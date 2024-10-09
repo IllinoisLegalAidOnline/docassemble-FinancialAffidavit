@@ -1,0 +1,24 @@
+metadata:
+  title: Financial affidavit
+  short title: Financial affidavit
+  comment: This program helps you make forms that provide financial information and documents to the other party in family law cases.
+  authors:
+    - Jim Graszer
+    - Matt Newsted
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.ILAO:ilao-interview-framework.yml
+  - docassemble.ILAO:shared-basic-questions.yml
+---
+
+---
+code: |
+  al_form_type = 'existing_case'
+  ilao_easy_form_title = "Financial affidavit"
+  ilao_easy_form_url = "https://www.illinoislegalaid.org/legal-information/financial-affidavit"
+  form_name = "Financial affidavit"
+  github_user = 'IllinoisLegalAidOnline'
+  github_repo_name = 'docassemble-FinancialAffidavit'
+  allowed_courts = ['Circuit']
+---
