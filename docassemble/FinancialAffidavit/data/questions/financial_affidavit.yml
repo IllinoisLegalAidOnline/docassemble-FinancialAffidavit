@@ -14,6 +14,8 @@ include:
 objects:
   - users: ALPeopleList.using(there_are_any=True)
   - other_parties: ALPeopleList.using(there_are_any=True)
+  - employment: DAList.using(object_type=Thing, complete_attribute='complete')
+  - employment[i].address: ALAddress
   - court_list: ALCourtLoader.using(file_name='docassemble.ILAO:data/sources/il_courts.xlsx')
 ---
 code: |
@@ -52,11 +54,21 @@ code: |
   case_county
   case_number
   filing_status
-  users[0].name
+  users[0].name.first
   party_label
-  other_parties[0].name
-
-
+  other_parties[0].name.first
+  set_progress(20)
+  nav.set_section('section_user')
+  if hide_contact == False:
+    users[0].address.address
+    users[0].phone_number
+  users[0].birthdate
+  household_expenses
+  users_acknowledge
+  set_progress(30)
+  nav.set_section('section_income')
+  if employment.there_are_any == True:
+    employment.gather()
 
   set_progress(100)
   nav.set_section('section_download')
@@ -65,7 +77,7 @@ code: |
 ---
 id: welcome
 question: |
-  Small Estate Affidavit
+  Financial Affidavit
 subquestion: |
   Welcome to Illinois Legal Aid Online's Financial Affidavit program.
 
@@ -142,8 +154,9 @@ fields:
 ---  
 id: party label
 question: |
-  What is your party label in the case?
+  Case Information
 subquestion: |
+  What is your party label in the case?
   ${ collapse_template(which_party) }  
 field: party_label
 choices:
@@ -166,7 +179,8 @@ sets:
     - users[0].name.last
     - users[0].name.middle
     - users[0].name.suffix
-question: Case Information
+question: |
+  Case Information
 subquestion: |
   What is your name?
 fields:
@@ -179,18 +193,28 @@ code: |
   if party_label == 'respondent':
     opposing_label = 'petitioner'
 ---
+id: other party name
 sets:
   - other_parties[0].name.first
-id: other party name
 question: |
-  What is the name of the ${ opposing_label }?
+  Case Information
 subquestion: |
-  ${ collapse_template(long_name_help) }
+  What is the name of the ${ opposing_label }?
 fields:
   - code: |
       other_parties[0].name_fields(person_or_business='person')
 ---
 ############### ABOUT YOU ###############
+id: hide contact 
+question: |
+  About You
+subquestion: |
+  Is your contact information is protected pursuant to court order because of 
+  domestic violence or abuse?
+fields:
+  - Hide my contact info: hide_contact
+    datatype: yesnoradio
+---
 id: users address
 sets:
   - users[0].address.address
@@ -210,7 +234,146 @@ fields:
     default: IL      
   - ZIP code: users[0].address.zip
 ---
-
+id: user phone
+question: |
+  About You
+subquestion: |
+  What is your phone number?
+fields:
+  - Phone Number: users[0].phone_number
+    datatype: al_international_phone
+---
+id: user birthdates
+question: |
+  About You
+subquestion: |
+  What is your birthdate?
+fields:
+  - Other Date of Birth Used: users[i].alternate_birthdates[j]
+    datatype: BirthDate
+    alMax: ${ today().format("yyyy-MM-dd") }
+---
+id: user expenses
+question: |
+  About You
+subquestion: |
+  Do you currently live with another adult, **not ${other_parties[0].name.full()}**,
+  who helps you pay your expenses?
+fields:
+  - no label: household_expenses
+    datatype: yesnoradio
+---
+id: user acknowledge
+continue button field: users_acknowledge
+question: |
+  About You
+subquestion: |
+  **IMPORTANT:** (1) If you intentionally or recklessly enter inaccurate or misleading information 
+  on this form, you may face significant penalties and sanctions, including costs and attorney's fees; (2) 
+  If you need more room for a section, complete and attach the Additional Information form for that 
+  section. Do not file this document and the enclosures with the Circuit Clerk unless a local rule or 
+  court order requires you to do so. Ask the Circuit Clerk where to find these rules. 
+---
+########### INCOME ####################
+id: income intro 
+question: |
+  Your employment
+subquestion: |
+  Are you employed or do you have other forms of business income?
+  This includes income:
+    - From employment by someone else;
+    - From self-employment as a sole proprietorship or independent contractor;
+    - As a member of a partnership;
+    - As a member of a limited liability company (LLC) not treated as a corporation;
+    - From a closely-held corporation;
+    - From any other flow-through business entities 
+fields:
+  - no label: employment.there_are_any
+    datatype: yesnoradio
+---
+code: |
+  employment[i].type
+  employment[i].complete = True 
+---
+id: unpaid funeral expense
+question: |
+  Employment or Business Income
+subquestion: |
+  Below are employment sources entered so far.
+fields:
+  - Are thre any more employement or business income?: employment.there_is_another
+    datatype: yesnoradio
+---
+id: employment info
+question: |
+  Employment or Business Income
+subquestion:
+  What is your ${ordinal(i)} source of employment or business income? 
+fields:
+  - "What type of employment or income is this?": employment[i].type
+    choices:
+			- Employed by someone else: employed
+      - Own business as a sole proprietorship: own
+      - Independent contractor: contractor
+      - Member of a partnership: partnership
+      - As a member of a limited liability company (LLC) not treated as a corporation: llc
+			- A closely-held corporation: corp
+			- Other flow-through business entity: other_entity
+  - "What is the name of this employer or business?": employment[i].name.text
+  - Street address: employment[i].address.address
+    address autocomplete: True
+  - Address line 2: employment[i].address.unit
+    required: False
+  - City: employment[i].address.city
+  - State: employment[i].address.state
+    code: |
+      states_list()
+  - ZIP code: employment[i].address.zip
+  - "How often are you paid?": employment[i].frequency
+    choices:
+      - Once a month: 12
+      - Twice a month: 24
+      - Every two weeks: 26
+      - Once a week: 52
+    show if:
+      variable: employment[i].type
+      is: employed
+  - "Are you paid in cash?": employment[i].cash_payment
+    datatype: yesnoradio
+    show if:
+      variable: employment[i].type
+      is: employed
+  - "What is the gross amount (before taxes and deductions) you receive monthly?": employment[i].monthly_gross
+    datatype: currency
+  - "What is the gross income (before taxes and deductions) so far this year?": employment[i].gross_income
+    datatype: currency
+    show if:
+      variable: employment[i].type
+      is: employed
+  - note: |
+      What was your total gross income (before taxes and deductions) last year, and so far this year?
+  - Last year (): employment[i].income_last_year
+    datatype: currency
+  - So far this year (): employment[i].income_current_year
+    datatype: currency
+  - note: |
+      What were your necessary business expenses last year, and so far this year?
+  - Last year (): employment[i].expenses_last_year
+    datatype: currency  
+  - So far this year (): employment[i].expenses_current_year
+    datatype: currency
+  - Do you receive any of these perks from this business? (Check all that apply): employment[i].perks
+    datatype: checkboxes
+    choices: 
+      - Reimbursed meals
+      - Company car
+      - Free housing or housing allowance
+      - Other
+    none of the above: False
+  - Briefly describe other perk(s): employment[i].other_perks
+    js show if: |
+      val("employment[i].perks['Other']")
+---
 
 ---
 id: forms assembling
@@ -233,7 +396,7 @@ subquestion: |
   
   ${ action_button_html(url_action('review_answers'), label=':edit: Make changes', color='success', size="md") }
 
-  ${ al_user_bundle.download_list_html() }
+  ${ al_user_bundle.download_html() }
 
   [NEWLINE]
 
@@ -261,6 +424,44 @@ attachment:
     variable name: fa_primary[i]
     filename: fa_primary
     pdf template file: fa_primary.pdf
+    editable: False
+    fields:
+      - "county": ${ case_county }
+      - "case_number": ${ case_number }
+      - "pre-judgment": ${ filing_status == "pre_judgment" }
+      - "post-judgment": ${ filing_status == "post_judgment" }
+      - "petitioner_name": |
+          % if party_label == 'petitioner':
+          ${ users[0].name.full(middle='full') }
+          % else:
+          ${ other_parties[0].name.full(middle='full') }
+          % endif
+      - "respondent_name": |
+          % if opposing_label == 'respondent':
+          ${ other_parties[0].name.full(middle='full') }
+          % else:
+          ${ users[0].name.full(middle='full') }
+          % endif
+      - "petitioner_yes": ${ party_label == 'petitioner' }
+      - "respondent_yes": ${ party_label == 'respondent' }
+      - "date_affirm": ${ today().format('MM/dd/yyyy') }
+      - "users_name": ${ users[0].name.full(middle='full') }
+      - "users_phone_number": |
+          % if not hide_contact:
+          ${ users[0].address.line_two() }
+          % endif
+      - "users_address": |
+          % if not hide_contact:
+          ${ users[0].address.line_one(bare=True) }
+          % endif
+      - "users_address2": |
+          % if not hide_contact:
+          ${ users[0].address.line_two() }
+          % endif
+      - "users_birthdate": ${ users[0].birthdate.format('MM/dd/yyyy') }
+      - "expenses_yes": ${ household_expenses == "yes"}
+      - "expenses_no": ${ household_expenses == "no"}
+
 ---
 objects:
   - instructions: ALDocument.using(title="Instructions", filename="instructions.pdf", enabled=True, has_addendum=False)
