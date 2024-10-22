@@ -28,17 +28,14 @@ code: |
   allowed_courts = ['Circuit']
 ---
 sections:
-  - review_answers: Review your answers
----
-sections:
   - section_intro: Start
-  - section_case: Case Information
-  - section_user: About You
+  - section_case: Case information
+  - section_user: About you
   - section_income: Income
   - section_expenses: Expenses
   - section_debts: Debts
   - section_assets: Assets
-  - section_final: Final Steps
+  - section_final: Final steps
   - section_download: Download
 ---
 #################### Interview order #####################
@@ -49,14 +46,16 @@ code: |
   set_progress(5)
   how_to_use
   accept_terms
+  if family_case == False:
+    family_kickout
   set_progress(10)
   nav.set_section('section_case')
-  case_county
-  case_number
-  filing_status
   users[0].name.first
   party_label
   other_parties[0].name.first
+  case_county
+  case_number
+  filing_status
   set_progress(20)
   nav.set_section('section_user')
   if hide_contact == False:
@@ -69,6 +68,9 @@ code: |
   nav.set_section('section_income')
   if employment.there_are_any == True:
     employment.gather()
+
+  if taxes_filed == True:
+    taxes_filed_status
 
   set_progress(100)
   nav.set_section('section_download')
@@ -112,10 +114,28 @@ subject: |
 content: |  
   This is an example of help. Click again to hide.
 ---
+id: family case 
+question: |
+  Do you have a family law case in Illinois?
+subquestion: |
+  If you have any active case or one where a judgment was already entered (Ex: divorce).
+fields:
+  - no label: family_case
+    datatype: yesnoradio
+---
+id: family case kickout
+event: family_kickout
+question: |
+  Sorry
+subquestion: |
+  You can only use this program if you have an active family law case in Illinois.
+buttons:
+  - Exit: exit
+  - Restart: restart
+---
 ############### CASE INFORMATION ###############
 id: case county
-question: Case Information
-subquestion: |
+question: |
   In which county was this case filed?
 fields:
   - County: case_county
@@ -123,9 +143,9 @@ fields:
       court_list._load_courts()["address_county"].unique()
 ---
 id: case number
-question: Case Information
-subquestion: |
+question: |
   What is the case number?
+subquestion: |
   ${ collapse_template(case_number_help) }
 fields:
   - Case number: case_number
@@ -135,16 +155,17 @@ template: case_number_help
 subject: |
   **Learn about case numbers**
 content: |  
-  The case number should be on your court papers. Look at the Complaint or Petition, or the Summons if you received one. It is usually in the top-right part of the first page.
+  The case number should be on your court papers. Look at the Complaint or Petition, or the
+  Summons if you received one. It is usually in the top-right part of the first page.
   
   If you started the case, the court clerk should have given you the case number.
 ---  
 id: case filing status
-question: Case Information
-subquestion: |
+question: |
   Are you filing your Financial Affidavit into a case that has a final 
-  judgment or order? For example, a Judgment of Dissolution of Marriage 
-  would be a final order in a divorce case.": 
+  judgment or order?
+subquestion: |
+  For example, a Judgment of Dissolution of Marriage would be a final order in a divorce case.": 
 fields:
   - Filing status: filing_status
     datatype: radio
@@ -154,9 +175,8 @@ fields:
 ---  
 id: party label
 question: |
-  Case Information
-subquestion: |
   What is your party label in the case?
+subquestion: |
   ${ collapse_template(which_party) }  
 field: party_label
 choices:
@@ -171,7 +191,8 @@ content: |
 
   If someone filed the case against you, you are either the Defendant or the Respondent.
 
-  The other court forms in the case should help you figure it out. Look at the top (the caption) of the Complaint or Petition. That form should have a label by your name.
+  The other court forms in the case should help you figure it out. Look at the top (the caption)
+  of the Complaint or Petition. That form should have a label by your name.
 ---
 id: your name
 sets:
@@ -180,8 +201,6 @@ sets:
     - users[0].name.middle
     - users[0].name.suffix
 question: |
-  Case Information
-subquestion: |
   What is your name?
 fields:
   - code: |
@@ -197,8 +216,6 @@ id: other party name
 sets:
   - other_parties[0].name.first
 question: |
-  Case Information
-subquestion: |
   What is the name of the ${ opposing_label }?
 fields:
   - code: |
@@ -207,21 +224,20 @@ fields:
 ############### ABOUT YOU ###############
 id: hide contact 
 question: |
-  About You
-subquestion: |
   Is your contact information is protected pursuant to court order because of 
   domestic violence or abuse?
 fields:
-  - Hide my contact info: hide_contact
+  - no label: hide_contact
     datatype: yesnoradio
 ---
 id: users address
 sets:
   - users[0].address.address
   - users[0].address.city
+  - users[0].address.state
   - users[0].address.zip
 question: |
-  What is ${ users[0].name.full(middle="full") }'s address?
+  What is your address?
 fields:
   - Street address: users[0].address.address
     address autocomplete: True
@@ -236,8 +252,6 @@ fields:
 ---
 id: user phone
 question: |
-  About You
-subquestion: |
   What is your phone number?
 fields:
   - Phone Number: users[0].phone_number
@@ -245,18 +259,14 @@ fields:
 ---
 id: user birthdates
 question: |
-  About You
-subquestion: |
-  What is your birthdate?
+  When were you born?
 fields:
-  - Other Date of Birth Used: users[i].alternate_birthdates[j]
+  - Other Date of Birth Used: users[i].birthdate
     datatype: BirthDate
     alMax: ${ today().format("yyyy-MM-dd") }
 ---
 id: user expenses
 question: |
-  About You
-subquestion: |
   Do you currently live with another adult, **not ${other_parties[0].name.full()}**,
   who helps you pay your expenses?
 fields:
@@ -266,48 +276,60 @@ fields:
 id: user acknowledge
 continue button field: users_acknowledge
 question: |
-  About You
+  Accuracy is important
 subquestion: |
-  **IMPORTANT:** (1) If you intentionally or recklessly enter inaccurate or misleading information 
-  on this form, you may face significant penalties and sanctions, including costs and attorney's fees; (2) 
-  If you need more room for a section, complete and attach the Additional Information form for that 
-  section. Do not file this document and the enclosures with the Circuit Clerk unless a local rule or 
-  court order requires you to do so. Ask the Circuit Clerk where to find these rules. 
+  <div class="alert alert-info ilao-info" role="alert">
+    <h2 class="h4">Important</h2>
+    <p>If you intentionally or recklessly enter inaccurate or misleading information on this form, 
+    you may face significant penalties and sanctions, including costs and attorney's fees.</p>
+    <p>Do not file this document and the enclosures with the Circuit Clerk unless a local rule or 
+    court order requires you to do so.</p>
+    <p>Ask the Circuit Clerk where to find these rules.</p>
+  </div>
 ---
 ########### INCOME ####################
 id: income intro 
 question: |
-  Your employment
-subquestion: |
   Are you employed or do you have other forms of business income?
+subquestion: |
   This includes income:
-    - From employment by someone else;
-    - From self-employment as a sole proprietorship or independent contractor;
-    - As a member of a partnership;
-    - As a member of a limited liability company (LLC) not treated as a corporation;
-    - From a closely-held corporation;
-    - From any other flow-through business entities 
+
+  - From employment by someone else;
+
+  - From self-employment as a sole proprietorship or independent contractor;
+
+  - As a member of a partnership;
+
+  - As a member of a limited liability company (LLC) not treated as a corporation;
+
+  - From a closely-held corporation;
+
+  - From any other flow-through business entities 
 fields:
   - no label: employment.there_are_any
     datatype: yesnoradio
 ---
 code: |
   employment[i].type
+  employment[i].name.text
+  if employment[i].type == "employed":
+    employment[i].frequency
+  else:
+    employment[i].income_last_year
+    employment[i].perks
   employment[i].complete = True 
 ---
-id: unpaid funeral expense
+id: other employment
 question: |
-  Employment or Business Income
+  Do you have any other employers or business to include?
 subquestion: |
-  Below are employment sources entered so far.
+  So far you have told us about ${comma_and_list(employment.complete_elements())}.
 fields:
-  - Are thre any more employement or business income?: employment.there_is_another
+  - no label: employment.there_is_another
     datatype: yesnoradio
 ---
 id: employment info
 question: |
-  Employment or Business Income
-subquestion:
   What is your ${ordinal(i)} source of employment or business income? 
 fields:
   - "What type of employment or income is this?": employment[i].type
@@ -319,7 +341,12 @@ fields:
       - As a member of a limited liability company (LLC) not treated as a corporation: llc
 			- A closely-held corporation: corp
 			- Other flow-through business entity: other_entity
-  - "What is the name of this employer or business?": employment[i].name.text
+---
+id: employer or business name 
+question: |
+  What is the name of this employer or business?
+fields: 
+  - Name: employment[i].name.text
   - Street address: employment[i].address.address
     address autocomplete: True
   - Address line 2: employment[i].address.unit
@@ -329,51 +356,91 @@ fields:
     code: |
       states_list()
   - ZIP code: employment[i].address.zip
-  - "How often are you paid?": employment[i].frequency
+---
+id: employer pay 
+question: |
+  How often are you paid?
+fields: 
+  - Pay period: employment[i].frequency
     choices:
       - Once a month: 12
       - Twice a month: 24
       - Every two weeks: 26
       - Once a week: 52
-    show if:
-      variable: employment[i].type
-      is: employed
   - "Are you paid in cash?": employment[i].cash_payment
     datatype: yesnoradio
-    show if:
-      variable: employment[i].type
-      is: employed
-  - "What is the gross amount (before taxes and deductions) you receive monthly?": employment[i].monthly_gross
-    datatype: currency
   - "What is the gross income (before taxes and deductions) so far this year?": employment[i].gross_income
     datatype: currency
-    show if:
-      variable: employment[i].type
-      is: employed
-  - note: |
-      What was your total gross income (before taxes and deductions) last year, and so far this year?
-  - Last year (): employment[i].income_last_year
+---
+id: business income 
+question: 
+  What was your total gross income (before taxes and deductions) last year, and so far this year?
+subquestion:
+  You must attach complete business federal and state business tax returns for the most recent tax year.
+fields:
+  - Last year (${ current_datetime().year - 1 }): employment[i].income_last_year
     datatype: currency
-  - So far this year (): employment[i].income_current_year
+  - So far this year (${ current_datetime().year }): employment[i].income_current_year
     datatype: currency
   - note: |
       What were your necessary business expenses last year, and so far this year?
-  - Last year (): employment[i].expenses_last_year
+  - Last year (${ current_datetime().year - 1 }): employment[i].expenses_last_year
     datatype: currency  
-  - So far this year (): employment[i].expenses_current_year
+  - So far this year (${ current_datetime().year }): employment[i].expenses_current_year
     datatype: currency
-  - Do you receive any of these perks from this business? (Check all that apply): employment[i].perks
+---
+id: business perks
+question: 
+  Do you receive any of these perks from this business?
+fields:
+  - Perks (Check all that apply): employment[i].perks
     datatype: checkboxes
     choices: 
-      - Reimbursed meals
-      - Company car
-      - Free housing or housing allowance
-      - Other
+      - Reimbursed meals: meals
+      - Company car: car
+      - Free housing or housing allowance: housing
+      - Other: other
     none of the above: False
   - Briefly describe other perk(s): employment[i].other_perks
     js show if: |
-      val("employment[i].perks['Other']")
+      val("employment[i].perks['other']")
 ---
+id: filed taxes
+question: |
+  Did you file taxes last year?
+fields:
+  - no label: taxes_filed
+    datatype: yesnoradio
+---
+id: filed taxes detail
+question: |
+  What was your tax filing status last year?
+fields:
+  - no label: taxes_filed_status
+    datatype: radio
+    choices: 
+      - Married (Joint): joint
+      - Married (Separate): separate
+      - Single: single
+      - Head of Household: household
+  - I claim on my federal tax return: deduction_type
+    datatype: radio
+    choices: 
+      - the standardized deduction: yes
+      - itemized deductions: no
+  - Gross income (before taxes and deductions) last year: gross_income_last_year
+    datatype: currency
+  - On my last tax return I claimed: tax_claimed
+    datatype: checkboxes
+    choices: 
+      - Child tax credit: child_credit
+      - Additional child tax credit: additional
+      - Credit for other dependents: dependents
+      - Earned Income Credit: eic
+      - Dependent care credit: care
+---
+
+
 
 ---
 id: forms assembling
@@ -396,7 +463,7 @@ subquestion: |
   
   ${ action_button_html(url_action('review_answers'), label=':edit: Make changes', color='success', size="md") }
 
-  ${ al_user_bundle.download_html() }
+  ${ al_user_bundle.download_list_html() }
 
   [NEWLINE]
 
@@ -411,8 +478,19 @@ under: |
   ${ action_button_html(interview_url(i="docassemble.ILAO:feedback.yml", easy_form_interview=ilao_easy_form_url, easy_form_title=ilao_easy_form_title, easy_form_page=user_info().question_id, easy_form_variable=user_info().variable, local=False,reset=1), label=':comment: Was this program helpful?', color="#181c36", size="md", new_window=True) }
 ---
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, fa_primary], filename="completed_financial_affidavit.pdf", title="Financial Affidavit", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, financial_affidavit_bundle], filename="completed_financial_affidavit.pdf", title="Financial Affidavit Package", enabled=True)
 ---
+objects:
+  - financial_affidavit_bundle: ALDocumentBundle.using(title="Financial Affidavit", filename="fa_primary.pdf", enabled=True, elements=[
+        fa_primary, 
+        additional_employment_bundle,
+      ])
+---
+objects:
+  - instructions: ALDocument.using(title="Instructions", filename="instructions.pdf", enabled=True, has_addendum=False)
+  - fa_primary: ALDocument.using(title="Financial Affidavit", filename="fa_primary.pdf", enabled=True, has_addendum=False)
+---
+############ FA PRIMARY DOCUMENT #############
 attachment:
   - name: instructions
     variable name: instructions[i]
@@ -461,9 +539,292 @@ attachment:
       - "users_birthdate": ${ users[0].birthdate.format('MM/dd/yyyy') }
       - "expenses_yes": ${ household_expenses == "yes"}
       - "expenses_no": ${ household_expenses == "no"}
+      ## 6. My Employment/Business
+      - "unemployed_yes": ${ employment.number_gathered() == 0 }  
+      # employed
+      - "employed_yes": ${ employment[0].type == "employed" }
+      - "employer_name": |
+          % if employment[0].type == "employed":
+          ${ employment[0].name.text }
+          % endif
+      - "employer_address": |
+          % if employment[0].type == "employed":
+          ${ employment[0].address.line_one() }
+          % endif
+      - "employer_address2": |
+          % if employment[0].type == "employed":
+          ${ employment[0].address.line_two() }
+          % endif
+      - "paychecks_monthly": |
+          % if employment[0].type == "employed":
+          ${ employment[0].frequency == "12" }
+          % endif
+      - "paychecks_bi_monthly": |
+          % if employment[0].type == "employed":
+          ${ employment[0].frequency == "24" }
+          % endif
+      - "paychecks_two_weeks": |
+          % if employment[0].type == "employed":
+          ${ employment[0].frequency == "26" }
+          % endif
+      - "paychecks_weekly": |
+          % if employment[0].type == "employed":
+          ${ employment[0].frequency == "52" }
+          % endif
+      - "paychecks_cash": |
+          % if employment[0].type == "employed":
+          ${ employment[0].cash_payment }
+          % endif
+      - "income_gross": |
+          % if employment[0].type == "employed":
+          ${ nice_number(employment[0].gross_income) }
+          % endif
+      - "income_date": |
+          % if employment[0].type == "employed":
+          ${ today().format('MM/dd/yyyy') }
+          % endif
+      # business
+      - "business_own": ${ employment[0].type == "own" }
+      - "business_contractor": ${ employment[0].type == "contractor" }
+      - "business_partnership": ${ employment[0].type == "partnership" }
+      - "business_llc": ${ employment[0].type == "llc" }
+      - "business_corporation": ${ employment[0].type == "corp" }
+      - "business_other_entity": ${ employment[0].type == "other_entity" }
+      - "business_name": |
+          % if employment[0].type != "employed":
+          ${ employment[0].name.text }
+          % endif
+      - "business_address": |
+          % if employment[0].type != "employed":
+          ${ employment[0].address.line_one() }
+          % endif
+      - "business_address2": |
+          % if employment[0].type != "employed":
+          ${ employment[0].address.line_two() }
+          % endif
+      - "business_gross_last_year": |
+          % if employment[0].type != "employed":
+          ${ nice_number(employment[0].income_last_year) }
+          % endif
+      - "business_gross_current_year": |
+          % if employment[0].type != "employed":
+          ${ nice_number(employment[0].income_current_year) }
+          % endif           
+      - "business_expense_last_year": |
+          % if employment[0].type != "employed":
+          ${ nice_number(employment[0].expenses_last_year) }
+          % endif
+      - "business_expense_current_year": |
+          % if employment[0].type != "employed":
+          ${ nice_number(employment[0].expenses_current_year) }
+          % endif
+      - "business_meals": |
+          % if employment[0].type != "employed":
+          ${ employment[0].perks['meals'] }
+          % endif
+      - "business_car": |
+          % if employment[0].type != "employed":
+          ${ employment[0].perks['car'] }
+          % endif
+      - "business_housing": |
+          % if employment[0].type != "employed":
+          ${ employment[0].perks['housing'] }
+          % endif
+      - "business_other": |
+          % if employment[0].type != "employed":
+          ${ employment[0].perks['other'] }
+          % endif
+      - "business_other_detail": |
+          % if employment[0].type != "employed":
+          ${ employment[0].other_perks }
+          % endif
+      - "employment_addendum_yes": ${ employment.number_gathered() > 1 }
 
+      ## Page 3:  Gross income/taxes from last year, monthly gross income sources
+      - "married_joint_yes": ${ taxes_filed_status == "joint" }  
+      - "married_separate_yes": ${ taxes_filed_status == "separate" }  
+      - "single_yes": ${ taxes_filed_status == "single" }  
+      - "taxes_household": ${ taxes_filed_status == "household" }  
+      - "taxes_not_filed": ${ not taxes_filed }   
+      - "deduction_standard": |
+          % if taxes_filed:
+          ${ deduction_type }
+          % endif
+      - "deduction_itemized": |
+          % if taxes_filed:
+          ${ not deduction_type }
+          % endif
+      - "Gross income (before taxes and deductions) last year": |
+          % if taxes_filed:
+          ${ nice_number(gross_income_last_year) }
+          % endif
+      - "Child Tax Credit": |
+          % if taxes_filed:
+          ${ tax_claimed['child_credit'] }
+          % endif
+      - "Additional child tax credit": |
+          % if taxes_filed:
+          ${ tax_claimed['additional'] }
+          % endif
+      - "Credit for other dependents": |
+          % if taxes_filed:
+          ${ tax_claimed['dependents'] }
+          % endif
+      - "Earned Income Credit": |
+          % if taxes_filed:
+          ${ tax_claimed['eic'] }
+          % endif
+      - "Dependent care credit": |
+          % if taxes_filed:
+          ${ tax_claimed['care'] }
+          % endif
+---
+############ FA EMPLOYMENT/BUSINESS INCOME ADDENDUM #############
+objects:
+  - employment[i].additional_employment: ALDocument.using(title="FA Additional Employment Business", filename="fa_additional_employment_business.pdf", has_addendum=False)
 ---
 objects:
-  - instructions: ALDocument.using(title="Instructions", filename="instructions.pdf", enabled=True, has_addendum=False)
-  - fa_primary: ALDocument.using(title="Financial Affidavit", filename="fa_primary.pdf", enabled=True, has_addendum=False)
+  - additional_employment_bundle: ALDocumentBundle.using(elements=[], title= "FA Additional Employment Bundle", filename="fa_additional_employment_business.pdf", has_addendum=False)
+---
+reconsider: True
+code: |
+  employment_to_bundle = []
+  additional_employment_bundle.enabled = False
+
+  
+  for index, el in enumerate(employment):
+    # No need for additional employment or business income unless employment.number_gathered() >= 1
+    if index == 0:
+      el.additional_employment.enabled = False
+    else:
+      el.additional_employment.enabled = True
+      additional_employment_bundle.enabled = True
+      employment_to_bundle.append(el.additional_employment)
+
+  additional_employment_bundle.elements = employment_to_bundle
+  complete_additional_employment = True
+---
+attachment:
+  variable name: employment[i].additional_employment[j]
+  name: additional_employment
+  filename: additional_employment
+  skip undefined: True
+  editable: False
+  pdf template file: fa_additional_employment_business.pdf
+  fields:
+      - "county": ${ case_county }
+      - "case_number": ${ case_number }
+      - "pre-judgment": ${ filing_status == "pre_judgment" }
+      - "post-judgment": ${ filing_status == "post_judgment" }
+      - "petitioner_name": |
+          % if party_label == 'petitioner':
+          ${ users[0].name.full(middle='full') }
+          % else:
+          ${ other_parties[0].name.full(middle='full') }
+          % endif
+      - "respondent_name": |
+          % if opposing_label == 'respondent':
+          ${ other_parties[0].name.full(middle='full') }
+          % else:
+          ${ users[0].name.full(middle='full') }
+          % endif
+      - "petitioner_yes": ${ party_label == 'petitioner' }
+      - "respondent_yes": ${ party_label == 'respondent' }
+
+      - "employed_yes": ${ employment[i].type == 'employed' }
+      - "employer_name": |
+          % if employment[i].type == "employed":
+          ${ employment[i].name.text }
+          % endif
+      - "employer_address": |
+          % if employment[i].type == "employed":
+          ${ employment[i].address.line_one() }
+          % endif
+      - "employer_address2": |
+          % if employment[i].type == "employed":
+          ${ employment[i].address.line_two() }
+          % endif
+      - "paychecks_monthly": |
+          % if employment[i].type == "employed":
+          ${ employment[i].frequency == "12" }
+          % endif
+      - "paychecks_bi_monthly": |
+          % if employment[i].type == "employed":
+          ${ employment[i].frequency == "24" }
+          % endif
+      - "paychecks_two_weeks": |
+          % if employment[i].type == "employed":
+          ${ employment[i].frequency == "26" }
+          % endif
+      - "paychecks_weekly": |
+          % if employment[i].type == "employed":
+          ${ employment[i].frequency == "52" }
+          % endif
+      - "paychecks_cash": |
+          % if employment[i].type == "employed":
+          ${ employment[i].cash_payment }
+          % endif
+      - "income_gross": |
+          % if employment[i].type == "employed":
+          ${ nice_number(employment[i].gross_income) }
+          % endif
+      - "income_date": |
+          % if employment[i].type == "employed":
+          ${ today().format('MM/dd/yyyy') }
+          % endif
+      # business
+      - "business_own": ${ employment[i].type == "own" }
+      - "business_contractor": ${ employment[i].type == "contractor" }
+      - "business_partnership": ${ employment[i].type == "partnership" }
+      - "business_llc": ${ employment[i].type == "llc" }
+      - "business_corporation": ${ employment[i].type == "corp" }
+      - "business_other_entity": ${ employment[i].type == "other_entity" }
+      - "business_name": |
+          % if employment[i].type != "employed":
+          ${ employment[i].name.text }
+          % endif
+      - "business_address": |
+          % if employment[i].type != "employed":
+          ${ employment[i].address.line_one() }
+          % endif
+      - "business_address2": |
+          % if employment[i].type != "employed":
+          ${ employment[i].address.line_two() }
+          % endif
+      - "business_gross_last_year": |
+          % if employment[i].type != "employed":
+          ${ nice_number(employment[i].income_last_year) }
+          % endif
+      - "business_gross_current_year": |
+          % if employment[i].type != "employed":
+          ${ nice_number(employment[i].income_current_year) }
+          % endif           
+      - "business_expense_last_year": |
+          % if employment[i].type != "employed":
+          ${ nice_number(employment[i].expenses_last_year) }
+          % endif
+      - "business_expense_current_year": |
+          % if employment[i].type != "employed":
+          ${ nice_number(employment[i].expenses_current_year) }
+          % endif
+      - "business_meals": |
+          % if employment[i].type != "employed":
+          ${ employment[i].perks['meals'] }
+          % endif
+      - "business_car": |
+          % if employment[i].type != "employed":
+          ${ employment[i].perks['car'] }
+          % endif
+      - "business_housing": |
+          % if employment[i].type != "employed":
+          ${ employment[i].perks['housing'] }
+          % endif
+      - "business_other": |
+          % if employment[i].type != "employed":
+          ${ employment[i].perks['other'] }
+          % endif
+      - "business_other_detail": |
+          % if employment[i].type != "employed":
+          ${ employment[i].other_perks }
+          % endif
 ---
