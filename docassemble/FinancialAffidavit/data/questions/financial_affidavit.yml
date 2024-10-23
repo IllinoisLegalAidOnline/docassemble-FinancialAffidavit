@@ -542,109 +542,142 @@ attachment:
       ## 6. My Employment/Business
       - "unemployed_yes": ${ employment.number_gathered() == 0 }  
       # employed
-      - "employed_yes": ${ employment[0].type == "employed" }
+      - "employed_yes": |
+          % if employment.there_are_any:
+          ${ employment[0].type == "employed" }
+          % endif
       - "employer_name": |
-          % if employment[0].type == "employed":
+          % if employment.there_are_any and employment[0].type == "employed":
           ${ employment[0].name.text }
           % endif
       - "employer_address": |
-          % if employment[0].type == "employed":
+          % if employment.there_are_any and employment[0].type == "employed":
           ${ employment[0].address.line_one() }
           % endif
       - "employer_address2": |
-          % if employment[0].type == "employed":
+          % if employment.there_are_any and employment[0].type == "employed":
           ${ employment[0].address.line_two() }
           % endif
       - "paychecks_monthly": |
-          % if employment[0].type == "employed":
+          % if employment.there_are_any and employment[0].type == "employed":
           ${ employment[0].frequency == "12" }
           % endif
       - "paychecks_bi_monthly": |
-          % if employment[0].type == "employed":
+          % if employment.there_are_any and employment[0].type == "employed":
           ${ employment[0].frequency == "24" }
           % endif
       - "paychecks_two_weeks": |
-          % if employment[0].type == "employed":
+          % if employment.there_are_any and employment[0].type == "employed":
           ${ employment[0].frequency == "26" }
           % endif
       - "paychecks_weekly": |
-          % if employment[0].type == "employed":
+          % if employment.there_are_any and employment[0].type == "employed":
           ${ employment[0].frequency == "52" }
           % endif
       - "paychecks_cash": |
-          % if employment[0].type == "employed":
+          % if employment.there_are_any and employment[0].type == "employed":
           ${ employment[0].cash_payment }
           % endif
       - "income_gross": |
-          % if employment[0].type == "employed":
+          % if employment.there_are_any and employment[0].type == "employed":
           ${ nice_number(employment[0].gross_income) }
           % endif
       - "income_date": |
-          % if employment[0].type == "employed":
+          % if employment.there_are_any and employment[0].type == "employed":
           ${ today().format('MM/dd/yyyy') }
           % endif
       # business
-      - "business_own": ${ employment[0].type == "own" }
-      - "business_contractor": ${ employment[0].type == "contractor" }
-      - "business_partnership": ${ employment[0].type == "partnership" }
-      - "business_llc": ${ employment[0].type == "llc" }
-      - "business_corporation": ${ employment[0].type == "corp" }
-      - "business_other_entity": ${ employment[0].type == "other_entity" }
+      - "business_own": |
+          % if employment.there_are_any:
+          ${ employment[0].type == "own" }
+          % endif
+      - "business_contractor": |
+          % if employment.there_are_any:
+          ${ employment[0].type == "contractor" }
+          % endif
+      - "business_partnership": |
+          % if employment.there_are_any:
+          ${ employment[0].type == "partnership" }
+          % endif          
+      - "business_llc": |
+          % if employment.there_are_any:
+          ${ employment[0].type == "llc" }
+          % endif          
+      - "business_corporation": |
+          % if employment.there_are_any:
+          ${ employment[0].type == "corp" }
+          % endif
+      - "business_other_entity": |
+          % if employment.there_are_any:
+          ${ employment[0].type == "other_entity" }
+          % endif          
       - "business_name": |
-          % if employment[0].type != "employed":
+          % if employment.there_are_any and employment[0].type != "employed":
           ${ employment[0].name.text }
           % endif
       - "business_address": |
-          % if employment[0].type != "employed":
+          % if employment.there_are_any and employment[0].type != "employed":
           ${ employment[0].address.line_one() }
           % endif
       - "business_address2": |
-          % if employment[0].type != "employed":
+          % if employment.there_are_any and employment[0].type != "employed":
           ${ employment[0].address.line_two() }
           % endif
       - "business_gross_last_year": |
-          % if employment[0].type != "employed":
+          % if employment.there_are_any and employment[0].type != "employed":
           ${ nice_number(employment[0].income_last_year) }
           % endif
       - "business_gross_current_year": |
-          % if employment[0].type != "employed":
+          % if employment.there_are_any and employment[0].type != "employed":
           ${ nice_number(employment[0].income_current_year) }
           % endif           
       - "business_expense_last_year": |
-          % if employment[0].type != "employed":
+          % if employment.there_are_any and employment[0].type != "employed":
           ${ nice_number(employment[0].expenses_last_year) }
           % endif
       - "business_expense_current_year": |
-          % if employment[0].type != "employed":
+          % if employment.there_are_any and employment[0].type != "employed":
           ${ nice_number(employment[0].expenses_current_year) }
           % endif
       - "business_meals": |
-          % if employment[0].type != "employed":
+          % if employment.there_are_any and employment[0].type != "employed":
           ${ employment[0].perks['meals'] }
           % endif
       - "business_car": |
-          % if employment[0].type != "employed":
+          % if employment.there_are_any and employment[0].type != "employed":
           ${ employment[0].perks['car'] }
           % endif
       - "business_housing": |
-          % if employment[0].type != "employed":
+          % if employment.there_are_any and employment[0].type != "employed":
           ${ employment[0].perks['housing'] }
           % endif
       - "business_other": |
-          % if employment[0].type != "employed":
+          % if employment.there_are_any and employment[0].type != "employed":
           ${ employment[0].perks['other'] }
           % endif
       - "business_other_detail": |
-          % if employment[0].type != "employed":
+          % if employment.there_are_any and employment[0].type != "employed":
           ${ employment[0].other_perks }
           % endif
       - "employment_addendum_yes": ${ employment.number_gathered() > 1 }
 
       ## Page 3:  Gross income/taxes from last year, monthly gross income sources
-      - "married_joint_yes": ${ taxes_filed_status == "joint" }  
-      - "married_separate_yes": ${ taxes_filed_status == "separate" }  
-      - "single_yes": ${ taxes_filed_status == "single" }  
-      - "taxes_household": ${ taxes_filed_status == "household" }  
+      - "married_joint_yes": |
+          % if taxes_filed:
+          ${ taxes_filed_status == "joint" }
+          % endif
+      - "married_separate_yes": |
+          % if taxes_filed:
+          ${ taxes_filed_status == "separate" }
+          % endif
+      - "single_yes": |
+          % if taxes_filed:
+          ${ taxes_filed_status == "single" }
+          % endif
+      - "taxes_household": |
+          % if taxes_filed:
+          ${ taxes_filed_status == "household" }
+          % endif
       - "taxes_not_filed": ${ not taxes_filed }   
       - "deduction_standard": |
           % if taxes_filed:
@@ -691,15 +724,15 @@ code: |
   employment_to_bundle = []
   additional_employment_bundle.enabled = False
 
-  
-  for index, el in enumerate(employment):
-    # No need for additional employment or business income unless employment.number_gathered() >= 1
-    if index == 0:
-      el.additional_employment.enabled = False
-    else:
-      el.additional_employment.enabled = True
-      additional_employment_bundle.enabled = True
-      employment_to_bundle.append(el.additional_employment)
+  if employment.number_gathered():
+    for index, el in enumerate(employment):
+      # No need for additional employment or business income unless employment.number_gathered() >= 1
+      if index == 0:
+        el.additional_employment.enabled = False
+      else:
+        el.additional_employment.enabled = True
+        additional_employment_bundle.enabled = True
+        employment_to_bundle.append(el.additional_employment)
 
   additional_employment_bundle.elements = employment_to_bundle
   complete_additional_employment = True
