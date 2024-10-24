@@ -10,6 +10,7 @@ include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.ILAO:ilao-interview-framework.yml
   - docassemble.ILAO:shared-basic-questions.yml
+  - section_reviews.yml
 ---
 objects:
   - users: ALPeopleList.using(there_are_any=True)
@@ -71,6 +72,18 @@ code: |
 
   if taxes_filed == True:
     taxes_filed_status
+
+  monthly_income_intro
+  users[0].regular_pay
+  users[0].pension
+  users[0].social_retirement
+  users[0].rental_income
+  users[0].maintenance_current
+  users[0].gifts_money
+  income_summary
+
+  set_progress(40)
+  nav.set_section('section_expenses')
 
   set_progress(100)
   nav.set_section('section_download')
@@ -272,9 +285,6 @@ question: |
 fields:
   - no label: household_expenses
     datatype: yesnoradio
-    choices:
-      - Yes
-      - No
 ---
 id: user acknowledge
 continue button field: users_acknowledge
@@ -443,9 +453,191 @@ fields:
       - Earned Income Credit: eic
       - Dependent care credit: care
 ---
+id: monthly income intro
+continue button field: monthly_income_intro
+question: |
+  Do you have any monthly income from any of the following categories?
+subquestion: |
+  Do you receive monthly income from any of the sources below? 
+  For each type of income, enter the gross monthly amount (before taxes 
+  and deductions) that you receive. 
+  
+  All fields are optional and can be left blank if not applicable.
+---
+id: monthly employment income 
+question: |
+  Monthly employment income
+fields:
+  - "Regular employment/self-employment earnings from all jobs (salary, wages, base pay, etc.)": users[0].regular_pay
+    datatype: currency
+    min: 0
+    required: False
+  - Overtime: users[0].overtime_pay
+    datatype: currency
+    min: 0
+    required: False
+  - Commission: users[0].commission_pay
+    datatype: currency
+    min: 0
+    required: False
+  - Tips and gratuities: users[0].tips
+    datatype: currency
+    min: 0
+    required: False
+  - Bonus: users[0].bonus
+    datatype: currency
+    min: 0
+    required: False
+---
+id: monthly investment income 
+question: |
+  Monthly investment income
+fields:
+  - Pension: users[0].pension
+    datatype: currency
+    min: 0
+    required: False
+  - Annuity: users[0].annuity
+    datatype: currency
+    min: 0
+    required: False
+  - Interest income: users[0].interest
+    datatype: currency
+    min: 0
+    required: False
+  - Dividend income: users[0].dividend
+    datatype: currency
+    min: 0
+    required: False
+  - Trust income: users[0].trust
+    datatype: currency
+    min: 0
+    required: False
+  - Investment income: users[0].investment
+    datatype: currency
+    min: 0
+    required: False
+---
+id: monthly benefits
+question: |
+  Monthly benefits
+fields:
+  - Social security retirement: users[0].social_retirement
+    datatype: currency
+    min: 0
+    required: False
+  - Social Security Disability: users[0].social_disability
+    datatype: currency
+    min: 0
+    required: False
+  - Social security income (SSI - not included as income for child support purposes): users[0].social_income
+    datatype: currency
+    min: 0
+    required: False
+  - Unemployment: users[0].unemployment_benefits
+    datatype: currency
+    min: 0
+    required: False
+  - Disability payment (not Social Security): users[0].disability_benefits
+    datatype: currency
+    min: 0
+    required: False
+  - Workers' compensation: users[0].workers_comp_benefits
+    datatype: currency
+    min: 0
+    required: False
+  - TANF and SNAP (not included as income for child support purposes): users[0].child_benefits
+    datatype: currency
+    min: 0
+    required: False
+  - Military allowances: users[0].military_allowances
+    datatype: currency
+    min: 0
+    required: False
+---
+id: other monthly business income
+question: |
+  Other monthly business income
+fields:
+  - Rental income: users[0].rental_income
+    datatype: currency
+    min: 0
+    required: False
+  - Partnership income: users[0].partnership_income
+    datatype: currency
+    min: 0
+    required: False
+  - Distributions and draws: users[0].distributions_draws
+    datatype: currency
+    min: 0
+    required: False
+  - Royalty income: users[0].royalty_income
+    datatype: currency
+    min: 0
+    required: False
+---
+id: monthly maintenance and support 
+question: |
+  Monthly maintenance and support
+fields:
+  - "Maintenance received under an order entered in this case or another case that you must report as income on your tax return": users[0].maintenance_current
+    datatype: currency
+    min: 0
+    required: False
+  - "Maintenance received under an order entered in this case or another case that you do not have to report as income on your tax return": users[0].maintenance_alternate
+    datatype: currency
+    min: 0
+    required: False
+  - "Child support for children of this relationship (if this support is paid by the other parent, it does not affect the support calculation)": users[0].child_support_current
+    datatype: currency
+    min: 0
+    required: False
+  - "Social Security payment made to the children of this relationship based on your disability or retirement": users[0].social_security_current
+    datatype: currency
+    min: 0
+    required: False
+---
+id: monthly gifts other income
+question: |
+  Monthly gifts and other income
+fields:
+  - Gifts of money: users[0].gifts_money
+    datatype: currency
+    min: 0
+    required: False
+  - Do you receive other types of income?: users[0].other_source
+    datatype: yesnoradio
+  - Other: users[0].other_income
+    datatype: currency
+    min: 0
+    required: False
+    show if: users[0].other_source
+  - "What is the source of the other income? (list all sources)": users[0].other_income_description
+    required: False
+    show if: users[0].other_source
+---
 
 
 
+  # total summary/review page
+  # - "total_gross_monthly_income": something
+
+  #     - "monthly_deductions_federal": something
+  #     - "monthly_deductions_state": something
+  #     - "monthly_deductions_FICA": something
+  #     - "monthly deductions medicare tax": something
+  #     - "monthly_deductions_retirement": something
+  #     - "monthly_deductions_total": something
+
+  #     - "maintenance_paid_court": something
+  #     - "maintenance_paid_no_tax": something
+  #     - "maintenance_paid_taxed": something
+  #     - "maintenance_payments_total": something
+
+  #     - "child_support_1": something
+  #     - "child_support_2": something
+  #     - "child_support_3": something
+  #     - "child_support_payments_total": something
 ---
 id: forms assembling
 continue button field: forms_assembling
@@ -714,6 +906,124 @@ attachment:
           % if taxes_filed:
           ${ tax_claimed['care'] }
           % endif
+      # monthly gross income
+      - "regular_pay": |
+          ${ nice_number(users[0].regular_pay, use_word=False) }
+      - "overtime_pay":  |
+          ${ nice_number(users[0].overtime_pay, use_word=False) }
+      - "commission_pay":  |
+          ${ nice_number(users[0].commission_pay, use_word=False) }
+      - "tips":  |
+          ${ nice_number(users[0].tips, use_word=False) }
+      - "bonus":  |
+          ${ nice_number(users[0].bonus, use_word=False) }
+      - "pension":  |
+          ${ nice_number(users[0].pension, use_word=False) }
+      - "annuity":  |
+          ${ nice_number(users[0].annuity, use_word=False) }
+      - "interest_income":  |
+          ${ nice_number(users[0].interest, use_word=False) }
+      - "dividend_income":  |
+          ${ nice_number(users[0].dividend, use_word=False) }
+      - "trust_income":  |
+          ${ nice_number(users[0].trust, use_word=False) }
+      - "investment_income":  |
+          ${ nice_number(users[0].investment, use_word=False) }
+      - "social_retirement":  |
+          ${ nice_number(users[0].social_retirement, use_word=False) }
+      - "social_disability":  |
+          ${ nice_number(users[0].social_disability, use_word=False) }
+      - "social_income":  |
+          ${ nice_number(users[0].social_income, use_word=False) }
+      - "unemployment_benefits":  |
+          ${ nice_number(users[0].unemployment_benefits, use_word=False) }
+      - "disability_benefits":  |
+          ${ nice_number(users[0].disability_benefits, use_word=False) }
+      - "workers_comp_benefits":  |
+          ${ nice_number(users[0].workers_comp_benefits, use_word=False) }
+      - "child_benefits":  |
+          ${ nice_number(users[0].child_benefits, use_word=False) }
+      - "military_allowances":  |
+          ${ nice_number(users[0].military_allowances, use_word=False) }
+      - "rental_income":  |
+          ${ nice_number(users[0].rental_income, use_word=False) }
+      - "partnership_income":  |
+          ${ nice_number(users[0].partnership_income, use_word=False) }
+      - "distributions_draws":  |
+          ${ nice_number(users[0].distributions_draws, use_word=False) }
+      - "royalty_income":  |
+          ${ nice_number(users[0].royalty_income, use_word=False) }
+      - "maintenance_current":  |
+          ${ nice_number(users[0].maintenance_current, use_word=False) }
+      - "maintenance_alternate":  |
+          ${ nice_number(users[0].maintenance_alternate, use_word=False) }
+      - "child_support_current":  |
+          ${ nice_number(users[0].child_support_current, use_word=False) }
+      - "social_security_current":  |
+          ${ nice_number(users[0].social_security_current, use_word=False) }
+      - "gifts_money":  |
+          ${ nice_number(users[0].gifts_money, use_word=False) }
+      - "other_income": |
+          % if users[0].other_source:
+          ${ nice_number(users[0].other_income, use_word=False) }
+          % endif
+      - "other_income_description": |
+          % if users[0].other_source:
+          ${ users[0].other_income_description }
+          % endif          
+      - "total_gross_monthly_income": |
+          ${ nice_number(
+          users[0].regular_pay +
+          users[0].overtime_pay +
+          users[0].commission_pay +
+          users[0].tips +
+          users[0].bonus +
+          users[0].pension +
+          users[0].annuity +
+          users[0].interest +
+          users[0].dividend +
+          users[0].trust +
+          users[0].investment + 
+          users[0].social_retirement +
+          users[0].social_disability +
+          users[0].social_income +
+          users[0].unemployment_benefits +
+          users[0].disability_benefits +
+          users[0].workers_comp_benefits +
+          users[0].child_benefits +
+          users[0].military_allowances +
+          users[0].rental_income +
+          users[0].partnership_income +
+          users[0].distributions_draws +
+          users[0].royalty_income + 
+          users[0].maintenance_current +
+          users[0].maintenance_alternate +
+          users[0].child_support_current +
+          users[0].social_security_current +
+          users[0].gifts_money + 
+          users[0].other_income, use_word=False) }
+
+
+
+
+      # - "monthly_deductions_federal": something
+      # - "monthly_deductions_state": something
+      # - "monthly_deductions_FICA": something
+      # - "monthly deductions medicare tax": something
+      # - "monthly_deductions_retirement": something
+      # - "monthly_deductions_total": something
+      
+      # - "maintenance_paid_court": something
+      # - "maintenance_paid_no_tax": something
+      # - "maintenance_paid_taxed": something
+      # - "maintenance_payments_total": something
+
+      # - "child_support_1": something
+      # - "child_support_2": something
+      # - "child_support_3": something
+      # - "child_support_payments_total": something
+
+
 ---
 ############ FA EMPLOYMENT/BUSINESS INCOME ADDENDUM #############
 objects:

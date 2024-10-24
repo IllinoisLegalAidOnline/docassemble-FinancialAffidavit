@@ -1,0 +1,98 @@
+---
+id: income summary review
+continue button field: income_summary
+question: |
+  Income summary for ${ users[0] }
+subquestion: |
+  Below are your answers so far for ${ users[0] }. Please 
+  check your work and use the "Edit" button to make any
+  necessary changes.
+
+  Click "Continue" when you are finished.
+review:
+  - Edit: 
+      - users[0].regular_pay
+    button: |
+      <h2 class="h4">Monthly employment income: ${ currency(
+        users[0].regular_pay +
+        users[0].overtime_pay +
+        users[0].commission_pay +
+        users[0].tips +
+        users[0].bonus) }</h2>
+  - Edit:
+      - users[0].pension
+    button: |
+      <h2 class="h4">Monthly investment income: ${ currency(
+        users[0].pension +
+        users[0].annuity +
+        users[0].interest +
+        users[0].dividend +
+        users[0].trust +
+        users[0].investment) }</h2>
+  - Edit:
+      - users[0].social_retirement
+    button: |
+      <h2 class="h4">Monthly benefits: ${ currency(
+        users[0].social_retirement +
+        users[0].social_disability +
+        users[0].social_income +
+        users[0].unemployment_benefits +
+        users[0].disability_benefits +
+        users[0].workers_comp_benefits +
+        users[0].child_benefits +
+        users[0].military_allowances) }</h2>
+  - Edit:
+      - users[0].rental_income
+    button: |
+      <h2 class="h4">Other monthly business income: ${ currency(
+        users[0].rental_income +
+        users[0].partnership_income +
+        users[0].distributions_draws +
+        users[0].royalty_income) }</h2>
+  - Edit:
+      - users[0].maintenance_current
+    button: |
+      <h2 class="h4">Monthly maintenance and support: ${ currency(
+        users[0].maintenance_current +
+        users[0].maintenance_alternate +
+        users[0].child_support_current +
+        users[0].social_security_current) }</h2>
+  - Edit:
+      - users[0].gifts_money
+    button: |
+      <h2 class="h4">Monthly gifts and other income: ${ currency(
+        users[0].gifts_money + users[0].other_income) }</h2>
+      Has other income: ${ yesno(users[0].other_source) }
+  - Edit: ""
+    button: |
+      <h2 class="h4">Monthly gifts and other income: ${ currency(
+        users[0].regular_pay +
+        users[0].overtime_pay +
+        users[0].commission_pay +
+        users[0].tips +
+        users[0].bonus +
+        users[0].pension +
+        users[0].annuity +
+        users[0].interest +
+        users[0].dividend +
+        users[0].trust +
+        users[0].investment + 
+        users[0].social_retirement +
+        users[0].social_disability +
+        users[0].social_income +
+        users[0].unemployment_benefits +
+        users[0].disability_benefits +
+        users[0].workers_comp_benefits +
+        users[0].child_benefits +
+        users[0].military_allowances +
+        users[0].rental_income +
+        users[0].partnership_income +
+        users[0].distributions_draws +
+        users[0].royalty_income + 
+        users[0].maintenance_current +
+        users[0].maintenance_alternate +
+        users[0].child_support_current +
+        users[0].social_security_current +
+        users[0].gifts_money + 
+        users[0].other_income) }</h2>
+---
