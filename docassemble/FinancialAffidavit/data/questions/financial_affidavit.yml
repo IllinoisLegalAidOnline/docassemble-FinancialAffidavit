@@ -257,11 +257,11 @@ fields:
   - Phone Number: users[0].phone_number
     datatype: al_international_phone
 ---
-id: user birthdates
+id: user birthdate
 question: |
   When were you born?
 fields:
-  - Other Date of Birth Used: users[i].birthdate
+  - Birth Date: users[i].birthdate
     datatype: BirthDate
     alMax: ${ today().format("yyyy-MM-dd") }
 ---
@@ -272,6 +272,9 @@ question: |
 fields:
   - no label: household_expenses
     datatype: yesnoradio
+    choices:
+      - Yes
+      - No
 ---
 id: user acknowledge
 continue button field: users_acknowledge
@@ -293,18 +296,12 @@ question: |
   Are you employed or do you have other forms of business income?
 subquestion: |
   This includes income:
-
-  - From employment by someone else;
-
-  - From self-employment as a sole proprietorship or independent contractor;
-
-  - As a member of a partnership;
-
-  - As a member of a limited liability company (LLC) not treated as a corporation;
-
-  - From a closely-held corporation;
-
-  - From any other flow-through business entities 
+  
+  * From employment by someone else,
+  * From self-employment as a sole proprietorship or independent contractor;  - As a member of a partnership,
+  * As a member of a limited liability company (LLC) not treated as a corporation,
+  * From a closely-held corporation, and
+  * From any other flow-through business entities.
 fields:
   - no label: employment.there_are_any
     datatype: yesnoradio
@@ -333,6 +330,7 @@ question: |
   What is your ${ordinal(i)} source of employment or business income? 
 fields:
   - "What type of employment or income is this?": employment[i].type
+    datatype: radio
     choices:
 			- Employed by someone else: employed
       - Own business as a sole proprietorship: own
@@ -346,7 +344,7 @@ id: employer or business name
 question: |
   What is the name of this employer or business?
 fields: 
-  - Name: employment[i].name.text
+  - Employer or business name: employment[i].name.text
   - Street address: employment[i].address.address
     address autocomplete: True
   - Address line 2: employment[i].address.unit
@@ -359,9 +357,10 @@ fields:
 ---
 id: employer pay 
 question: |
-  How often are you paid?
-fields: 
+  Details about pay from ${ employment[i].name.text }
+fields:
   - Pay period: employment[i].frequency
+    datatype: radio
     choices:
       - Once a month: 12
       - Twice a month: 24
@@ -369,12 +368,17 @@ fields:
       - Once a week: 52
   - "Are you paid in cash?": employment[i].cash_payment
     datatype: yesnoradio
-  - "What is the gross income (before taxes and deductions) so far this year?": employment[i].gross_income
+  - "Gross income as of January 1, ${ current_datetime().year }:": employment[i].gross_income
     datatype: currency
+  - "Gross income as of date (i.e. last pay statement)": employment[i].gross_date
+    datatype: date
+    max: ${ today().format("MM-dd-yyyy") }
+    default: |
+      ${ today().format("MM-dd-yyyy") }
 ---
 id: business income 
 question: 
-  What was your total gross income (before taxes and deductions) last year, and so far this year?
+  Income and expenses for ${ employment[i].name.text }
 subquestion:
   You must attach complete business federal and state business tax returns for the most recent tax year.
 fields:
@@ -391,7 +395,7 @@ fields:
 ---
 id: business perks
 question: 
-  Do you receive any of these perks from this business?
+  Do you receive any of these perks from ${ employment[i].name.text }?
 fields:
   - Perks (Check all that apply): employment[i].perks
     datatype: checkboxes
@@ -414,23 +418,23 @@ fields:
 ---
 id: filed taxes detail
 question: |
-  What was your tax filing status last year?
+  Income tax details for the previous year (${ current_datetime().year-1 })
 fields:
-  - no label: taxes_filed_status
+  - What was your tax filing status last year?: taxes_filed_status
     datatype: radio
     choices: 
       - Married (Joint): joint
       - Married (Separate): separate
       - Single: single
       - Head of Household: household
-  - I claim on my federal tax return: deduction_type
+  - How did you claim deductions last year?: deduction_type
     datatype: radio
     choices: 
       - the standardized deduction: yes
       - itemized deductions: no
   - Gross income (before taxes and deductions) last year: gross_income_last_year
     datatype: currency
-  - On my last tax return I claimed: tax_claimed
+  - Did you claim any of these? (check any that apply): tax_claimed
     datatype: checkboxes
     choices: 
       - Child tax credit: child_credit
@@ -478,7 +482,7 @@ under: |
   ${ action_button_html(interview_url(i="docassemble.ILAO:feedback.yml", easy_form_interview=ilao_easy_form_url, easy_form_title=ilao_easy_form_title, easy_form_page=user_info().question_id, easy_form_variable=user_info().variable, local=False,reset=1), label=':comment: Was this program helpful?', color="#181c36", size="md", new_window=True) }
 ---
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, financial_affidavit_bundle], filename="completed_financial_affidavit.pdf", title="Financial Affidavit Package", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, financial_affidavit_bundle], filename="completed_financial_affidavit.pdf", title="All forms", enabled=True)
 ---
 objects:
   - financial_affidavit_bundle: ALDocumentBundle.using(title="Financial Affidavit", filename="fa_primary.pdf", enabled=True, elements=[
@@ -504,7 +508,7 @@ attachment:
     pdf template file: fa_primary.pdf
     editable: False
     fields:
-      - "county": ${ case_county }
+      - "county_name": ${ case_county.upper() }
       - "case_number": ${ case_number }
       - "pre-judgment": ${ filing_status == "pre_judgment" }
       - "post-judgment": ${ filing_status == "post_judgment" }
@@ -537,9 +541,8 @@ attachment:
           ${ users[0].address.line_two() }
           % endif
       - "users_birthdate": ${ users[0].birthdate.format('MM/dd/yyyy') }
-      - "expenses_yes": ${ household_expenses == "yes"}
-      - "expenses_no": ${ household_expenses == "no"}
-      ## 6. My Employment/Business
+      - "household_expenses": ${ household_expenses }
+      # Page 2: 6. My Employment/Business
       - "unemployed_yes": ${ employment.number_gathered() == 0 }  
       # employed
       - "employed_yes": |
@@ -584,7 +587,7 @@ attachment:
           % endif
       - "income_date": |
           % if employment.there_are_any and employment[0].type == "employed":
-          ${ today().format('MM/dd/yyyy') }
+          ${ employment[0].gross_date.format('MM/dd/yyyy') }
           % endif
       # business
       - "business_own": |
@@ -803,7 +806,7 @@ attachment:
           % endif
       - "income_date": |
           % if employment[i].type == "employed":
-          ${ today().format('MM/dd/yyyy') }
+          ${ employment[i].gross_date.format('MM/dd/yyyy') }
           % endif
       # business
       - "business_own": ${ employment[i].type == "own" }
