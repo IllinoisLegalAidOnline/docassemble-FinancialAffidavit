@@ -80,6 +80,8 @@ code: |
   users[0].rental_income
   users[0].maintenance_current
   users[0].gifts_money
+  if users[0].other_source == False:
+    users[0].other_income = 0
   income_summary
 
   set_progress(40)

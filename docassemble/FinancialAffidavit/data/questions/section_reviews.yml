@@ -63,8 +63,7 @@ review:
       <h2 class="h4">Monthly gifts and other income: ${ currency(
         users[0].gifts_money + users[0].other_income) }</h2>
       Has other income: ${ yesno(users[0].other_source) }
-  - Edit: ""
-    button: |
+  - note: |
       <h2 class="h4">Monthly gifts and other income: ${ currency(
         users[0].regular_pay +
         users[0].overtime_pay +
