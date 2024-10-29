@@ -95,3 +95,188 @@ review:
         users[0].gifts_money + 
         users[0].other_income) }</h2>
 ---
+id: expenses summary review
+continue button field: expenses_summary
+question: |
+  Monthly expenses summary for ${ users[0] }
+subquestion: |
+  Below are your answers so far for ${ users[0] }. Please 
+  check your work and use the "Edit" button to make any
+  necessary changes.
+
+  Click "Continue" when you are finished.
+review:
+  - Edit:
+      - users[0].deductions_federal
+    button: |
+      <h2 class="h4">Monthly payroll deductions: ${ currency(
+        users[0].deductions_federal +
+        users[0].deductions_state +
+        users[0].deductions_FICA +
+        users[0].deductions_medicare +
+        users[0].deductions_retirement) }</h2>
+  - Edit:
+      - users[0].maintenance_paid_court
+    button: |
+      <h2 class="h4">Monthly maintenance payments: ${ currency(
+        users[0].maintenance_paid_court +
+        users[0].maintenance_paid_no_tax +
+        users[0].maintenance_paid_taxed) }</h2>
+  - Edit:
+      - users[0].child_support_1
+    button: |
+      <h2 class="h4">Monthly child support payments: ${ currency(
+        users[0].child_support_1 +
+        users[0].child_support_2 +
+        users[0].child_support_3) }</h2>
+  - Edit:
+      - users[0].living_house_payment
+    button: |
+      <h2 class="h4">Subtotal monthly household living expenses: ${ currency(
+        users[0].living_house_payment +
+        users[0].living_heloc +
+        users[0].living_property_taxes +
+        users[0].living_hoa +
+        users[0].living_insurance +
+        users[0].living_gas +
+        users[0].living_power +
+        users[0].living_phone +
+        users[0].living_cable +
+        users[0].living_internet +
+        users[0].living_water +
+        users[0].living_trash +
+        users[0].living_laundry +
+        users[0].living_cleaner +
+        users[0].living_repairs +
+        users[0].living_pets +
+        users[0].living_groceries +
+        users[0].living_other) }</h2>
+  - Edit:
+      - users[0].transport_payment
+    button: |
+      <h2 class="h4">Subtotal monthly transportation expenses: ${ currency(
+        users[0].transport_payment +
+        users[0].transport_maintenance +
+        users[0].transport_insurance +
+        users[0].transport_fuel +
+        users[0].transport_public +
+        users[0].transport_parking +
+        users[0].transport_other) }</h2>
+  - Edit:
+      - users[0].personal_doctor
+    button: |
+      <h2 class="h4">Subtotal monthly personal expenses: ${ currency(
+        users[0].personal_doctor +
+        users[0].personal_therapy +
+        users[0].personal_dental +
+        users[0].personal_vision +
+        users[0].personal_medications +
+        users[0].personal_life_term +
+        users[0].personal_life_whole +
+        users[0].personal_clothing +
+        users[0].personal_stylist +
+        users[0].personal_memberships +
+        users[0].personal_subscriptions +
+        users[0].personal_entertainment +
+        users[0].personal_gifts +
+        users[0].personal_donations +
+        users[0].personal_vacations +
+        users[0].personal_associations +
+        users[0].peronsal_professional +
+        users[0].personal_other) }</h2>
+  - Edit:
+      - users[0].children_tuition
+    button: |
+      <h2 class="h4">Subtotal monthly minor and dependent children expenses: ${ currency(
+        users[0].children_clothing +
+        users[0].children_grooming +
+        users[0].children_tuition +
+        users[0].children_books +
+        users[0].children_school_lunch +
+        users[0].children_transportation +
+        users[0].children_school_events +
+        users[0].children_school_uniforms +
+        users[0].children_after_school +
+        users[0].children_tutor +
+        users[0].children_doctor +
+        users[0].children_therapy +
+        users[0].children_dental +
+        users[0].children_vision +
+        users[0].children_medications +
+        users[0].children_allowance +
+        users[0].children_childcare +
+        users[0].children_sports +
+        users[0].children_camps +
+        users[0].children_vacations +
+        users[0].children_entertainment +
+        users[0].children_party_gifts +
+        users[0].children_other) }</h2>
+  - note: |
+      <h2 class="h4">Total Monthly Living Expenses: ${ currency(
+        users[0].living_house_payment +
+        users[0].living_heloc +
+        users[0].living_property_taxes +
+        users[0].living_hoa +
+        users[0].living_insurance +
+        users[0].living_gas +
+        users[0].living_power +
+        users[0].living_phone +
+        users[0].living_cable +
+        users[0].living_internet +
+        users[0].living_water +
+        users[0].living_trash +
+        users[0].living_laundry +
+        users[0].living_cleaner +
+        users[0].living_repairs +
+        users[0].living_pets +
+        users[0].living_groceries +
+        users[0].living_other +
+        users[0].transport_payment +
+        users[0].transport_maintenance +
+        users[0].transport_insurance +
+        users[0].transport_fuel +
+        users[0].transport_public +
+        users[0].transport_parking +
+        users[0].transport_other +
+        users[0].personal_doctor +
+        users[0].personal_therapy +
+        users[0].personal_dental +
+        users[0].personal_vision +
+        users[0].personal_medications +
+        users[0].personal_life_term +
+        users[0].personal_life_whole +
+        users[0].personal_clothing +
+        users[0].personal_stylist +
+        users[0].personal_memberships +
+        users[0].personal_subscriptions +
+        users[0].personal_entertainment +
+        users[0].personal_gifts +
+        users[0].personal_donations +
+        users[0].personal_vacations +
+        users[0].personal_associations +
+        users[0].peronsal_professional +
+        users[0].personal_other +
+        users[0].children_clothing +
+        users[0].children_grooming +
+        users[0].children_tuition +
+        users[0].children_books +
+        users[0].children_school_lunch +
+        users[0].children_transportation +
+        users[0].children_school_events +
+        users[0].children_school_uniforms +
+        users[0].children_after_school +
+        users[0].children_tutor +
+        users[0].children_doctor +
+        users[0].children_therapy +
+        users[0].children_dental +
+        users[0].children_vision +
+        users[0].children_medications +
+        users[0].children_allowance +
+        users[0].children_childcare +
+        users[0].children_sports +
+        users[0].children_camps +
+        users[0].children_vacations +
+        users[0].children_entertainment +
+        users[0].children_party_gifts +
+        users[0].children_other) }</h2>
+---
