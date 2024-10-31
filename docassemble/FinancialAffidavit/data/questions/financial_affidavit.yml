@@ -17,6 +17,7 @@ objects:
   - other_parties: ALPeopleList.using(there_are_any=True)
   - employment: DAList.using(object_type=Thing, complete_attribute='complete')
   - employment[i].address: ALAddress
+  - insurance: DAList.using(object_type=Thing, complete_attribute='complete')
   - court_list: ALCourtLoader.using(file_name='docassemble.ILAO:data/sources/il_courts.xlsx')
 ---
 code: |
@@ -74,35 +75,63 @@ code: |
     taxes_filed_status
 
   monthly_income_intro
-  users[0].regular_pay
-  users[0].pension
-  users[0].social_retirement
-  users[0].rental_income
-  users[0].maintenance_current
-  users[0].gifts_money
-  if users[0].other_source == False:
-    users[0].other_income = 0
+  users[0].regular_pay_question
+  users[0].pension_question
+  users[0].social_retirement_question
+  users[0].rental_income_question
+  users[0].maintenance_current_question
+  users[0].gifts_money_question
   income_summary
 
   set_progress(40)
   nav.set_section('section_expenses') 
   expenses_intro
-  users[0].deductions_federal
-  users[0].maintenance_paid_court
-  users[0].child_support_1
-  users[0].living_house_payment
-  users[0].transport_payment
-  users[0].personal_doctor
-  users[0].children_tuition
+  users[0].deductions_federal_question
+  users[0].maintenance_paid_court_question
+  users[0].child_support_1_question
+  
+  users[0].living_house_payment_question
+  users[0].living_gas_question
+  users[0].living_laundry_question
+  users[0].living_other_question
+
+  users[0].transport_payment_question
+  users[0].transport_other_question
+
+  users[0].personal_doctor_question
+  users[0].personal_life_term_question
+  users[0].personal_clothing_question
+  users[0].personal_entertainment_question
+  users[0].personal_gifts_question
+  users[0].personal_vacations_question
+  users[0].personal_associations_question
+  users[0].other_personal_question
+
+  if users[0].children_expenses_question:
+    users[0].children_tuition_question
+    users[0].children_doctor_question
+    users[0].children_allowance_question 
+    users[0].children_vacations_question 
+    users[0].children_other_question
+
   expenses_summary
 
-
+  if insurance.there_are_any:
+    insurance.gather()
 
   set_progress(100)
   nav.set_section('section_download')
   forms_assembling
   get_docs_screen
 ---
+# mandatory: True
+# code:
+#   users[0].other_income = 0
+#   users[0].living_other = 0
+#   users[0].transport_other = 0
+#   users[0].personal_other = 0
+#   users[0].children_other = 0
+# ---
 id: welcome
 question: |
   Financial Affidavit
@@ -287,7 +316,7 @@ id: user birthdate
 question: |
   When were you born?
 fields:
-  - Birth Date: users[i].birthdate
+  - Birth date: users[i].birthdate
     datatype: BirthDate
     alMax: ${ today().format("yyyy-MM-dd") }
 ---
@@ -321,7 +350,7 @@ subquestion: |
   This includes income:
   
   * From employment by someone else,
-  * From self-employment as a sole proprietorship or independent contractor;  - As a member of a partnership,
+  * From self-employment as a sole proprietorship or independent contractor - as a member of a partnership,
   * As a member of a limited liability company (LLC) not treated as a corporation,
   * From a closely-held corporation, and
   * From any other flow-through business entities.
@@ -365,7 +394,7 @@ fields:
 ---
 id: employer or business name 
 question: |
-  What is the name of this employer or business?
+  Employer or business info
 fields: 
   - Employer or business name: employment[i].name.text
   - Street address: employment[i].address.address
@@ -391,19 +420,19 @@ fields:
       - Once a week: 52
   - "Are you paid in cash?": employment[i].cash_payment
     datatype: yesnoradio
-  - "Gross income as of January 1, ${ current_datetime().year }:": employment[i].gross_income
+  - "Gross income in ${ current_datetime().year }:": employment[i].gross_income
     datatype: currency
-  - "Gross income as of date (i.e. last pay statement)": employment[i].gross_date
+  - "Gross income from January 1, ${ current_datetime().year } through :": employment[i].gross_date
     datatype: date
     max: ${ today().format("MM-dd-yyyy") }
     default: |
       ${ today().format("MM-dd-yyyy") }
 ---
 id: business income 
-question: 
+question: |
   Income and expenses for ${ employment[i].name.text }
-subquestion:
-  You must attach complete business federal and state business tax returns for the most recent tax year.
+subquestion: |
+  **Note:** You must attach complete business federal and state business tax returns for the most recent tax year.
 fields:
   - Last year (${ current_datetime().year - 1 }): employment[i].income_last_year
     datatype: currency
@@ -417,7 +446,7 @@ fields:
     datatype: currency
 ---
 id: business perks
-question: 
+question: |
   Do you receive any of these perks from ${ employment[i].name.text }?
 fields:
   - Perks (Check all that apply): employment[i].perks
@@ -481,153 +510,309 @@ id: monthly employment income
 question: |
   Monthly employment income
 fields:
-  - "Regular employment/self-employment earnings from all jobs (salary, wages, base pay, etc.)": users[0].regular_pay
+  - "Regular employment/self-employment earnings from all jobs (salary, wages, base pay, etc.)": users[0].regular_pay_question
+    datatype: yesnowide
+  - Amount: users[0].regular_pay
     datatype: currency
     min: 0
-    required: False
-  - Overtime: users[0].overtime_pay
+    show if: users[0].regular_pay_question
+  - Overtime: users[0].overtime_pay_question
+    datatype: yesnowide
+  - Amount: users[0].overtime_pay
     datatype: currency
     min: 0
-    required: False
-  - Commission: users[0].commission_pay
+    show if: users[0].overtime_pay_question
+  - Commission: users[0].commission_pay_question
+    datatype: yesnowide
+  - Amount: users[0].commission_pay
     datatype: currency
     min: 0
-    required: False
-  - Tips and gratuities: users[0].tips
+    show if: users[0].commission_pay_question
+  - Tips and gratuities: users[0].tips_question
+    datatype: yesnowide
+  - Amount: users[0].tips
     datatype: currency
     min: 0
-    required: False
+    show if: users[0].tips_question
+  - Bonus: users[0].bonus_question
+    datatype: yesnowide
   - Bonus: users[0].bonus
     datatype: currency
     min: 0
-    required: False
+    show if: users[0].bonus_question
 ---
 id: monthly investment income 
 question: |
   Monthly investment income
 fields:
-  - Pension: users[0].pension
+  - Pension: users[0].pension_question
+    datatype: yesnowide
+  - Amount: users[0].pension
     datatype: currency
     min: 0
-    required: False
-  - Annuity: users[0].annuity
+    show if: users[0].pension_question
+  - Annuity: users[0].annuity_question
+    datatype: yesnowide
+  - Amount: users[0].annuity
     datatype: currency
     min: 0
-    required: False
-  - Interest income: users[0].interest
+    show if: users[0].annuity_question
+  - Interest income: users[0].interest_question
+    datatype: yesnowide
+  - Amount: users[0].interest
     datatype: currency
     min: 0
-    required: False
-  - Dividend income: users[0].dividend
+    show if: users[0].interest_question
+  - Dividend income: users[0].dividend_question
+    datatype: yesnowide
+  - Amount: users[0].dividend
     datatype: currency
     min: 0
-    required: False
-  - Trust income: users[0].trust
+    show if: users[0].dividend_question
+  - Trust income: users[0].trust_question
+    datatype: yesnowide
+  - Amount: users[0].trust
     datatype: currency
     min: 0
-    required: False
-  - Investment income: users[0].investment
+    show if: users[0].trust_question
+  - Investment income: users[0].investment_question
+    datatype: yesnowide
+  - Amount: users[0].investment
     datatype: currency
     min: 0
-    required: False
+    show if: users[0].investment_question
 ---
 id: monthly benefits
 question: |
   Monthly benefits
 fields:
-  - Social security retirement: users[0].social_retirement
+  - Social security retirement: users[0].social_retirement_question
+    datatype: yesnowide
+  - Amount: users[0].social_retirement
     datatype: currency
     min: 0
-    required: False
-  - Social Security Disability: users[0].social_disability
+    show if: users[0].social_retirement_question
+  - Social Security Disability: users[0].social_disability_question
+    datatype: yesnowide
+  - Amount: users[0].social_disability
     datatype: currency
     min: 0
-    required: False
-  - Social security income (SSI - not included as income for child support purposes): users[0].social_income
+    show if: users[0].social_disability_question
+  - Social security income (SSI - not included as income for child support purposes): users[0].social_income_question
+    datatype: yesnowide
+  - Amount: users[0].social_income
     datatype: currency
     min: 0
-    required: False
-  - Unemployment: users[0].unemployment_benefits
+    show if: users[0].social_income_question
+  - Unemployment: users[0].unemployment_benefits_question
+    datatype: yesnowide
+  - Amount: users[0].unemployment_benefits
     datatype: currency
     min: 0
-    required: False
-  - Disability payment (not Social Security): users[0].disability_benefits
+    show if: users[0].unemployment_benefits_question
+  - Disability payment (not Social Security): users[0].disability_benefits_question
+    datatype: yesnowide
+  - Amount: users[0].disability_benefits
     datatype: currency
     min: 0
-    required: False
-  - Workers' compensation: users[0].workers_comp_benefits
+    show if: users[0].disability_benefits_question
+  - Workers' compensation: users[0].workers_comp_benefits_question
+    datatype: yesnowide
+  - Amount: users[0].workers_comp_benefits
     datatype: currency
     min: 0
-    required: False
-  - TANF and SNAP (not included as income for child support purposes): users[0].child_benefits
+    show if: users[0].workers_comp_benefits_question
+  - TANF and SNAP (not included as income for child support purposes): users[0].child_benefits_question
+    datatype: yesnowide
+  - Amount: users[0].child_benefits
     datatype: currency
     min: 0
-    required: False
-  - Military allowances: users[0].military_allowances
+    show if: users[0].child_benefits_question
+  - Military allowances: users[0].military_allowances_question
+    datatype: yesnowide
+  - Amount: users[0].military_allowances
     datatype: currency
     min: 0
-    required: False
+    show if: users[0].military_allowances_question
 ---
 id: other monthly business income
 question: |
   Other monthly business income
 fields:
-  - Rental income: users[0].rental_income
+  - Rental income: users[0].rental_income_question
+    datatype: yesnowide
+  - Amount: users[0].rental_income
     datatype: currency
     min: 0
-    required: False
-  - Partnership income: users[0].partnership_income
+    show if: users[0].rental_income_question
+  - Partnership income: users[0].partnership_income_question
+    datatype: yesnowide
+  - Amount: users[0].partnership_income
     datatype: currency
     min: 0
-    required: False
-  - Distributions and draws: users[0].distributions_draws
+    show if: users[0].partnership_income_question
+  - Distributions and draws: users[0].distributions_draws_question
+    datatype: yesnowide
+  - Amount: users[0].distributions_draws
     datatype: currency
     min: 0
-    required: False
-  - Royalty income: users[0].royalty_income
+    show if: users[0].distributions_draws_question
+  - Royalty income: users[0].royalty_income_question
+    datatype: yesnowide
+  - Amount: users[0].royalty_income
     datatype: currency
     min: 0
-    required: False
+    show if: users[0].royalty_income_question
 ---
 id: monthly maintenance and support 
 question: |
   Monthly maintenance and support
 fields:
-  - "Maintenance received under an order entered in this case or another case that you must report as income on your tax return": users[0].maintenance_current
+  - "Maintenance received under an order entered in this case or another case that you must report as income on your tax return": users[0].maintenance_current_question
+    datatype: yesnowide
+  - Amount: users[0].maintenance_current
     datatype: currency
     min: 0
-    required: False
-  - "Maintenance received under an order entered in this case or another case that you do not have to report as income on your tax return": users[0].maintenance_alternate
+    show if: users[0].maintenance_current_question
+  - "Maintenance received under an order entered in this case or another case that you do not have to report as income on your tax return": users[0].maintenance_alternate_question
+    datatype: yesnowide
+  - Amount: users[0].maintenance_alternate
     datatype: currency
     min: 0
-    required: False
-  - "Child support for children of this relationship (if this support is paid by the other parent, it does not affect the support calculation)": users[0].child_support_current
+    show if: users[0].maintenance_alternate_question
+  - "Child support for children of this relationship (if this support is paid by the other parent, it does not affect the support calculation)": users[0].child_support_current_question
+    datatype: yesnowide
+  - Amount: users[0].child_support_current
     datatype: currency
     min: 0
-    required: False
-  - "Social Security payment made to the children of this relationship based on your disability or retirement": users[0].social_security_current
+    show if: users[0].child_support_current_question
+  - "Social Security payment made to the children of this relationship based on your disability or retirement": users[0].social_security_current_question
+    datatype: yesnowide
+  - Amount: users[0].social_security_current
     datatype: currency
     min: 0
-    required: False
+    show if: users[0].social_security_current_question
 ---
 id: monthly gifts other income
 question: |
   Monthly gifts and other income
 fields:
-  - Gifts of money: users[0].gifts_money
+  - Gifts of money: users[0].gifts_money_question
+    datatype: yesnowide
+  - Amount: users[0].gifts_money
     datatype: currency
     min: 0
-    required: False
-  - Do you receive other types of income?: users[0].other_source
-    datatype: yesnoradio
+    show if: users[0].gifts_money_question
+  - Do you receive other types of income?: users[0].other_income_question
+    datatype: yesnowide
   - Other: users[0].other_income
     datatype: currency
     min: 0
-    required: False
-    show if: users[0].other_source
+    show if: users[0].other_income_question
   - "What is the source of the other income? (list all sources)": users[0].other_income_description
-    required: False
-    show if: users[0].other_source
+    show if: users[0].other_income_question
+---
+depends on:
+  - users[0].regular_pay
+  - users[0].overtime_pay
+  - users[0].commission_pay
+  - users[0].tips
+  - users[0].bonus
+  - users[0].pension
+  - users[0].annuity
+  - users[0].interest
+  - users[0].dividend
+  - users[0].trust
+  - users[0].investment 
+  - users[0].social_retirement
+  - users[0].social_disability
+  - users[0].social_income
+  - users[0].unemployment_benefits
+  - users[0].disability_benefits
+  - users[0].workers_comp_benefits
+  - users[0].child_benefits
+  - users[0].military_allowances
+  - users[0].rental_income
+  - users[0].partnership_income
+  - users[0].distributions_draws
+  - users[0].royalty_income 
+  - users[0].maintenance_current
+  - users[0].maintenance_alternate
+  - users[0].child_support_current
+  - users[0].social_security_current
+  - users[0].gifts_money 
+  - users[0].other_income
+code: |
+  total_monthly_employment_income = sum_if_defined(
+    'users[0].regular_pay',
+    'users[0].overtime_pay',
+    'users[0].commission_pay',
+    'users[0].tips',
+    'users[0].bonus')
+  total_monthly_investment_income = sum_if_defined(
+    'users[0].pension',
+    'users[0].annuity',
+    'users[0].interest',
+    'users[0].dividend',
+    'users[0].trust',
+    'users[0].investment')
+
+  total_monthly_benefits_income = sum_if_defined(
+    'users[0].social_retirement',
+    'users[0].social_disability',
+    'users[0].social_income',
+    'users[0].unemployment_benefits',
+    'users[0].disability_benefits',
+    'users[0].workers_comp_benefits',
+    'users[0].child_benefits',
+    'users[0].military_allowances')
+
+  total_other_monthly_business_income = sum_if_defined(
+    'users[0].rental_income',
+    'users[0].partnership_income',
+    'users[0].distributions_draws',
+    'users[0].royalty_income')
+
+  total_monthly_maintenance_support_income = sum_if_defined(
+    'users[0].maintenance_current',
+    'users[0].maintenance_alternate',
+    'users[0].child_support_current',
+    'users[0].social_security_current')
+
+  total_monthly_gifts_other_income = sum_if_defined(
+    'users[0].gifts_money',
+    'users[0].other_income')
+
+  total_gross_monthly_income = sum_if_defined(
+    'users[0].regular_pay',
+    'users[0].overtime_pay',
+    'users[0].commission_pay',
+    'users[0].tips',
+    'users[0].bonus',
+    'users[0].pension',
+    'users[0].annuity',
+    'users[0].interest',
+    'users[0].dividend',
+    'users[0].trust',
+    'users[0].investment',
+    'users[0].social_retirement',
+    'users[0].social_disability',
+    'users[0].social_income',
+    'users[0].unemployment_benefits',
+    'users[0].disability_benefits',
+    'users[0].workers_comp_benefits',
+    'users[0].child_benefits',
+    'users[0].military_allowances',
+    'users[0].rental_income',
+    'users[0].partnership_income',
+    'users[0].distributions_draws',
+    'users[0].royalty_income',
+    'users[0].maintenance_current',
+    'users[0].maintenance_alternate',
+    'users[0].child_support_current',
+    'users[0].social_security_current',
+    'users[0].gifts_money',
+    'users[0].other_income')
 ---
 ########### EXPENSES ###########
 id: expenses intro 
@@ -649,397 +834,886 @@ question: |
 subquestion: |
   Monthly deductions are payments you must make every month. All fields are optional.
 fields:
-  - Federal income tax: users[0].deductions_federal
+  - Federal income tax: users[0].deductions_federal_question
+    datatype: yesnowide
+  - Amount: users[0].deductions_federal
     datatype: currency
     min: 0
-    required: False
-  - State income tax: users[0].deductions_state
+    show if: users[0].deductions_federal_question
+  - State income tax: users[0].deductions_state_question
+    datatype: yesnowide
+  - Amount: users[0].deductions_state
     datatype: currency
     min: 0
-    required: False
-  - FICA (or Social Security equivalent, such as Self-employment tax): users[0].deductions_FICA
+    show if: users[0].deductions_state_question
+  - FICA (or Social Security equivalent, such as Self-employment tax): users[0].deductions_FICA_question
+    datatype: yesnowide
+  - Amount: users[0].deductions_FICA
     datatype: currency
     min: 0
-    required: False
-  - Medicare tax: users[0].deductions_medicare
+    show if: users[0].deductions_FICA_question
+  - Medicare tax: users[0].deductions_medicare_question
+    datatype: yesnowide
+  - Amount: users[0].deductions_medicare
     datatype: currency
     min: 0
-    required: False
-  - Mandatory retirement contributions: users[0].deductions_retirement
+    show if: users[0].deductions_medicare_question
+  - Mandatory retirement contributions: users[0].deductions_retirement_question
+    datatype: yesnowide
+  - note: |
+      (by law or condition of employment, but only if no FICA or Social Security equivalent) 
+    show if: users[0].deductions_retirement_question
+  - Amount: users[0].deductions_retirement
     datatype: currency
     min: 0
-    required: False
-under: |
-  (by law or condition of employment, but only if no FICA or Social Security equivalent) 
+    show if: users[0].deductions_retirement_question
 ---
 id: monthly maintenance expenses
 question: |
   What monthly maintenance or child support payments do you make? 
 fields:
-  - "Maintenance being paid or payable to the other party by you under a court order **in this case**": users[0].maintenance_paid_court
+  - "Maintenance being paid or payable to the other party by you under a court order **in this case**": users[0].maintenance_paid_court_question
+    datatype: yesnowide
+  - Amount: users[0].maintenance_paid_court
     datatype: currency
     min: 0
-    required: False
-  - "Maintenance being paid under a court order to a former spouse by you, which is **tax deductible** to you": users[0].maintenance_paid_no_tax
+    show if: users[0].maintenance_paid_court_question
+  - "Maintenance being paid under a court order to a former spouse by you, which is **tax deductible** to you": users[0].maintenance_paid_no_tax_question
+    datatype: yesnowide
+  - Amount: users[0].maintenance_paid_no_tax
     datatype: currency
     min: 0
-    required: False
-  - "Maintenance being paid under a court order to a former spouse by you, which is **not tax deductible** to you": users[0].maintenance_paid_taxed
+    show if: users[0].maintenance_paid_no_tax_question
+  - "Maintenance being paid under a court order to a former spouse by you, which is **not tax deductible** to you": users[0].maintenance_paid_taxed_question
+    datatype: yesnowide
+  - Amount: users[0].maintenance_paid_taxed
     datatype: currency
     min: 0
-    required: False
+    show if: users[0].maintenance_paid_taxed_question
 ---
 id: monthly child support expenses
 question: |
   Do you make any monthly child support payments for any children to any other person?
 fields:
-  - Court-ordered child support being paid for the children of this relationship: users[0].child_support_1
-    label above field: True
+  - Court-ordered child support being paid for the children of this relationship: users[0].child_support_1_question
+    datatype: yesnowide
+  - Amount: users[0].child_support_1
     datatype: currency
     min: 0
-    required: False
-  - Child support being paid under a court order for children not shared with the other party and who are not part of this case: users[0].child_support_2
-    label above field: True
+    show if: users[0].child_support_1_question
+  - Child support being paid under a court order for children not shared with the other party and who are not part of this case: users[0].child_support_2_question
+    datatype: yesnowide
+  - Amount: users[0].child_support_2
     datatype: currency
     min: 0
-    required: False
+    show if: users[0].child_support_2_question
+  - Child support being paid, but there is no court order, for children not shared with the other party and who are not part of this case and: users[0].child_support_3_question
+    datatype: yesnowide
   - note: |
-      Child support being paid, but there is no court order, for children not shared with the other party and who are not part of this case and 
       (1) that are presumed to be yours, 
+
       (2) for whom there is a voluntary acknowledgment of paternity (VAP) signed by you and the other parent, OR 
+
       (3) for whom there is a court order naming you as a parent, but there is no support order
-  - no label: users[0].child_support_3
+    show if: users[0].child_support_3_question
+  - Amount: users[0].child_support_3
     datatype: currency
     min: 0
-    required: False
+    show if: users[0].child_support_3_question
 ---
-id: monthly household expenses
+id: monthly housing expenses
 question: |
-  What monthly household living expenses do you have?
+  Monthly housing expenses:
 fields:
-  - Mortgage or rent: users[0].living_house_payment
+  - Mortgage or rent: users[0].living_house_payment_question
+    datatype: yesnowide
+  - Amount: users[0].living_house_payment
     datatype: currency
     min: 0
-    required: False 
-  - Home equity (HELOC) and second mortgage: users[0].living_heloc
+    show if: users[0].living_house_payment_question
+  - Home equity (HELOC) and second mortgage: users[0].living_heloc_question
+    datatype: yesnowide
+  - Amount: users[0].living_heloc
     datatype: currency
     min: 0
-    required: False
-  - Real estate taxes: users[0].living_property_taxes
+    show if: users[0].living_heloc_question
+  - Real estate taxes: users[0].living_property_taxes_question
+    datatype: yesnowide
+  - Amount: users[0].living_property_taxes
     datatype: currency
     min: 0
-    required: False
-  - Homeowners or condo association dues and assessments: users[0].living_hoa
+    show if: users[0].living_property_taxes_question
+  - Homeowners or condo association dues and assessments: users[0].living_hoa_question
+    datatype: yesnowide
+  - Amount: users[0].living_hoa
     datatype: currency
     min: 0
-    required: False
-  - Homeowners or renters insurance: users[0].living_insurance
+    show if: users[0].living_hoa_question
+  - Homeowners or renters insurance: users[0].living_insurance_question
+    datatype: yesnowide
+  - Amount: users[0].living_insurance
     datatype: currency
     min: 0
-    required: False
-  - Gas: users[0].living_gas
+    show if: users[0].living_insurance_question
+---
+id: monthly utility expenses
+question: |
+  Monthly household utility expenses:
+fields:
+  - Gas: users[0].living_gas_question
+    datatype: yesnowide
+  - Amount: users[0].living_gas
     datatype: currency
     min: 0
-    required: False
-  - Electric: users[0].living_power
+    show if:  users[0].living_gas_question
+  - Electric: users[0].living_power_question
+    datatype: yesnowide
+  - Amount: users[0].living_power
     datatype: currency
     min: 0
-    required: False
-  - Telephone: users[0].living_phone
+    show if: users[0].living_power_question
+  - Telephone: users[0].living_phone_question
+    datatype: yesnowide
+  - Amount: users[0].living_phone
     datatype: currency
     min: 0
-    required: False
-  - Cable or satellite TV: users[0].living_cable
+    show if: users[0].living_phone_question
+  - Cable or satellite TV: users[0].living_cable_question
+    datatype: yesnowide
+  - Amount: users[0].living_cable
     datatype: currency
     min: 0
-    required: False
-  - Internet: users[0].living_internet
+    show if: users[0].living_cable_question
+  - Internet: users[0].living_internet_question
+    datatype: yesnowide
+  - Amount: users[0].living_internet
     datatype: currency
     min: 0
-    required: False
-  - Water and sewer: users[0].living_water
+    show if: users[0].living_internet_question
+  - Water and sewer: users[0].living_water_question
+    datatype: yesnowide
+  - Amount: users[0].living_water
     datatype: currency
     min: 0
-    required: False
-  - Garbage removal: users[0].living_trash
+    show if: users[0].living_water_question
+  - Garbage removal: users[0].living_trash_question
+    datatype: yesnowide
+  - Amount: users[0].living_trash
     datatype: currency
     min: 0
-    required: False
-  - Laundry and dry cleaning: users[0].living_laundry
+    show if: users[0].living_trash_question
+---
+id: monthly living expenses
+question: |
+  Monthly living expenses:
+fields:
+  - Laundry and dry cleaning: users[0].living_laundry_question
+    datatype: yesnowide
+  - Amount: users[0].living_laundry
     datatype: currency
     min: 0
-    required: False
-  - House cleaning service: users[0].living_cleaner
+    show if: users[0].living_laundry_question
+  - House cleaning service: users[0].living_cleaner_question
+    datatype: yesnowide
+  - Amount: users[0].living_cleaner
     datatype: currency
     min: 0
-    required: False
-  - Necessary repairs and maintenance to my property: users[0].living_repairs
+    show if: users[0].living_cleaner_question
+  - Necessary repairs and maintenance to my property: users[0].living_repairs_question
+    datatype: yesnowide
+  - Amount: users[0].living_repairs
     datatype: currency
     min: 0
-    required: False
-  - Pet care: users[0].living_pets
+    show if: users[0].living_repairs_question
+  - Pet care: users[0].living_pets_question
+    datatype: yesnowide
+  - Amount: users[0].living_pets
     datatype: currency
     min: 0
-    required: False
-  - Groceries, household supplies, and toiletries: users[0].living_groceries
+    show if: users[0].living_pets_question
+  - Groceries, household supplies, and toiletries: users[0].living_groceries_question
+    datatype: yesnowide
+  - Amount: users[0].living_groceries
     datatype: currency
     min: 0
-    required: False
-  - Do you have other monthly household living expenses?: users[0].other_living
-    datatype: yesnoradio
-  - Other monthly household living expenses: users[0].living_other
+    show if: users[0].living_groceries_question
+---
+id: monthly other expenses
+question: |
+  Other (non transportation):
+fields:
+  - Other monthly household living expenses: users[0].living_other_question
+    datatype: yesnowide
+  - Amount: users[0].living_other
     datatype: currency
     min: 0
-    required: False
-    show if: users[0].other_living
+    show if: users[0].living_other_question
   - "What are the other monthly household living expenses?": users[0].living_other_description
-    required: False
-    show if: users[0].other_living
+    show if: users[0].living_other_question
 ---
 id: monthly transport expenses
 question: |
   What monthly transportation expenses do you have?
 fields:
-  - Car payment: users[0].transport_payment
+  - Car payment: users[0].transport_payment_question
+    datatype: yesnowide
+  - Amount: users[0].transport_payment
     datatype: currency
     min: 0
-    required: False
-  - Repairs and maintenance: users[0].transport_maintenance
+    show if: users[0].transport_payment_question
+  - Repairs and maintenance: users[0].transport_maintenance_question
+    datatype: yesnowide
+  - Amount: users[0].transport_maintenance
     datatype: currency
     min: 0
-    required: False
-  - Insurance, license, registration, and city stickers: users[0].transport_insurance
+    show if: users[0].transport_maintenance_question
+  - Insurance, license, registration, and city stickers: users[0].transport_insurance_question
+    datatype: yesnowide
+  - Amount: users[0].transport_insurance
     datatype: currency
     min: 0
-    required: False
-  - Gasoline/Charging: users[0].transport_fuel
+    show if: users[0].transport_insurance_question
+  - Gasoline/Charging: users[0].transport_fuel_question
+    datatype: yesnowide
+  - Amount: users[0].transport_fuel
     datatype: currency
     min: 0
-    required: False
-  - Taxi, ride-share, bus, and train: users[0].transport_public
+    show if: users[0].transport_fuel_question
+  - Taxi, ride-share, bus, and train: users[0].transport_public_question
+    datatype: yesnowide
+  - Amount: users[0].transport_public
     datatype: currency
     min: 0
-    required: False
-  - Parking: users[0].transport_parking
+    show if: users[0].transport_public_question
+  - Parking: users[0].transport_parking_question
+    datatype: yesnowide
+  - Amount: users[0].transport_parking
     datatype: currency
     min: 0
-    required: False
-  - Do you have other transportation expenses?: users[0].other_transport_yes
-    datatype: yesnoradio
+    show if: users[0].transport_parking_question
+---
+id: monthly other transport expenses
+question: |
+  Do you have other transportation expenses?
+fields:
+  - Other monthly transportation expenses: users[0].transport_other_question
+    datatype: yesnowide
   - Other monthly transportation expenses: users[0].transport_other
     datatype: currency
     min: 0
-    required: False
-    show if: users[0].other_transport_yes
+    show if: users[0].transport_other_question
   - "What are the other monthly transportation expenses?": users[0].transport_other_description
-    required: False
-    show if: users[0].other_transport_yes
+    show if: users[0].transport_other_question
+---
+id: monthly personal medical expenses
+question: |
+  What monthly personal medical expenses do you have?
+fields:
+  - Doctor visits: users[0].personal_doctor_question
+    datatype: yesnowide
+  - Amount: users[0].personal_doctor
+    datatype: currency
+    min: 0
+    show if: users[0].personal_doctor_question
+  - Therapy and counseling: users[0].personal_therapy_question
+    datatype: yesnowide
+  - Amount: users[0].personal_therapy
+    datatype: currency
+    min: 0
+    show if: users[0].personal_therapy_question
+  - Dental and orthodontia: users[0].personal_dental_question
+    datatype: yesnowide
+  - Amount: users[0].personal_dental
+    datatype: currency
+    min: 0
+    show if: users[0].personal_dental_question
+  - Optical: users[0].personal_vision_question
+    datatype: yesnowide
+  - Amount: users[0].personal_vision
+    datatype: currency
+    min: 0
+    show if: users[0].personal_vision_question
+  - Medicine and prescriptions: users[0].personal_medications_question
+    datatype: yesnowide
+  - Amount: users[0].personal_medications
+    datatype: currency
+    min: 0
+    show if: users[0].personal_medications_question
+---
+id: monthly personal insurance expenses
+question: |
+  Life insurance (not required by law to secure child support) 
+fields:
+  - Life (term): users[0].personal_life_term_question
+    datatype: yesnowide
+  - Amount: users[0].personal_life_term
+    datatype: currency
+    min: 0
+    show if: users[0].personal_life_term_question
+  - Life (whole or annuity): users[0].personal_life_whole_question
+    datatype: yesnowide
+  - Amount: users[0].personal_life_whole
+    datatype: currency
+    min: 0
+    show if: users[0].personal_life_whole_question
 ---
 id: monthly personal expenses
 question: |
-  What monthly personal expenses do you have?
+  Personal expenses 
 fields:
-  - Doctor visits: users[0].personal_doctor
+  - Clothing: users[0].personal_clothing_question
+    datatype: yesnowide
+  - Amount: users[0].personal_clothing  
     datatype: currency
     min: 0
-    required: False
-  - Therapy and counseling: users[0].personal_therapy
+    show if: users[0].personal_clothing_question 
+  - Grooming (hair, nails, spa, etc.): users[0].personal_stylist_question
+    datatype: yesnowide
+  - Amount: users[0].personal_stylist  
     datatype: currency
     min: 0
-    required: False 
-  - Dental and orthodontia: users[0].personal_dental
+    show if: users[0].personal_stylist_question 
+  - Gym & Club membership dues: users[0].personal_memberships_question
+    datatype: yesnowide
+  - Amount: users[0].personal_memberships  
     datatype: currency
     min: 0
-    required: False 
-  - Optical: users[0].personal_vision
+    show if: users[0].personal_memberships_question 
+---
+id: monthly personal entertainment expenses
+question: |
+  Entertainment and monthly subscriptions
+fields:
+  - Entertainment, dining out, and hobbies: users[0].personal_entertainment_question
+    datatype: yesnowide
+  - Amount: users[0].personal_entertainment  
     datatype: currency
     min: 0
-    required: False 
-  - Medicine and prescriptions: users[0].personal_medications
+    show if: users[0].personal_entertainment_question 
+  - Newspapers, magazines, and subscriptions: users[0].personal_subscriptions_question
+    datatype: yesnowide
+  - Amount: users[0].personal_subscriptions  
     datatype: currency
     min: 0
-    required: False 
-  - note: |
-      Life insurance (not required by law to secure child support) 
-  - Life (term): users[0].personal_life_term
+    show if: users[0].personal_subscriptions_question 
+---
+id: monthly personal gifts expenses
+question: |
+  Gifts and donations
+fields:
+  - Gifts: users[0].personal_gifts_question
+    datatype: yesnowide
+  - Amount: users[0].personal_gifts  
     datatype: currency
     min: 0
-    required: False 
-  - Life (whole or annuity): users[0].personal_life_whole
+    show if: users[0].personal_gifts_question 
+  - Donations (political, religious, charity, etc.): users[0].personal_donations_question
+    datatype: yesnowide
+  - Amount: users[0].personal_donations  
     datatype: currency
     min: 0
-    required: False 
-  - note: |
-      Other personal expenses 
-  - Clothing: users[0].personal_clothing
+    show if: users[0].personal_donations_question 
+---
+id: monthly personal vacation expenses
+question: |
+  Vacation expenses
+fields:
+  - Vacations: users[0].personal_vacations_question
+    datatype: yesnowide
+  - Amount: users[0].personal_vacations  
     datatype: currency
     min: 0
-    required: False
-  - Grooming (hair, nails, spa, etc.): users[0].personal_stylist
+    show if: users[0].personal_vacations_question
+--- 
+id: monthly personal dues expenses
+question: |
+  Dues and professional fees
+fields:
+  - Mandatory or voluntary union, trade, or professional association dues: users[0].personal_associations_question
+    datatype: yesnowide
+  - Amount: users[0].personal_associations  
     datatype: currency
     min: 0
-    required: False
-  - Gym & Club membership dues: users[0].personal_life_term
+    show if: users[0].personal_associations_question 
+  - Professional fees (accountants, tax preparers, attorneys, etc.): users[0].peronsal_professional_question
+    datatype: yesnowide
+  - Amount: users[0].peronsal_professional  
     datatype: currency
     min: 0
-    required: False
-  - Entertainment, dining out, and hobbies: users[0].personal_entertainment
+    show if: users[0].peronsal_professional_question 
+---
+id: monthly other personal expenses
+question: |
+  Other personal expenses:
+fields:
+  - Do you have any other personal expenses not listed above?: users[0].personal_other_question
+    datatype: yesnowide
+  - Amount: users[0].personal_other
     datatype: currency
     min: 0
-    required: False
-  - Newspapers, magazines, and subscriptions: users[0].personal_subscriptions
-    datatype: currency
-    min: 0
-    required: False
-  - Gifts: users[0].personal_gifts
-    datatype: currency
-    min: 0
-    required: False
-  - Donations (political, religious, charity, etc.): users[0].personal_donations
-    datatype: currency
-    min: 0
-    required: False
-  - Vacations: users[0].personal_vacations
-    datatype: currency
-    min: 0
-    required: False
-  - Mandatory or voluntary union, trade, or professional association dues: users[0].personal_associations
-    datatype: currency
-    min: 0
-    required: False 
-  - Professional fees (accountants, tax preparers, attorneys, etc.): users[0].peronsal_professional
-    datatype: currency
-    min: 0
-    required: False
-  - Do you have any other personal expenses not listed above?: users[0].other_personal_yes
-    datatype: yesnoradio
-  - Other monthly personal expenses: users[0].personal_other
-    datatype: currency
-    min: 0
-    required: False
-    show if: users[0].other_personal_yes
+    show if: users[0].personal_other_question
   - "What are the other monthly personal expenses?": users[0].personal_other_description
-    required: False
-    show if: users[0].other_personal_yes
+    show if: users[0].personal_other_question
 ---
 id: monthly children expenses
 question: |
-  What monthly minor and dependent children expenses do you have?
+  Do you have any minor and/or dependent children expenses?
 fields:
-  - note: |
-      Education expenses:
-  - Tuition: users[0].children_tuition
-    datatype: currency
-    min: 0
-    required: False
-  - Books, fees, and supplies: users[0].children_books
-    datatype: currency
-    min: 0
-    required: False
-  - School lunch: users[0].children_school_lunch
-    datatype: currency
-    min: 0
-    required: False
-  - Transportation: users[0].children_transportation
-    datatype: currency
-    min: 0
-    required: False
-  - School-sponsored trips and special events: users[0].children_school_events
-    datatype: currency
-    min: 0
-    required: False
-  - Uniforms: users[0].children_school_uniforms
-    datatype: currency
-    min: 0
-    required: False
-  - Before and after-school care: users[0].children_after_school
-    datatype: currency
-    min: 0
-    required: False
-  - Tutoring and summer school: users[0].children_tutor
-    datatype: currency
-    min: 0
-    required: False
-  - note: |
-      Medical (out-of-pocket expenses) 
-  - Doctor visits: users[0].children_doctor
-    datatype: currency
-    min: 0
-    required: False
-  - Therapy and counseling: users[0].children_therapy
-    datatype: currency
-    min: 0
-    required: False
-  - Dental and orthodontia: users[0].children_dental
-    datatype: currency
-    min: 0
-    required: False
-  - Optical: users[0].children_vision
-    datatype: currency
-    min: 0
-    required: False
-  - Medicine: users[0].children_medications
-    datatype: currency
-    min: 0
-    required: False
-  - note: |
-      General expenses:
-  - Clothing: users[0].children_clothing
-    datatype: currency
-    min: 0
-    required: False
-  - Grooming (hair, nails, spa, etc.): users[0].children_grooming
-    datatype: currency
-    min: 0
-    required: False
-  - Allowance: users[0].children_allowance
-    datatype: currency
-    min: 0
-    required: False
-  - Childcare and sitters: users[0].children_childcare
-    datatype: currency
-    min: 0
-    required: False
-  - Extracurricular activities and sports (equipment, uniforms, etc.): users[0].children_sports
-    datatype: currency
-    min: 0
-    required: False
-  - Summer and school-break camps: users[0].children_camps
-    datatype: currency
-    min: 0
-    required: False
-  - Vacations (children only): users[0].children_vacations
-    datatype: currency
-    min: 0
-    required: False
-  - Entertainment, dining out, and hobbies (children only): users[0].children_entertainment
-    datatype: currency
-    min: 0
-    required: False
-  - Gifts children give to others: users[0].children_party_gifts
-    datatype: currency
-    min: 0
-    required: False
-  - Do you have other expenses not mentioned above?: users[0].other_child_expense_yes
+  - no label: users[0].children_expenses_question
     datatype: yesnoradio
-  - Other monthly minor and dependent children expenses: users[0].children_other
+---
+id: monthly children personal expenses
+question: |
+  Personal expenses:
+fields:
+  - Clothing: users[0].children_clothing_question
+    datatype: yesnowide
+  - Amount: users[0].children_clothing  
     datatype: currency
     min: 0
-    required: False
-    show if: users[0].other_child_expense_yes
-  - "What are the other monthly minor and dependent children expenses?": users[0].children_other_description
-    required: False
-    show if: users[0].other_child_expense_yes
+    show if: users[0].children_clothing_question 
+  - Grooming (hair, nails, spa, etc.): users[0].children_grooming_question
+    datatype: yesnowide
+  - Amount: users[0].children_grooming  
+    datatype: currency
+    min: 0
+    show if: users[0].children_grooming_question 
 ---
+id: monthly children education expenses
+question: |
+  Education expenses:
+fields:
+  - Tuition: users[0].children_tuition_question
+    datatype: yesnowide
+  - Amount: users[0].children_tuition
+    datatype: currency
+    min: 0
+    show if: users[0].children_tuition_question
+  - Books, fees, and supplies: users[0].children_books_question
+    datatype: yesnowide
+  - Amount: users[0].children_books
+    datatype: currency
+    min: 0
+    show if: users[0].children_books_question 
+  - School lunch: users[0].children_school_lunch_question
+    datatype: yesnowide
+  - Amount: users[0].children_school_lunch
+    datatype: currency
+    min: 0
+    show if: users[0].children_school_lunch_question 
+  - Transportation: users[0].children_transportation_question
+    datatype: yesnowide
+  - Amount: users[0].children_transportation
+    datatype: currency
+    min: 0
+    show if: users[0].children_transportation_question 
+  - School-sponsored trips and special events: users[0].children_school_events_question
+    datatype: yesnowide
+  - Amount: users[0].children_school_events
+    datatype: currency
+    min: 0
+    show if: users[0].children_school_events_question 
+  - Uniforms: users[0].children_school_uniforms_question
+    datatype: yesnowide
+  - Amount: users[0].children_school_uniforms
+    datatype: currency
+    min: 0
+    show if: users[0].children_school_uniforms_question 
+  - Before and after-school care: users[0].children_after_school_question
+    datatype: yesnowide
+  - Amount: users[0].children_after_school
+    datatype: currency
+    min: 0
+    show if: users[0].children_after_school_question 
+  - Tutoring and summer school: users[0].children_tutor_question
+    datatype: yesnowide
+  - Amount: users[0].children_tutor
+    datatype: currency
+    min: 0
+    show if: users[0].children_tutor_question 
+---
+id: monthly children medical expenses
+question: |
+  Medical (out-of-pocket expenses) 
+fields:
+  - Doctor visits: users[0].children_doctor_question
+    datatype: yesnowide
+  - Amount: users[0].children_doctor
+    datatype: currency
+    min: 0
+    show if: users[0].children_doctor_question 
+  - Therapy and counseling: users[0].children_therapy_question
+    datatype: yesnowide
+  - Amount: users[0].children_therapy
+    datatype: currency
+    min: 0
+    show if: users[0].children_therapy_question 
+  - Dental and orthodontia: users[0].children_dental_question 
+    datatype: yesnowide
+  - Amount: users[0].children_dental
+    datatype: currency
+    min: 0
+    show if: users[0].children_dental_question 
+  - Optical: users[0].children_vision_question
+    datatype: yesnowide
+  - Amount: users[0].children_vision
+    datatype: currency
+    min: 0
+    show if: users[0].children_vision_question 
+  - Medicine: users[0].children_medications_question
+    datatype: yesnowide
+  - Amount: users[0].children_medications
+    datatype: currency
+    min: 0
+    show if: users[0].children_medications_question 
+---
+id: monthly children additional expenses
+question: |
+  Additional monthly children expenses
+fields:
+  - Allowance: users[0].children_allowance_question 
+    datatype: yesnowide
+  - Amount: users[0].children_allowance
+    datatype: currency
+    min: 0
+    show if: users[0].children_allowance_question 
+  - Childcare and sitters: users[0].children_childcare_question 
+    datatype: yesnowide
+  - Amount: users[0].children_childcare
+    datatype: currency
+    min: 0
+    show if: users[0].children_childcare_question 
+  - Extracurricular activities and sports (equipment, uniforms, etc.): users[0].children_sports_question
+    datatype: yesnowide
+  - Amount: users[0].children_sports
+    datatype: currency
+    min: 0
+    show if: users[0].children_sports_question 
+  - Summer and school-break camps: users[0].children_camps_question 
+    datatype: yesnowide
+  - Amount: users[0].children_camps
+    datatype: currency
+    min: 0
+    show if: users[0].children_camps_question 
+---
+id: monthly children vacation expenses
+question: |
+  Vacations and entertainment (children only)
+fields:
+  - Vacations (children only): users[0].children_vacations_question 
+    datatype: yesnowide
+  - Amount: users[0].children_vacations
+    datatype: currency
+    min: 0
+    show if: users[0].children_vacations_question 
+  - Entertainment, dining out, and hobbies (children only): users[0].children_entertainment_question
+    datatype: yesnowide
+  - Amount: users[0].children_entertainment
+    datatype: currency
+    min: 0
+    show if: users[0].children_entertainment_question 
+  - Gifts children give to others: users[0].children_party_gifts_question 
+    datatype: yesnowide
+  - Amount: users[0].children_party_gifts
+    datatype: currency
+    min: 0
+    show if: users[0].children_party_gifts_question 
+---
+id: monthly children other expenses
+question: |
+  Other monthly expenses for children:
+fields:
+  - Do you have other expenses not mentioned above?: users[0].children_other_question
+    datatype: yesnowide
+  - Amount: users[0].children_other
+    datatype: currency
+    min: 0
+    show if: users[0].children_other_question
+  - "What are the other monthly minor and dependent children expenses?": users[0].children_other_description
+    show if: users[0].children_other_question
+---
+depends on:
+  - users[0].deductions_federal
+  - users[0].deductions_state
+  - users[0].deductions_FICA
+  - users[0].deductions_medicare
+  - users[0].deductions_retirement
+  - users[0].maintenance_paid_court
+  - users[0].maintenance_paid_no_tax
+  - users[0].maintenance_paid_taxed
+  - users[0].child_support_1
+  - users[0].child_support_2
+  - users[0].child_support_3
+  # Section 12 a-d
+  - users[0].living_house_payment
+  - users[0].living_heloc
+  - users[0].living_property_taxes
+  - users[0].living_hoa
+  - users[0].living_insurance
+  - users[0].living_gas
+  - users[0].living_power
+  - users[0].living_phone
+  - users[0].living_cable
+  - users[0].living_internet
+  - users[0].living_water
+  - users[0].living_trash
+  - users[0].living_laundry
+  - users[0].living_cleaner
+  - users[0].living_repairs
+  - users[0].living_pets
+  - users[0].living_groceries
+  - users[0].living_other
+  - users[0].transport_payment
+  - users[0].transport_maintenance
+  - users[0].transport_insurance
+  - users[0].transport_fuel
+  - users[0].transport_public
+  - users[0].transport_parking
+  - users[0].transport_other
+  - users[0].personal_doctor
+  - users[0].personal_therapy
+  - users[0].personal_dental
+  - users[0].personal_vision
+  - users[0].personal_medications
+  - users[0].personal_life_term
+  - users[0].personal_life_whole
+  - users[0].personal_clothing
+  - users[0].personal_stylist
+  - users[0].personal_memberships
+  - users[0].personal_subscriptions
+  - users[0].personal_entertainment
+  - users[0].personal_gifts
+  - users[0].personal_donations
+  - users[0].personal_vacations
+  - users[0].personal_associations
+  - users[0].peronsal_professional
+  - users[0].personal_other
+  - users[0].children_clothing
+  - users[0].children_grooming
+  - users[0].children_tuition
+  - users[0].children_books
+  - users[0].children_school_lunch
+  - users[0].children_transportation
+  - users[0].children_school_events
+  - users[0].children_school_uniforms
+  - users[0].children_after_school
+  - users[0].children_tutor
+  - users[0].children_doctor
+  - users[0].children_therapy
+  - users[0].children_dental
+  - users[0].children_vision
+  - users[0].children_medications
+  - users[0].children_allowance
+  - users[0].children_childcare
+  - users[0].children_sports
+  - users[0].children_camps
+  - users[0].children_vacations
+  - users[0].children_entertainment
+  - users[0].children_party_gifts
+  - users[0].children_other
+code: |
+  total_monthly_deductions = sum_if_defined(
+    'users[0].deductions_federal',
+    'users[0].deductions_state',
+    'users[0].deductions_FICA',
+    'users[0].deductions_medicare',
+    'users[0].deductions_retirement')
 
+  total_maintenance_payments = sum_if_defined(
+    'users[0].maintenance_paid_court',
+    'users[0].maintenance_paid_no_tax',
+    'users[0].maintenance_paid_taxed')
 
+  total_child_support_payments = sum_if_defined(
+    'users[0].child_support_1',
+    'users[0].child_support_2',
+    'users[0].child_support_3')
 
+  subtotal_monthly_household_expenses = sum_if_defined(
+    'users[0].living_house_payment',
+    'users[0].living_heloc',
+    'users[0].living_property_taxes',
+    'users[0].living_hoa',
+    'users[0].living_insurance',
+    'users[0].living_gas',
+    'users[0].living_power',
+    'users[0].living_phone',
+    'users[0].living_cable',
+    'users[0].living_internet',
+    'users[0].living_water',
+    'users[0].living_trash',
+    'users[0].living_laundry',
+    'users[0].living_cleaner',
+    'users[0].living_repairs',
+    'users[0].living_pets',
+    'users[0].living_groceries',
+    'users[0].living_other')
 
+  subtotal_monthly_transportation_expenses = sum_if_defined(
+    'users[0].transport_payment',
+    'users[0].transport_maintenance',
+    'users[0].transport_insurance',
+    'users[0].transport_fuel',
+    'users[0].transport_public',
+    'users[0].transport_parking',
+    'users[0].transport_other')
+  
+  subtotal_monthly_personal_expenses = sum_if_defined(
+    'users[0].personal_doctor',
+    'users[0].personal_therapy',
+    'users[0].personal_dental',
+    'users[0].personal_vision',
+    'users[0].personal_medications',
+    'users[0].personal_life_term',
+    'users[0].personal_life_whole',
+    'users[0].personal_clothing',
+    'users[0].personal_stylist',
+    'users[0].personal_memberships',
+    'users[0].personal_subscriptions',
+    'users[0].personal_entertainment',
+    'users[0].personal_gifts',
+    'users[0].personal_donations',
+    'users[0].personal_vacations',
+    'users[0].personal_associations',
+    'users[0].peronsal_professional',
+    'users[0].personal_other')
 
+  subtotal_monthly_children_expenses = sum_if_defined(
+    'users[0].children_clothing',
+    'users[0].children_grooming',
+    'users[0].children_tuition',
+    'users[0].children_books',
+    'users[0].children_school_lunch',
+    'users[0].children_transportation',
+    'users[0].children_school_events',
+    'users[0].children_school_uniforms',
+    'users[0].children_after_school',
+    'users[0].children_tutor',
+    'users[0].children_doctor',
+    'users[0].children_therapy',
+    'users[0].children_dental',
+    'users[0].children_vision',
+    'users[0].children_medications',
+    'users[0].children_allowance',
+    'users[0].children_childcare',
+    'users[0].children_sports',
+    'users[0].children_camps',
+    'users[0].children_vacations',
+    'users[0].children_entertainment',
+    'users[0].children_party_gifts',
+    'users[0].children_other')
 
-
-
-
+  total_monthly_household_expenses = sum_if_defined(
+    'subtotal_monthly_household_expenses',
+    'subtotal_monthly_transportation_expenses',
+    'subtotal_monthly_personal_expenses',
+    'subtotal_monthly_children_expenses')
+---
+################### FA HEALTH INSURANCE ##################
+id: health insurance intro 
+question: |
+  Do you have health insurance?
+subquestion: |
+  If theree are children/dependents you should select Yes
+fields:
+  - no label: insurance.there_are_any
+    datatype: yesnoradio
+---
+code: |
+  insurance[i].name.text
+  insurance[i].coverage
+  insurance[i].monthly_cost
+  insurance[i].complete = True 
+---
+id: additional health insurance
+question: |
+  Do you have another insurance policy you want to include?
+subquestion: |
+  So far you have told us about ${comma_and_list(insurance.complete_elements())}.
+fields:
+  - no label: insurance.there_is_another
+    datatype: yesnoradio
+---
+id: health insurance name
+question: |
+  Details for the ${ordinal(i)} insurance provider: 
+fields:
+  - Name of the insurance company: insurance[i].name.text
+  - Type of insurance: insurance[i].type
+    datatype: radio
+    choices:
+      - Medical
+      - Dental
+      - Orthodontic
+      - Vision
+  - Type of policy: insurance[i].policy
+    datatype: radio
+    choices:
+      - HMO
+      - PPO
+      - Other
+  - Provided through: insurance[i].provider
+    datatype: radio
+    choices:
+      - Employer: employer
+      - Private policy: private 
+      - Other group policy: group
+      - Medicaid/All Kids: public
+---
+id: health insurance coverage
+question: |
+  Who is covered under this policy?
+fields:
+  - Number of people covered: insurance[i].total_covered
+    datatype: range
+    min: 1
+    max: 10
+  - Insurance coverage: insurance[i].coverage
+    datatype: radio
+    choices:
+      - Me: myself
+      - My spouse/partner: both
+      - children of this relationship: children_current
+      - children of this relationship and other children: children_other
+  - List the number of the other children covered and their ages: insurance[i].other_children_covered
+    js show if: |
+      val("insurance[i].coverage") == 'children_other'
+---
+id: health insurance costs 
+question: |
+  What are the monthly costs for this insurance policy?
+fields:
+  - Total monthly costs for this insurance: insurance[i].monthly_cost
+    datatype: currency
+    min: 0
+  - This is paid for by: insurance[i].paid
+    datatype: radio
+    choices:
+      - Me: myself 
+      - My spouse/partner: partner 
+      - Other: other
+  - Name the other payment source: insurance[i].other_description
+    js show if: |
+      val("insurance[i].paid") == 'other'
+  - What are the monthly cost for this insurance for covering children?: insurance[i].cost_children 
+    datatype: currency
+    min: 0
+  - What are the monthly cost for this insurance for covering children of this relationship (if known)?: insurance[i].cost_children_current
+    datatype: currency
+    min: 0
+  - What is the individual deductible?: insurance[i].individual_deductible
+    datatype: currency
+    min: 0
+  - What is the family deductible?: insurance[i].family_deductible
+    datatype: currency
+    min: 0
+  - Coinsurance (percentage of costs you pay, e.g. 20%): insurance[i].coinsurance
+    datatype: percentage
+    min: 0
+  - Copayment (a flat amount you pay per service, e.g. $20): insurance[i].copayment
+    datatype: currency
+    min: 0
+---
 
 
 ---
@@ -1084,6 +1758,7 @@ objects:
   - financial_affidavit_bundle: ALDocumentBundle.using(title="Financial Affidavit", filename="fa_primary.pdf", enabled=True, elements=[
         fa_primary, 
         additional_employment_bundle,
+        additional_health_insurance_bundle,
       ])
 ---
 objects:
@@ -1288,7 +1963,7 @@ attachment:
           % endif
       - "Gross income (before taxes and deductions) last year": |
           % if taxes_filed:
-          ${ nice_number(gross_income_last_year) }
+          ${ thousands(gross_income_last_year, show_decimals=True)}
           % endif
       - "Child Tax Credit": |
           % if taxes_filed:
@@ -1312,426 +1987,593 @@ attachment:
           % endif
       # monthly gross income
       - "regular_pay": |
-          ${ nice_number(users[0].regular_pay, use_word=False) }
-      - "overtime_pay":  |
-          ${ nice_number(users[0].overtime_pay, use_word=False) }
-      - "commission_pay":  |
-          ${ nice_number(users[0].commission_pay, use_word=False) }
-      - "tips":  |
-          ${ nice_number(users[0].tips, use_word=False) }
-      - "bonus":  |
-          ${ nice_number(users[0].bonus, use_word=False) }
-      - "pension":  |
-          ${ nice_number(users[0].pension, use_word=False) }
-      - "annuity":  |
-          ${ nice_number(users[0].annuity, use_word=False) }
-      - "interest_income":  |
-          ${ nice_number(users[0].interest, use_word=False) }
-      - "dividend_income":  |
-          ${ nice_number(users[0].dividend, use_word=False) }
-      - "trust_income":  |
-          ${ nice_number(users[0].trust, use_word=False) }
-      - "investment_income":  |
-          ${ nice_number(users[0].investment, use_word=False) }
-      - "social_retirement":  |
-          ${ nice_number(users[0].social_retirement, use_word=False) }
-      - "social_disability":  |
-          ${ nice_number(users[0].social_disability, use_word=False) }
-      - "social_income":  |
-          ${ nice_number(users[0].social_income, use_word=False) }
-      - "unemployment_benefits":  |
-          ${ nice_number(users[0].unemployment_benefits, use_word=False) }
-      - "disability_benefits":  |
-          ${ nice_number(users[0].disability_benefits, use_word=False) }
-      - "workers_comp_benefits":  |
-          ${ nice_number(users[0].workers_comp_benefits, use_word=False) }
-      - "child_benefits":  |
-          ${ nice_number(users[0].child_benefits, use_word=False) }
-      - "military_allowances":  |
-          ${ nice_number(users[0].military_allowances, use_word=False) }
-      - "rental_income":  |
-          ${ nice_number(users[0].rental_income, use_word=False) }
-      - "partnership_income":  |
-          ${ nice_number(users[0].partnership_income, use_word=False) }
-      - "distributions_draws":  |
-          ${ nice_number(users[0].distributions_draws, use_word=False) }
-      - "royalty_income":  |
-          ${ nice_number(users[0].royalty_income, use_word=False) }
-      - "maintenance_current":  |
-          ${ nice_number(users[0].maintenance_current, use_word=False) }
-      - "maintenance_alternate":  |
-          ${ nice_number(users[0].maintenance_alternate, use_word=False) }
-      - "child_support_current":  |
-          ${ nice_number(users[0].child_support_current, use_word=False) }
-      - "social_security_current":  |
-          ${ nice_number(users[0].social_security_current, use_word=False) }
-      - "gifts_money":  |
-          ${ nice_number(users[0].gifts_money, use_word=False) }
+          % if users[0].regular_pay_question:
+          ${thousands(users[0].regular_pay, show_decimals=True)}
+          % endif
+      - "overtime_pay": |
+          % if users[0].overtime_pay_question:
+          ${ thousands(users[0].overtime_pay, show_decimals=True)}
+          % endif
+      - "commission_pay": |
+          % if users[0].commission_pay_question:
+          ${ thousands(users[0].commission_pay, show_decimals=True)}
+          % endif
+      - "tips": |
+          % if users[0].tips_question:
+          ${ thousands(users[0].tips, show_decimals=True)}
+          % endif
+      - "bonus": |
+          % if users[0].bonus_question:
+          ${ thousands(users[0].bonus, show_decimals=True)}
+          % endif
+      - "pension": |
+          % if users[0].pension_question:
+          ${ thousands(users[0].pension, show_decimals=True)}
+          % endif
+      - "annuity": |
+          % if users[0].annuity_question:
+          ${ thousands(users[0].annuity, show_decimals=True)}
+          % endif
+      - "interest_income": |
+          % if users[0].interest_question:
+          ${ thousands(users[0].interest, show_decimals=True)}
+          % endif
+      - "dividend_income": |
+          % if users[0].dividend_question:
+          ${ thousands(users[0].dividend, show_decimals=True)}
+          % endif
+      - "trust_income": |
+          % if users[0].trust_question:
+          ${ thousands(users[0].trust, show_decimals=True)}
+          % endif
+      - "investment_income": |
+          % if users[0].investment_question:
+          ${ thousands(users[0].investment, show_decimals=True)}
+          % endif
+      - "social_retirement": |
+          % if users[0].social_retirement_question:
+          ${ thousands(users[0].social_retirement, show_decimals=True)}
+          % endif
+      - "social_disability": |
+          % if users[0].social_disability_question:
+          ${ thousands(users[0].social_disability, show_decimals=True)}
+          % endif
+      - "social_income": |
+          % if users[0].social_income_question:
+          ${ thousands(users[0].social_income, show_decimals=True)}
+          % endif
+      - "unemployment_benefits": |
+          % if users[0].unemployment_benefits_question:
+          ${ thousands(users[0].unemployment_benefits, show_decimals=True)}
+          % endif
+      - "disability_benefits": |
+          % if users[0].disability_benefits_question:
+          ${ thousands(users[0].disability_benefits, show_decimals=True)}
+          % endif
+      - "workers_comp_benefits": |
+          % if users[0].workers_comp_benefits_question:
+          ${ thousands(users[0].workers_comp_benefits, show_decimals=True)}
+          % endif
+      - "child_benefits": |
+          % if users[0].child_benefits_question:
+          ${ thousands(users[0].child_benefits, show_decimals=True)}
+          % endif
+      - "military_allowances": |
+          % if users[0].military_allowances_question:
+          ${ thousands(users[0].military_allowances, show_decimals=True)}
+          % endif
+      - "rental_income": |
+          % if users[0].rental_income_question:
+          ${ thousands(users[0].rental_income, show_decimals=True)}
+          % endif
+      - "partnership_income": |
+          % if users[0].partnership_income_question:
+          ${ thousands(users[0].partnership_income, show_decimals=True)}
+          % endif
+      - "distributions_draws": |
+          % if users[0].distributions_draws_question:
+          ${ thousands(users[0].distributions_draws, show_decimals=True)}
+          % endif
+      - "royalty_income": |
+          % if users[0].royalty_income_question:
+          ${ thousands(users[0].royalty_income, show_decimals=True)}
+          % endif
+      - "maintenance_current": |
+          % if users[0].maintenance_current_question:
+          ${ thousands(users[0].maintenance_current, show_decimals=True)}
+          % endif
+      - "maintenance_alternate": |
+          % if users[0].maintenance_alternate_question:
+          ${ thousands(users[0].maintenance_alternate, show_decimals=True)}
+          % endif
+      - "child_support_current": |
+          % if users[0].child_support_current_question:
+          ${ thousands(users[0].child_support_current, show_decimals=True)}
+          % endif
+      - "social_security_current": |
+          % if users[0].social_security_current_question:
+          ${ thousands(users[0].social_security_current, show_decimals=True)}
+          % endif
+      - "gifts_money": |
+          % if users[0].gifts_money_question:
+          ${ thousands(users[0].gifts_money, show_decimals=True)}
+          % endif
       - "other_income": |
-          % if users[0].other_source:
-          ${ nice_number(users[0].other_income, use_word=False) }
+          % if users[0].other_income_question:
+          ${ thousands(users[0].other_income, show_decimals=True)}
           % endif
       - "other_income_description": |
-          % if users[0].other_source:
+          % if users[0].other_income_question:
           ${ users[0].other_income_description }
           % endif          
       - "total_gross_monthly_income": |
-          ${ nice_number(
-          users[0].regular_pay +
-          users[0].overtime_pay +
-          users[0].commission_pay +
-          users[0].tips +
-          users[0].bonus +
-          users[0].pension +
-          users[0].annuity +
-          users[0].interest +
-          users[0].dividend +
-          users[0].trust +
-          users[0].investment + 
-          users[0].social_retirement +
-          users[0].social_disability +
-          users[0].social_income +
-          users[0].unemployment_benefits +
-          users[0].disability_benefits +
-          users[0].workers_comp_benefits +
-          users[0].child_benefits +
-          users[0].military_allowances +
-          users[0].rental_income +
-          users[0].partnership_income +
-          users[0].distributions_draws +
-          users[0].royalty_income + 
-          users[0].maintenance_current +
-          users[0].maintenance_alternate +
-          users[0].child_support_current +
-          users[0].social_security_current +
-          users[0].gifts_money + 
-          users[0].other_income, use_word=False) }
+          ${ thousands(total_gross_monthly_income, show_decimals=True) }
       # expenses
       - "deductions_federal": |
-          ${ nice_number(users[0].deductions_federal, use_word=False) }
+          % if users[0].deductions_federal_question:
+          ${ thousands(users[0].deductions_federal, show_decimals=True)}
+          % endif
       - "deductions_state":  |
-          ${ nice_number(users[0].deductions_state, use_word=False) }
+          % if users[0].deductions_state_question:
+          ${ thousands(users[0].deductions_state, show_decimals=True)}
+          % endif
       - "deductions_FICA":  |
-          ${ nice_number(users[0].deductions_FICA, use_word=False) }
+          % if users[0].deductions_FICA_question:
+          ${ thousands(users[0].deductions_FICA, show_decimals=True)}
+          % endif
       - "deductions_medicare":  |
-          ${ nice_number(users[0].deductions_medicare, use_word=False) }
+          % if users[0].deductions_medicare_question:
+          ${ thousands(users[0].deductions_medicare, show_decimals=True)}
+          % endif
       - "deductions_retirement":  |
-          ${ nice_number(users[0].deductions_retirement, use_word=False) }
+          % if users[0].deductions_retirement_question:
+          ${ thousands(users[0].deductions_retirement, show_decimals=True)}
+          % endif
       - "total_deductions":  |
-          ${ nice_number(
-          users[0].deductions_federal +
-          users[0].deductions_state +
-          users[0].deductions_FICA +
-          users[0].deductions_medicare +
-          users[0].deductions_retirement) }
+          ${ thousands(total_monthly_deductions, show_decimals=True)}
       - "maintenance_paid_court": |
-          ${ nice_number(users[0].maintenance_paid_court, use_word=False) }
+          % if users[0].maintenance_paid_court_question:
+          ${ thousands(users[0].maintenance_paid_court, show_decimals=True)}
+          % endif
       - "maintenance_paid_no_tax": |
-          ${ nice_number(users[0].maintenance_paid_no_tax, use_word=False) }
+          % if users[0].maintenance_paid_no_tax_question:
+          ${ thousands(users[0].maintenance_paid_no_tax, show_decimals=True)}
+          % endif
       - "maintenance_paid_taxed": |
-          ${ nice_number(users[0].maintenance_paid_taxed, use_word=False) }
+          % if users[0].maintenance_paid_taxed_question:
+          ${ thousands(users[0].maintenance_paid_taxed, show_decimals=True)}
+          % endif
       - "total_maintenance": |
-          ${ nice_number(
-          users[0].maintenance_paid_court +
-          users[0].maintenance_paid_no_tax +
-          users[0].maintenance_paid_taxed) }
+          ${ thousands(total_maintenance_payments, show_decimals=True)}
       - "child_support_1": |
-          ${ nice_number(users[0].child_support_1, use_word=False) }
+          % if users[0].child_support_1_question:
+          ${ thousands(users[0].child_support_1, show_decimals=True)}
+          % endif
       - "child_support_2": |
-          ${ nice_number(users[0].child_support_2, use_word=False) }
+          % if users[0].child_support_2_question:
+          ${ thousands(users[0].child_support_2, show_decimals=True)}
+          % endif
       - "child_support_3": |
-          ${ nice_number(users[0].child_support_3, use_word=False) }
+          % if users[0].child_support_3_question:
+          ${ thousands(users[0].child_support_3, show_decimals=True)}
+          % endif
       - "total_child_support": |
-          ${ nice_number(
-          users[0].child_support_1 +
-          users[0].child_support_2 +
-          users[0].child_support_3) }
-      - "child_support_1": |
-          ${ nice_number(users[0].child_support_1, use_word=False) }
-      - "child_support_2": |
-          ${ nice_number(users[0].child_support_2, use_word=False) }
-      - "child_support_3": |
-          ${ nice_number(users[0].child_support_3, use_word=False) }
-      - "total_child_support": |
-          ${ nice_number(
-          users[0].child_support_1 +
-          users[0].child_support_2 +
-          users[0].child_support_3) }
+          ${ thousands(total_child_support_payments, show_decimals=True)}
       - "living_house_payment": |
-          ${ nice_number(users[0].living_house_payment, use_word=False) }
+          % if users[0].living_house_payment_question:
+          ${ thousands(users[0].living_house_payment, show_decimals=True)}
+          % endif
       - "living_heloc": |
-          ${ nice_number(users[0].living_heloc, use_word=False) }
+          % if users[0].living_heloc_question:
+          ${ thousands(users[0].living_heloc, show_decimals=True)}
+          % endif
       - "living_property_taxes": |
-          ${ nice_number(users[0].living_property_taxes, use_word=False) }
+          % if users[0].living_property_taxes_question:
+          ${ thousands(users[0].living_property_taxes, show_decimals=True)}
+          % endif
       - "living_hoa": |
-          ${ nice_number(users[0].living_hoa, use_word=False) }
+          % if users[0].living_hoa_question:
+          ${ thousands(users[0].living_hoa, show_decimals=True)}
+          % endif
       - "living_insurance": |
-          ${ nice_number(users[0].living_insurance, use_word=False) }
+          % if users[0].living_insurance_question:
+          ${ thousands(users[0].living_insurance, show_decimals=True)}
+          % endif
       - "living_gas": |
-          ${ nice_number(users[0].living_gas, use_word=False) }
+          % if users[0].living_gas_question:
+          ${ thousands(users[0].living_gas, show_decimals=True)}
+          % endif
       - "living_power": |
-          ${ nice_number(users[0].living_power, use_word=False) }
+          % if users[0].living_power_question:
+          ${ thousands(users[0].living_power, show_decimals=True)}
+          % endif
       - "living_phone": |
-          ${ nice_number(users[0].living_phone, use_word=False) }
+          % if users[0].living_phone_question:
+          ${ thousands(users[0].living_phone, show_decimals=True)}
+          % endif
       - "living_cable": |
-          ${ nice_number(users[0].living_cable, use_word=False) }
+          % if users[0].living_cable_question:
+          ${ thousands(users[0].living_cable, show_decimals=True)}
+          % endif
       - "living_internet": |
-          ${ nice_number(users[0].living_internet, use_word=False) }
+          % if users[0].living_internet_question:
+          ${ thousands(users[0].living_internet, show_decimals=True)}
+          % endif
       - "living_water": |
-          ${ nice_number(users[0].living_water, use_word=False) }
+          % if users[0].living_water_question:
+          ${ thousands(users[0].living_water, show_decimals=True)}
+          % endif
       - "living_trash": |
-          ${ nice_number(users[0].living_trash, use_word=False) }
+          % if users[0].living_trash_question:
+          ${ thousands(users[0].living_trash, show_decimals=True)}
+          % endif
       - "living_laundry": |
-          ${ nice_number(users[0].living_laundry, use_word=False) }
+          % if users[0].living_laundry_question:
+          ${ thousands(users[0].living_laundry, show_decimals=True)}
+          % endif
       - "living_cleaner": |
-          ${ nice_number(users[0].living_cleaner, use_word=False) }
+          % if users[0].living_cleaner_question:
+          ${ thousands(users[0].living_cleaner, show_decimals=True)}
+          % endif
       - "living_repairs": |
-          ${ nice_number(users[0].living_repairs, use_word=False) }
+          % if users[0].living_repairs_question:
+          ${ thousands(users[0].living_repairs, show_decimals=True)}
+          % endif
       - "living_pets": |
-          ${ nice_number(users[0].living_pets, use_word=False) }
+          % if users[0].living_pets_question:
+          ${ thousands(users[0].living_pets, show_decimals=True)}
+          % endif
       - "living_groceries": |
-          ${ nice_number(users[0].living_groceries, use_word=False) }
+          % if users[0].living_groceries_question:
+          ${ thousands(users[0].living_groceries, show_decimals=True)}
+          % endif
       - "living_other": |
-          ${ nice_number(users[0].living_other, use_word=False) }
+          % if users[0].living_other_question:
+          ${ thousands(users[0].living_other, show_decimals=True)}
+          % endif
+      - "living_other_description": |
+          % if users[0].living_other_question:
+          ${ users[0].living_other_description }
+          % endif
       - "subtotal_living": |
-          ${ nice_number(
-          users[0].living_house_payment +
-          users[0].living_heloc +
-          users[0].living_property_taxes +
-          users[0].living_hoa +
-          users[0].living_insurance +
-          users[0].living_gas +
-          users[0].living_power +
-          users[0].living_phone +
-          users[0].living_cable +
-          users[0].living_internet +
-          users[0].living_water +
-          users[0].living_trash +
-          users[0].living_laundry +
-          users[0].living_cleaner +
-          users[0].living_repairs +
-          users[0].living_pets +
-          users[0].living_groceries +
-          users[0].living_other) }
+          ${ thousands(subtotal_monthly_household_expenses, show_decimals=True)}
       - "transport_payment": |
-          ${ nice_number(users[0].transport_payment, use_word=False) }
+          % if users[0].transport_payment_question:
+          ${ thousands(users[0].transport_payment, show_decimals=True)}
+          % endif
       - "transport_maintenance": |
-          ${ nice_number(users[0].transport_maintenance, use_word=False) }
+          % if users[0].transport_maintenance_question:
+          ${ thousands(users[0].transport_maintenance, show_decimals=True)}
+          % endif
       - "transport_insurance": |
-          ${ nice_number(users[0].transport_insurance, use_word=False) }
+          % if users[0].transport_insurance_question:
+          ${ thousands(users[0].transport_insurance, show_decimals=True)}
+          % endif
       - "transport_fuel": |
-          ${ nice_number(users[0].transport_fuel, use_word=False) }
+          % if users[0].transport_fuel_question:
+          ${ thousands(users[0].transport_fuel, show_decimals=True)}
+          % endif
       - "transport_public": |
-          ${ nice_number(users[0].transport_public, use_word=False) }
+          % if users[0].transport_public_question:
+          ${ thousands(users[0].transport_public, show_decimals=True)}
+          % endif
       - "transport_parking": |
-          ${ nice_number(users[0].transport_parking, use_word=False) }
+          % if users[0].transport_parking_question:
+          ${ thousands(users[0].transport_parking, show_decimals=True)}
+          % endif
       - "transport_other": |
-          ${ nice_number(users[0].transport_other, use_word=False) }
+          % if users[0].transport_other_question:
+          ${ thousands(users[0].transport_other, show_decimals=True)}
+          % endif
+      - "transport_other_description": |
+          % if users[0].transport_other_question:
+          ${ users[0].transport_other_description }
+          % endif
       - "subtotal_transport":  |
-          ${ nice_number(
-          users[0].transport_payment +
-          users[0].transport_maintenance +
-          users[0].transport_insurance +
-          users[0].transport_fuel +
-          users[0].transport_public +
-          users[0].transport_parking +
-          users[0].transport_other) }
+          ${ thousands(subtotal_monthly_transportation_expenses) }
       - "personal_doctor": |
-          ${ nice_number(users[0].transport_parking, use_word=False) }
+          % if users[0].personal_doctor_question:
+          ${ thousands(users[0].personal_doctor, show_decimals=True)}
+          % endif
       - "personal_therapy": |
-          ${ nice_number(users[0].transpersonal_therapyport_parking, use_word=False) }
+          % if users[0].personal_therapy_question:
+          ${ thousands(users[0].personal_therapy, show_decimals=True)}
+          % endif
       - "personal_dental": |
-          ${ nice_number(users[0].personal_dental, use_word=False) }
+          % if users[0].personal_dental_question:
+          ${ thousands(users[0].personal_dental, show_decimals=True)}
+          % endif
       - "personal_vision": |
-          ${ nice_number(users[0].personal_vision, use_word=False) }
+          % if users[0].personal_vision_question:
+          ${ thousands(users[0].personal_vision, show_decimals=True)}
+          % endif
       - "personal_medications": |
-          ${ nice_number(users[0].personal_medications, use_word=False) }
+          % if users[0].personal_medications_question:
+          ${ thousands(users[0].personal_medications, show_decimals=True)}
+          % endif
       - "personal_life_term": |
-          ${ nice_number(users[0].personal_life_term, use_word=False) }
+          % if users[0].personal_life_term_question:
+          ${ thousands(users[0].personal_life_term, show_decimals=True)}
+          % endif
       - "personal_life_whole": |
-          ${ nice_number(users[0].personal_life_whole, use_word=False) }
+          % if users[0].personal_life_whole_question:
+          ${ thousands(users[0].personal_life_whole, show_decimals=True)}
+          % endif
       - "personal_clothing": |
-          ${ nice_number(users[0].personal_clothing, use_word=False) }
+          % if users[0].personal_clothing_question:
+          ${ thousands(users[0].personal_clothing, show_decimals=True)}
+          % endif
       - "personal_stylist": |
-          ${ nice_number(users[0].personal_stylist, use_word=False) }
+          % if users[0].personal_stylist_question:
+          ${ thousands(users[0].personal_stylist, show_decimals=True)}
+          % endif
       - "personal_memberships": |
-          ${ nice_number(users[0].personal_memberships, use_word=False) }
+          % if users[0].personal_memberships_question:
+          ${ thousands(users[0].personal_memberships, show_decimals=True)}
+          % endif
       - "personal_subscriptions": |
-          ${ nice_number(users[0].personal_subscriptions, use_word=False) }
+          % if users[0].personal_subscriptions_question:
+          ${ thousands(users[0].personal_subscriptions, show_decimals=True)}
+          % endif
       - "personal_entertainment": |
-          ${ nice_number(users[0].personal_entertainment, use_word=False) }
+          % if users[0].personal_entertainment_question:
+          ${ thousands(users[0].personal_entertainment, show_decimals=True)}
+          % endif
       - "personal_gifts": |
-          ${ nice_number(users[0].personal_gifts, use_word=False) }
+          % if users[0].personal_gifts_question:
+          ${ thousands(users[0].personal_gifts, show_decimals=True)}
+          % endif
       - "personal_donations": |
-          ${ nice_number(users[0].personal_donations, use_word=False) }
+          % if users[0].personal_donations_question:
+          ${ thousands(users[0].personal_donations, show_decimals=True)}
+          % endif
       - "personal_vacations": |
-          ${ nice_number(users[0].personal_vacations, use_word=False) }
+          % if users[0].personal_vacations_question:
+          ${ thousands(users[0].personal_vacations, show_decimals=True)}
+          % endif
       - "personal_associations": |
-          ${ nice_number(users[0].personal_associations, use_word=False) }
+          % if users[0].personal_associations_question:
+          ${ thousands(users[0].personal_associations, show_decimals=True)}
+          % endif
       - "peronsal_professional": |
-          ${ nice_number(users[0].peronsal_professional, use_word=False) }
+          % if users[0].peronsal_professional_question:
+          ${ thousands(users[0].peronsal_professional, show_decimals=True)}
+          % endif
       - "personal_other": |
-          ${ nice_number(users[0].personal_other, use_word=False) }
+          % if users[0].personal_other_question:
+          ${ thousands(users[0].personal_other, show_decimals=True)}
+          % endif
+      - "personal_other": |
+          % if users[0].personal_other_question:
+          ${ thousands(users[0].personal_other, show_decimals=True)}
+          % endif
+      - "personal_other_description": |
+          % if users[0].personal_other_question:
+          ${ users[0].personal_other_description}
+          % endif
       - "subtotal_personal":  |
-          ${ nice_number(
-          users[0].personal_doctor +
-          users[0].personal_therapy +
-          users[0].personal_dental +
-          users[0].personal_vision +
-          users[0].personal_medications +
-          users[0].personal_life_term +
-          users[0].personal_life_whole +
-          users[0].personal_clothing +
-          users[0].personal_stylist +
-          users[0].personal_memberships +
-          users[0].personal_subscriptions +
-          users[0].personal_entertainment +
-          users[0].personal_gifts +
-          users[0].personal_donations +
-          users[0].personal_vacations +
-          users[0].personal_associations +
-          users[0].peronsal_professional +
-          users[0].personal_other) }
+          ${ thousands(subtotal_monthly_personal_expenses, show_decimals=True) }
       - "children_clothing": |
-          ${ nice_number(users[0].children_clothing, use_word=False) }
+          % if users[0].children_clothing_question:
+          ${ thousands(users[0].children_clothing, show_decimals=True)}
+          % endif
       - "children_grooming": |
-          ${ nice_number(users[0].children_grooming, use_word=False) }
+          % if users[0].children_grooming_question:
+          ${ thousands(users[0].children_grooming, show_decimals=True)}
+          % endif
       - "children_tuition": |
-          ${ nice_number(users[0].children_tuition, use_word=False) }
+          % if users[0].children_tuition_question:
+          ${ thousands(users[0].children_tuition, show_decimals=True)}
+          % endif
       - "children_books": |
-          ${ nice_number(users[0].children_books, use_word=False) }
+          % if users[0].children_books_question:
+          ${ thousands(users[0].children_books, show_decimals=True)}
+          % endif
       - "children_school_lunch": |
-          ${ nice_number(users[0].children_school_lunch, use_word=False) }
+          % if users[0].children_school_lunch_question:
+          ${ thousands(users[0].children_school_lunch, show_decimals=True)}
+          % endif
       - "children_transportation": |
-          ${ nice_number(users[0].children_transportation, use_word=False) }
+          % if users[0].children_transportation_question:
+          ${ thousands(users[0].children_transportation, show_decimals=True)}
+          % endif
       - "children_school_events": |
-          ${ nice_number(users[0].children_school_events, use_word=False) }
+          % if users[0].children_school_events_question:
+          ${ thousands(users[0].children_school_events, show_decimals=True)}
+          % endif
       - "children_school_uniforms": |
-          ${ nice_number(users[0].children_school_uniforms, use_word=False) }
+          % if users[0].children_school_uniforms_question:
+          ${ thousands(users[0].children_school_uniforms, show_decimals=True)}
+          % endif
       - "children_after_school": |
-          ${ nice_number(users[0].children_after_school, use_word=False) }
+          % if users[0].children_after_school_question:
+          ${ thousands(users[0].children_after_school, show_decimals=True)}
+          % endif
       - "children_tutor": |
-          ${ nice_number(users[0].children_tutor, use_word=False) }
+          % if users[0].children_tutor_question:
+          ${ thousands(users[0].children_tutor, show_decimals=True)}
+          % endif
       - "children_doctor": |
-          ${ nice_number(users[0].children_doctor, use_word=False) }
+          % if users[0].children_doctor_question:
+          ${ thousands(users[0].children_doctor, show_decimals=True)}
+          % endif
       - "children_therapy": |
-          ${ nice_number(users[0].children_therapy, use_word=False) }
+          % if users[0].children_therapy_question:
+          ${ thousands(users[0].children_therapy, show_decimals=True)}
+          % endif
       - "children_dental": |
-          ${ nice_number(users[0].children_dental, use_word=False) }
+          % if users[0].children_dental_question:
+          ${ thousands(users[0].children_dental, show_decimals=True)}
+          % endif
       - "children_vision": |
-          ${ nice_number(users[0].children_vision, use_word=False) }
+          % if users[0].children_vision_question:
+          ${ thousands(users[0].children_vision, show_decimals=True)}
+          % endif
       - "children_medications": |
-          ${ nice_number(users[0].children_medications, use_word=False) }
+          % if users[0].children_medications_question:
+          ${ thousands(users[0].children_medications, show_decimals=True)}
+          % endif
       - "children_allowance": |
-          ${ nice_number(users[0].children_allowance, use_word=False) }
+          % if users[0].children_allowance_question:
+          ${ thousands(users[0].children_allowance, show_decimals=True)}
+          % endif
       - "children_childcare": |
-          ${ nice_number(users[0].children_childcare, use_word=False) }
+          % if users[0].children_childcare_question:
+          ${ thousands(users[0].children_childcare, show_decimals=True)}
+          % endif
       - "children_sports": |
-          ${ nice_number(users[0].children_sports, use_word=False) }
+          % if users[0].children_sports_question:
+          ${ thousands(users[0].children_sports, show_decimals=True)}
+          % endif
       - "children_camps": |
-          ${ nice_number(users[0].children_camps, use_word=False) }
+          % if users[0].children_camps_question:
+          ${ thousands(users[0].children_camps, show_decimals=True)}
+          % endif
       - "children_vacations": |
-          ${ nice_number(users[0].children_vacations, use_word=False) }
+          % if users[0].children_vacations_question:
+          ${ thousands(users[0].children_vacations, show_decimals=True)}
+          % endif
       - "children_entertainment": |
-          ${ nice_number(users[0].children_entertainment, use_word=False) }
+          % if users[0].children_entertainment_question:
+          ${ thousands(users[0].children_entertainment, show_decimals=True)}
+          % endif
       - "children_party_gifts": |
-          ${ nice_number(users[0].children_party_gifts, use_word=False) }
+          % if users[0].children_party_gifts_question:
+          ${ thousands(users[0].children_party_gifts, show_decimals=True)}
+          % endif
       - "children_other": |
-          ${ nice_number(users[0].children_other, use_word=False) }
+          % if users[0].children_other_question:
+          ${ thousands(users[0].children_other, show_decimals=True)}
+          % endif
+      - "children_other_description": |
+          % if users[0].children_other_question:
+          ${ users[0].children_other_description}
+          % endif
       - "subtotal_children_expense":  |
-          ${ nice_number(
-          users[0].children_clothing +
-          users[0].children_grooming +
-          users[0].children_tuition +
-          users[0].children_books +
-          users[0].children_school_lunch +
-          users[0].children_transportation +
-          users[0].children_school_events +
-          users[0].children_school_uniforms +
-          users[0].children_after_school +
-          users[0].children_tutor +
-          users[0].children_doctor +
-          users[0].children_therapy +
-          users[0].children_dental +
-          users[0].children_vision +
-          users[0].children_medications +
-          users[0].children_allowance +
-          users[0].children_childcare +
-          users[0].children_sports +
-          users[0].children_camps +
-          users[0].children_vacations +
-          users[0].children_entertainment +
-          users[0].children_party_gifts +
-          users[0].children_other) }
+          ${ thousands(subtotal_monthly_children_expenses, show_decimals=True)}
       # Part 12 total monthly living expenses
       - "total_monthly_living _expenses": |
-          ${ nice_number(
-          users[0].living_house_payment +
-          users[0].living_heloc +
-          users[0].living_property_taxes +
-          users[0].living_hoa +
-          users[0].living_insurance +
-          users[0].living_gas +
-          users[0].living_power +
-          users[0].living_phone +
-          users[0].living_cable +
-          users[0].living_internet +
-          users[0].living_water +
-          users[0].living_trash +
-          users[0].living_laundry +
-          users[0].living_cleaner +
-          users[0].living_repairs +
-          users[0].living_pets +
-          users[0].living_groceries +
-          users[0].living_other +
-          users[0].transport_payment +
-          users[0].transport_maintenance +
-          users[0].transport_insurance +
-          users[0].transport_fuel +
-          users[0].transport_public +
-          users[0].transport_parking +
-          users[0].transport_other +
-          users[0].personal_doctor +
-          users[0].personal_therapy +
-          users[0].personal_dental +
-          users[0].personal_vision +
-          users[0].personal_medications +
-          users[0].personal_life_term +
-          users[0].personal_life_whole +
-          users[0].personal_clothing +
-          users[0].personal_stylist +
-          users[0].personal_memberships +
-          users[0].personal_subscriptions +
-          users[0].personal_entertainment +
-          users[0].personal_gifts +
-          users[0].personal_donations +
-          users[0].personal_vacations +
-          users[0].personal_associations +
-          users[0].peronsal_professional +
-          users[0].personal_other +
-          users[0].children_clothing +
-          users[0].children_grooming +
-          users[0].children_tuition +
-          users[0].children_books +
-          users[0].children_school_lunch +
-          users[0].children_transportation +
-          users[0].children_school_events +
-          users[0].children_school_uniforms +
-          users[0].children_after_school +
-          users[0].children_tutor +
-          users[0].children_doctor +
-          users[0].children_therapy +
-          users[0].children_dental +
-          users[0].children_vision +
-          users[0].children_medications +
-          users[0].children_allowance +
-          users[0].children_childcare +
-          users[0].children_sports +
-          users[0].children_camps +
-          users[0].children_vacations +
-          users[0].children_entertainment +
-          users[0].children_party_gifts +
-          users[0].children_other) }
+          ${ thousands(total_monthly_household_expenses, show_decimals=True)}
+      # 13 Health insurance
+      - "health_insurance_yes": ${ insurance.there_are_any }
+      - "health_insurance_no": ${ insurance.number_gathered() == 0 }
+      - "health_insurance_company": |
+          % if insurance.there_are_any:
+          ${ insurance[0].name.text }
+          % endif
+      - "insurance_type_dental": |
+          % if insurance.there_are_any:
+          ${ insurance[0].type == "Dental" }
+          % endif
+      - "insurance_type_medical": |
+          % if insurance.there_are_any:
+          ${ insurance[0].type == "Medical" }
+          % endif
+      - "insurance_type_vision": |
+          % if insurance.there_are_any:
+          ${ insurance[0].type == "Vision" }
+          % endif          
+      - "insurance_type_orthodontic": |
+          % if insurance.there_are_any:
+          ${ insurance[0].type == "Orthodontic" }
+          % endif          
+      - "policy_type_ppo": |
+          % if insurance.there_are_any:
+          ${ insurance[0].policy == "PPO" }
+          % endif
+      - "policy_type_hmo": |
+          % if insurance.there_are_any:
+          ${ insurance[0].policy == "HMO" }
+          % endif         
+      - "policy_type_other": |
+          % if insurance.there_are_any:
+          ${ insurance[0].policy == "Other" }
+          % endif
+      - "insurance_provided_employer": |
+          % if insurance.there_are_any:
+          ${ insurance[0].provider == "employer" }
+          % endif         
+      - "insurance_provided_private": |
+          % if insurance.there_are_any:
+          ${ insurance[0].provider == "private" }
+          % endif 
+      - "insurance_provided_group": |
+          % if insurance.there_are_any:
+          ${ insurance[0].provider == "group" }
+          % endif          
+      - "insurance_provided_public": |
+          % if insurance.there_are_any:
+          ${ insurance[0].provider == "public" }
+          % endif
+      - "insurance_total_covered": |
+          % if insurance.there_are_any:
+          ${ nice_number(insurance[0].total_covered, use_word=False) }
+          % endif
+      - "insurance_covers_myself": |
+          % if insurance.there_are_any:
+          ${ insurance[0].coverage == "myself" }
+          % endif
+      - "insurance_covers_both": |
+          % if insurance.there_are_any:
+          ${ insurance[0].coverage == "both" }
+          % endif
+      - "insurance_covers_children_current": |
+          % if insurance.there_are_any:
+          ${ insurance[0].coverage == "children_current" }
+          % endif
+      - "insurance_covers_children_other": |
+          % if insurance.there_are_any:
+          ${ insurance[0].coverage == "children_other" }
+          % endif
+      - "other_children_covered": |
+          % if insurance.there_are_any and insurance[0].coverage == "children_other":
+          ${ insurance[0].other_children_covered }
+          % endif
+      - "insurance_monthly_cost":   |
+          % if insurance.there_are_any:
+          ${ thousands(insurance[0].monthly_cost, show_decimals=True) }
+          % endif
+      - "insurance_paid_myself":  |
+          % if insurance.there_are_any:
+          ${ insurance[0].paid == "myself" }
+          % endif
+      - "insurance_paid_partner":  |
+          % if insurance.there_are_any:
+          ${ insurance[0].paid == "partner" }
+          % endif
+      - "insurance_paid_other":  |
+          % if insurance.there_are_any:
+          ${ insurance[0].paid == "other" }
+          % endif
+      - "insurance_paid_other_description":   |
+          % if insurance.there_are_any:
+          ${ insurance[0].other_description }
+          % endif
+      - "cost_insurance_children":   |
+          % if insurance.there_are_any:
+          ${ thousands(insurance[0].cost_children, show_decimals=True) }
+          % endif
+      - "cost_insurance_children_current":   |
+          % if insurance.there_are_any:
+          ${ thousands(insurance[0].cost_children_current, show_decimals=True) }
+          % endif
+      - "individual_deductible":   |
+          % if insurance.there_are_any:
+          ${ thousands(insurance[0].individual_deductible, show_decimals=True) }
+          % endif
+      - "family_deductible":   |
+          % if insurance.there_are_any:
+          ${ thousands(insurance[0].family_deductible, show_decimals=True) }
+          % endif
+      - "coinsurance":  |
+          % if insurance.there_are_any:
+          ${ nice_number(insurance[0].coinsurance, use_word=False) }
+          % endif
+      - "copayment":  |
+          % if insurance.there_are_any:
+          ${ thousands(insurance[0].copayment, show_decimals=True) }
+          % endif
+      - "insurance_addendum_yes": ${ insurance.number_gathered() == 1 }
 
 ---
 ############ FA EMPLOYMENT/BUSINESS INCOME ADDENDUM #############
@@ -1882,4 +2724,180 @@ attachment:
           % if employment[i].type != "employed":
           ${ employment[i].other_perks }
           % endif
+---
+############ FA ADDITIONAL HEALTH INSURANCE #############
+objects:
+  - insurance[i].additional_health_insurance: ALDocument.using(title="FA Additional Health Insurance", filename="FA_additional_health_insurance.pdf", has_addendum=False)
+---
+objects:
+  - additional_health_insurance_bundle: ALDocumentBundle.using(elements=[], title= "FA Additional Health Insurance Bundle", filename="FA_additional_health_insurance.pdf", has_addendum=False)
+---
+reconsider: True
+code: |
+  insurance_to_bundle = []
+  additional_health_insurance_bundle.enabled = False
+
+  if insurance.number_gathered():
+    for index, el in enumerate(insurance):
+      # No need for additional health insurance unless insurance.number_gathered() >= 1
+      if index == 0:
+        el.additional_health_insurance.enabled = False
+      else:
+        el.additional_health_insurance.enabled = True
+        additional_health_insurance_bundle.enabled = True
+        insurance_to_bundle.append(el.additional_health_insurance)
+
+  additional_health_insurance_bundle.elements = insurance_to_bundle
+  complete_additional_health_insurance = True
+---
+attachment:
+  variable name: insurance[i].additional_health_insurance[j]
+  name: additional_health_insurance
+  filename: additional_health_insurance
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_health_insurance.pdf
+  fields:
+      - "county": ${ case_county }
+      - "case_number": ${ case_number }
+      - "pre-judgment": ${ filing_status == "pre_judgment" }
+      - "post-judgment": ${ filing_status == "post_judgment" }
+      - "petitioner_name": |
+          % if party_label == 'petitioner':
+          ${ users[0].name.full(middle='full') }
+          % else:
+          ${ other_parties[0].name.full(middle='full') }
+          % endif
+      - "respondent_name": |
+          % if opposing_label == 'respondent':
+          ${ other_parties[0].name.full(middle='full') }
+          % else:
+          ${ users[0].name.full(middle='full') }
+          % endif
+      - "petitioner_yes": ${ party_label == 'petitioner' }
+      - "respondent_yes": ${ party_label == 'respondent' }
+
+      - "health_insurance_yes": ${ insurance.there_are_any }
+      - "health_insurance_no": ${ insurance.number_gathered() == 0 }
+      - "health_insurance_company": |
+          % if insurance.there_are_any:
+          ${ insurance[i].name.text }
+          % endif
+      - "insurance_type_dental": |
+          % if insurance.there_are_any:
+          ${ insurance[i].type == "Dental" }
+          % endif
+      - "insurance_type_medical": |
+          % if insurance.there_are_any:
+          ${ insurance[i].type == "Medical" }
+          % endif
+      - "insurance_type_vision": |
+          % if insurance.there_are_any:
+          ${ insurance[i].type == "Vision" }
+          % endif          
+      - "insurance_type_orthodontic": |
+          % if insurance.there_are_any:
+          ${ insurance[i].type == "Orthodontic" }
+          % endif          
+      - "policy_type_ppo": |
+          % if insurance.there_are_any:
+          ${ insurance[i].policy == "PPO" }
+          % endif
+      - "policy_type_hmo": |
+          % if insurance.there_are_any:
+          ${ insurance[i].policy == "HMO" }
+          % endif         
+      - "policy_type_other": |
+          % if insurance.there_are_any:
+          ${ insurance[i].policy == "Other" }
+          % endif
+      - "insurance_provided_employer": |
+          % if insurance.there_are_any:
+          ${ insurance[i].provider == "employer" }
+          % endif         
+      - "insurance_provided_private": |
+          % if insurance.there_are_any:
+          ${ insurance[i].provider == "private" }
+          % endif 
+      - "insurance_provided_group": |
+          % if insurance.there_are_any:
+          ${ insurance[i].provider == "group" }
+          % endif          
+      - "insurance_provided_public": |
+          % if insurance.there_are_any:
+          ${ insurance[i].provider == "public" }
+          % endif
+      - "insurance_total_covered": |
+          % if insurance.there_are_any:
+          ${ nice_number(insurance[i].total_covered, use_word=False) }
+          % endif
+      - "insurance_covers_myself": |
+          % if insurance.there_are_any:
+          ${ insurance[i].coverage == "myself" }
+          % endif
+      - "insurance_covers_both": |
+          % if insurance.there_are_any:
+          ${ insurance[i].coverage == "both" }
+          % endif
+      - "insurance_covers_children_current": |
+          % if insurance.there_are_any:
+          ${ insurance[i].coverage == "children_current" }
+          % endif
+      - "insurance_covers_children_other": |
+          % if insurance.there_are_any:
+          ${ insurance[i].coverage == "children_other" }
+          % endif
+      - "other_children_covered": |
+          % if insurance.there_are_any and insurance[i].coverage == "children_other":
+          ${ insurance[i].other_children_covered }
+          % endif
+      - "insurance_monthly_cost":   |
+          % if insurance.there_are_any:
+          ${ thousands(insurance[i].monthly_cost, show_decimals=True) }
+          % endif
+      - "insurance_paid_myself":  |
+          % if insurance.there_are_any:
+          ${ insurance[i].paid == "myself" }
+          % endif
+      - "insurance_paid_partner":  |
+          % if insurance.there_are_any:
+          ${ insurance[i].paid == "partner" }
+          % endif
+      - "insurance_paid_other":  |
+          % if insurance.there_are_any:
+          ${ insurance[i].paid == "other" }
+          % endif
+      - "insurance_paid_other_description":   |
+          % if insurance.there_are_any:
+          ${ insurance[i].other_description }
+          % endif
+      - "cost_insurance_children":   |
+          % if insurance.there_are_any:
+          ${ thousands(insurance[i].cost_children, show_decimals=True) }
+          % endif
+      - "cost_insurance_children_current":   |
+          % if insurance.there_are_any:
+          ${ thousands(insurance[i].cost_children_current, show_decimals=True) }
+          % endif
+      - "individual_deductible":   |
+          % if insurance.there_are_any:
+          ${ thousands(insurance[i].individual_deductible, show_decimals=True) }
+          % endif
+      - "family_deductible":   |
+          % if insurance.there_are_any:
+          ${ thousands(insurance[i].family_deductible, show_decimals=True) }
+          % endif
+      - "coinsurance":  |
+          % if insurance.there_are_any:
+          ${ nice_number(insurance[i].coinsurance, use_word=False) }
+          % endif
+      - "copayment":  |
+          % if insurance.there_are_any:
+          ${ thousands(insurance[i].copayment, show_decimals=True) }
+          % endif
+      - "insurance_additional_yes": ${ insurance.number_gathered() > 2 }
+      - "additional_count": |
+          % if insurance.number_gathered() > 2:
+          ${ insurance.number_gathered() - 1 }
+          % endif 
 ---
