@@ -3728,4 +3728,341 @@ attachment:
         % if cash.there_are_any and cash.number_gathered() >= 4:
         ${ thousands(cash[3].balance, show_decimals=True) }
         % endif
+    - "cash_bank_name_5": |
+        % if cash.there_are_any and cash.number_gathered() >= 5:
+        ${ cash[4].name.text }
+        % endif
+    - "cash_account_name_5": |
+        % if cash.there_are_any and cash.number_gathered() >= 5:
+        ${ cash[4].account }
+        % endif
+    - "cash_account_type_5": |
+        % if cash.there_are_any and cash.number_gathered() >= 5:
+        ${ cash[4].type }
+        % endif
+    - "cash_balance_5": |
+        % if cash.there_are_any and cash.number_gathered() >= 5:
+        ${ thousands(cash[4].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_6": |
+        % if cash.there_are_any and cash.number_gathered() >= 6:
+        ${ cash[5].name.text }
+        % endif
+    - "cash_account_name_6": |
+        % if cash.there_are_any and cash.number_gathered() >= 6:
+        ${ cash[5].account }
+        % endif
+    - "cash_account_type_6": |
+        % if cash.there_are_any and cash.number_gathered() >= 6:
+        ${ cash[5].type }
+        % endif
+    - "cash_balance_6": |
+        % if cash.there_are_any and cash.number_gathered() >= 6:
+        ${ thousands(cash[5].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_7": |
+        % if cash.there_are_any and cash.number_gathered() >= 7:
+        ${ cash[6].name.text }
+        % endif
+    - "cash_account_name_7": |
+        % if cash.there_are_any and cash.number_gathered() >= 7:
+        ${ cash[6].account }
+        % endif
+    - "cash_account_type_7": |
+        % if cash.there_are_any and cash.number_gathered() >= 7:
+        ${ cash[6].type }
+        % endif
+    - "cash_balance_7": |
+        % if cash.there_are_any and cash.number_gathered() >= 7:
+        ${ thousands(cash[6].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_8": |
+        % if cash.there_are_any and cash.number_gathered() >= 8:
+        ${ cash[7].name.text }
+        % endif
+    - "cash_account_name_8": |
+        % if cash.there_are_any and cash.number_gathered() >= 8:
+        ${ cash[7].account }
+        % endif
+    - "cash_account_type_8": |
+        % if cash.there_are_any and cash.number_gathered() >= 8:
+        ${ cash[7].type }
+        % endif
+    - "cash_balance_8": |
+        % if cash.there_are_any and cash.number_gathered() >= 8:
+        ${ thousands(cash[7].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_9": |
+        % if cash.there_are_any and cash.number_gathered() >= 9:
+        ${ cash[8].name.text }
+        % endif
+    - "cash_account_name_9": |
+        % if cash.there_are_any and cash.number_gathered() >= 9:
+        ${ cash[8].account }
+        % endif
+    - "cash_account_type_9": |
+        % if cash.there_are_any and cash.number_gathered() >= 9:
+        ${ cash[8].type }
+        % endif
+    - "cash_balance_9": |
+        % if cash.there_are_any and cash.number_gathered() >= 9:
+        ${ thousands(cash[8].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_10": |
+        % if cash.there_are_any and cash.number_gathered() >= 10:
+        ${ cash[9].name.text }
+        % endif
+    - "cash_account_name_10": |
+        % if cash.there_are_any and cash.number_gathered() >= 10:
+        ${ cash[9].account }
+        % endif
+    - "cash_account_type_10": |
+        % if cash.there_are_any and cash.number_gathered() >= 10:
+        ${ cash[9].type }
+        % endif
+    - "cash_balance_10": |
+        % if cash.there_are_any and cash.number_gathered() >= 10:
+        ${ thousands(cash[9].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_11": |
+        % if cash.there_are_any and cash.number_gathered() >= 11:
+        ${ cash[10].name.text }
+        % endif
+    - "cash_account_name_11": |
+        % if cash.there_are_any and cash.number_gathered() >= 11:
+        ${ cash[10].account }
+        % endif
+    - "cash_account_type_11": |
+        % if cash.there_are_any and cash.number_gathered() >= 11:
+        ${ cash[10].type }
+        % endif
+    - "cash_balance_11": |
+        % if cash.there_are_any and cash.number_gathered() >= 11:
+        ${ thousands(cash[10].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_12": |
+        % if cash.there_are_any and cash.number_gathered() >= 12:
+        ${ cash[11].name.text }
+        % endif
+    - "cash_account_name_12": |
+        % if cash.there_are_any and cash.number_gathered() >= 12:
+        ${ cash[11].account }
+        % endif
+    - "cash_account_type_12": |
+        % if cash.there_are_any and cash.number_gathered() >= 12:
+        ${ cash[11].type }
+        % endif
+    - "cash_balance_12": |
+        % if cash.there_are_any and cash.number_gathered() >= 12:
+        ${ thousands(cash[11].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_13": |
+        % if cash.there_are_any and cash.number_gathered() >= 13:
+        ${ cash[12].name.text }
+        % endif
+    - "cash_account_name_13": |
+        % if cash.there_are_any and cash.number_gathered() >= 13:
+        ${ cash[12].account }
+        % endif
+    - "cash_account_type_13": |
+        % if cash.there_are_any and cash.number_gathered() >= 13:
+        ${ cash[12].type }
+        % endif
+    - "cash_balance_13": |
+        % if cash.there_are_any and cash.number_gathered() >= 13:
+        ${ thousands(cash[12].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_14": |
+        % if cash.there_are_any and cash.number_gathered() >= 14:
+        ${ cash[13].name.text }
+        % endif
+    - "cash_account_name_14": |
+        % if cash.there_are_any and cash.number_gathered() >= 14:
+        ${ cash[13].account }
+        % endif
+    - "cash_account_type_14": |
+        % if cash.there_are_any and cash.number_gathered() >= 14:
+        ${ cash[13].type }
+        % endif
+    - "cash_balance_14": |
+        % if cash.there_are_any and cash.number_gathered() >= 14:
+        ${ thousands(cash[13].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_15": |
+        % if cash.there_are_any and cash.number_gathered() >= 15:
+        ${ cash[14].name.text }
+        % endif
+    - "cash_account_name_15": |
+        % if cash.there_are_any and cash.number_gathered() >= 15:
+        ${ cash[14].account }
+        % endif
+    - "cash_account_type_15": |
+        % if cash.there_are_any and cash.number_gathered() >= 15:
+        ${ cash[14].type }
+        % endif
+    - "cash_balance_15": |
+        % if cash.there_are_any and cash.number_gathered() >= 15:
+        ${ thousands(cash[14].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_16": |
+        % if cash.there_are_any and cash.number_gathered() >= 16:
+        ${ cash[15].name.text }
+        % endif
+    - "cash_account_name_16": |
+        % if cash.there_are_any and cash.number_gathered() >= 16:
+        ${ cash[15].account }
+        % endif
+    - "cash_account_type_16": |
+        % if cash.there_are_any and cash.number_gathered() >= 16:
+        ${ cash[15].type }
+        % endif
+    - "cash_balance_16": |
+        % if cash.there_are_any and cash.number_gathered() >= 16:
+        ${ thousands(cash[15].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_17": |
+        % if cash.there_are_any and cash.number_gathered() >= 17:
+        ${ cash[16].name.text }
+        % endif
+    - "cash_account_name_17": |
+        % if cash.there_are_any and cash.number_gathered() >= 17:
+        ${ cash[16].account }
+        % endif
+    - "cash_account_type_17": |
+        % if cash.there_are_any and cash.number_gathered() >= 17:
+        ${ cash[16].type }
+        % endif
+    - "cash_balance_17": |
+        % if cash.there_are_any and cash.number_gathered() >= 17:
+        ${ thousands(cash[16].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_18": |
+        % if cash.there_are_any and cash.number_gathered() >= 18:
+        ${ cash[17].name.text }
+        % endif
+    - "cash_account_name_18": |
+        % if cash.there_are_any and cash.number_gathered() >= 18:
+        ${ cash[17].account }
+        % endif
+    - "cash_account_type_18": |
+        % if cash.there_are_any and cash.number_gathered() >= 18:
+        ${ cash[17].type }
+        % endif
+    - "cash_balance_18": |
+        % if cash.there_are_any and cash.number_gathered() >= 18:
+        ${ thousands(cash[17].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_19": |
+        % if cash.there_are_any and cash.number_gathered() >= 19:
+        ${ cash[18].name.text }
+        % endif
+    - "cash_account_name_19": |
+        % if cash.there_are_any and cash.number_gathered() >= 19:
+        ${ cash[18].account }
+        % endif
+    - "cash_account_type_19": |
+        % if cash.there_are_any and cash.number_gathered() >= 19:
+        ${ cash[18].type }
+        % endif
+    - "cash_balance_19": |
+        % if cash.there_are_any and cash.number_gathered() >= 19:
+        ${ thousands(cash[18].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_20": |
+        % if cash.there_are_any and cash.number_gathered() >= 20:
+        ${ cash[19].name.text }
+        % endif
+    - "cash_account_name_20": |
+        % if cash.there_are_any and cash.number_gathered() >= 20:
+        ${ cash[19].account }
+        % endif
+    - "cash_account_type_20": |
+        % if cash.there_are_any and cash.number_gathered() >= 20:
+        ${ cash[19].type }
+        % endif
+    - "cash_balance_20": |
+        % if cash.there_are_any and cash.number_gathered() >= 20:
+        ${ thousands(cash[19].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_21": |
+        % if cash.there_are_any and cash.number_gathered() >= 21:
+        ${ cash[20].name.text }
+        % endif
+    - "cash_account_name_21": |
+        % if cash.there_are_any and cash.number_gathered() >= 21:
+        ${ cash[20].account }
+        % endif
+    - "cash_account_type_21": |
+        % if cash.there_are_any and cash.number_gathered() >= 21:
+        ${ cash[20].type }
+        % endif
+    - "cash_balance_21": |
+        % if cash.there_are_any and cash.number_gathered() >= 21:
+        ${ thousands(cash[20].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_22": |
+        % if cash.there_are_any and cash.number_gathered() >= 22:
+        ${ cash[21].name.text }
+        % endif
+    - "cash_account_name_22": |
+        % if cash.there_are_any and cash.number_gathered() >= 22:
+        ${ cash[21].account }
+        % endif
+    - "cash_account_type_22": |
+        % if cash.there_are_any and cash.number_gathered() >= 22:
+        ${ cash[21].type }
+        % endif
+    - "cash_balance_22": |
+        % if cash.there_are_any and cash.number_gathered() >= 22:
+        ${ thousands(cash[21].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_23": |
+        % if cash.there_are_any and cash.number_gathered() >= 23:
+        ${ cash[22].name.text }
+        % endif
+    - "cash_account_name_23": |
+        % if cash.there_are_any and cash.number_gathered() >= 23:
+        ${ cash[22].account }
+        % endif
+    - "cash_account_type_23": |
+        % if cash.there_are_any and cash.number_gathered() >= 23:
+        ${ cash[22].type }
+        % endif
+    - "cash_balance_23": |
+        % if cash.there_are_any and cash.number_gathered() >= 23:
+        ${ thousands(cash[22].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_24": |
+        % if cash.there_are_any and cash.number_gathered() >= 24:
+        ${ cash[23].name.text }
+        % endif
+    - "cash_account_name_24": |
+        % if cash.there_are_any and cash.number_gathered() >= 24:
+        ${ cash[23].account }
+        % endif
+    - "cash_account_type_24": |
+        % if cash.there_are_any and cash.number_gathered() >= 24:
+        ${ cash[23].type }
+        % endif
+    - "cash_balance_24": |
+        % if cash.there_are_any and cash.number_gathered() >= 24:
+        ${ thousands(cash[23].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_25": |
+        % if cash.there_are_any and cash.number_gathered() >= 25:
+        ${ cash[24].name.text }
+        % endif
+    - "cash_account_name_25": |
+        % if cash.there_are_any and cash.number_gathered() >= 25:
+        ${ cash[24].account }
+        % endif
+    - "cash_account_type_25": |
+        % if cash.there_are_any and cash.number_gathered() >= 25:
+        ${ cash[24].type }
+        % endif
+    - "cash_balance_25": |
+        % if cash.there_are_any and cash.number_gathered() >= 25:
+        ${ thousands(cash[24].balance, show_decimals=True) }
+        % endif
+
 ---
