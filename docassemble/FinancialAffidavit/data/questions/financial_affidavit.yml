@@ -17,7 +17,10 @@ objects:
   - other_parties: ALPeopleList.using(there_are_any=True)
   - employment: DAList.using(object_type=Thing, complete_attribute='complete')
   - employment[i].address: ALAddress
+  - taxes: DAList.using(object_type=Thing, there_are_any=False)
   - insurance: DAList.using(object_type=Thing, complete_attribute='complete')
+  - debts: DAList.using(object_type=Thing, complete_attribute='complete')
+  - cash: DAList.using(object_type=Thing, complete_attribute='complete')
   - court_list: ALCourtLoader.using(file_name='docassemble.ILAO:data/sources/il_courts.xlsx')
 ---
 code: |
@@ -73,6 +76,9 @@ code: |
 
   if taxes_filed == True:
     taxes_filed_status
+    taxes[0].federal_tax
+  if taxes_filed_two_years == True:
+    taxes[1].federal_tax
 
   monthly_income_intro
   users[0].regular_pay_question
@@ -83,7 +89,7 @@ code: |
   users[0].gifts_money_question
   income_summary
 
-  set_progress(40)
+  set_progress(50)
   nav.set_section('section_expenses') 
   expenses_intro
   users[0].deductions_federal_question
@@ -105,9 +111,10 @@ code: |
   users[0].personal_gifts_question
   users[0].personal_vacations_question
   users[0].personal_associations_question
-  users[0].other_personal_question
+  users[0].personal_other_question
 
   if users[0].children_expenses_question:
+    users[0].children_clothing_question
     users[0].children_tuition_question
     users[0].children_doctor_question
     users[0].children_allowance_question 
@@ -118,6 +125,18 @@ code: |
 
   if insurance.there_are_any:
     insurance.gather()
+
+  set_progress(60)
+  nav.set_section('section_debts')
+  if debts.there_are_any:
+    debts.gather()
+
+  set_progress(70)
+  nav.set_section('section_assets')
+  assets_intro
+  if cash.there_are_any:
+    cash.gather()
+
 
   set_progress(100)
   nav.set_section('section_download')
@@ -468,6 +487,13 @@ fields:
   - no label: taxes_filed
     datatype: yesnoradio
 ---
+id: filed taxes two years
+question: |
+  Did you file taxes two years ago?
+fields:
+  - no label: taxes_filed_two_years
+    datatype: yesnoradio
+---
 id: filed taxes detail
 question: |
   Income tax details for the previous year (${ current_datetime().year-1 })
@@ -494,6 +520,84 @@ fields:
       - Credit for other dependents: dependents
       - Earned Income Credit: eic
       - Dependent care credit: care
+---
+id: federal state taxes last year
+question: |
+  Tax return detail for last year
+fields: 
+  - Federal: taxes[0].federal_tax
+    datatype: radio
+    choices:
+      - Refund: refund
+      - Amount Owed: owed
+  - What was your refund: taxes[0].federal_refund
+    datatype: currency
+    min: 0
+    show if:
+      variable: taxes[0].federal_tax
+      is: refund
+  - How much did you owe?: taxes[0].federal_owed
+    datatype: currency
+    min: 0
+    show if:
+      variable: taxes[0].federal_tax
+      is: owed
+  - State: taxes[0].state_tax
+    datatype: radio
+    choices:
+      - Refund: refund
+      - Amount Owed: owed
+  - What was your refund: taxes[0].state_refund
+    datatype: currency
+    min: 0
+    show if:
+      variable: taxes[0].state_tax
+      is: refund
+  - How much did you owe?: taxes[0].state_owed
+    datatype: currency
+    min: 0
+    show if:
+      variable: taxes[0].state_tax
+      is: owed
+---
+id: federal state taxes two years ago
+question: |
+  Tax return detail for 2 years ago
+fields: 
+  - Federal: taxes[1].federal_tax
+    datatype: radio
+    choices:
+      - Refund: refund
+      - Amount Owed: owed
+  - What was your refund: taxes[1].federal_refund
+    datatype: currency
+    min: 0
+    show if:
+      variable: taxes[1].federal_tax
+      is: refund
+  - How much did you owe?: taxes[1].federal_owed
+    datatype: currency
+    min: 0
+    show if:
+      variable: taxes[1].federal_tax
+      is: owed
+  - State: taxes[1].state_tax
+    datatype: radio
+    choices:
+      - Refund: refund
+      - Amount Owed: owed
+  - What was your refund: taxes[1].state_refund
+    datatype: currency
+    min: 0
+    show if:
+      variable: taxes[1].state_tax
+      is: refund
+  - How much did you owe?: taxes[1].state_owed
+    datatype: currency
+    min: 0
+    show if:
+      variable: taxes[1].state_tax
+      is: owed
 ---
 id: monthly income intro
 continue button field: monthly_income_intro
@@ -1714,6 +1818,131 @@ fields:
     datatype: currency
     min: 0
 ---
+########### FA DEBTS ###########
+id: debt intro 
+question: |
+  Do you have any debts?
+subquestion: |
+  Debts including credit cards and past due bills. Do not include debt payments previously listed.
+fields:
+  - no label: debts.there_are_any
+    datatype: yesnoradio
+---
+code: |
+  debts[i].name.text
+  debts[i].complete = True 
+---
+code: |
+  if debts.number_gathered() >= 26:
+    debts.there_is_another = False
+---
+id: additional debts
+question: |
+  Do you have other debts you need to include?
+subquestion: |
+  So far you have told us about:
+
+  ${ debts_table }
+fields:
+  - Add another?: debts.there_is_another
+    datatype: yesnoradio
+---
+table: debts_table
+rows: debts
+columns:
+  - Creditor: row_item.name.text
+  - Describe debt: row_item.description
+  - Amount owed: currency(row_item.amount)
+  - Monthly payment: currency(row_item.payment)
+---
+id: debt information
+question: |
+  Details for the ${ordinal(i)} creditor: 
+fields:
+  - Name of the creditor: debts[i].name.text
+  - Describe nature of debt: debts[i].description
+  - Amount owed: debts[i].amount
+    datatype: currency
+    min: 0
+  - Monthly payment: debts[i].payment
+    datatype: currency
+    min: 0
+---
+########### FA ASSETS ###########
+id: assets intro
+continue button field: assets_intro
+question: |
+  Consider your assets
+subquestion: |
+  * Cash and Cash Equivalents 
+  * Certificates of Deposit
+  * Cash, Prepaid Debit Cards and Money Transfer Apps like Venmo, PayPal, Apple pay, 
+  * Investment Accounts and Securities
+  * Investment/Brokerage Accounts, Mutual Funds, Secured or Unsecured Notes, and 
+  * Cryptocurrency
+  * Real Estate 
+  * Motor Vehicles
+  * Business Interests
+  * Life Insurance Policies
+  * Retirement Benefits and Deferred Compensation
+  * Valuable Collectibles 
+  * Other Personal Property Valued Over $500
+  * Transfer or Sale of Assets or Property Within the Last 2 Years With a FMV of at Least $1,000
+---
+########### FA ASSETS - 15a Cash/Cash Equivalents ###########
+id: cash equivalent intro 
+question: |
+  Do you have any cash assets?
+subquestion: |
+  Cash and cash equivalents are checking, savings, money market, and other
+  bank or credit union accounts. **Do not list account numbers.** 
+fields:
+  - no label: cash.there_are_any
+    datatype: yesnoradio
+---
+code: |
+  cash[i].name.text
+  cash[i].complete = True 
+---
+code: |
+  if cash.number_gathered() >= 25:
+    cash.there_is_another = False
+---
+id: additional cash
+question: |
+  Do you have other cash or cash equivalent accounts to include?
+subquestion: |
+  So far you have told us about:
+  ${ cash_table }
+fields:
+  - Add another?: cash.there_is_another
+    datatype: yesnoradio
+---
+table: cash_table
+rows: cash
+columns:
+  - Bank name: row_item.name.text
+  - Name on account: row_item.account
+  - Account type: row_item.type
+  - Balance: currency(row_item.balance)
+---
+id: cash information
+question: |
+  Details for the ${ordinal(i)} creditor: 
+fields:
+  - Bank name: cash[i].name.text
+  - Name on the account: cash[i].account
+  - Account type: cash[i].type
+    datatype: radio
+    choices:
+      - Checking
+      - Savings 
+      - Money market
+      - Credit union
+  - Balance: cash[i].balance
+    datatype: currency
+    min: 0
+---
 
 
 ---
@@ -1759,6 +1988,8 @@ objects:
         fa_primary, 
         additional_employment_bundle,
         additional_health_insurance_bundle,
+        additional_debts,
+        additional_cash,
       ])
 ---
 objects:
@@ -2354,99 +2585,99 @@ attachment:
       - "subtotal_personal":  |
           ${ thousands(subtotal_monthly_personal_expenses, show_decimals=True) }
       - "children_clothing": |
-          % if users[0].children_clothing_question:
+          % if users[0].children_expenses_question and users[0].children_clothing_question:
           ${ thousands(users[0].children_clothing, show_decimals=True)}
           % endif
       - "children_grooming": |
-          % if users[0].children_grooming_question:
+          % if users[0].children_expenses_question and users[0].children_grooming_question:
           ${ thousands(users[0].children_grooming, show_decimals=True)}
           % endif
       - "children_tuition": |
-          % if users[0].children_tuition_question:
+          % if users[0].children_expenses_question and users[0].children_tuition_question:
           ${ thousands(users[0].children_tuition, show_decimals=True)}
           % endif
       - "children_books": |
-          % if users[0].children_books_question:
+          % if users[0].children_expenses_question and users[0].children_books_question:
           ${ thousands(users[0].children_books, show_decimals=True)}
           % endif
       - "children_school_lunch": |
-          % if users[0].children_school_lunch_question:
+          % if users[0].children_expenses_question and users[0].children_school_lunch_question:
           ${ thousands(users[0].children_school_lunch, show_decimals=True)}
           % endif
       - "children_transportation": |
-          % if users[0].children_transportation_question:
+          % if users[0].children_expenses_question and users[0].children_transportation_question:
           ${ thousands(users[0].children_transportation, show_decimals=True)}
           % endif
       - "children_school_events": |
-          % if users[0].children_school_events_question:
+          % if users[0].children_expenses_question and users[0].children_school_events_question:
           ${ thousands(users[0].children_school_events, show_decimals=True)}
           % endif
       - "children_school_uniforms": |
-          % if users[0].children_school_uniforms_question:
+          % if users[0].children_expenses_question and users[0].children_school_uniforms_question:
           ${ thousands(users[0].children_school_uniforms, show_decimals=True)}
           % endif
       - "children_after_school": |
-          % if users[0].children_after_school_question:
+          % if users[0].children_expenses_question and users[0].children_after_school_question:
           ${ thousands(users[0].children_after_school, show_decimals=True)}
           % endif
       - "children_tutor": |
-          % if users[0].children_tutor_question:
+          % if users[0].children_expenses_question and users[0].children_tutor_question:
           ${ thousands(users[0].children_tutor, show_decimals=True)}
           % endif
       - "children_doctor": |
-          % if users[0].children_doctor_question:
+          % if users[0].children_expenses_question and users[0].children_doctor_question:
           ${ thousands(users[0].children_doctor, show_decimals=True)}
           % endif
       - "children_therapy": |
-          % if users[0].children_therapy_question:
+          % if users[0].children_expenses_question and users[0].children_therapy_question:
           ${ thousands(users[0].children_therapy, show_decimals=True)}
           % endif
       - "children_dental": |
-          % if users[0].children_dental_question:
+          % if users[0].children_expenses_question and users[0].children_dental_question:
           ${ thousands(users[0].children_dental, show_decimals=True)}
           % endif
       - "children_vision": |
-          % if users[0].children_vision_question:
+          % if users[0].children_expenses_question and users[0].children_vision_question:
           ${ thousands(users[0].children_vision, show_decimals=True)}
           % endif
       - "children_medications": |
-          % if users[0].children_medications_question:
+          % if users[0].children_expenses_question and users[0].children_medications_question:
           ${ thousands(users[0].children_medications, show_decimals=True)}
           % endif
       - "children_allowance": |
-          % if users[0].children_allowance_question:
+          % if users[0].children_expenses_question and users[0].children_allowance_question:
           ${ thousands(users[0].children_allowance, show_decimals=True)}
           % endif
       - "children_childcare": |
-          % if users[0].children_childcare_question:
+          % if users[0].children_expenses_question and users[0].children_childcare_question:
           ${ thousands(users[0].children_childcare, show_decimals=True)}
           % endif
       - "children_sports": |
-          % if users[0].children_sports_question:
+          % if users[0].children_expenses_question and users[0].children_sports_question:
           ${ thousands(users[0].children_sports, show_decimals=True)}
           % endif
       - "children_camps": |
-          % if users[0].children_camps_question:
+          % if users[0].children_expenses_question and users[0].children_camps_question:
           ${ thousands(users[0].children_camps, show_decimals=True)}
           % endif
       - "children_vacations": |
-          % if users[0].children_vacations_question:
+          % if users[0].children_expenses_question and users[0].children_vacations_question:
           ${ thousands(users[0].children_vacations, show_decimals=True)}
           % endif
       - "children_entertainment": |
-          % if users[0].children_entertainment_question:
+          % if users[0].children_expenses_question and users[0].children_entertainment_question:
           ${ thousands(users[0].children_entertainment, show_decimals=True)}
           % endif
       - "children_party_gifts": |
-          % if users[0].children_party_gifts_question:
+          % if users[0].children_expenses_question and users[0].children_party_gifts_question:
           ${ thousands(users[0].children_party_gifts, show_decimals=True)}
           % endif
       - "children_other": |
-          % if users[0].children_other_question:
+          % if users[0].children_expenses_question and users[0].children_other_question:
           ${ thousands(users[0].children_other, show_decimals=True)}
           % endif
       - "children_other_description": |
-          % if users[0].children_other_question:
+          % if users[0].children_expenses_question and users[0].children_other_question:
           ${ users[0].children_other_description}
           % endif
       - "subtotal_children_expense":  |
@@ -2574,6 +2805,192 @@ attachment:
           ${ thousands(insurance[0].copayment, show_decimals=True) }
           % endif
       - "insurance_addendum_yes": ${ insurance.number_gathered() == 1 }
+      # 14 Debts
+      - "creditor_name_1": |
+          % if debts.there_are_any:
+          ${ debts[0].name.text }
+          % endif
+      - "creditor_description_1": |
+          % if debts.there_are_any:
+          ${ debts[0].description }
+          % endif
+      - "creditor_amount_1": |
+          % if debts.there_are_any:
+          ${ thousands(debts[0].amount, show_decimals=True) }
+          % endif
+      - "creditor_payment_1": |
+          % if debts.there_are_any:
+          ${ thousands(debts[0].payment, show_decimals=True) }
+          % endif
+      - "creditor_name_2": |
+          % if debts.there_are_any and debts.number_gathered() >= 2:
+          ${ debts[1].name.text }
+          % endif
+      - "creditor_description_2": |
+          % if debts.there_are_any and debts.number_gathered() >= 2:
+          ${ debts[1].description }
+          % endif
+      - "creditor_amount_2": |
+          % if debts.there_are_any and debts.number_gathered() >= 2:
+          ${ thousands(debts[1].amount, show_decimals=True) }
+          % endif
+      - "creditor_payment_2": |
+          % if debts.there_are_any and debts.number_gathered() >= 2:
+          ${ thousands(debts[1].payment, show_decimals=True) }
+          % endif
+      - "creditor_name_3": |
+          % if debts.there_are_any and debts.number_gathered() >= 3:
+          ${ debts[2].name.text }
+          % endif
+      - "creditor_description_3": |
+          % if debts.there_are_any and debts.number_gathered() >= 3:
+          ${ debts[2].description }
+          % endif
+      - "creditor_amount_3": |
+          % if debts.there_are_any and debts.number_gathered() >= 3:
+          ${ thousands(debts[2].amount, show_decimals=True) }
+          % endif
+      - "creditor_payment_3": |
+          % if debts.there_are_any and debts.number_gathered() >= 3:
+          ${ thousands(debts[2].payment, show_decimals=True) }
+          % endif
+      - "creditor_addendum_yes": ${ debts.number_gathered() > 6 }
+      - "total_aditional_debts": |
+          % if debts.there_are_any and debts.number_gathered() >= 7:
+          ${ thousands(sum(y.payment for y in debts[6:]), show_decimals=True) }
+          % endif
+      - "total_debt_payments": |
+          % if debts.there_are_any:
+          ${ thousands(sum(y.payment for y in debts), show_decimals=True) }
+          % endif
+      # 15a Cash Assets
+      - "cash_bank_name_1": |
+          % if cash.there_are_any:
+          ${ cash[0].name.text }
+          % endif
+      - "cash_account_name_1": |
+          % if cash.there_are_any:
+          ${ cash[0].account }
+          % endif
+      - "cash_account_type_1": |
+          % if cash.there_are_any:
+          ${ cash[0].type }
+          % endif
+      - "cash_balance_1": |
+          % if cash.there_are_any:
+          ${ thousands(cash[0].balance, show_decimals=True) }
+          % endif
+      - "cash_bank_name_2": |
+          % if cash.there_are_any and cash.number_gathered() >= 2:
+          ${ cash[1].name.text }
+          % endif
+      - "cash_account_name_2": |
+          % if cash.there_are_any and cash.number_gathered() >= 2:
+          ${ cash[1].account }
+          % endif
+      - "cash_account_type_2": |
+          % if cash.there_are_any and cash.number_gathered() >= 2:
+          ${ cash[1].type }
+          % endif
+      - "cash_balance_2": |
+          % if cash.there_are_any and cash.number_gathered() >= 2:
+          ${ thousands(cash[1].balance, show_decimals=True) }
+          % endif
+      - "cash_bank_name_3": |
+          % if cash.there_are_any and cash.number_gathered() >= 3:
+          ${ cash[2].name.text }
+          % endif
+      - "cash_account_name_3": |
+          % if cash.there_are_any and cash.number_gathered() >= 3:
+          ${ cash[2].account }
+          % endif
+      - "cash_account_type_3": |
+          % if cash.there_are_any and cash.number_gathered() >= 3:
+          ${ cash[2].type }
+          % endif
+      - "cash_balance_3": |
+          % if cash.there_are_any and cash.number_gathered() >= 3:
+          ${ thousands(cash[2].balance, show_decimals=True) }
+          % endif
+      - "cash_addendum_yes": ${ cash.number_gathered() > 3 }
+
+
+
+
+
+      # 17 Income Tax Refund/Owed Amounts
+      - "taxes_year1": |
+          % if taxes_filed:
+          ${ current_datetime().year - 1 }
+          % endif
+      - "taxes_federal_refund1": |
+          % if taxes_filed:
+          ${ taxes[0].federal_tax == 'refund' }
+          % endif
+      - "taxes_federal_refund_amount1": |
+          % if taxes_filed and taxes[0].federal_tax == 'refund':
+          ${ thousands(taxes[0].federal_refund, show_decimals=True) }
+          % endif
+      - "taxes_federal_owed1": |
+          % if taxes_filed:
+          ${ taxes[0].federal_tax == 'owed' }
+          % endif
+      - "taxes_federal_owed_amount1": |
+          % if taxes_filed and taxes[0].federal_tax == 'owed':
+          ${ thousands(taxes[0].federal_owed, show_decimals=True) }
+          % endif
+      - "taxes_state_refund1": |
+          % if taxes_filed:
+          ${ taxes[0].state_tax == 'refund' }
+          % endif
+      - "taxes_state_refund_amount1": |
+          % if taxes_filed and taxes[0].state_tax == 'refund':
+          ${ thousands(taxes[0].state_refund, show_decimals=True) }
+          % endif
+      - "taxes_state_owed1": |
+          % if taxes_filed:
+          ${ taxes[0].state_tax == 'owed' }
+          % endif
+      - "taxes_state_owed_amount1": |
+          % if taxes_filed and taxes[0].state_tax == 'owed':
+          ${ thousands(taxes[0].state_owed, show_decimals=True) }
+          % endif
+      - "taxes_year2": |
+          % if taxes_filed_two_years:
+          ${ current_datetime().year - 2 }
+          % endif
+      - "taxes_federal_refund2": |
+          % if taxes_filed_two_years:
+          ${ taxes[1].federal_tax == 'refund' }
+          % endif
+      - "taxes_federal_refund_amount2": |
+          % if taxes_filed_two_years and taxes[1].federal_tax == 'refund':
+          ${ thousands(taxes[1].federal_refund, show_decimals=True) }
+          % endif
+      - "taxes_federal_owed2": |
+          % if taxes_filed_two_years:
+          ${ taxes[1].federal_tax == 'owed' }
+          % endif
+      - "taxes_federal_owed_amount2": |
+          % if taxes_filed_two_years and taxes[1].federal_tax == 'owed':
+          ${ thousands(taxes[1].federal_owed, show_decimals=True) }
+          % endif
+      - "taxes_state_refund2": |
+          % if taxes_filed_two_years:
+          ${ taxes[1].state_tax == 'refund' }
+          % endif
+      - "taxes_state_refund_amount2": |
+          % if taxes_filed_two_years and taxes[1].state_tax == 'refund':
+          ${ thousands(taxes[1].state_refund, show_decimals=True) }
+          % endif
+      - "taxes_state_owed2": |
+          % if taxes_filed_two_years:
+          ${ taxes[1].state_tax == 'owed' }
+          % endif
+      - "taxes_state_owed_amount2": |
+          % if taxes_filed_two_years and taxes[1].state_tax == 'owed':
+          ${ thousands(taxes[1].state_owed, show_decimals=True) }
+          % endif
 
 ---
 ############ FA EMPLOYMENT/BUSINESS INCOME ADDENDUM #############
@@ -2609,7 +3026,7 @@ attachment:
   editable: False
   pdf template file: fa_additional_employment_business.pdf
   fields:
-      - "county": ${ case_county }
+      - "county_name": ${ case_county }
       - "case_number": ${ case_number }
       - "pre-judgment": ${ filing_status == "pre_judgment" }
       - "post-judgment": ${ filing_status == "post_judgment" }
@@ -2758,7 +3175,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_health_insurance.pdf
   fields:
-      - "county": ${ case_county }
+      - "county_name": ${ case_county }
       - "case_number": ${ case_number }
       - "pre-judgment": ${ filing_status == "pre_judgment" }
       - "post-judgment": ${ filing_status == "post_judgment" }
@@ -2900,4 +3317,415 @@ attachment:
           % if insurance.number_gathered() > 2:
           ${ insurance.number_gathered() - 1 }
           % endif 
+---
+############ FA ADDITIONAL DEBTS #############
+objects:
+  - additional_debts: ALDocument.using(title="FA Additional Debts", filename="FA_additional_debts.pdf", has_addendum=False)
+---
+code: |
+  additional_debts.enabled = debts.number_gathered() >= 7
+---
+attachment:
+  name: additional_debts
+  variable name: additional_debts[i]
+  filename: additional_debts
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_debts.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+
+    - "creditor_name_7": |
+        % if debts.there_are_any and debts.number_gathered() >= 7:
+        ${ debts[6].name.text }
+        % endif
+    - "creditor_description_7": |
+        % if debts.there_are_any and debts.number_gathered() >= 7:
+        ${ debts[6].description }
+        % endif
+    - "creditor_amount_7": |
+        % if debts.there_are_any and debts.number_gathered() >= 7:
+        ${ thousands(debts[6].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_7": |
+        % if debts.there_are_any  and debts.number_gathered() >= 7:
+        ${ thousands(debts[6].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_8": |
+        % if debts.there_are_any and debts.number_gathered() >= 8:
+        ${ debts[7].name.text }
+        % endif
+    - "creditor_description_8": |
+        % if debts.there_are_any and debts.number_gathered() >= 8:
+        ${ debts[7].description }
+        % endif
+    - "creditor_amount_8": |
+        % if debts.there_are_any and debts.number_gathered() >= 8:
+        ${ thousands(debts[7].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_8": |
+        % if debts.there_are_any and debts.number_gathered() >= 8:
+        ${ thousands(debts[7].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_9": |
+        % if debts.there_are_any and debts.number_gathered() >= 9:
+        ${ debts[8].name.text }
+        % endif
+    - "creditor_description_9": |
+        % if debts.there_are_any and debts.number_gathered() >= 9:
+        ${ debts[8].description }
+        % endif
+    - "creditor_amount_9": |
+        % if debts.there_are_any and debts.number_gathered() >= 9:
+        ${ thousands(debts[8].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_9": |
+        % if debts.there_are_any and debts.number_gathered() >= 9:
+        ${ thousands(debts[8].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_10": |
+        % if debts.there_are_any and debts.number_gathered() >= 10:
+        ${ debts[9].name.text }
+        % endif
+    - "creditor_description_10": |
+        % if debts.there_are_any and debts.number_gathered() >= 10:
+        ${ debts[9].description }
+        % endif
+    - "creditor_amount_10": |
+        % if debts.there_are_any and debts.number_gathered() >= 10:
+        ${ thousands(debts[9].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_10": |
+        % if debts.there_are_any and debts.number_gathered() >= 10:
+        ${ thousands(debts[9].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_11": |
+        % if debts.there_are_any and debts.number_gathered() >= 11:
+        ${ debts[10].name.text }
+        % endif
+    - "creditor_description_11": |
+        % if debts.there_are_any and debts.number_gathered() >= 11:
+        ${ debts[10].description }
+        % endif
+    - "creditor_amount_11": |
+        % if debts.there_are_any and debts.number_gathered() >= 11:
+        ${ thousands(debts[10].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_11": |
+        % if debts.there_are_any and debts.number_gathered() >= 11:
+        ${ thousands(debts[10].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_12": |
+        % if debts.there_are_any and debts.number_gathered() >= 12:
+        ${ debts[11].name.text }
+        % endif
+    - "creditor_description_12": |
+        % if debts.there_are_any and debts.number_gathered() >= 12:
+        ${ debts[11].description }
+        % endif
+    - "creditor_amount_12": |
+        % if debts.there_are_any and debts.number_gathered() >= 12:
+        ${ thousands(debts[11].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_12": |
+        % if debts.there_are_any and debts.number_gathered() >= 12:
+        ${ thousands(debts[11].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_13": |
+        % if debts.there_are_any and debts.number_gathered() >= 13:
+        ${ debts[12].name.text }
+        % endif
+    - "creditor_description_13": |
+        % if debts.there_are_any and debts.number_gathered() >= 13:
+        ${ debts[12].description }
+        % endif
+    - "creditor_amount_13": |
+        % if debts.there_are_any and debts.number_gathered() >= 13:
+        ${ thousands(debts[12].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_13": |
+        % if debts.there_are_any and debts.number_gathered() >= 13:
+        ${ thousands(debts[12].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_14": |
+        % if debts.there_are_any and debts.number_gathered() >= 14:
+        ${ debts[13].name.text }
+        % endif
+    - "creditor_description_14": |
+        % if debts.there_are_any and debts.number_gathered() >= 14:
+        ${ debts[13].description }
+        % endif
+    - "creditor_amount_14": |
+        % if debts.there_are_any and debts.number_gathered() >= 14:
+        ${ thousands(debts[13].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_14": |
+        % if debts.there_are_any and debts.number_gathered() >= 14:
+        ${ thousands(debts[13].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_15": |
+        % if debts.there_are_any and debts.number_gathered() >= 15:
+        ${ debts[14].name.text }
+        % endif
+    - "creditor_description_15": |
+        % if debts.there_are_any and debts.number_gathered() >= 15:
+        ${ debts[14].description }
+        % endif
+    - "creditor_amount_15": |
+        % if debts.there_are_any and debts.number_gathered() >= 15:
+        ${ thousands(debts[14].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_15": |
+        % if debts.there_are_any and debts.number_gathered() >= 15:
+        ${ thousands(debts[14].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_16": |
+        % if debts.there_are_any and debts.number_gathered() >= 16:
+        ${ debts[15].name.text }
+        % endif
+    - "creditor_description_16": |
+        % if debts.there_are_any and debts.number_gathered() >= 16:
+        ${ debts[15].description }
+        % endif
+    - "creditor_amount_16": |
+        % if debts.there_are_any and debts.number_gathered() >= 16:
+        ${ thousands(debts[15].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_16": |
+        % if debts.there_are_any and debts.number_gathered() >= 16:
+        ${ thousands(debts[15].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_17": |
+        % if debts.there_are_any and debts.number_gathered() >= 17:
+        ${ debts[16].name.text }
+        % endif
+    - "creditor_description_17": |
+        % if debts.there_are_any and debts.number_gathered() >= 17:
+        ${ debts[16].description }
+        % endif
+    - "creditor_amount_17": |
+        % if debts.there_are_any and debts.number_gathered() >= 17:
+        ${ thousands(debts[16].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_17": |
+        % if debts.there_are_any and debts.number_gathered() >= 17:
+        ${ thousands(debts[16].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_18": |
+        % if debts.there_are_any and debts.number_gathered() >= 18:
+        ${ debts[17].name.text }
+        % endif
+    - "creditor_description_18": |
+        % if debts.there_are_any and debts.number_gathered() >= 18:
+        ${ debts[17].description }
+        % endif
+    - "creditor_amount_18": |
+        % if debts.there_are_any and debts.number_gathered() >= 18:
+        ${ thousands(debts[17].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_18": |
+        % if debts.there_are_any and debts.number_gathered() >= 18:
+        ${ thousands(debts[17].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_19": |
+        % if debts.there_are_any and debts.number_gathered() >= 19:
+        ${ debts[18].name.text }
+        % endif
+    - "creditor_description_19": |
+        % if debts.there_are_any and debts.number_gathered() >= 19:
+        ${ debts[18].description }
+        % endif
+    - "creditor_amount_19": |
+        % if debts.there_are_any and debts.number_gathered() >= 19:
+        ${ thousands(debts[18].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_19": |
+        % if debts.there_are_any and debts.number_gathered() >= 19:
+        ${ thousands(debts[18].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_20": |
+        % if debts.there_are_any and debts.number_gathered() >= 20:
+        ${ debts[19].name.text }
+        % endif
+    - "creditor_description_20": |
+        % if debts.there_are_any and debts.number_gathered() >= 20:
+        ${ debts[19].description }
+        % endif
+    - "creditor_amount_20": |
+        % if debts.there_are_any and debts.number_gathered() >= 20:
+        ${ thousands(debts[19].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_20": |
+        % if debts.there_are_any and debts.number_gathered() >= 20:
+        ${ thousands(debts[19].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_21": |
+        % if debts.there_are_any and debts.number_gathered() >= 21:
+        ${ debts[20].name.text }
+        % endif
+    - "creditor_description_21": |
+        % if debts.there_are_any and debts.number_gathered() >= 21:
+        ${ debts[20].description }
+        % endif
+    - "creditor_amount_21": |
+        % if debts.there_are_any and debts.number_gathered() >= 21:
+        ${ thousands(debts[20].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_21": |
+        % if debts.there_are_any and debts.number_gathered() >= 21:
+        ${ thousands(debts[20].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_22": |
+        % if debts.there_are_any and debts.number_gathered() >= 22:
+        ${ debts[21].name.text }
+        % endif
+    - "creditor_description_22": |
+        % if debts.there_are_any and debts.number_gathered() >= 22:
+        ${ debts[21].description }
+        % endif
+    - "creditor_amount_22": |
+        % if debts.there_are_any and debts.number_gathered() >= 22:
+        ${ thousands(debts[21].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_22": |
+        % if debts.there_are_any and debts.number_gathered() >= 22:
+        ${ thousands(debts[21].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_23": |
+        % if debts.there_are_any and debts.number_gathered() >= 23:
+        ${ debts[22].name.text }
+        % endif
+    - "creditor_description_23": |
+        % if debts.there_are_any and debts.number_gathered() >= 23:
+        ${ debts[22].description }
+        % endif
+    - "creditor_amount_23": |
+        % if debts.there_are_any and debts.number_gathered() >= 23:
+        ${ thousands(debts[22].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_23": |
+        % if debts.there_are_any and debts.number_gathered() >= 23:
+        ${ thousands(debts[22].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_24": |
+        % if debts.there_are_any and debts.number_gathered() >= 24:
+        ${ debts[23].name.text }
+        % endif
+    - "creditor_description_24": |
+        % if debts.there_are_any and debts.number_gathered() >= 24:
+        ${ debts[23].description }
+        % endif
+    - "creditor_amount_24": |
+        % if debts.there_are_any and debts.number_gathered() >= 24:
+        ${ thousands(debts[23].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_24": |
+        % if debts.there_are_any and debts.number_gathered() >= 24:
+        ${ thousands(debts[23].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_25": |
+        % if debts.there_are_any and debts.number_gathered() >= 25:
+        ${ debts[24].name.text }
+        % endif
+    - "creditor_description_25": |
+        % if debts.there_are_any and debts.number_gathered() >= 25:
+        ${ debts[24].description }
+        % endif
+    - "creditor_amount_25": |
+        % if debts.there_are_any and debts.number_gathered() >= 25:
+        ${ thousands(debts[24].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_25": |
+        % if debts.there_are_any and debts.number_gathered() >= 25:
+        ${ thousands(debts[24].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_26": |
+        % if debts.there_are_any and debts.number_gathered() == 26:
+        ${ debts[25].name.text }
+        % endif
+    - "creditor_description_26": |
+        % if debts.there_are_any and debts.number_gathered() == 26:
+        ${ debts[25].description }
+        % endif
+    - "creditor_amount_26": |
+        % if debts.there_are_any and debts.number_gathered() == 26:
+        ${ thousands(debts[25].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_26": |
+        % if debts.there_are_any and debts.number_gathered() == 26:
+        ${ thousands(debts[25].payment, show_decimals=True) }
+        % endif
+    - "total_aditional_debts": |
+        % if debts.there_are_any and debts.number_gathered() >= 7:
+        ${ thousands(sum(y.payment for y in debts[6:]), show_decimals=True) }
+        % endif
+
+---
+############ FA ADDITIONAL CASH #############
+objects:
+  - additional_cash: ALDocument.using(title="FA Additional Cash", filename="FA_additional_cash.pdf", has_addendum=False)
+---
+code: |
+  additional_cash.enabled = cash.number_gathered() >= 4
+---
+attachment:
+  name: additional_cash
+  variable name: additional_cash[i]
+  filename: additional_cash
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_cash.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+
+    - "cash_bank_name_4": |
+        % if cash.there_are_any and cash.number_gathered() >= 4:
+        ${ cash[3].name.text }
+        % endif
+    - "cash_account_name_4": |
+        % if cash.there_are_any and cash.number_gathered() >= 4:
+        ${ cash[3].account }
+        % endif
+    - "cash_account_type_4": |
+        % if cash.there_are_any and cash.number_gathered() >= 4:
+        ${ cash[3].type }
+        % endif
+    - "cash_balance_4": |
+        % if cash.there_are_any and cash.number_gathered() >= 4:
+        ${ thousands(cash[3].balance, show_decimals=True) }
+        % endif
 ---
