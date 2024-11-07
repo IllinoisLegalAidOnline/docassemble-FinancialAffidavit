@@ -1929,7 +1929,7 @@ code: |
   debts[i].complete = True 
 ---
 code: |
-  if debts.number_gathered() > 5:
+  if debts.number_gathered() > 26:
     debts.there_is_another = False
 ---
 ########### FA ASSETS ###########
@@ -2004,7 +2004,7 @@ code: |
   cash[i].complete = True 
 ---
 code: |
-  if cash.number_gathered() > 5:
+  if cash.number_gathered() > 25:
     cash.there_is_another = False
 ---
 ########### FA ASSETS - 15a Certificate of Deposit ###########
@@ -2047,7 +2047,7 @@ code: |
   cert_deposit[i].complete = True 
 ---
 code: |
-  if cert_deposit.number_gathered() > 5:
+  if cert_deposit.number_gathered() > 25:
     cert_deposit.there_is_another = False
 ---
 ########### FA ASSETS - 15a money cash/card ###########
@@ -2091,7 +2091,7 @@ code: |
   money[i].complete = True 
 ---
 code: |
-  if money.number_gathered() > 5:
+  if money.number_gathered() > 25:
     money.there_is_another = False
 ---
 ########### FA ASSETS - 15b Investment Accounts ###########
@@ -2146,7 +2146,7 @@ code: |
   investments[i].complete = True 
 ---
 code: |
-  if investments.number_gathered() > 5:
+  if investments.number_gathered() > 25:
     investments.there_is_another = False
 ---
 ########### FA ASSETS - 15b Securities ###########
@@ -2191,7 +2191,7 @@ code: |
   securities[i].complete = True 
 ---
 code: |
-  if securities.number_gathered() > 5:
+  if securities.number_gathered() > 25:
     securities.there_is_another = False
 ---
 ########### FA ASSETS - 15c REAL ESTATE ###########
@@ -2246,7 +2246,7 @@ code: |
   real_estate[i].complete = True 
 ---
 code: |
-  if real_estate.number_gathered() > 5:
+  if real_estate.number_gathered() > 25:
     real_estate.there_is_another = False
 ---
 ########### FA ASSETS - 15d Motor Vehicle ###########
@@ -2305,7 +2305,7 @@ code: |
   motor_vehicle[i].complete = True 
 ---
 code: |
-  if motor_vehicle.number_gathered() > 5:
+  if motor_vehicle.number_gathered() > 25:
     motor_vehicle.there_is_another = False
 ---
 ########### FA ASSETS - 15e Business Interests ###########
@@ -2353,7 +2353,7 @@ code: |
   business_interests[i].complete = True 
 ---
 code: |
-  if business_interests.number_gathered() > 5:
+  if business_interests.number_gathered() > 25:
     business_interests.there_is_another = False
 ---
 ########### FA ASSETS - 15f Life Insurance ###########
@@ -2407,7 +2407,7 @@ code: |
   life_insurance[i].complete = True 
 ---
 code: |
-  if life_insurance.number_gathered() > 5:
+  if life_insurance.number_gathered() > 25:
     life_insurance.there_is_another = False
 ---
 ########### FA ASSETS - 15g Retirement Benefits #######
@@ -2454,7 +2454,7 @@ code: |
   retirement_plan[i].complete = True 
 ---
 code: |
-  if retirement_plan.number_gathered() > 5:
+  if retirement_plan.number_gathered() > 25:
     retirement_plan.there_is_another = False
 ---
 ########### FA ASSETS - 15h Valuable collectibles ###########
@@ -2497,7 +2497,7 @@ code: |
   collection[i].complete = True 
 ---
 code: |
-  if collection.number_gathered() > 5:
+  if collection.number_gathered() > 25:
     collection.there_is_another = False
 ---
 ########### FA ASSETS - 15i Other Personal Property ###########
@@ -2538,7 +2538,7 @@ code: |
   other_property[i].complete = True 
 ---
 code: |
-  if other_property.number_gathered() > 5:
+  if other_property.number_gathered() > 25:
     other_property.there_is_another = False
 ---
 ########### FA ASSETS - 15j Transfer or Sale of Assets #######
@@ -2586,7 +2586,7 @@ code: |
   transfer[i].complete = True 
 ---
 code: |
-  if transfer.number_gathered() > 5:
+  if transfer.number_gathered() > 25:
     transfer.there_is_another = False
 ---
 ########### FA LAWSUITS AND CLAIMS #######
@@ -2631,7 +2631,7 @@ code: |
   lawsuits[i].complete = True 
 ---
 code: |
-  if lawsuits.number_gathered() > 5:
+  if lawsuits.number_gathered() > 25:
     lawsuits.there_is_another = False
 ---
 id: e-signature
