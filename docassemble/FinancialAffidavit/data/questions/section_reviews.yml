@@ -32,20 +32,20 @@ review:
     button: |
       <h2 class="h4">Monthly benefits: ${ currency(total_monthly_benefits_income) }</h2>
   - Edit:
-      - users[0].rental_income
+      - users[0].rental_income_question
     button: |
       <h2 class="h4">Other monthly business income: ${ currency(total_other_monthly_business_income) }</h2>
   - Edit:
-      - users[0].maintenance_current
+      - users[0].maintenance_current_question
     button: |
       <h2 class="h4">Monthly maintenance and support: ${ currency(total_monthly_maintenance_support_income) }</h2>
   - Edit:
-      - users[0].gifts_money
+      - users[0].gifts_money_question
     button: |
       <h2 class="h4">Monthly gifts and other income: ${ currency(total_monthly_gifts_other_income) }</h2>
       Has other income: ${ yesno(users[0].other_source) }
   - note: |
-      <h2 class="h4">Monthly gifts and other income: ${ currency(total_gross_monthly_income) }</h2>
+      <h2 class="h4">Total Gross Monthly Income: ${ currency(total_gross_monthly_income) }</h2>
 ---
 id: expenses summary review
 continue button field: expenses_summary

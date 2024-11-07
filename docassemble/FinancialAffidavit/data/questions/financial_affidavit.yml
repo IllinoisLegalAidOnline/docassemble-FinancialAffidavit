@@ -3574,19 +3574,19 @@ attachment:
       - "insurance_addendum_yes": ${ insurance.number_gathered() > 1 }
       # 14 Debts
       - "creditor_name_1": |
-          % if debts.there_are_any:
+          % if has_debts:
           ${ debts[0].name.text }
           % endif
       - "creditor_description_1": |
-          % if debts.there_are_any:
+          % if has_debts:
           ${ debts[0].description }
           % endif
       - "creditor_amount_1": |
-          % if debts.there_are_any:
+          % if has_debts:
           ${ thousands(debts[0].amount, show_decimals=True) }
           % endif
       - "creditor_payment_1": |
-          % if debts.there_are_any:
+          % if has_debts:
           ${ thousands(debts[0].payment, show_decimals=True) }
           % endif
       - "creditor_name_2": |
@@ -3632,19 +3632,19 @@ attachment:
           % endif
       # 15 Assets - Cash/bank accounts
       - "cash_bank_name_1": |
-          % if cash.there_are_any:
+          % if has_cash_assets:
           ${ cash[0].name.text }
           % endif
       - "cash_account_name_1": |
-          % if cash.there_are_any:
+          % if has_cash_assets:
           ${ cash[0].account }
           % endif
       - "cash_account_type_1": |
-          % if cash.there_are_any:
+          % if has_cash_assets:
           ${ cash[0].type }
           % endif
       - "cash_balance_1": |
-          % if cash.there_are_any:
+          % if has_cash_assets:
           ${ thousands(cash[0].balance, show_decimals=True) }
           % endif
       - "cash_bank_name_2": |
@@ -3682,15 +3682,15 @@ attachment:
       - "cash_addendum_yes": ${ cash.number_gathered() > 3 }
       # 15 Assets - Certificate of Deposit
       - "cd_bank_name_1": |
-          % if cert_deposit.there_are_any:
+          % if has_cert_deposit:
           ${ cert_deposit[0].name.text }
           % endif
       - "cd_account_name_1": |
-          % if cert_deposit.there_are_any:
+          % if has_cert_deposit:
           ${ cert_deposit[0].account }
           % endif
       - "cd_balance_1": |
-          % if cert_deposit.there_are_any:
+          % if has_cert_deposit:
           ${ thousands(cert_deposit[0].balance, show_decimals=True) }
           % endif
       - "cd_bank_name_2": |
@@ -3720,15 +3720,15 @@ attachment:
       - "cd_addendum_yes": ${ cert_deposit.number_gathered() > 3 }
       # 15 Assets - Money cash/card/apps
       - "money_card_1": |
-          % if money.there_are_any:
+          % if has_money:
           ${ money[0].name.text }
           % endif
       - "money_holder_1": |
-          % if money.there_are_any:
+          % if has_money:
           ${ money[0].holder }
           % endif
       - "money_balance_1": |
-          % if money.there_are_any:
+          % if has_money:
           ${ thousands(money[0].balance, show_decimals=True) }
           % endif
       - "money_card_2": |
@@ -3758,23 +3758,23 @@ attachment:
       - "money_addendum_yes": ${ money.number_gathered() > 3 }
       # 15 Assets - Investments
       - "investment_name_1": |
-          % if investments.there_are_any:
+          % if has_investments:
           ${ investments[0].name.text }
           % endif
       - "investment_shares_1": |
-          % if investments.there_are_any:
+          % if has_investments:
           ${ investments[0].shares }
           % endif
       - "investment_type_1": |
-          % if investments.there_are_any:
+          % if has_investments:
           ${ investments[0].type }
           % endif
       - "investment_owner_1": |
-          % if investments.there_are_any:
+          % if has_investments:
           ${ investments[0].owner }
           % endif
       - "investment_fmv_1": |
-          % if investments.there_are_any:
+          % if has_investments:
           ${ thousands(investments[0].fmv, show_decimals=True) }
           % endif
       - "investment_name_2": |
@@ -3820,15 +3820,15 @@ attachment:
       - "investment_addendum_yes": ${ investments.number_gathered() > 3 }
       # 15 Assets - Investment securities
       - "securities_description_1": |
-          % if securities.there_are_any:
+          % if has_securities:
           ${ securities[0].name.text }
           % endif
       - "securities_owner_1": |
-          % if securities.there_are_any:
+          % if has_securities:
           ${ securities[0].owner }
           % endif
       - "securities_balance_1": |
-          % if securities.there_are_any:
+          % if has_securities:
           ${ thousands(securities[0].balance, show_decimals=True) }
           % endif
       - "securities_description_2": |
@@ -3858,19 +3858,19 @@ attachment:
       - "securities_addendum_yes": ${ securities.number_gathered() > 3 }
       # 15 Assets - Real Estate
       - "real_estate_address_1": |
-          % if real_estate.there_are_any:
+          % if has_real_estate:
           ${ real_estate[0].address.on_one_line() }
           % endif
       - "real_estate_title_1": |
-          % if real_estate.there_are_any:
+          % if has_real_estate:
           ${ real_estate[0].name.text }
           % endif
       - "real_estate_fmv_1": |
-          % if real_estate.there_are_any:
+          % if has_real_estate:
           ${ thousands(real_estate[0].balance, show_decimals=True) }
           % endif
       - "real_estate_balance_1": |
-          % if real_estate.there_are_any:
+          % if has_real_estate:
           ${ thousands(real_estate[0].balance, show_decimals=True) }
           % endif
       - "real_estate_address_2": |
@@ -3908,19 +3908,19 @@ attachment:
       - "real_estate_addendum_yes": ${ real_estate.number_gathered() > 3 }
       # 15 Assets - Motor Vehicles
       - "motor_vehicle_info_1": |
-          % if motor_vehicle.there_are_any:
+          % if has_motor_vehicle:
           ${ motor_vehicle[0].year } ${ motor_vehicle[0].make } ${ motor_vehicle[0].model }
           % endif
       - "motor_vehicle_title_1": |
-          % if motor_vehicle.there_are_any:
+          % if has_motor_vehicle:
           ${ motor_vehicle[0].name.text }
           % endif
       - "motor_vehicle_fmv_1": |
-          % if motor_vehicle.there_are_any:
+          % if has_motor_vehicle:
           ${ thousands(motor_vehicle[0].fmv, show_decimals=True) }
           % endif
       - "motor_vehicle_balance_1": |
-          % if motor_vehicle.there_are_any:
+          % if has_motor_vehicle:
           ${ thousands(motor_vehicle[0].balance, show_decimals=True) }
           % endif
       - "motor_vehicle_info_2": |
@@ -3974,19 +3974,19 @@ attachment:
       - "motor_vehicle_addendum_yes": ${ motor_vehicle.number_gathered() > 4 }
       # 15 Assets - Business interests
       - "business_interests_name_1": |
-          % if business_interests.there_are_any:
+          % if has_business_interests:
           ${ business_interests[0].name.text }
           % endif
       - "business_interests_type_1": |
-          % if business_interests.there_are_any:
+          % if has_business_interests:
           ${ business_interests[0].name.text }
           % endif
       - "business_interests_ownership_1": |
-          % if business_interests.there_are_any:
+          % if has_business_interests:
           ${ nice_number(business_interests[0].ownership, use_word=False) }
           % endif
       - "business_interests_fmv_1": |
-          % if business_interests.there_are_any:
+          % if has_business_interests:
           ${ thousands(business_interests[0].fmv, show_decimals=True) }
           % endif
       - "business_interests_name_2": |
@@ -4024,19 +4024,19 @@ attachment:
       - "business_interests_addendum_yes": ${ business_interests.number_gathered() > 3 }
       # 15 Assets - Life insurance
       - "life_insurance_company_1": |
-          % if life_insurance.there_are_any:
+          % if has_life_insurance:
           ${ life_insurance[0].name.text }
           % endif
       - "life_insurance_type_1": |
-          % if life_insurance.there_are_any:
+          % if has_life_insurance:
           ${ life_insurance[0].type }
           % endif
       - "life_insurance_benefit_1": |
-          % if life_insurance.there_are_any:
+          % if has_life_insurance:
           ${ thousands(life_insurance[0].benefit, show_decimals=True) }
           % endif
       - "life_insurance_value_1": |
-          % if life_insurance.there_are_any:
+          % if has_life_insurance:
           ${ thousands(life_insurance[0].value, show_decimals=True) }
           % endif
       - "life_insurance_company_2": |
@@ -4074,15 +4074,15 @@ attachment:
       - "life_insurance_addendum_yes": ${ life_insurance.number_gathered() > 3 }
       # 15 Assets - retirement benefits
       - "retirement_plan_1": |
-          % if retirement_plan.there_are_any:
+          % if has_retirement_plan:
           ${ retirement_plan[0].name.text }
           % endif
       - "retirement_type_1": |
-          % if retirement_plan.there_are_any:
+          % if has_retirement_plan:
           ${ retirement_plan[0].name.text }
           % endif
       - "retirement_balance_1": |
-          % if retirement_plan.there_are_any:
+          % if has_retirement_plan:
           ${ thousands(retirement_plan[0].balance, show_decimals=True) }
           % endif
       - "retirement_plan_2": |
@@ -4112,11 +4112,11 @@ attachment:
       - "retirement_addendum_yes": ${ retirement_plan.number_gathered() > 3 }
       # 15 Assets - valuable collectibles
       - "collection_description_1": |
-          % if collection.there_are_any:
+          % if has_collection:
           ${ collection[0].name.text }
           % endif
       - "collection_fmv_1": |
-          % if collection.there_are_any:
+          % if has_collection:
           ${ thousands(collection[0].fmv, show_decimals=True) }
           % endif
       - "collection_description_2": |
@@ -4138,11 +4138,11 @@ attachment:
       - "collection_addendum_yes": ${ collection.number_gathered() > 3 }
       # 15 Assets - other personal property
       - "other_property_description_1": |
-          % if other_property.there_are_any:
+          % if has_other_property:
           ${ other_property[0].name.text }
           % endif
       - "other_property_fmv_1": |
-          % if other_property.there_are_any:
+          % if has_other_property:
           ${ thousands(other_property[0].fmv, show_decimals=True) }
           % endif
       - "other_property_description_2": |
@@ -4164,19 +4164,19 @@ attachment:
       - "other_property_addendum_yes": ${ other_property.number_gathered() > 3 }
       # 15 Assets - transfer/sale property
       - "transfer_description_1": |
-          % if transfer.there_are_any:
+          % if has_transfer:
           ${ transfer[0].name.text }
           % endif
       - "transfer_sold_1": |
-          % if transfer.there_are_any:
+          % if has_transfer:
           ${ transfer[0].sold }
           % endif
       - "transfer_date_1": |
-          % if transfer.there_are_any:
+          % if has_transfer:
           ${ transfer[0].date.format('MM/dd/yyyy') }
           % endif
       - "transfer_amount_1": |
-          % if transfer.there_are_any:
+          % if has_transfer:
           ${ thousands(transfer[0].amount, show_decimals=True) }
           % endif
       - "transfer_description_2": |
@@ -4214,15 +4214,15 @@ attachment:
       - "transfer_addendum_yes": ${ transfer.number_gathered() > 3 }
       # 16 Lawsuits and Claims
       - "lawsuit_number_1": |
-          % if lawsuits.there_are_any:
+          % if has_lawsuits:
           ${ lawsuits[0].case }
           % endif
       - "lawsuit_date_1":  |
-          % if lawsuits.there_are_any:
+          % if has_lawsuits:
           ${ lawsuits[0].date.format('MM/dd/yyyy') }
           % endif
       - "lawsuit_amount_1": |
-          % if lawsuits.there_are_any:
+          % if has_lawsuits:
           ${ thousands(lawsuits[0].amount, show_decimals=True) }
           % endif
       - "lawsuit_number_2": |
