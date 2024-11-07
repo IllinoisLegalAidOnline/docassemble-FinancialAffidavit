@@ -1,0 +1,5072 @@
+---
+############ FA ADDITIONAL DEBTS #############
+objects:
+  - additional_debts: ALDocument.using(title="FA Additional Debts", filename="FA_additional_debts.pdf", has_addendum=False)
+---
+code: |
+  additional_debts.enabled = debts.number_gathered() >= 7
+---
+attachment:
+  name: additional_debts
+  variable name: additional_debts[i]
+  filename: additional_debts
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_debts.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+    - "creditor_name_7": |
+        % if debts.number_gathered() >= 7:
+        ${ debts[6].name.text }
+        % endif
+    - "creditor_description_7": |
+        % if debts.number_gathered() >= 7:
+        ${ debts[6].description }
+        % endif
+    - "creditor_amount_7": |
+        % if debts.number_gathered() >= 7:
+        ${ thousands(debts[6].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_7": |
+        % if debts.there_are_any  and debts.number_gathered() >= 7:
+        ${ thousands(debts[6].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_8": |
+        % if debts.number_gathered() >= 8:
+        ${ debts[7].name.text }
+        % endif
+    - "creditor_description_8": |
+        % if debts.number_gathered() >= 8:
+        ${ debts[7].description }
+        % endif
+    - "creditor_amount_8": |
+        % if debts.number_gathered() >= 8:
+        ${ thousands(debts[7].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_8": |
+        % if debts.number_gathered() >= 8:
+        ${ thousands(debts[7].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_9": |
+        % if debts.number_gathered() >= 9:
+        ${ debts[8].name.text }
+        % endif
+    - "creditor_description_9": |
+        % if debts.number_gathered() >= 9:
+        ${ debts[8].description }
+        % endif
+    - "creditor_amount_9": |
+        % if debts.number_gathered() >= 9:
+        ${ thousands(debts[8].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_9": |
+        % if debts.number_gathered() >= 9:
+        ${ thousands(debts[8].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_10": |
+        % if debts.number_gathered() >= 10:
+        ${ debts[9].name.text }
+        % endif
+    - "creditor_description_10": |
+        % if debts.number_gathered() >= 10:
+        ${ debts[9].description }
+        % endif
+    - "creditor_amount_10": |
+        % if debts.number_gathered() >= 10:
+        ${ thousands(debts[9].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_10": |
+        % if debts.number_gathered() >= 10:
+        ${ thousands(debts[9].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_11": |
+        % if debts.number_gathered() >= 11:
+        ${ debts[10].name.text }
+        % endif
+    - "creditor_description_11": |
+        % if debts.number_gathered() >= 11:
+        ${ debts[10].description }
+        % endif
+    - "creditor_amount_11": |
+        % if debts.number_gathered() >= 11:
+        ${ thousands(debts[10].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_11": |
+        % if debts.number_gathered() >= 11:
+        ${ thousands(debts[10].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_12": |
+        % if debts.number_gathered() >= 12:
+        ${ debts[11].name.text }
+        % endif
+    - "creditor_description_12": |
+        % if debts.number_gathered() >= 12:
+        ${ debts[11].description }
+        % endif
+    - "creditor_amount_12": |
+        % if debts.number_gathered() >= 12:
+        ${ thousands(debts[11].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_12": |
+        % if debts.number_gathered() >= 12:
+        ${ thousands(debts[11].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_13": |
+        % if debts.number_gathered() >= 13:
+        ${ debts[12].name.text }
+        % endif
+    - "creditor_description_13": |
+        % if debts.number_gathered() >= 13:
+        ${ debts[12].description }
+        % endif
+    - "creditor_amount_13": |
+        % if debts.number_gathered() >= 13:
+        ${ thousands(debts[12].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_13": |
+        % if debts.number_gathered() >= 13:
+        ${ thousands(debts[12].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_14": |
+        % if debts.number_gathered() >= 14:
+        ${ debts[13].name.text }
+        % endif
+    - "creditor_description_14": |
+        % if debts.number_gathered() >= 14:
+        ${ debts[13].description }
+        % endif
+    - "creditor_amount_14": |
+        % if debts.number_gathered() >= 14:
+        ${ thousands(debts[13].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_14": |
+        % if debts.number_gathered() >= 14:
+        ${ thousands(debts[13].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_15": |
+        % if debts.number_gathered() >= 15:
+        ${ debts[14].name.text }
+        % endif
+    - "creditor_description_15": |
+        % if debts.number_gathered() >= 15:
+        ${ debts[14].description }
+        % endif
+    - "creditor_amount_15": |
+        % if debts.number_gathered() >= 15:
+        ${ thousands(debts[14].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_15": |
+        % if debts.number_gathered() >= 15:
+        ${ thousands(debts[14].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_16": |
+        % if debts.number_gathered() >= 16:
+        ${ debts[15].name.text }
+        % endif
+    - "creditor_description_16": |
+        % if debts.number_gathered() >= 16:
+        ${ debts[15].description }
+        % endif
+    - "creditor_amount_16": |
+        % if debts.number_gathered() >= 16:
+        ${ thousands(debts[15].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_16": |
+        % if debts.number_gathered() >= 16:
+        ${ thousands(debts[15].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_17": |
+        % if debts.number_gathered() >= 17:
+        ${ debts[16].name.text }
+        % endif
+    - "creditor_description_17": |
+        % if debts.number_gathered() >= 17:
+        ${ debts[16].description }
+        % endif
+    - "creditor_amount_17": |
+        % if debts.number_gathered() >= 17:
+        ${ thousands(debts[16].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_17": |
+        % if debts.number_gathered() >= 17:
+        ${ thousands(debts[16].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_18": |
+        % if debts.number_gathered() >= 18:
+        ${ debts[17].name.text }
+        % endif
+    - "creditor_description_18": |
+        % if debts.number_gathered() >= 18:
+        ${ debts[17].description }
+        % endif
+    - "creditor_amount_18": |
+        % if debts.number_gathered() >= 18:
+        ${ thousands(debts[17].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_18": |
+        % if debts.number_gathered() >= 18:
+        ${ thousands(debts[17].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_19": |
+        % if debts.number_gathered() >= 19:
+        ${ debts[18].name.text }
+        % endif
+    - "creditor_description_19": |
+        % if debts.number_gathered() >= 19:
+        ${ debts[18].description }
+        % endif
+    - "creditor_amount_19": |
+        % if debts.number_gathered() >= 19:
+        ${ thousands(debts[18].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_19": |
+        % if debts.number_gathered() >= 19:
+        ${ thousands(debts[18].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_20": |
+        % if debts.number_gathered() >= 20:
+        ${ debts[19].name.text }
+        % endif
+    - "creditor_description_20": |
+        % if debts.number_gathered() >= 20:
+        ${ debts[19].description }
+        % endif
+    - "creditor_amount_20": |
+        % if debts.number_gathered() >= 20:
+        ${ thousands(debts[19].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_20": |
+        % if debts.number_gathered() >= 20:
+        ${ thousands(debts[19].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_21": |
+        % if debts.number_gathered() >= 21:
+        ${ debts[20].name.text }
+        % endif
+    - "creditor_description_21": |
+        % if debts.number_gathered() >= 21:
+        ${ debts[20].description }
+        % endif
+    - "creditor_amount_21": |
+        % if debts.number_gathered() >= 21:
+        ${ thousands(debts[20].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_21": |
+        % if debts.number_gathered() >= 21:
+        ${ thousands(debts[20].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_22": |
+        % if debts.number_gathered() >= 22:
+        ${ debts[21].name.text }
+        % endif
+    - "creditor_description_22": |
+        % if debts.number_gathered() >= 22:
+        ${ debts[21].description }
+        % endif
+    - "creditor_amount_22": |
+        % if debts.number_gathered() >= 22:
+        ${ thousands(debts[21].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_22": |
+        % if debts.number_gathered() >= 22:
+        ${ thousands(debts[21].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_23": |
+        % if debts.number_gathered() >= 23:
+        ${ debts[22].name.text }
+        % endif
+    - "creditor_description_23": |
+        % if debts.number_gathered() >= 23:
+        ${ debts[22].description }
+        % endif
+    - "creditor_amount_23": |
+        % if debts.number_gathered() >= 23:
+        ${ thousands(debts[22].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_23": |
+        % if debts.number_gathered() >= 23:
+        ${ thousands(debts[22].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_24": |
+        % if debts.number_gathered() >= 24:
+        ${ debts[23].name.text }
+        % endif
+    - "creditor_description_24": |
+        % if debts.number_gathered() >= 24:
+        ${ debts[23].description }
+        % endif
+    - "creditor_amount_24": |
+        % if debts.number_gathered() >= 24:
+        ${ thousands(debts[23].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_24": |
+        % if debts.number_gathered() >= 24:
+        ${ thousands(debts[23].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_25": |
+        % if debts.number_gathered() >= 25:
+        ${ debts[24].name.text }
+        % endif
+    - "creditor_description_25": |
+        % if debts.number_gathered() >= 25:
+        ${ debts[24].description }
+        % endif
+    - "creditor_amount_25": |
+        % if debts.number_gathered() >= 25:
+        ${ thousands(debts[24].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_25": |
+        % if debts.number_gathered() >= 25:
+        ${ thousands(debts[24].payment, show_decimals=True) }
+        % endif
+    - "creditor_name_26": |
+        % if debts.number_gathered() == 26:
+        ${ debts[25].name.text }
+        % endif
+    - "creditor_description_26": |
+        % if debts.number_gathered() == 26:
+        ${ debts[25].description }
+        % endif
+    - "creditor_amount_26": |
+        % if debts.number_gathered() == 26:
+        ${ thousands(debts[25].amount, show_decimals=True) }
+        % endif
+    - "creditor_payment_26": |
+        % if debts.number_gathered() == 26:
+        ${ thousands(debts[25].payment, show_decimals=True) }
+        % endif
+    - "total_aditional_debts": |
+        % if debts.number_gathered() >= 7:
+        ${ thousands(sum(y.payment for y in debts[6:]), show_decimals=True) }
+        % endif
+
+---
+############ FA ADDITIONAL CASH #############
+objects:
+  - additional_cash: ALDocument.using(title="FA Additional Cash", filename="FA_additional_cash.pdf", has_addendum=False)
+---
+code: |
+  additional_cash.enabled = cash.number_gathered() >= 4
+---
+attachment:
+  name: additional_cash
+  variable name: additional_cash[i]
+  filename: additional_cash
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_cash.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+    - "cash_bank_name_4": |
+        % if cash.number_gathered() >= 4:
+        ${ cash[3].name.text }
+        % endif
+    - "cash_account_name_4": |
+        % if cash.number_gathered() >= 4:
+        ${ cash[3].account }
+        % endif
+    - "cash_account_type_4": |
+        % if cash.number_gathered() >= 4:
+        ${ cash[3].type }
+        % endif
+    - "cash_balance_4": |
+        % if cash.number_gathered() >= 4:
+        ${ thousands(cash[3].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_5": |
+        % if cash.number_gathered() >= 5:
+        ${ cash[4].name.text }
+        % endif
+    - "cash_account_name_5": |
+        % if cash.number_gathered() >= 5:
+        ${ cash[4].account }
+        % endif
+    - "cash_account_type_5": |
+        % if cash.number_gathered() >= 5:
+        ${ cash[4].type }
+        % endif
+    - "cash_balance_5": |
+        % if cash.number_gathered() >= 5:
+        ${ thousands(cash[4].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_6": |
+        % if cash.number_gathered() >= 6:
+        ${ cash[5].name.text }
+        % endif
+    - "cash_account_name_6": |
+        % if cash.number_gathered() >= 6:
+        ${ cash[5].account }
+        % endif
+    - "cash_account_type_6": |
+        % if cash.number_gathered() >= 6:
+        ${ cash[5].type }
+        % endif
+    - "cash_balance_6": |
+        % if cash.number_gathered() >= 6:
+        ${ thousands(cash[5].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_7": |
+        % if cash.number_gathered() >= 7:
+        ${ cash[6].name.text }
+        % endif
+    - "cash_account_name_7": |
+        % if cash.number_gathered() >= 7:
+        ${ cash[6].account }
+        % endif
+    - "cash_account_type_7": |
+        % if cash.number_gathered() >= 7:
+        ${ cash[6].type }
+        % endif
+    - "cash_balance_7": |
+        % if cash.number_gathered() >= 7:
+        ${ thousands(cash[6].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_8": |
+        % if cash.number_gathered() >= 8:
+        ${ cash[7].name.text }
+        % endif
+    - "cash_account_name_8": |
+        % if cash.number_gathered() >= 8:
+        ${ cash[7].account }
+        % endif
+    - "cash_account_type_8": |
+        % if cash.number_gathered() >= 8:
+        ${ cash[7].type }
+        % endif
+    - "cash_balance_8": |
+        % if cash.number_gathered() >= 8:
+        ${ thousands(cash[7].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_9": |
+        % if cash.number_gathered() >= 9:
+        ${ cash[8].name.text }
+        % endif
+    - "cash_account_name_9": |
+        % if cash.number_gathered() >= 9:
+        ${ cash[8].account }
+        % endif
+    - "cash_account_type_9": |
+        % if cash.number_gathered() >= 9:
+        ${ cash[8].type }
+        % endif
+    - "cash_balance_9": |
+        % if cash.number_gathered() >= 9:
+        ${ thousands(cash[8].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_10": |
+        % if cash.number_gathered() >= 10:
+        ${ cash[9].name.text }
+        % endif
+    - "cash_account_name_10": |
+        % if cash.number_gathered() >= 10:
+        ${ cash[9].account }
+        % endif
+    - "cash_account_type_10": |
+        % if cash.number_gathered() >= 10:
+        ${ cash[9].type }
+        % endif
+    - "cash_balance_10": |
+        % if cash.number_gathered() >= 10:
+        ${ thousands(cash[9].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_11": |
+        % if cash.number_gathered() >= 11:
+        ${ cash[10].name.text }
+        % endif
+    - "cash_account_name_11": |
+        % if cash.number_gathered() >= 11:
+        ${ cash[10].account }
+        % endif
+    - "cash_account_type_11": |
+        % if cash.number_gathered() >= 11:
+        ${ cash[10].type }
+        % endif
+    - "cash_balance_11": |
+        % if cash.number_gathered() >= 11:
+        ${ thousands(cash[10].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_12": |
+        % if cash.number_gathered() >= 12:
+        ${ cash[11].name.text }
+        % endif
+    - "cash_account_name_12": |
+        % if cash.number_gathered() >= 12:
+        ${ cash[11].account }
+        % endif
+    - "cash_account_type_12": |
+        % if cash.number_gathered() >= 12:
+        ${ cash[11].type }
+        % endif
+    - "cash_balance_12": |
+        % if cash.number_gathered() >= 12:
+        ${ thousands(cash[11].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_13": |
+        % if cash.number_gathered() >= 13:
+        ${ cash[12].name.text }
+        % endif
+    - "cash_account_name_13": |
+        % if cash.number_gathered() >= 13:
+        ${ cash[12].account }
+        % endif
+    - "cash_account_type_13": |
+        % if cash.number_gathered() >= 13:
+        ${ cash[12].type }
+        % endif
+    - "cash_balance_13": |
+        % if cash.number_gathered() >= 13:
+        ${ thousands(cash[12].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_14": |
+        % if cash.number_gathered() >= 14:
+        ${ cash[13].name.text }
+        % endif
+    - "cash_account_name_14": |
+        % if cash.number_gathered() >= 14:
+        ${ cash[13].account }
+        % endif
+    - "cash_account_type_14": |
+        % if cash.number_gathered() >= 14:
+        ${ cash[13].type }
+        % endif
+    - "cash_balance_14": |
+        % if cash.number_gathered() >= 14:
+        ${ thousands(cash[13].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_15": |
+        % if cash.number_gathered() >= 15:
+        ${ cash[14].name.text }
+        % endif
+    - "cash_account_name_15": |
+        % if cash.number_gathered() >= 15:
+        ${ cash[14].account }
+        % endif
+    - "cash_account_type_15": |
+        % if cash.number_gathered() >= 15:
+        ${ cash[14].type }
+        % endif
+    - "cash_balance_15": |
+        % if cash.number_gathered() >= 15:
+        ${ thousands(cash[14].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_16": |
+        % if cash.number_gathered() >= 16:
+        ${ cash[15].name.text }
+        % endif
+    - "cash_account_name_16": |
+        % if cash.number_gathered() >= 16:
+        ${ cash[15].account }
+        % endif
+    - "cash_account_type_16": |
+        % if cash.number_gathered() >= 16:
+        ${ cash[15].type }
+        % endif
+    - "cash_balance_16": |
+        % if cash.number_gathered() >= 16:
+        ${ thousands(cash[15].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_17": |
+        % if cash.number_gathered() >= 17:
+        ${ cash[16].name.text }
+        % endif
+    - "cash_account_name_17": |
+        % if cash.number_gathered() >= 17:
+        ${ cash[16].account }
+        % endif
+    - "cash_account_type_17": |
+        % if cash.number_gathered() >= 17:
+        ${ cash[16].type }
+        % endif
+    - "cash_balance_17": |
+        % if cash.number_gathered() >= 17:
+        ${ thousands(cash[16].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_18": |
+        % if cash.number_gathered() >= 18:
+        ${ cash[17].name.text }
+        % endif
+    - "cash_account_name_18": |
+        % if cash.number_gathered() >= 18:
+        ${ cash[17].account }
+        % endif
+    - "cash_account_type_18": |
+        % if cash.number_gathered() >= 18:
+        ${ cash[17].type }
+        % endif
+    - "cash_balance_18": |
+        % if cash.number_gathered() >= 18:
+        ${ thousands(cash[17].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_19": |
+        % if cash.number_gathered() >= 19:
+        ${ cash[18].name.text }
+        % endif
+    - "cash_account_name_19": |
+        % if cash.number_gathered() >= 19:
+        ${ cash[18].account }
+        % endif
+    - "cash_account_type_19": |
+        % if cash.number_gathered() >= 19:
+        ${ cash[18].type }
+        % endif
+    - "cash_balance_19": |
+        % if cash.number_gathered() >= 19:
+        ${ thousands(cash[18].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_20": |
+        % if cash.number_gathered() >= 20:
+        ${ cash[19].name.text }
+        % endif
+    - "cash_account_name_20": |
+        % if cash.number_gathered() >= 20:
+        ${ cash[19].account }
+        % endif
+    - "cash_account_type_20": |
+        % if cash.number_gathered() >= 20:
+        ${ cash[19].type }
+        % endif
+    - "cash_balance_20": |
+        % if cash.number_gathered() >= 20:
+        ${ thousands(cash[19].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_21": |
+        % if cash.number_gathered() >= 21:
+        ${ cash[20].name.text }
+        % endif
+    - "cash_account_name_21": |
+        % if cash.number_gathered() >= 21:
+        ${ cash[20].account }
+        % endif
+    - "cash_account_type_21": |
+        % if cash.number_gathered() >= 21:
+        ${ cash[20].type }
+        % endif
+    - "cash_balance_21": |
+        % if cash.number_gathered() >= 21:
+        ${ thousands(cash[20].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_22": |
+        % if cash.number_gathered() >= 22:
+        ${ cash[21].name.text }
+        % endif
+    - "cash_account_name_22": |
+        % if cash.number_gathered() >= 22:
+        ${ cash[21].account }
+        % endif
+    - "cash_account_type_22": |
+        % if cash.number_gathered() >= 22:
+        ${ cash[21].type }
+        % endif
+    - "cash_balance_22": |
+        % if cash.number_gathered() >= 22:
+        ${ thousands(cash[21].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_23": |
+        % if cash.number_gathered() >= 23:
+        ${ cash[22].name.text }
+        % endif
+    - "cash_account_name_23": |
+        % if cash.number_gathered() >= 23:
+        ${ cash[22].account }
+        % endif
+    - "cash_account_type_23": |
+        % if cash.number_gathered() >= 23:
+        ${ cash[22].type }
+        % endif
+    - "cash_balance_23": |
+        % if cash.number_gathered() >= 23:
+        ${ thousands(cash[22].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_24": |
+        % if cash.number_gathered() >= 24:
+        ${ cash[23].name.text }
+        % endif
+    - "cash_account_name_24": |
+        % if cash.number_gathered() >= 24:
+        ${ cash[23].account }
+        % endif
+    - "cash_account_type_24": |
+        % if cash.number_gathered() >= 24:
+        ${ cash[23].type }
+        % endif
+    - "cash_balance_24": |
+        % if cash.number_gathered() >= 24:
+        ${ thousands(cash[23].balance, show_decimals=True) }
+        % endif
+    - "cash_bank_name_25": |
+        % if cash.number_gathered() == 25:
+        ${ cash[24].name.text }
+        % endif
+    - "cash_account_name_25": |
+        % if cash.number_gathered() == 25:
+        ${ cash[24].account }
+        % endif
+    - "cash_account_type_25": |
+        % if cash.number_gathered() == 25:
+        ${ cash[24].type }
+        % endif
+    - "cash_balance_25": |
+        % if cash.number_gathered() == 25:
+        ${ thousands(cash[24].balance, show_decimals=True) }
+        % endif
+---
+############ FA ADDITIONAL CERTIFICATE OF DEPOSIT #############
+objects:
+  - additional_cd: ALDocument.using(title="FA Additional CD", filename="FA_additional_cd.pdf", has_addendum=False)
+---
+code: |
+  additional_cd.enabled = cert_deposit.number_gathered() >= 4
+---
+attachment:
+  name: additional_cd
+  variable name: additional_cd[i]
+  filename: additional_cd
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_cd.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+    - "cd_bank_name_4": |
+        % if cert_deposit.number_gathered() >= 4:
+        ${ cert_deposit[3].name.text }
+        % endif
+    - "cd_account_name_4": |
+        % if cert_deposit.number_gathered() >= 4:
+        ${ cert_deposit[3].account }
+        % endif
+    - "cd_balance_4": |
+        % if cert_deposit.number_gathered() >= 4:
+        ${ thousands(cert_deposit[3].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_5": |
+        % if cert_deposit.number_gathered() >= 5:
+        ${ cert_deposit[4].name.text }
+        % endif
+    - "cd_account_name_5": |
+        % if cert_deposit.number_gathered() >= 5:
+        ${ cert_deposit[4].account }
+        % endif
+    - "cd_balance_5": |
+        % if cert_deposit.number_gathered() >= 5:
+        ${ thousands(cert_deposit[4].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_6": |
+        % if cert_deposit.number_gathered() >= 6:
+        ${ cert_deposit[5].name.text }
+        % endif
+    - "cd_account_name_6": |
+        % if cert_deposit.number_gathered() >= 6:
+        ${ cert_deposit[5].account }
+        % endif
+    - "cd_balance_6": |
+        % if cert_deposit.number_gathered() >= 6:
+        ${ thousands(cert_deposit[5].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_7": |
+        % if cert_deposit.number_gathered() >= 7:
+        ${ cert_deposit[6].name.text }
+        % endif
+    - "cd_account_name_7": |
+        % if cert_deposit.number_gathered() >= 7:
+        ${ cert_deposit[6].account }
+        % endif
+    - "cd_balance_7": |
+        % if cert_deposit.number_gathered() >= 7:
+        ${ thousands(cert_deposit[6].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_8": |
+        % if cert_deposit.number_gathered() >= 8:
+        ${ cert_deposit[7].name.text }
+        % endif
+    - "cd_account_name_8": |
+        % if cert_deposit.number_gathered() >= 8:
+        ${ cert_deposit[7].account }
+        % endif
+    - "cd_balance_8": |
+        % if cert_deposit.number_gathered() >= 8:
+        ${ thousands(cert_deposit[7].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_9": |
+        % if cert_deposit.number_gathered() >= 9:
+        ${ cert_deposit[8].name.text }
+        % endif
+    - "cd_account_name_9": |
+        % if cert_deposit.number_gathered() >= 9:
+        ${ cert_deposit[8].account }
+        % endif
+    - "cd_balance_9": |
+        % if cert_deposit.number_gathered() >= 9:
+        ${ thousands(cert_deposit[8].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_10": |
+        % if cert_deposit.number_gathered() >= 10:
+        ${ cert_deposit[9].name.text }
+        % endif
+    - "cd_account_name_10": |
+        % if cert_deposit.number_gathered() >= 10:
+        ${ cert_deposit[9].account }
+        % endif
+    - "cd_balance_10": |
+        % if cert_deposit.number_gathered() >= 10:
+        ${ thousands(cert_deposit[9].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_11": |
+        % if cert_deposit.number_gathered() >= 11:
+        ${ cert_deposit[10].name.text }
+        % endif
+    - "cd_account_name_11": |
+        % if cert_deposit.number_gathered() >= 11:
+        ${ cert_deposit[10].account }
+        % endif
+    - "cd_balance_11": |
+        % if cert_deposit.number_gathered() >= 11:
+        ${ thousands(cert_deposit[10].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_12": |
+        % if cert_deposit.number_gathered() >= 12:
+        ${ cert_deposit[11].name.text }
+        % endif
+    - "cd_account_name_12": |
+        % if cert_deposit.number_gathered() >= 12:
+        ${ cert_deposit[11].account }
+        % endif
+    - "cd_balance_12": |
+        % if cert_deposit.number_gathered() >= 12:
+        ${ thousands(cert_deposit[11].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_13": |
+        % if cert_deposit.number_gathered() >= 13:
+        ${ cert_deposit[12].name.text }
+        % endif
+    - "cd_account_name_13": |
+        % if cert_deposit.number_gathered() >= 13:
+        ${ cert_deposit[12].account }
+        % endif
+    - "cd_balance_13": |
+        % if cert_deposit.number_gathered() >= 13:
+        ${ thousands(cert_deposit[12].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_14": |
+        % if cert_deposit.number_gathered() >= 14:
+        ${ cert_deposit[13].name.text }
+        % endif
+    - "cd_account_name_14": |
+        % if cert_deposit.number_gathered() >= 14:
+        ${ cert_deposit[13].account }
+        % endif
+    - "cd_balance_14": |
+        % if cert_deposit.number_gathered() >= 14:
+        ${ thousands(cert_deposit[13].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_15": |
+        % if cert_deposit.number_gathered() >= 15:
+        ${ cert_deposit[14].name.text }
+        % endif
+    - "cd_account_name_15": |
+        % if cert_deposit.number_gathered() >= 15:
+        ${ cert_deposit[14].account }
+        % endif
+    - "cd_balance_15": |
+        % if cert_deposit.number_gathered() >= 15:
+        ${ thousands(cert_deposit[14].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_16": |
+        % if cert_deposit.number_gathered() >= 16:
+        ${ cert_deposit[15].name.text }
+        % endif
+    - "cd_account_name_16": |
+        % if cert_deposit.number_gathered() >= 16:
+        ${ cert_deposit[15].account }
+        % endif
+    - "cd_balance_16": |
+        % if cert_deposit.number_gathered() >= 16:
+        ${ thousands(cert_deposit[15].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_17": |
+        % if cert_deposit.number_gathered() >= 17:
+        ${ cert_deposit[16].name.text }
+        % endif
+    - "cd_account_name_17": |
+        % if cert_deposit.number_gathered() >= 17:
+        ${ cert_deposit[16].account }
+        % endif
+    - "cd_balance_17": |
+        % if cert_deposit.number_gathered() >= 17:
+        ${ thousands(cert_deposit[16].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_18": |
+        % if cert_deposit.number_gathered() >= 18:
+        ${ cert_deposit[17].name.text }
+        % endif
+    - "cd_account_name_18": |
+        % if cert_deposit.number_gathered() >= 18:
+        ${ cert_deposit[17].account }
+        % endif
+    - "cd_balance_18": |
+        % if cert_deposit.number_gathered() >= 18:
+        ${ thousands(cert_deposit[17].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_19": |
+        % if cert_deposit.number_gathered() >= 19:
+        ${ cert_deposit[18].name.text }
+        % endif
+    - "cd_account_name_19": |
+        % if cert_deposit.number_gathered() >= 19:
+        ${ cert_deposit[18].account }
+        % endif
+    - "cd_balance_19": |
+        % if cert_deposit.number_gathered() >= 19:
+        ${ thousands(cert_deposit[18].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_20": |
+        % if cert_deposit.number_gathered() >= 20:
+        ${ cert_deposit[19].name.text }
+        % endif
+    - "cd_account_name_20": |
+        % if cert_deposit.number_gathered() >= 20:
+        ${ cert_deposit[19].account }
+        % endif
+    - "cd_balance_20": |
+        % if cert_deposit.number_gathered() >= 20:
+        ${ thousands(cert_deposit[19].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_21": |
+        % if cert_deposit.number_gathered() >= 21:
+        ${ cert_deposit[20].name.text }
+        % endif
+    - "cd_account_name_21": |
+        % if cert_deposit.number_gathered() >= 21:
+        ${ cert_deposit[20].account }
+        % endif
+    - "cd_balance_21": |
+        % if cert_deposit.number_gathered() >= 21:
+        ${ thousands(cert_deposit[20].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_22": |
+        % if cert_deposit.number_gathered() >= 22:
+        ${ cert_deposit[21].name.text }
+        % endif
+    - "cd_account_name_22": |
+        % if cert_deposit.number_gathered() >= 22:
+        ${ cert_deposit[21].account }
+        % endif
+    - "cd_balance_22": |
+        % if cert_deposit.number_gathered() >= 22:
+        ${ thousands(cert_deposit[21].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_23": |
+        % if cert_deposit.number_gathered() >= 23:
+        ${ cert_deposit[22].name.text }
+        % endif
+    - "cd_account_name_23": |
+        % if cert_deposit.number_gathered() >= 23:
+        ${ cert_deposit[22].account }
+        % endif
+    - "cd_balance_23": |
+        % if cert_deposit.number_gathered() >= 23:
+        ${ thousands(cert_deposit[22].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_24": |
+        % if cert_deposit.number_gathered() >= 24:
+        ${ cert_deposit[23].name.text }
+        % endif
+    - "cd_account_name_24": |
+        % if cert_deposit.number_gathered() >= 24:
+        ${ cert_deposit[23].account }
+        % endif
+    - "cd_balance_24": |
+        % if cert_deposit.number_gathered() >= 24:
+        ${ thousands(cert_deposit[23].balance, show_decimals=True) }
+        % endif
+    - "cd_bank_name_25": |
+        % if cert_deposit.number_gathered() >= 25:
+        ${ cert_deposit[24].name.text }
+        % endif
+    - "cd_account_name_25": |
+        % if cert_deposit.number_gathered() >= 25:
+        ${ cert_deposit[24].account }
+        % endif
+    - "cd_balance_25": |
+        % if cert_deposit.number_gathered() >= 25:
+        ${ thousands(cert_deposit[24].balance, show_decimals=True) }
+        % endif
+
+
+---
+############ FA ADDITIONAL MONEY CASH/CARD/APPS #############
+objects:
+  - additional_money: ALDocument.using(title="FA Additional Money Cash Card", filename="FA_additional_money.pdf", has_addendum=False)
+---
+code: |
+  additional_money.enabled = money.number_gathered() >= 4
+---
+attachment:
+  name: additional_money
+  variable name: additional_money[i]
+  filename: additional_money
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_money.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+    - "money_card_4": |
+        % if money.number_gathered() >= 4:
+        ${ money[3].name.text }
+        % endif
+    - "money_holder_4": |
+        % if money.number_gathered() >= 4:
+        ${ money[3].holder }
+        % endif
+    - "money_balance_4": |
+        % if money.number_gathered() >= 4:
+        ${ thousands(money[3].balance, show_decimals=True) }
+        % endif
+    - "money_card_5": |
+        % if money.number_gathered() >= 5:
+        ${ money[4].name.text }
+        % endif
+    - "money_holder_5": |
+        % if money.number_gathered() >= 5:
+        ${ money[4].holder }
+        % endif
+    - "money_balance_5": |
+        % if money.number_gathered() >= 5:
+        ${ thousands(money[4].balance, show_decimals=True) }
+        % endif
+    - "money_card_6": |
+        % if money.number_gathered() >= 6:
+        ${ money[5].name.text }
+        % endif
+    - "money_holder_6": |
+        % if money.number_gathered() >= 6:
+        ${ money[5].holder }
+        % endif
+    - "money_balance_6": |
+        % if money.number_gathered() >= 6:
+        ${ thousands(money[5].balance, show_decimals=True) }
+        % endif
+    - "money_card_7": |
+        % if money.number_gathered() >= 7:
+        ${ money[6].name.text }
+        % endif
+    - "money_holder_7": |
+        % if money.number_gathered() >= 7:
+        ${ money[6].holder }
+        % endif
+    - "money_balance_7": |
+        % if money.number_gathered() >= 7:
+        ${ thousands(money[6].balance, show_decimals=True) }
+        % endif
+    - "money_card_8": |
+        % if money.number_gathered() >= 8:
+        ${ money[7].name.text }
+        % endif
+    - "money_holder_8": |
+        % if money.number_gathered() >= 8:
+        ${ money[7].holder }
+        % endif
+    - "money_balance_8": |
+        % if money.number_gathered() >= 8:
+        ${ thousands(money[7].balance, show_decimals=True) }
+        % endif
+    - "money_card_9": |
+        % if money.number_gathered() >= 9:
+        ${ money[8].name.text }
+        % endif
+    - "money_holder_9": |
+        % if money.number_gathered() >= 9:
+        ${ money[8].holder }
+        % endif
+    - "money_balance_9": |
+        % if money.number_gathered() >= 9:
+        ${ thousands(money[8].balance, show_decimals=True) }
+        % endif
+    - "money_card_10": |
+        % if money.number_gathered() >= 10:
+        ${ money[9].name.text }
+        % endif
+    - "money_holder_10": |
+        % if money.number_gathered() >= 10:
+        ${ money[9].holder }
+        % endif
+    - "money_balance_10": |
+        % if money.number_gathered() >= 10:
+        ${ thousands(money[9].balance, show_decimals=True) }
+        % endif
+    - "money_card_11": |
+        % if money.number_gathered() >= 11:
+        ${ money[10].name.text }
+        % endif
+    - "money_holder_11": |
+        % if money.number_gathered() >= 11:
+        ${ money[10].holder }
+        % endif
+    - "money_balance_11": |
+        % if money.number_gathered() >= 11:
+        ${ thousands(money[10].balance, show_decimals=True) }
+        % endif
+    - "money_card_12": |
+        % if money.number_gathered() >= 12:
+        ${ money[11].name.text }
+        % endif
+    - "money_holder_12": |
+        % if money.number_gathered() >= 12:
+        ${ money[11].holder }
+        % endif
+    - "money_balance_12": |
+        % if money.number_gathered() >= 12:
+        ${ thousands(money[11].balance, show_decimals=True) }
+        % endif
+    - "money_card_13": |
+        % if money.number_gathered() >= 13:
+        ${ money[12].name.text }
+        % endif
+    - "money_holder_13": |
+        % if money.number_gathered() >= 13:
+        ${ money[12].holder }
+        % endif
+    - "money_balance_13": |
+        % if money.number_gathered() >= 13:
+        ${ thousands(money[12].balance, show_decimals=True) }
+        % endif
+    - "money_card_14": |
+        % if money.number_gathered() >= 14:
+        ${ money[13].name.text }
+        % endif
+    - "money_holder_14": |
+        % if money.number_gathered() >= 14:
+        ${ money[13].holder }
+        % endif
+    - "money_balance_14": |
+        % if money.number_gathered() >= 14:
+        ${ thousands(money[13].balance, show_decimals=True) }
+        % endif
+    - "money_card_15": |
+        % if money.number_gathered() >= 15:
+        ${ money[14].name.text }
+        % endif
+    - "money_holder_15": |
+        % if money.number_gathered() >= 15:
+        ${ money[14].holder }
+        % endif
+    - "money_balance_15": |
+        % if money.number_gathered() >= 15:
+        ${ thousands(money[14].balance, show_decimals=True) }
+        % endif
+    - "money_card_16": |
+        % if money.number_gathered() >= 16:
+        ${ money[15].name.text }
+        % endif
+    - "money_holder_16": |
+        % if money.number_gathered() >= 16:
+        ${ money[15].holder }
+        % endif
+    - "money_balance_16": |
+        % if money.number_gathered() >= 16:
+        ${ thousands(money[15].balance, show_decimals=True) }
+        % endif
+    - "money_card_17": |
+        % if money.number_gathered() >= 17:
+        ${ money[16].name.text }
+        % endif
+    - "money_holder_17": |
+        % if money.number_gathered() >= 17:
+        ${ money[16].holder }
+        % endif
+    - "money_balance_17": |
+        % if money.number_gathered() >= 17:
+        ${ thousands(money[16].balance, show_decimals=True) }
+        % endif
+    - "money_card_18": |
+        % if money.number_gathered() >= 18:
+        ${ money[17].name.text }
+        % endif
+    - "money_holder_18": |
+        % if money.number_gathered() >= 18:
+        ${ money[17].holder }
+        % endif
+    - "money_balance_18": |
+        % if money.number_gathered() >= 18:
+        ${ thousands(money[17].balance, show_decimals=True) }
+        % endif
+    - "money_card_19": |
+        % if money.number_gathered() >= 19:
+        ${ money[18].name.text }
+        % endif
+    - "money_holder_19": |
+        % if money.number_gathered() >= 19:
+        ${ money[18].holder }
+        % endif
+    - "money_balance_19": |
+        % if money.number_gathered() >= 19:
+        ${ thousands(money[18].balance, show_decimals=True) }
+        % endif
+    - "money_card_20": |
+        % if money.number_gathered() >= 20:
+        ${ money[19].name.text }
+        % endif
+    - "money_holder_20": |
+        % if money.number_gathered() >= 20:
+        ${ money[19].holder }
+        % endif
+    - "money_balance_20": |
+        % if money.number_gathered() >= 20:
+        ${ thousands(money[19].balance, show_decimals=True) }
+        % endif
+    - "money_card_21": |
+        % if money.number_gathered() >= 21:
+        ${ money[20].name.text }
+        % endif
+    - "money_holder_21": |
+        % if money.number_gathered() >= 21:
+        ${ money[20].holder }
+        % endif
+    - "money_balance_21": |
+        % if money.number_gathered() >= 21:
+        ${ thousands(money[20].balance, show_decimals=True) }
+        % endif
+    - "money_card_22": |
+        % if money.number_gathered() >= 22:
+        ${ money[21].name.text }
+        % endif
+    - "money_holder_22": |
+        % if money.number_gathered() >= 22:
+        ${ money[21].holder }
+        % endif
+    - "money_balance_22": |
+        % if money.number_gathered() >= 22:
+        ${ thousands(money[21].balance, show_decimals=True) }
+        % endif
+    - "money_card_23": |
+        % if money.number_gathered() >= 23:
+        ${ money[22].name.text }
+        % endif
+    - "money_holder_23": |
+        % if money.number_gathered() >= 23:
+        ${ money[22].holder }
+        % endif
+    - "money_balance_23": |
+        % if money.number_gathered() >= 23:
+        ${ thousands(money[22].balance, show_decimals=True) }
+        % endif
+    - "money_card_24": |
+        % if money.number_gathered() >= 24:
+        ${ money[23].name.text }
+        % endif
+    - "money_holder_24": |
+        % if money.number_gathered() >= 24:
+        ${ money[23].holder }
+        % endif
+    - "money_balance_24": |
+        % if money.number_gathered() >= 24:
+        ${ thousands(money[23].balance, show_decimals=True) }
+        % endif
+    - "money_card_25": |
+        % if money.number_gathered() >= 25:
+        ${ money[24].name.text }
+        % endif
+    - "money_holder_25": |
+        % if money.number_gathered() >= 25:
+        ${ money[24].holder }
+        % endif
+    - "money_balance_25": |
+        % if money.number_gathered() >= 25:
+        ${ thousands(money[24].balance, show_decimals=True) }
+        % endif
+---
+############ FA ADDITIONAL INVESTMENTS #############
+objects:
+  - additional_investments: ALDocument.using(title="FA Additional Investments", filename="FA_additional_investments.pdf", has_addendum=False)
+---
+code: |
+  additional_investments.enabled = investments.number_gathered() >= 4
+---
+attachment:
+  name: additional_investments
+  variable name: additional_investments[i]
+  filename: additional_investments
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_investments.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+    - "investment_name_4": |
+        % if investments.number_gathered() >= 4:
+        ${ investments[3].name.text }
+        % endif
+    - "investment_shares_4": |
+        % if investments.number_gathered() >= 4:
+        ${ investments[3].shares }
+        % endif
+    - "investment_type_4": |
+        % if investments.number_gathered() >= 4:
+        ${ investments[3].type }
+        % endif
+    - "investment_owner_4": |
+        % if investments.number_gathered() >= 4:
+        ${ investments[3].owner }
+        % endif
+    - "investment_fmv_4": |
+        % if investments.number_gathered() >= 4:
+        ${ thousands(investments[3].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_5": |
+        % if investments.number_gathered() >= 5:
+        ${ investments[4].name.text }
+        % endif
+    - "investment_shares_5": |
+        % if investments.number_gathered() >= 5:
+        ${ investments[4].shares }
+        % endif
+    - "investment_type_5": |
+        % if investments.number_gathered() >= 5:
+        ${ investments[4].type }
+        % endif
+    - "investment_owner_5": |
+        % if investments.number_gathered() >= 5:
+        ${ investments[4].owner }
+        % endif
+    - "investment_fmv_5": |
+        % if investments.number_gathered() >= 5:
+        ${ thousands(investments[4].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_6": |
+        % if investments.number_gathered() >= 6:
+        ${ investments[5].name.text }
+        % endif
+    - "investment_shares_6": |
+        % if investments.number_gathered() >= 6:
+        ${ investments[5].shares }
+        % endif
+    - "investment_type_6": |
+        % if investments.number_gathered() >= 6:
+        ${ investments[5].type }
+        % endif
+    - "investment_owner_6": |
+        % if investments.number_gathered() >= 6:
+        ${ investments[5].owner }
+        % endif
+    - "investment_fmv_6": |
+        % if investments.number_gathered() >= 6:
+        ${ thousands(investments[5].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_7": |
+        % if investments.number_gathered() >= 7:
+        ${ investments[6].name.text }
+        % endif
+    - "investment_shares_7": |
+        % if investments.number_gathered() >= 7:
+        ${ investments[6].shares }
+        % endif
+    - "investment_type_7": |
+        % if investments.number_gathered() >= 7:
+        ${ investments[6].type }
+        % endif
+    - "investment_owner_7": |
+        % if investments.number_gathered() >= 7:
+        ${ investments[6].owner }
+        % endif
+    - "investment_fmv_7": |
+        % if investments.number_gathered() >= 7:
+        ${ thousands(investments[6].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_8": |
+        % if investments.number_gathered() >= 8:
+        ${ investments[7].name.text }
+        % endif
+    - "investment_shares_8": |
+        % if investments.number_gathered() >= 8:
+        ${ investments[7].shares }
+        % endif
+    - "investment_type_8": |
+        % if investments.number_gathered() >= 8:
+        ${ investments[7].type }
+        % endif
+    - "investment_owner_8": |
+        % if investments.number_gathered() >= 8:
+        ${ investments[7].owner }
+        % endif
+    - "investment_fmv_8": |
+        % if investments.number_gathered() >= 8:
+        ${ thousands(investments[7].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_9": |
+        % if investments.number_gathered() >= 9:
+        ${ investments[8].name.text }
+        % endif
+    - "investment_shares_9": |
+        % if investments.number_gathered() >= 9:
+        ${ investments[8].shares }
+        % endif
+    - "investment_type_9": |
+        % if investments.number_gathered() >= 9:
+        ${ investments[8].type }
+        % endif
+    - "investment_owner_9": |
+        % if investments.number_gathered() >= 9:
+        ${ investments[8].owner }
+        % endif
+    - "investment_fmv_9": |
+        % if investments.number_gathered() >= 9:
+        ${ thousands(investments[8].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_10": |
+        % if investments.number_gathered() >= 10:
+        ${ investments[9].name.text }
+        % endif
+    - "investment_shares_10": |
+        % if investments.number_gathered() >= 10:
+        ${ investments[9].shares }
+        % endif
+    - "investment_type_10": |
+        % if investments.number_gathered() >= 10:
+        ${ investments[9].type }
+        % endif
+    - "investment_owner_10": |
+        % if investments.number_gathered() >= 10:
+        ${ investments[9].owner }
+        % endif
+    - "investment_fmv_10": |
+        % if investments.number_gathered() >= 10:
+        ${ thousands(investments[9].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_11": |
+        % if investments.number_gathered() >= 11:
+        ${ investments[10].name.text }
+        % endif
+    - "investment_shares_11": |
+        % if investments.number_gathered() >= 11:
+        ${ investments[10].shares }
+        % endif
+    - "investment_type_11": |
+        % if investments.number_gathered() >= 11:
+        ${ investments[10].type }
+        % endif
+    - "investment_owner_11": |
+        % if investments.number_gathered() >= 11:
+        ${ investments[10].owner }
+        % endif
+    - "investment_fmv_11": |
+        % if investments.number_gathered() >= 11:
+        ${ thousands(investments[10].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_12": |
+        % if investments.number_gathered() >= 12:
+        ${ investments[11].name.text }
+        % endif
+    - "investment_shares_12": |
+        % if investments.number_gathered() >= 12:
+        ${ investments[11].shares }
+        % endif
+    - "investment_type_12": |
+        % if investments.number_gathered() >= 12:
+        ${ investments[11].type }
+        % endif
+    - "investment_owner_12": |
+        % if investments.number_gathered() >= 12:
+        ${ investments[11].owner }
+        % endif
+    - "investment_fmv_12": |
+        % if investments.number_gathered() >= 12:
+        ${ thousands(investments[11].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_13": |
+        % if investments.number_gathered() >= 13:
+        ${ investments[12].name.text }
+        % endif
+    - "investment_shares_13": |
+        % if investments.number_gathered() >= 13:
+        ${ investments[12].shares }
+        % endif
+    - "investment_type_13": |
+        % if investments.number_gathered() >= 13:
+        ${ investments[12].type }
+        % endif
+    - "investment_owner_13": |
+        % if investments.number_gathered() >= 13:
+        ${ investments[12].owner }
+        % endif
+    - "investment_fmv_13": |
+        % if investments.number_gathered() >= 13:
+        ${ thousands(investments[12].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_14": |
+        % if investments.number_gathered() >= 14:
+        ${ investments[13].name.text }
+        % endif
+    - "investment_shares_14": |
+        % if investments.number_gathered() >= 14:
+        ${ investments[13].shares }
+        % endif
+    - "investment_type_14": |
+        % if investments.number_gathered() >= 14:
+        ${ investments[13].type }
+        % endif
+    - "investment_owner_14": |
+        % if investments.number_gathered() >= 14:
+        ${ investments[13].owner }
+        % endif
+    - "investment_fmv_14": |
+        % if investments.number_gathered() >= 14:
+        ${ thousands(investments[13].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_15": |
+        % if investments.number_gathered() >= 15:
+        ${ investments[14].name.text }
+        % endif
+    - "investment_shares_15": |
+        % if investments.number_gathered() >= 15:
+        ${ investments[14].shares }
+        % endif
+    - "investment_type_15": |
+        % if investments.number_gathered() >= 15:
+        ${ investments[14].type }
+        % endif
+    - "investment_owner_15": |
+        % if investments.number_gathered() >= 15:
+        ${ investments[14].owner }
+        % endif
+    - "investment_fmv_15": |
+        % if investments.number_gathered() >= 15:
+        ${ thousands(investments[14].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_16": |
+        % if investments.number_gathered() >= 16:
+        ${ investments[15].name.text }
+        % endif
+    - "investment_shares_16": |
+        % if investments.number_gathered() >= 16:
+        ${ investments[15].shares }
+        % endif
+    - "investment_type_16": |
+        % if investments.number_gathered() >= 16:
+        ${ investments[15].type }
+        % endif
+    - "investment_owner_16": |
+        % if investments.number_gathered() >= 16:
+        ${ investments[15].owner }
+        % endif
+    - "investment_fmv_16": |
+        % if investments.number_gathered() >= 16:
+        ${ thousands(investments[15].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_17": |
+        % if investments.number_gathered() >= 17:
+        ${ investments[16].name.text }
+        % endif
+    - "investment_shares_17": |
+        % if investments.number_gathered() >= 17:
+        ${ investments[16].shares }
+        % endif
+    - "investment_type_17": |
+        % if investments.number_gathered() >= 17:
+        ${ investments[16].type }
+        % endif
+    - "investment_owner_17": |
+        % if investments.number_gathered() >= 17:
+        ${ investments[16].owner }
+        % endif
+    - "investment_fmv_17": |
+        % if investments.number_gathered() >= 17:
+        ${ thousands(investments[16].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_18": |
+        % if investments.number_gathered() >= 18:
+        ${ investments[17].name.text }
+        % endif
+    - "investment_shares_18": |
+        % if investments.number_gathered() >= 18:
+        ${ investments[17].shares }
+        % endif
+    - "investment_type_18": |
+        % if investments.number_gathered() >= 18:
+        ${ investments[17].type }
+        % endif
+    - "investment_owner_18": |
+        % if investments.number_gathered() >= 18:
+        ${ investments[17].owner }
+        % endif
+    - "investment_fmv_18": |
+        % if investments.number_gathered() >= 18:
+        ${ thousands(investments[17].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_19": |
+        % if investments.number_gathered() >= 19:
+        ${ investments[18].name.text }
+        % endif
+    - "investment_shares_19": |
+        % if investments.number_gathered() >= 19:
+        ${ investments[18].shares }
+        % endif
+    - "investment_type_19": |
+        % if investments.number_gathered() >= 19:
+        ${ investments[18].type }
+        % endif
+    - "investment_owner_19": |
+        % if investments.number_gathered() >= 19:
+        ${ investments[18].owner }
+        % endif
+    - "investment_fmv_19": |
+        % if investments.number_gathered() >= 19:
+        ${ thousands(investments[18].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_20": |
+        % if investments.number_gathered() >= 20:
+        ${ investments[19].name.text }
+        % endif
+    - "investment_shares_20": |
+        % if investments.number_gathered() >= 20:
+        ${ investments[19].shares }
+        % endif
+    - "investment_type_20": |
+        % if investments.number_gathered() >= 20:
+        ${ investments[19].type }
+        % endif
+    - "investment_owner_20": |
+        % if investments.number_gathered() >= 20:
+        ${ investments[19].owner }
+        % endif
+    - "investment_fmv_20": |
+        % if investments.number_gathered() >= 20:
+        ${ thousands(investments[19].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_21": |
+        % if investments.number_gathered() >= 21:
+        ${ investments[20].name.text }
+        % endif
+    - "investment_shares_21": |
+        % if investments.number_gathered() >= 21:
+        ${ investments[20].shares }
+        % endif
+    - "investment_type_21": |
+        % if investments.number_gathered() >= 21:
+        ${ investments[20].type }
+        % endif
+    - "investment_owner_21": |
+        % if investments.number_gathered() >= 21:
+        ${ investments[20].owner }
+        % endif
+    - "investment_fmv_21": |
+        % if investments.number_gathered() >= 21:
+        ${ thousands(investments[20].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_22": |
+        % if investments.number_gathered() >= 22:
+        ${ investments[21].name.text }
+        % endif
+    - "investment_shares_22": |
+        % if investments.number_gathered() >= 22:
+        ${ investments[21].shares }
+        % endif
+    - "investment_type_22": |
+        % if investments.number_gathered() >= 22:
+        ${ investments[21].type }
+        % endif
+    - "investment_owner_22": |
+        % if investments.number_gathered() >= 22:
+        ${ investments[21].owner }
+        % endif
+    - "investment_fmv_22": |
+        % if investments.number_gathered() >= 22:
+        ${ thousands(investments[21].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_23": |
+        % if investments.number_gathered() >= 23:
+        ${ investments[22].name.text }
+        % endif
+    - "investment_shares_23": |
+        % if investments.number_gathered() >= 23:
+        ${ investments[22].shares }
+        % endif
+    - "investment_type_23": |
+        % if investments.number_gathered() >= 23:
+        ${ investments[22].type }
+        % endif
+    - "investment_owner_23": |
+        % if investments.number_gathered() >= 23:
+        ${ investments[22].owner }
+        % endif
+    - "investment_fmv_23": |
+        % if investments.number_gathered() >= 23:
+        ${ thousands(investments[22].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_24": |
+        % if investments.number_gathered() >= 24:
+        ${ investments[23].name.text }
+        % endif
+    - "investment_shares_24": |
+        % if investments.number_gathered() >= 24:
+        ${ investments[23].shares }
+        % endif
+    - "investment_type_24": |
+        % if investments.number_gathered() >= 24:
+        ${ investments[23].type }
+        % endif
+    - "investment_owner_24": |
+        % if investments.number_gathered() >= 24:
+        ${ investments[23].owner }
+        % endif
+    - "investment_fmv_24": |
+        % if investments.number_gathered() >= 24:
+        ${ thousands(investments[23].fmv, show_decimals=True) }
+        % endif
+    - "investment_name_25": |
+        % if investments.number_gathered() >= 25:
+        ${ investments[24].name.text }
+        % endif
+    - "investment_shares_25": |
+        % if investments.number_gathered() >= 25:
+        ${ investments[24].shares }
+        % endif
+    - "investment_type_25": |
+        % if investments.number_gathered() >= 25:
+        ${ investments[24].type }
+        % endif
+    - "investment_owner_25": |
+        % if investments.number_gathered() >= 25:
+        ${ investments[24].owner }
+        % endif
+    - "investment_fmv_25": |
+        % if investments.number_gathered() >= 25:
+        ${ thousands(investments[24].fmv, show_decimals=True) }
+        % endif
+---
+############ FA ADDITIONAL SECURITIES #############
+objects:
+  - additional_securities: ALDocument.using(title="FA Additional Securities", filename="FA_additional_securities.pdf", has_addendum=False)
+---
+code: |
+  additional_securities.enabled = securities.number_gathered() >= 4
+---
+attachment:
+  name: additional_securities
+  variable name: additional_securities[i]
+  filename: additional_securities
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_securities.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+    - "securities_description_4": |
+        % if securities.number_gathered() >= 4:
+        ${ securities[3].name.text }
+        % endif
+    - "securities_owner_4": |
+        % if securities.number_gathered() >= 4:
+        ${ securities[3].owner }
+        % endif
+    - "securities_balance_4": |
+        % if securities.number_gathered() >= 4:
+        ${ thousands(securities[3].balance, show_decimals=True) }
+        % endif
+    - "securities_description_5": |
+        % if securities.number_gathered() >= 5:
+        ${ securities[4].name.text }
+        % endif
+    - "securities_owner_5": |
+        % if securities.number_gathered() >= 5:
+        ${ securities[4].owner }
+        % endif
+    - "securities_balance_5": |
+        % if securities.number_gathered() >= 5:
+        ${ thousands(securities[4].balance, show_decimals=True) }
+        % endif
+    - "securities_description_6": |
+        % if securities.number_gathered() >= 6:
+        ${ securities[5].name.text }
+        % endif
+    - "securities_owner_6": |
+        % if securities.number_gathered() >= 6:
+        ${ securities[5].owner }
+        % endif
+    - "securities_balance_6": |
+        % if securities.number_gathered() >= 6:
+        ${ thousands(securities[5].balance, show_decimals=True) }
+        % endif
+    - "securities_description_7": |
+        % if securities.number_gathered() >= 7:
+        ${ securities[6].name.text }
+        % endif
+    - "securities_owner_7": |
+        % if securities.number_gathered() >= 7:
+        ${ securities[6].owner }
+        % endif
+    - "securities_balance_7": |
+        % if securities.number_gathered() >= 7:
+        ${ thousands(securities[6].balance, show_decimals=True) }
+        % endif
+    - "securities_description_8": |
+        % if securities.number_gathered() >= 8:
+        ${ securities[7].name.text }
+        % endif
+    - "securities_owner_8": |
+        % if securities.number_gathered() >= 8:
+        ${ securities[7].owner }
+        % endif
+    - "securities_balance_8": |
+        % if securities.number_gathered() >= 8:
+        ${ thousands(securities[7].balance, show_decimals=True) }
+        % endif
+    - "securities_description_9": |
+        % if securities.number_gathered() >= 9:
+        ${ securities[8].name.text }
+        % endif
+    - "securities_owner_9": |
+        % if securities.number_gathered() >= 9:
+        ${ securities[8].owner }
+        % endif
+    - "securities_balance_9": |
+        % if securities.number_gathered() >= 9:
+        ${ thousands(securities[8].balance, show_decimals=True) }
+        % endif
+    - "securities_description_10": |
+        % if securities.number_gathered() >= 10:
+        ${ securities[9].name.text }
+        % endif
+    - "securities_owner_10": |
+        % if securities.number_gathered() >= 10:
+        ${ securities[9].owner }
+        % endif
+    - "securities_balance_10": |
+        % if securities.number_gathered() >= 10:
+        ${ thousands(securities[9].balance, show_decimals=True) }
+        % endif
+    - "securities_description_11": |
+        % if securities.number_gathered() >= 11:
+        ${ securities[10].name.text }
+        % endif
+    - "securities_owner_11": |
+        % if securities.number_gathered() >= 11:
+        ${ securities[10].owner }
+        % endif
+    - "securities_balance_11": |
+        % if securities.number_gathered() >= 11:
+        ${ thousands(securities[10].balance, show_decimals=True) }
+        % endif
+    - "securities_description_12": |
+        % if securities.number_gathered() >= 12:
+        ${ securities[11].name.text }
+        % endif
+    - "securities_owner_12": |
+        % if securities.number_gathered() >= 12:
+        ${ securities[11].owner }
+        % endif
+    - "securities_balance_12": |
+        % if securities.number_gathered() >= 12:
+        ${ thousands(securities[11].balance, show_decimals=True) }
+        % endif
+    - "securities_description_13": |
+        % if securities.number_gathered() >= 13:
+        ${ securities[12].name.text }
+        % endif
+    - "securities_owner_13": |
+        % if securities.number_gathered() >= 13:
+        ${ securities[12].owner }
+        % endif
+    - "securities_balance_13": |
+        % if securities.number_gathered() >= 13:
+        ${ thousands(securities[12].balance, show_decimals=True) }
+        % endif
+    - "securities_description_14": |
+        % if securities.number_gathered() >= 14:
+        ${ securities[13].name.text }
+        % endif
+    - "securities_owner_14": |
+        % if securities.number_gathered() >= 14:
+        ${ securities[13].owner }
+        % endif
+    - "securities_balance_14": |
+        % if securities.number_gathered() >= 14:
+        ${ thousands(securities[13].balance, show_decimals=True) }
+        % endif
+    - "securities_description_15": |
+        % if securities.number_gathered() >= 15:
+        ${ securities[14].name.text }
+        % endif
+    - "securities_owner_15": |
+        % if securities.number_gathered() >= 15:
+        ${ securities[14].owner }
+        % endif
+    - "securities_balance_15": |
+        % if securities.number_gathered() >= 15:
+        ${ thousands(securities[14].balance, show_decimals=True) }
+        % endif
+    - "securities_description_16": |
+        % if securities.number_gathered() >= 16:
+        ${ securities[15].name.text }
+        % endif
+    - "securities_owner_16": |
+        % if securities.number_gathered() >= 16:
+        ${ securities[15].owner }
+        % endif
+    - "securities_balance_16": |
+        % if securities.number_gathered() >= 16:
+        ${ thousands(securities[15].balance, show_decimals=True) }
+        % endif
+    - "securities_description_17": |
+        % if securities.number_gathered() >= 17:
+        ${ securities[16].name.text }
+        % endif
+    - "securities_owner_17": |
+        % if securities.number_gathered() >= 17:
+        ${ securities[16].owner }
+        % endif
+    - "securities_balance_17": |
+        % if securities.number_gathered() >= 17:
+        ${ thousands(securities[16].balance, show_decimals=True) }
+        % endif
+    - "securities_description_18": |
+        % if securities.number_gathered() >= 18:
+        ${ securities[17].name.text }
+        % endif
+    - "securities_owner_18": |
+        % if securities.number_gathered() >= 18:
+        ${ securities[17].owner }
+        % endif
+    - "securities_balance_18": |
+        % if securities.number_gathered() >= 18:
+        ${ thousands(securities[17].balance, show_decimals=True) }
+        % endif
+    - "securities_description_19": |
+        % if securities.number_gathered() >= 19:
+        ${ securities[18].name.text }
+        % endif
+    - "securities_owner_19": |
+        % if securities.number_gathered() >= 19:
+        ${ securities[18].owner }
+        % endif
+    - "securities_balance_19": |
+        % if securities.number_gathered() >= 19:
+        ${ thousands(securities[18].balance, show_decimals=True) }
+        % endif
+    - "securities_description_20": |
+        % if securities.number_gathered() >= 20:
+        ${ securities[19].name.text }
+        % endif
+    - "securities_owner_20": |
+        % if securities.number_gathered() >= 20:
+        ${ securities[19].owner }
+        % endif
+    - "securities_balance_20": |
+        % if securities.number_gathered() >= 20:
+        ${ thousands(securities[19].balance, show_decimals=True) }
+        % endif
+    - "securities_description_21": |
+        % if securities.number_gathered() >= 21:
+        ${ securities[20].name.text }
+        % endif
+    - "securities_owner_21": |
+        % if securities.number_gathered() >= 21:
+        ${ securities[20].owner }
+        % endif
+    - "securities_balance_21": |
+        % if securities.number_gathered() >= 21:
+        ${ thousands(securities[20].balance, show_decimals=True) }
+        % endif
+    - "securities_description_22": |
+        % if securities.number_gathered() >= 22:
+        ${ securities[21].name.text }
+        % endif
+    - "securities_owner_22": |
+        % if securities.number_gathered() >= 22:
+        ${ securities[21].owner }
+        % endif
+    - "securities_balance_22": |
+        % if securities.number_gathered() >= 22:
+        ${ thousands(securities[21].balance, show_decimals=True) }
+        % endif
+    - "securities_description_23": |
+        % if securities.number_gathered() >= 23:
+        ${ securities[22].name.text }
+        % endif
+    - "securities_owner_23": |
+        % if securities.number_gathered() >= 23:
+        ${ securities[22].owner }
+        % endif
+    - "securities_balance_23": |
+        % if securities.number_gathered() >= 23:
+        ${ thousands(securities[22].balance, show_decimals=True) }
+        % endif
+    - "securities_description_24": |
+        % if securities.number_gathered() >= 24:
+        ${ securities[23].name.text }
+        % endif
+    - "securities_owner_24": |
+        % if securities.number_gathered() >= 24:
+        ${ securities[23].owner }
+        % endif
+    - "securities_balance_24": |
+        % if securities.number_gathered() >= 24:
+        ${ thousands(securities[23].balance, show_decimals=True) }
+        % endif
+    - "securities_description_25": |
+        % if securities.number_gathered() >= 25:
+        ${ securities[24].name.text }
+        % endif
+    - "securities_owner_25": |
+        % if securities.number_gathered() >= 25:
+        ${ securities[24].owner }
+        % endif
+    - "securities_balance_25": |
+        % if securities.number_gathered() >= 25:
+        ${ thousands(securities[24].balance, show_decimals=True) }
+        % endif
+---  
+############ FA ADDITIONAL REAL ESTATE #############
+objects:
+  - additional_real_estate: ALDocument.using(title="FA Additional Real Estate", filename="FA_additional_real_estate.pdf", has_addendum=False)
+---
+code: |
+  additional_real_estate.enabled = real_estate.number_gathered() >= 4
+---
+attachment:
+  name: additional_real_estate
+  variable name: additional_real_estate[i]
+  filename: additional_real_estate
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_real_estate.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+    - "real_estate_address_4": |
+        % if real_estate.number_gathered() >= 4:
+        ${ real_estate[3].address.on_one_line() }
+        % endif
+    - "real_estate_title_4": |
+        % if real_estate.number_gathered() >= 4:
+        ${ real_estate[3].name.text }
+        % endif
+    - "real_estate_fmv_4": |
+        % if real_estate.number_gathered() >= 4:
+        ${ thousands(real_estate[3].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_4": |
+        % if real_estate.number_gathered() >= 4:
+        ${ thousands(real_estate[3].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_5": |
+        % if real_estate.number_gathered() >= 5:
+        ${ real_estate[4].address.on_one_line() }
+        % endif
+    - "real_estate_title_5": |
+        % if real_estate.number_gathered() >= 5:
+        ${ real_estate[4].name.text }
+        % endif
+    - "real_estate_fmv_5": |
+        % if real_estate.number_gathered() >= 5:
+        ${ thousands(real_estate[4].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_5": |
+        % if real_estate.number_gathered() >= 5:
+        ${ thousands(real_estate[4].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_6": |
+        % if real_estate.number_gathered() >= 6:
+        ${ real_estate[5].address.on_one_line() }
+        % endif
+    - "real_estate_title_6": |
+        % if real_estate.number_gathered() >= 6:
+        ${ real_estate[5].name.text }
+        % endif
+    - "real_estate_fmv_6": |
+        % if real_estate.number_gathered() >= 6:
+        ${ thousands(real_estate[5].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_6": |
+        % if real_estate.number_gathered() >= 6:
+        ${ thousands(real_estate[5].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_7": |
+        % if real_estate.number_gathered() >= 7:
+        ${ real_estate[6].address.on_one_line() }
+        % endif
+    - "real_estate_title_7": |
+        % if real_estate.number_gathered() >= 7:
+        ${ real_estate[6].name.text }
+        % endif
+    - "real_estate_fmv_7": |
+        % if real_estate.number_gathered() >= 7:
+        ${ thousands(real_estate[6].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_7": |
+        % if real_estate.number_gathered() >= 7:
+        ${ thousands(real_estate[6].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_8": |
+        % if real_estate.number_gathered() >= 8:
+        ${ real_estate[7].address.on_one_line() }
+        % endif
+    - "real_estate_title_8": |
+        % if real_estate.number_gathered() >= 8:
+        ${ real_estate[7].name.text }
+        % endif
+    - "real_estate_fmv_8": |
+        % if real_estate.number_gathered() >= 8:
+        ${ thousands(real_estate[7].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_8": |
+        % if real_estate.number_gathered() >= 8:
+        ${ thousands(real_estate[7].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_9": |
+        % if real_estate.number_gathered() >= 9:
+        ${ real_estate[8].address.on_one_line() }
+        % endif
+    - "real_estate_title_9": |
+        % if real_estate.number_gathered() >= 9:
+        ${ real_estate[8].name.text }
+        % endif
+    - "real_estate_fmv_9": |
+        % if real_estate.number_gathered() >= 9:
+        ${ thousands(real_estate[8].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_9": |
+        % if real_estate.number_gathered() >= 9:
+        ${ thousands(real_estate[8].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_10": |
+        % if real_estate.number_gathered() >= 10:
+        ${ real_estate[9].address.on_one_line() }
+        % endif
+    - "real_estate_title_10": |
+        % if real_estate.number_gathered() >= 10:
+        ${ real_estate[9].name.text }
+        % endif
+    - "real_estate_fmv_10": |
+        % if real_estate.number_gathered() >= 10:
+        ${ thousands(real_estate[9].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_10": |
+        % if real_estate.number_gathered() >= 10:
+        ${ thousands(real_estate[9].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_11": |
+        % if real_estate.number_gathered() >= 11:
+        ${ real_estate[10].address.on_one_line() }
+        % endif
+    - "real_estate_title_11": |
+        % if real_estate.number_gathered() >= 11:
+        ${ real_estate[10].name.text }
+        % endif
+    - "real_estate_fmv_11": |
+        % if real_estate.number_gathered() >= 11:
+        ${ thousands(real_estate[10].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_11": |
+        % if real_estate.number_gathered() >= 11:
+        ${ thousands(real_estate[10].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_12": |
+        % if real_estate.number_gathered() >= 12:
+        ${ real_estate[11].address.on_one_line() }
+        % endif
+    - "real_estate_title_12": |
+        % if real_estate.number_gathered() >= 12:
+        ${ real_estate[11].name.text }
+        % endif
+    - "real_estate_fmv_12": |
+        % if real_estate.number_gathered() >= 12:
+        ${ thousands(real_estate[11].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_12": |
+        % if real_estate.number_gathered() >= 12:
+        ${ thousands(real_estate[11].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_13": |
+        % if real_estate.number_gathered() >= 13:
+        ${ real_estate[12].address.on_one_line() }
+        % endif
+    - "real_estate_title_13": |
+        % if real_estate.number_gathered() >= 13:
+        ${ real_estate[12].name.text }
+        % endif
+    - "real_estate_fmv_13": |
+        % if real_estate.number_gathered() >= 13:
+        ${ thousands(real_estate[12].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_13": |
+        % if real_estate.number_gathered() >= 13:
+        ${ thousands(real_estate[12].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_14": |
+        % if real_estate.number_gathered() >= 14:
+        ${ real_estate[13].address.on_one_line() }
+        % endif
+    - "real_estate_title_14": |
+        % if real_estate.number_gathered() >= 14:
+        ${ real_estate[13].name.text }
+        % endif
+    - "real_estate_fmv_14": |
+        % if real_estate.number_gathered() >= 14:
+        ${ thousands(real_estate[13].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_14": |
+        % if real_estate.number_gathered() >= 14:
+        ${ thousands(real_estate[13].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_15": |
+        % if real_estate.number_gathered() >= 15:
+        ${ real_estate[14].address.on_one_line() }
+        % endif
+    - "real_estate_title_15": |
+        % if real_estate.number_gathered() >= 15:
+        ${ real_estate[14].name.text }
+        % endif
+    - "real_estate_fmv_15": |
+        % if real_estate.number_gathered() >= 15:
+        ${ thousands(real_estate[14].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_15": |
+        % if real_estate.number_gathered() >= 15:
+        ${ thousands(real_estate[14].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_16": |
+        % if real_estate.number_gathered() >= 16:
+        ${ real_estate[15].address.on_one_line() }
+        % endif
+    - "real_estate_title_16": |
+        % if real_estate.number_gathered() >= 16:
+        ${ real_estate[15].name.text }
+        % endif
+    - "real_estate_fmv_16": |
+        % if real_estate.number_gathered() >= 16:
+        ${ thousands(real_estate[15].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_16": |
+        % if real_estate.number_gathered() >= 16:
+        ${ thousands(real_estate[15].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_17": |
+        % if real_estate.number_gathered() >= 17:
+        ${ real_estate[16].address.on_one_line() }
+        % endif
+    - "real_estate_title_17": |
+        % if real_estate.number_gathered() >= 17:
+        ${ real_estate[16].name.text }
+        % endif
+    - "real_estate_fmv_17": |
+        % if real_estate.number_gathered() >= 17:
+        ${ thousands(real_estate[16].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_17": |
+        % if real_estate.number_gathered() >= 17:
+        ${ thousands(real_estate[16].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_18": |
+        % if real_estate.number_gathered() >= 18:
+        ${ real_estate[17].address.on_one_line() }
+        % endif
+    - "real_estate_title_18": |
+        % if real_estate.number_gathered() >= 18:
+        ${ real_estate[17].name.text }
+        % endif
+    - "real_estate_fmv_18": |
+        % if real_estate.number_gathered() >= 18:
+        ${ thousands(real_estate[17].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_18": |
+        % if real_estate.number_gathered() >= 18:
+        ${ thousands(real_estate[17].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_19": |
+        % if real_estate.number_gathered() >= 19:
+        ${ real_estate[18].address.on_one_line() }
+        % endif
+    - "real_estate_title_19": |
+        % if real_estate.number_gathered() >= 19:
+        ${ real_estate[18].name.text }
+        % endif
+    - "real_estate_fmv_19": |
+        % if real_estate.number_gathered() >= 19:
+        ${ thousands(real_estate[18].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_19": |
+        % if real_estate.number_gathered() >= 19:
+        ${ thousands(real_estate[18].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_20": |
+        % if real_estate.number_gathered() >= 20:
+        ${ real_estate[19].address.on_one_line() }
+        % endif
+    - "real_estate_title_20": |
+        % if real_estate.number_gathered() >= 20:
+        ${ real_estate[19].name.text }
+        % endif
+    - "real_estate_fmv_20": |
+        % if real_estate.number_gathered() >= 20:
+        ${ thousands(real_estate[19].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_20": |
+        % if real_estate.number_gathered() >= 20:
+        ${ thousands(real_estate[19].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_21": |
+        % if real_estate.number_gathered() >= 21:
+        ${ real_estate[20].address.on_one_line() }
+        % endif
+    - "real_estate_title_21": |
+        % if real_estate.number_gathered() >= 21:
+        ${ real_estate[20].name.text }
+        % endif
+    - "real_estate_fmv_21": |
+        % if real_estate.number_gathered() >= 21:
+        ${ thousands(real_estate[20].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_21": |
+        % if real_estate.number_gathered() >= 21:
+        ${ thousands(real_estate[20].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_22": |
+        % if real_estate.number_gathered() >= 22:
+        ${ real_estate[21].address.on_one_line() }
+        % endif
+    - "real_estate_title_22": |
+        % if real_estate.number_gathered() >= 22:
+        ${ real_estate[21].name.text }
+        % endif
+    - "real_estate_fmv_22": |
+        % if real_estate.number_gathered() >= 22:
+        ${ thousands(real_estate[21].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_22": |
+        % if real_estate.number_gathered() >= 22:
+        ${ thousands(real_estate[21].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_23": |
+        % if real_estate.number_gathered() >= 23:
+        ${ real_estate[22].address.on_one_line() }
+        % endif
+    - "real_estate_title_23": |
+        % if real_estate.number_gathered() >= 23:
+        ${ real_estate[22].name.text }
+        % endif
+    - "real_estate_fmv_23": |
+        % if real_estate.number_gathered() >= 23:
+        ${ thousands(real_estate[22].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_23": |
+        % if real_estate.number_gathered() >= 23:
+        ${ thousands(real_estate[22].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_24": |
+        % if real_estate.number_gathered() >= 24:
+        ${ real_estate[23].address.on_one_line() }
+        % endif
+    - "real_estate_title_24": |
+        % if real_estate.number_gathered() >= 24:
+        ${ real_estate[23].name.text }
+        % endif
+    - "real_estate_fmv_24": |
+        % if real_estate.number_gathered() >= 24:
+        ${ thousands(real_estate[23].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_24": |
+        % if real_estate.number_gathered() >= 24:
+        ${ thousands(real_estate[23].balance, show_decimals=True) }
+        % endif
+    - "real_estate_address_25": |
+        % if real_estate.number_gathered() >= 25:
+        ${ real_estate[24].address.on_one_line() }
+        % endif
+    - "real_estate_title_25": |
+        % if real_estate.number_gathered() >= 25:
+        ${ real_estate[24].name.text }
+        % endif
+    - "real_estate_fmv_25": |
+        % if real_estate.number_gathered() >= 25:
+        ${ thousands(real_estate[24].fmv, show_decimals=True) }
+        % endif
+    - "real_estate_balance_25": |
+        % if real_estate.number_gathered() >= 25:
+        ${ thousands(real_estate[24].balance, show_decimals=True) }
+        % endif
+---
+############ FA ADDITIONAL MOTOR VEHICLES #############
+objects:
+  - additional_motor_vehicle: ALDocument.using(title="FA Additional Motor Vehicles", filename="FA_additional_motor_vehicles.pdf", has_addendum=False)
+---
+code: |
+  additional_motor_vehicle.enabled = cash.number_gathered() >= 4
+---
+attachment:
+  name: additional_motor_vehicle
+  variable name: additional_motor_vehicle[i]
+  filename: additional_motor_vehicle
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_motor_vehicles.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+    - "motor_vehicle_info_4": |
+        % if motor_vehicle.number_gathered() >= 4:
+        ${ motor_vehicle[3].year } ${ motor_vehicle[3].make } ${ motor_vehicle[3].model }
+        % endif
+    - "motor_vehicle_title_4": |
+        % if motor_vehicle.number_gathered() >= 4:
+        ${ motor_vehicle[3].name.text }
+        % endif
+    - "motor_vehicle_fmv_4": |
+        % if motor_vehicle.number_gathered() >= 4:
+        ${ thousands(motor_vehicle[3].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_4": |
+        % if motor_vehicle.number_gathered() >= 4:
+        ${ thousands(motor_vehicle[3].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_5": |
+        % if motor_vehicle.number_gathered() >= 5:
+        ${ motor_vehicle[4].year } ${ motor_vehicle[4].make } ${ motor_vehicle[4].model }
+        % endif
+    - "motor_vehicle_title_5": |
+        % if motor_vehicle.number_gathered() >= 5:
+        ${ motor_vehicle[4].name.text }
+        % endif
+    - "motor_vehicle_fmv_5": |
+        % if motor_vehicle.number_gathered() >= 5:
+        ${ thousands(motor_vehicle[4].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_5": |
+        % if motor_vehicle.number_gathered() >= 5:
+        ${ thousands(motor_vehicle[4].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_6": |
+        % if motor_vehicle.number_gathered() >= 6:
+        ${ motor_vehicle[5].year } ${ motor_vehicle[5].make } ${ motor_vehicle[5].model }
+        % endif
+    - "motor_vehicle_title_6": |
+        % if motor_vehicle.number_gathered() >= 6:
+        ${ motor_vehicle[5].name.text }
+        % endif
+    - "motor_vehicle_fmv_6": |
+        % if motor_vehicle.number_gathered() >= 6:
+        ${ thousands(motor_vehicle[5].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_6": |
+        % if motor_vehicle.number_gathered() >= 6:
+        ${ thousands(motor_vehicle[5].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_7": |
+        % if motor_vehicle.number_gathered() >= 7:
+        ${ motor_vehicle[6].year } ${ motor_vehicle[6].make } ${ motor_vehicle[6].model }
+        % endif
+    - "motor_vehicle_title_7": |
+        % if motor_vehicle.number_gathered() >= 7:
+        ${ motor_vehicle[6].name.text }
+        % endif
+    - "motor_vehicle_fmv_7": |
+        % if motor_vehicle.number_gathered() >= 7:
+        ${ thousands(motor_vehicle[6].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_7": |
+        % if motor_vehicle.number_gathered() >= 7:
+        ${ thousands(motor_vehicle[6].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_8": |
+        % if motor_vehicle.number_gathered() >= 8:
+        ${ motor_vehicle[7].year } ${ motor_vehicle[7].make } ${ motor_vehicle[7].model }
+        % endif
+    - "motor_vehicle_title_8": |
+        % if motor_vehicle.number_gathered() >= 8:
+        ${ motor_vehicle[7].name.text }
+        % endif
+    - "motor_vehicle_fmv_8": |
+        % if motor_vehicle.number_gathered() >= 8:
+        ${ thousands(motor_vehicle[7].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_8": |
+        % if motor_vehicle.number_gathered() >= 8:
+        ${ thousands(motor_vehicle[7].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_9": |
+        % if motor_vehicle.number_gathered() >= 9:
+        ${ motor_vehicle[8].year } ${ motor_vehicle[8].make } ${ motor_vehicle[8].model }
+        % endif
+    - "motor_vehicle_title_9": |
+        % if motor_vehicle.number_gathered() >= 9:
+        ${ motor_vehicle[8].name.text }
+        % endif
+    - "motor_vehicle_fmv_9": |
+        % if motor_vehicle.number_gathered() >= 9:
+        ${ thousands(motor_vehicle[8].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_9": |
+        % if motor_vehicle.number_gathered() >= 9:
+        ${ thousands(motor_vehicle[8].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_10": |
+        % if motor_vehicle.number_gathered() >= 10:
+        ${ motor_vehicle[9].year } ${ motor_vehicle[9].make } ${ motor_vehicle[9].model }
+        % endif
+    - "motor_vehicle_title_10": |
+        % if motor_vehicle.number_gathered() >= 10:
+        ${ motor_vehicle[9].name.text }
+        % endif
+    - "motor_vehicle_fmv_10": |
+        % if motor_vehicle.number_gathered() >= 10:
+        ${ thousands(motor_vehicle[9].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_10": |
+        % if motor_vehicle.number_gathered() >= 10:
+        ${ thousands(motor_vehicle[9].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_11": |
+        % if motor_vehicle.number_gathered() >= 11:
+        ${ motor_vehicle[10].year } ${ motor_vehicle[10].make } ${ motor_vehicle[10].model }
+        % endif
+    - "motor_vehicle_title_11": |
+        % if motor_vehicle.number_gathered() >= 11:
+        ${ motor_vehicle[10].name.text }
+        % endif
+    - "motor_vehicle_fmv_11": |
+        % if motor_vehicle.number_gathered() >= 11:
+        ${ thousands(motor_vehicle[10].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_11": |
+        % if motor_vehicle.number_gathered() >= 11:
+        ${ thousands(motor_vehicle[10].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_12": |
+        % if motor_vehicle.number_gathered() >= 12:
+        ${ motor_vehicle[11].year } ${ motor_vehicle[11].make } ${ motor_vehicle[11].model }
+        % endif
+    - "motor_vehicle_title_12": |
+        % if motor_vehicle.number_gathered() >= 12:
+        ${ motor_vehicle[11].name.text }
+        % endif
+    - "motor_vehicle_fmv_12": |
+        % if motor_vehicle.number_gathered() >= 12:
+        ${ thousands(motor_vehicle[11].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_12": |
+        % if motor_vehicle.number_gathered() >= 12:
+        ${ thousands(motor_vehicle[11].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_13": |
+        % if motor_vehicle.number_gathered() >= 13:
+        ${ motor_vehicle[12].year } ${ motor_vehicle[12].make } ${ motor_vehicle[12].model }
+        % endif
+    - "motor_vehicle_title_13": |
+        % if motor_vehicle.number_gathered() >= 13:
+        ${ motor_vehicle[12].name.text }
+        % endif
+    - "motor_vehicle_fmv_13": |
+        % if motor_vehicle.number_gathered() >= 13:
+        ${ thousands(motor_vehicle[12].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_13": |
+        % if motor_vehicle.number_gathered() >= 13:
+        ${ thousands(motor_vehicle[12].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_14": |
+        % if motor_vehicle.number_gathered() >= 14:
+        ${ motor_vehicle[13].year } ${ motor_vehicle[13].make } ${ motor_vehicle[13].model }
+        % endif
+    - "motor_vehicle_title_14": |
+        % if motor_vehicle.number_gathered() >= 14:
+        ${ motor_vehicle[13].name.text }
+        % endif
+    - "motor_vehicle_fmv_14": |
+        % if motor_vehicle.number_gathered() >= 14:
+        ${ thousands(motor_vehicle[13].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_14": |
+        % if motor_vehicle.number_gathered() >= 14:
+        ${ thousands(motor_vehicle[13].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_15": |
+        % if motor_vehicle.number_gathered() >= 15:
+        ${ motor_vehicle[14].year } ${ motor_vehicle[14].make } ${ motor_vehicle[14].model }
+        % endif
+    - "motor_vehicle_title_15": |
+        % if motor_vehicle.number_gathered() >= 15:
+        ${ motor_vehicle[14].name.text }
+        % endif
+    - "motor_vehicle_fmv_15": |
+        % if motor_vehicle.number_gathered() >= 15:
+        ${ thousands(motor_vehicle[14].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_15": |
+        % if motor_vehicle.number_gathered() >= 15:
+        ${ thousands(motor_vehicle[14].balance, show_decimals=True) }
+        % endif
+
+    - "motor_vehicle_info_16": |
+        % if motor_vehicle.number_gathered() >= 16:
+        ${ motor_vehicle[15].year } ${ motor_vehicle[15].make } ${ motor_vehicle[15].model }
+        % endif
+    - "motor_vehicle_title_16": |
+        % if motor_vehicle.number_gathered() >= 16:
+        ${ motor_vehicle[15].name.text }
+        % endif
+    - "motor_vehicle_fmv_16": |
+        % if motor_vehicle.number_gathered() >= 16:
+        ${ thousands(motor_vehicle[15].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_16": |
+        % if motor_vehicle.number_gathered() >= 16:
+        ${ thousands(motor_vehicle[15].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_17": |
+        % if motor_vehicle.number_gathered() >= 17:
+        ${ motor_vehicle[16].year } ${ motor_vehicle[16].make } ${ motor_vehicle[16].model }
+        % endif
+    - "motor_vehicle_title_17": |
+        % if motor_vehicle.number_gathered() >= 17:
+        ${ motor_vehicle[16].name.text }
+        % endif
+    - "motor_vehicle_fmv_17": |
+        % if motor_vehicle.number_gathered() >= 17:
+        ${ thousands(motor_vehicle[16].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_17": |
+        % if motor_vehicle.number_gathered() >= 17:
+        ${ thousands(motor_vehicle[16].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_18": |
+        % if motor_vehicle.number_gathered() >= 18:
+        ${ motor_vehicle[17].year } ${ motor_vehicle[17].make } ${ motor_vehicle[17].model }
+        % endif
+    - "motor_vehicle_title_18": |
+        % if motor_vehicle.number_gathered() >= 18:
+        ${ motor_vehicle[17].name.text }
+        % endif
+    - "motor_vehicle_fmv_18": |
+        % if motor_vehicle.number_gathered() >= 18:
+        ${ thousands(motor_vehicle[17].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_18": |
+        % if motor_vehicle.number_gathered() >= 18:
+        ${ thousands(motor_vehicle[17].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_19": |
+        % if motor_vehicle.number_gathered() >= 19:
+        ${ motor_vehicle[18].year } ${ motor_vehicle[18].make } ${ motor_vehicle[18].model }
+        % endif
+    - "motor_vehicle_title_19": |
+        % if motor_vehicle.number_gathered() >= 19:
+        ${ motor_vehicle[18].name.text }
+        % endif
+    - "motor_vehicle_fmv_19": |
+        % if motor_vehicle.number_gathered() >= 19:
+        ${ thousands(motor_vehicle[18].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_19": |
+        % if motor_vehicle.number_gathered() >= 19:
+        ${ thousands(motor_vehicle[18].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_20": |
+        % if motor_vehicle.number_gathered() >= 20:
+        ${ motor_vehicle[19].year } ${ motor_vehicle[19].make } ${ motor_vehicle[19].model }
+        % endif
+    - "motor_vehicle_title_20": |
+        % if motor_vehicle.number_gathered() >= 20:
+        ${ motor_vehicle[19].name.text }
+        % endif
+    - "motor_vehicle_fmv_20": |
+        % if motor_vehicle.number_gathered() >= 20:
+        ${ thousands(motor_vehicle[19].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_20": |
+        % if motor_vehicle.number_gathered() >= 20:
+        ${ thousands(motor_vehicle[19].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_21": |
+        % if motor_vehicle.number_gathered() >= 21:
+        ${ motor_vehicle[20].year } ${ motor_vehicle[20].make } ${ motor_vehicle[20].model }
+        % endif
+    - "motor_vehicle_title_21": |
+        % if motor_vehicle.number_gathered() >= 21:
+        ${ motor_vehicle[20].name.text }
+        % endif
+    - "motor_vehicle_fmv_21": |
+        % if motor_vehicle.number_gathered() >= 21:
+        ${ thousands(motor_vehicle[20].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_21": |
+        % if motor_vehicle.number_gathered() >= 21:
+        ${ thousands(motor_vehicle[20].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_22": |
+        % if motor_vehicle.number_gathered() >= 22:
+        ${ motor_vehicle[21].year } ${ motor_vehicle[21].make } ${ motor_vehicle[21].model }
+        % endif
+    - "motor_vehicle_title_22": |
+        % if motor_vehicle.number_gathered() >= 22:
+        ${ motor_vehicle[21].name.text }
+        % endif
+    - "motor_vehicle_fmv_22": |
+        % if motor_vehicle.number_gathered() >= 22:
+        ${ thousands(motor_vehicle[21].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_22": |
+        % if motor_vehicle.number_gathered() >= 22:
+        ${ thousands(motor_vehicle[21].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_23": |
+        % if motor_vehicle.number_gathered() >= 23:
+        ${ motor_vehicle[22].year } ${ motor_vehicle[22].make } ${ motor_vehicle[22].model }
+        % endif
+    - "motor_vehicle_title_23": |
+        % if motor_vehicle.number_gathered() >= 23:
+        ${ motor_vehicle[22].name.text }
+        % endif
+    - "motor_vehicle_fmv_23": |
+        % if motor_vehicle.number_gathered() >= 23:
+        ${ thousands(motor_vehicle[22].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_23": |
+        % if motor_vehicle.number_gathered() >= 23:
+        ${ thousands(motor_vehicle[22].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_24": |
+        % if motor_vehicle.number_gathered() >= 24:
+        ${ motor_vehicle[23].year } ${ motor_vehicle[23].make } ${ motor_vehicle[23].model }
+        % endif
+    - "motor_vehicle_title_24": |
+        % if motor_vehicle.number_gathered() >= 24:
+        ${ motor_vehicle[23].name.text }
+        % endif
+    - "motor_vehicle_fmv_24": |
+        % if motor_vehicle.number_gathered() >= 24:
+        ${ thousands(motor_vehicle[23].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_24": |
+        % if motor_vehicle.number_gathered() >= 24:
+        ${ thousands(motor_vehicle[23].balance, show_decimals=True) }
+        % endif
+    - "motor_vehicle_info_25": |
+        % if motor_vehicle.number_gathered() >= 25:
+        ${ motor_vehicle[24].year } ${ motor_vehicle[24].make } ${ motor_vehicle[24].model }
+        % endif
+    - "motor_vehicle_title_25": |
+        % if motor_vehicle.number_gathered() >= 25:
+        ${ motor_vehicle[24].name.text }
+        % endif
+    - "motor_vehicle_fmv_25": |
+        % if motor_vehicle.number_gathered() >= 25:
+        ${ thousands(motor_vehicle[24].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_25": |
+        % if motor_vehicle.number_gathered() >= 25:
+        ${ thousands(motor_vehicle[24].balance, show_decimals=True) }
+        % endif
+---
+############ FA ADDITIONAL BUSINESS INTERESTS #############
+objects:
+  - additional_business_interests: ALDocument.using(title="FA Additional Business Interests", filename="FA_additional_business_interests.pdf", has_addendum=False)
+---
+code: |
+  additional_business_interests.enabled = business_interests.number_gathered() >= 4
+---
+attachment:
+  name: additional_business_interests
+  variable name: additional_business_interests[i]
+  filename: additional_business_interests
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_business_interests.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+    - "business_interests_name_4": |
+        % if business_interests.number_gathered() >= 4:
+        ${ business_interests[3].name.text }
+        % endif
+    - "business_interests_type_4": |
+        % if business_interests.number_gathered() >= 4:
+        ${ business_interests[3].type }
+        % endif
+    - "business_interests_ownership_4": |
+        % if business_interests.number_gathered() >= 4:
+        ${ nice_number(business_interests[3].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_4": |
+        % if business_interests.number_gathered() >= 4:
+        ${ thousands(business_interests[3].fmv, show_decimals=True) }
+        % endif
+
+    - "business_interests_name_5": |
+        % if business_interests.number_gathered() >= 5:
+        ${ business_interests[4].name.text }
+        % endif
+    - "business_interests_type_5": |
+        % if business_interests.number_gathered() >= 5:
+        ${ business_interests[4].type }
+        % endif
+    - "business_interests_ownership_5": |
+        % if business_interests.number_gathered() >= 5:
+        ${ nice_number(business_interests[4].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_5": |
+        % if business_interests.number_gathered() >= 5:
+        ${ thousands(business_interests[4].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_6": |
+        % if business_interests.number_gathered() >= 6:
+        ${ business_interests[5].name.text }
+        % endif
+    - "business_interests_type_6": |
+        % if business_interests.number_gathered() >= 6:
+        ${ business_interests[5].type }
+        % endif
+    - "business_interests_ownership_6": |
+        % if business_interests.number_gathered() >= 6:
+        ${ nice_number(business_interests[5].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_6": |
+        % if business_interests.number_gathered() >= 6:
+        ${ thousands(business_interests[5].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_7": |
+        % if business_interests.number_gathered() >= 7:
+        ${ business_interests[6].name.text }
+        % endif
+    - "business_interests_type_7": |
+        % if business_interests.number_gathered() >= 7:
+        ${ business_interests[6].type }
+        % endif
+    - "business_interests_ownership_7": |
+        % if business_interests.number_gathered() >= 7:
+        ${ nice_number(business_interests[6].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_7": |
+        % if business_interests.number_gathered() >= 7:
+        ${ thousands(business_interests[6].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_8": |
+        % if business_interests.number_gathered() >= 8:
+        ${ business_interests[7].name.text }
+        % endif
+    - "business_interests_type_8": |
+        % if business_interests.number_gathered() >= 8:
+        ${ business_interests[7].type }
+        % endif
+    - "business_interests_ownership_8": |
+        % if business_interests.number_gathered() >= 8:
+        ${ nice_number(business_interests[7].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_8": |
+        % if business_interests.number_gathered() >= 8:
+        ${ thousands(business_interests[7].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_9": |
+        % if business_interests.number_gathered() >= 9:
+        ${ business_interests[8].name.text }
+        % endif
+    - "business_interests_type_9": |
+        % if business_interests.number_gathered() >= 9:
+        ${ business_interests[8].type }
+        % endif
+    - "business_interests_ownership_9": |
+        % if business_interests.number_gathered() >= 9:
+        ${ nice_number(business_interests[8].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_9": |
+        % if business_interests.number_gathered() >= 9:
+        ${ thousands(business_interests[8].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_10": |
+        % if business_interests.number_gathered() >= 10:
+        ${ business_interests[9].name.text }
+        % endif
+    - "business_interests_type_10": |
+        % if business_interests.number_gathered() >= 10:
+        ${ business_interests[9].type }
+        % endif
+    - "business_interests_ownership_10": |
+        % if business_interests.number_gathered() >= 10:
+        ${ nice_number(business_interests[9].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_10": |
+        % if business_interests.number_gathered() >= 10:
+        ${ thousands(business_interests[9].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_11": |
+        % if business_interests.number_gathered() >= 11:
+        ${ business_interests[10].name.text }
+        % endif
+    - "business_interests_type_11": |
+        % if business_interests.number_gathered() >= 11:
+        ${ business_interests[10].type }
+        % endif
+    - "business_interests_ownership_11": |
+        % if business_interests.number_gathered() >= 11:
+        ${ nice_number(business_interests[10].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_11": |
+        % if business_interests.number_gathered() >= 11:
+        ${ thousands(business_interests[10].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_12": |
+        % if business_interests.number_gathered() >= 12:
+        ${ business_interests[11].name.text }
+        % endif
+    - "business_interests_type_12": |
+        % if business_interests.number_gathered() >= 12:
+        ${ business_interests[11].type }
+        % endif
+    - "business_interests_ownership_12": |
+        % if business_interests.number_gathered() >= 12:
+        ${ nice_number(business_interests[11].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_12": |
+        % if business_interests.number_gathered() >= 12:
+        ${ thousands(business_interests[11].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_13": |
+        % if business_interests.number_gathered() >= 13:
+        ${ business_interests[12].name.text }
+        % endif
+    - "business_interests_type_13": |
+        % if business_interests.number_gathered() >= 13:
+        ${ business_interests[12].type }
+        % endif
+    - "business_interests_ownership_13": |
+        % if business_interests.number_gathered() >= 13:
+        ${ nice_number(business_interests[12].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_13": |
+        % if business_interests.number_gathered() >= 13:
+        ${ thousands(business_interests[12].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_14": |
+        % if business_interests.number_gathered() >= 14:
+        ${ business_interests[13].name.text }
+        % endif
+    - "business_interests_type_14": |
+        % if business_interests.number_gathered() >= 14:
+        ${ business_interests[13].type }
+        % endif
+    - "business_interests_ownership_14": |
+        % if business_interests.number_gathered() >= 14:
+        ${ nice_number(business_interests[13].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_14": |
+        % if business_interests.number_gathered() >= 14:
+        ${ thousands(business_interests[13].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_15": |
+        % if business_interests.number_gathered() >= 15:
+        ${ business_interests[14].name.text }
+        % endif
+    - "business_interests_type_15": |
+        % if business_interests.number_gathered() >= 15:
+        ${ business_interests[14].type }
+        % endif
+    - "business_interests_ownership_15": |
+        % if business_interests.number_gathered() >= 15:
+        ${ nice_number(business_interests[14].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_15": |
+        % if business_interests.number_gathered() >= 15:
+        ${ thousands(business_interests[14].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_16": |
+        % if business_interests.number_gathered() >= 16:
+        ${ business_interests[15].name.text }
+        % endif
+    - "business_interests_type_16": |
+        % if business_interests.number_gathered() >= 16:
+        ${ business_interests[15].type }
+        % endif
+    - "business_interests_ownership_16": |
+        % if business_interests.number_gathered() >= 16:
+        ${ nice_number(business_interests[15].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_16": |
+        % if business_interests.number_gathered() >= 16:
+        ${ thousands(business_interests[15].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_17": |
+        % if business_interests.number_gathered() >= 17:
+        ${ business_interests[16].name.text }
+        % endif
+    - "business_interests_type_17": |
+        % if business_interests.number_gathered() >= 17:
+        ${ business_interests[16].type }
+        % endif
+    - "business_interests_ownership_17": |
+        % if business_interests.number_gathered() >= 17:
+        ${ nice_number(business_interests[16].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_17": |
+        % if business_interests.number_gathered() >= 17:
+        ${ thousands(business_interests[16].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_18": |
+        % if business_interests.number_gathered() >= 18:
+        ${ business_interests[17].name.text }
+        % endif
+    - "business_interests_type_18": |
+        % if business_interests.number_gathered() >= 18:
+        ${ business_interests[17].type }
+        % endif
+    - "business_interests_ownership_18": |
+        % if business_interests.number_gathered() >= 18:
+        ${ nice_number(business_interests[17].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_18": |
+        % if business_interests.number_gathered() >= 18:
+        ${ thousands(business_interests[17].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_19": |
+        % if business_interests.number_gathered() >= 19:
+        ${ business_interests[18].name.text }
+        % endif
+    - "business_interests_type_19": |
+        % if business_interests.number_gathered() >= 19:
+        ${ business_interests[18].type }
+        % endif
+    - "business_interests_ownership_19": |
+        % if business_interests.number_gathered() >= 19:
+        ${ nice_number(business_interests[18].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_19": |
+        % if business_interests.number_gathered() >= 19:
+        ${ thousands(business_interests[18].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_20": |
+        % if business_interests.number_gathered() >= 20:
+        ${ business_interests[19].name.text }
+        % endif
+    - "business_interests_type_20": |
+        % if business_interests.number_gathered() >= 20:
+        ${ business_interests[19].type }
+        % endif
+    - "business_interests_ownership_20": |
+        % if business_interests.number_gathered() >= 20:
+        ${ nice_number(business_interests[19].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_20": |
+        % if business_interests.number_gathered() >= 20:
+        ${ thousands(business_interests[19].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_21": |
+        % if business_interests.number_gathered() >= 21:
+        ${ business_interests[20].name.text }
+        % endif
+    - "business_interests_type_21": |
+        % if business_interests.number_gathered() >= 21:
+        ${ business_interests[20].type }
+        % endif
+    - "business_interests_ownership_21": |
+        % if business_interests.number_gathered() >= 21:
+        ${ nice_number(business_interests[20].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_21": |
+        % if business_interests.number_gathered() >= 21:
+        ${ thousands(business_interests[20].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_22": |
+        % if business_interests.number_gathered() >= 22:
+        ${ business_interests[21].name.text }
+        % endif
+    - "business_interests_type_22": |
+        % if business_interests.number_gathered() >= 22:
+        ${ business_interests[21].type }
+        % endif
+    - "business_interests_ownership_22": |
+        % if business_interests.number_gathered() >= 22:
+        ${ nice_number(business_interests[21].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_22": |
+        % if business_interests.number_gathered() >= 22:
+        ${ thousands(business_interests[21].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_23": |
+        % if business_interests.number_gathered() >= 23:
+        ${ business_interests[22].name.text }
+        % endif
+    - "business_interests_type_23": |
+        % if business_interests.number_gathered() >= 23:
+        ${ business_interests[22].type }
+        % endif
+    - "business_interests_ownership_23": |
+        % if business_interests.number_gathered() >= 23:
+        ${ nice_number(business_interests[22].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_23": |
+        % if business_interests.number_gathered() >= 23:
+        ${ thousands(business_interests[22].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_24": |
+        % if business_interests.number_gathered() >= 24:
+        ${ business_interests[23].name.text }
+        % endif
+    - "business_interests_type_24": |
+        % if business_interests.number_gathered() >= 24:
+        ${ business_interests[23].type }
+        % endif
+    - "business_interests_ownership_24": |
+        % if business_interests.number_gathered() >= 24:
+        ${ nice_number(business_interests[23].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_24": |
+        % if business_interests.number_gathered() >= 24:
+        ${ thousands(business_interests[23].fmv, show_decimals=True) }
+        % endif
+    - "business_interests_name_25": |
+        % if business_interests.number_gathered() >= 25:
+        ${ business_interests[24].name.text }
+        % endif
+    - "business_interests_type_25": |
+        % if business_interests.number_gathered() >= 25:
+        ${ business_interests[24].type }
+        % endif
+    - "business_interests_ownership_25": |
+        % if business_interests.number_gathered() >= 25:
+        ${ nice_number(business_interests[24].ownership, use_word=False) }
+        % endif
+    - "business_interests_fmv_25": |
+        % if business_interests.number_gathered() >= 25:
+        ${ thousands(business_interests[24].fmv, show_decimals=True) }
+        % endif
+
+---
+############ FA ADDITIONAL LIFE INSURANCE #############
+objects:
+  - additional_life_insurance: ALDocument.using(title="FA Additional Life Insurance", filename="FA_additional_life_insurance.pdf", has_addendum=False)
+---
+code: |
+  additional_life_insurance.enabled = life_insurance.number_gathered() >= 4
+---
+attachment:
+  name: additional_life_insurance
+  variable name: additional_life_insurance[i]
+  filename: additional_life_insurance
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_life_insurance.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+    - "life_insurance_company_4": |
+        % if life_insurance.number_gathered() >= 4:
+        ${ life_insurance[3].name.text }
+        % endif
+    - "life_insurance_type_4": |
+        % if life_insurance.number_gathered() >= 4:
+        ${ life_insurance[3].type }
+        % endif
+    - "life_insurance_benefit_4": |
+        % if life_insurance.number_gathered() >= 4:
+        ${ thousands(life_insurance[3].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_4": |
+        % if life_insurance.number_gathered() >= 4:
+        ${ thousands(life_insurance[3].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_5": |
+        % if life_insurance.number_gathered() >= 5:
+        ${ life_insurance[4].name.text }
+        % endif
+    - "life_insurance_type_5": |
+        % if life_insurance.number_gathered() >= 5:
+        ${ life_insurance[4].type }
+        % endif
+    - "life_insurance_benefit_5": |
+        % if life_insurance.number_gathered() >= 5:
+        ${ thousands(life_insurance[4].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_5": |
+        % if life_insurance.number_gathered() >= 5:
+        ${ thousands(life_insurance[4].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_6": |
+        % if life_insurance.number_gathered() >= 6:
+        ${ life_insurance[5].name.text }
+        % endif
+    - "life_insurance_type_6": |
+        % if life_insurance.number_gathered() >= 6:
+        ${ life_insurance[5].type }
+        % endif
+    - "life_insurance_benefit_6": |
+        % if life_insurance.number_gathered() >= 6:
+        ${ thousands(life_insurance[5].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_6": |
+        % if life_insurance.number_gathered() >= 6:
+        ${ thousands(life_insurance[5].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_7": |
+        % if life_insurance.number_gathered() >= 7:
+        ${ life_insurance[6].name.text }
+        % endif
+    - "life_insurance_type_7": |
+        % if life_insurance.number_gathered() >= 7:
+        ${ life_insurance[6].type }
+        % endif
+    - "life_insurance_benefit_7": |
+        % if life_insurance.number_gathered() >= 7:
+        ${ thousands(life_insurance[6].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_7": |
+        % if life_insurance.number_gathered() >= 7:
+        ${ thousands(life_insurance[6].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_8": |
+        % if life_insurance.number_gathered() >= 8:
+        ${ life_insurance[7].name.text }
+        % endif
+    - "life_insurance_type_8": |
+        % if life_insurance.number_gathered() >= 8:
+        ${ life_insurance[7].type }
+        % endif
+    - "life_insurance_benefit_8": |
+        % if life_insurance.number_gathered() >= 8:
+        ${ thousands(life_insurance[7].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_8": |
+        % if life_insurance.number_gathered() >= 8:
+        ${ thousands(life_insurance[7].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_9": |
+        % if life_insurance.number_gathered() >= 9:
+        ${ life_insurance[8].name.text }
+        % endif
+    - "life_insurance_type_9": |
+        % if life_insurance.number_gathered() >= 9:
+        ${ life_insurance[8].type }
+        % endif
+    - "life_insurance_benefit_9": |
+        % if life_insurance.number_gathered() >= 9:
+        ${ thousands(life_insurance[8].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_9": |
+        % if life_insurance.number_gathered() >= 9:
+        ${ thousands(life_insurance[8].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_10": |
+        % if life_insurance.number_gathered() >= 10:
+        ${ life_insurance[9].name.text }
+        % endif
+    - "life_insurance_type_10": |
+        % if life_insurance.number_gathered() >= 10:
+        ${ life_insurance[9].type }
+        % endif
+    - "life_insurance_benefit_10": |
+        % if life_insurance.number_gathered() >= 10:
+        ${ thousands(life_insurance[9].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_10": |
+        % if life_insurance.number_gathered() >= 10:
+        ${ thousands(life_insurance[9].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_11": |
+        % if life_insurance.number_gathered() >= 11:
+        ${ life_insurance[10].name.text }
+        % endif
+    - "life_insurance_type_11": |
+        % if life_insurance.number_gathered() >= 11:
+        ${ life_insurance[10].type }
+        % endif
+    - "life_insurance_benefit_11": |
+        % if life_insurance.number_gathered() >= 11:
+        ${ thousands(life_insurance[10].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_11": |
+        % if life_insurance.number_gathered() >= 11:
+        ${ thousands(life_insurance[10].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_12": |
+        % if life_insurance.number_gathered() >= 12:
+        ${ life_insurance[11].name.text }
+        % endif
+    - "life_insurance_type_12": |
+        % if life_insurance.number_gathered() >= 12:
+        ${ life_insurance[11].type }
+        % endif
+    - "life_insurance_benefit_12": |
+        % if life_insurance.number_gathered() >= 12:
+        ${ thousands(life_insurance[11].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_12": |
+        % if life_insurance.number_gathered() >= 12:
+        ${ thousands(life_insurance[11].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_13": |
+        % if life_insurance.number_gathered() >= 13:
+        ${ life_insurance[12].name.text }
+        % endif
+    - "life_insurance_type_13": |
+        % if life_insurance.number_gathered() >= 13:
+        ${ life_insurance[12].type }
+        % endif
+    - "life_insurance_benefit_13": |
+        % if life_insurance.number_gathered() >= 13:
+        ${ thousands(life_insurance[12].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_13": |
+        % if life_insurance.number_gathered() >= 13:
+        ${ thousands(life_insurance[12].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_14": |
+        % if life_insurance.number_gathered() >= 14:
+        ${ life_insurance[13].name.text }
+        % endif
+    - "life_insurance_type_14": |
+        % if life_insurance.number_gathered() >= 14:
+        ${ life_insurance[13].type }
+        % endif
+    - "life_insurance_benefit_14": |
+        % if life_insurance.number_gathered() >= 14:
+        ${ thousands(life_insurance[13].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_14": |
+        % if life_insurance.number_gathered() >= 14:
+        ${ thousands(life_insurance[13].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_15": |
+        % if life_insurance.number_gathered() >= 15:
+        ${ life_insurance[14].name.text }
+        % endif
+    - "life_insurance_type_15": |
+        % if life_insurance.number_gathered() >= 15:
+        ${ life_insurance[14].type }
+        % endif
+    - "life_insurance_benefit_15": |
+        % if life_insurance.number_gathered() >= 15:
+        ${ thousands(life_insurance[14].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_15": |
+        % if life_insurance.number_gathered() >= 15:
+        ${ thousands(life_insurance[14].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_16": |
+        % if life_insurance.number_gathered() >= 16:
+        ${ life_insurance[15].name.text }
+        % endif
+    - "life_insurance_type_16": |
+        % if life_insurance.number_gathered() >= 16:
+        ${ life_insurance[15].type }
+        % endif
+    - "life_insurance_benefit_16": |
+        % if life_insurance.number_gathered() >= 16:
+        ${ thousands(life_insurance[15].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_16": |
+        % if life_insurance.number_gathered() >= 16:
+        ${ thousands(life_insurance[15].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_17": |
+        % if life_insurance.number_gathered() >= 17:
+        ${ life_insurance[16].name.text }
+        % endif
+    - "life_insurance_type_17": |
+        % if life_insurance.number_gathered() >= 17:
+        ${ life_insurance[16].type }
+        % endif
+    - "life_insurance_benefit_17": |
+        % if life_insurance.number_gathered() >= 17:
+        ${ thousands(life_insurance[16].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_17": |
+        % if life_insurance.number_gathered() >= 17:
+        ${ thousands(life_insurance[16].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_18": |
+        % if life_insurance.number_gathered() >= 18:
+        ${ life_insurance[17].name.text }
+        % endif
+    - "life_insurance_type_18": |
+        % if life_insurance.number_gathered() >= 18:
+        ${ life_insurance[17].type }
+        % endif
+    - "life_insurance_benefit_18": |
+        % if life_insurance.number_gathered() >= 18:
+        ${ thousands(life_insurance[17].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_18": |
+        % if life_insurance.number_gathered() >= 18:
+        ${ thousands(life_insurance[17].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_19": |
+        % if life_insurance.number_gathered() >= 19:
+        ${ life_insurance[18].name.text }
+        % endif
+    - "life_insurance_type_19": |
+        % if life_insurance.number_gathered() >= 19:
+        ${ life_insurance[18].type }
+        % endif
+    - "life_insurance_benefit_19": |
+        % if life_insurance.number_gathered() >= 19:
+        ${ thousands(life_insurance[18].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_19": |
+        % if life_insurance.number_gathered() >= 19:
+        ${ thousands(life_insurance[18].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_20": |
+        % if life_insurance.number_gathered() >= 20:
+        ${ life_insurance[19].name.text }
+        % endif
+    - "life_insurance_type_20": |
+        % if life_insurance.number_gathered() >= 20:
+        ${ life_insurance[19].type }
+        % endif
+    - "life_insurance_benefit_20": |
+        % if life_insurance.number_gathered() >= 20:
+        ${ thousands(life_insurance[19].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_20": |
+        % if life_insurance.number_gathered() >= 20:
+        ${ thousands(life_insurance[19].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_21": |
+        % if life_insurance.number_gathered() >= 21:
+        ${ life_insurance[20].name.text }
+        % endif
+    - "life_insurance_type_21": |
+        % if life_insurance.number_gathered() >= 21:
+        ${ life_insurance[20].type }
+        % endif
+    - "life_insurance_benefit_21": |
+        % if life_insurance.number_gathered() >= 21:
+        ${ thousands(life_insurance[20].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_21": |
+        % if life_insurance.number_gathered() >= 21:
+        ${ thousands(life_insurance[20].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_22": |
+        % if life_insurance.number_gathered() >= 22:
+        ${ life_insurance[21].name.text }
+        % endif
+    - "life_insurance_type_22": |
+        % if life_insurance.number_gathered() >= 22:
+        ${ life_insurance[21].type }
+        % endif
+    - "life_insurance_benefit_22": |
+        % if life_insurance.number_gathered() >= 22:
+        ${ thousands(life_insurance[21].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_22": |
+        % if life_insurance.number_gathered() >= 22:
+        ${ thousands(life_insurance[21].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_23": |
+        % if life_insurance.number_gathered() >= 23:
+        ${ life_insurance[22].name.text }
+        % endif
+    - "life_insurance_type_23": |
+        % if life_insurance.number_gathered() >= 23:
+        ${ life_insurance[22].type }
+        % endif
+    - "life_insurance_benefit_23": |
+        % if life_insurance.number_gathered() >= 23:
+        ${ thousands(life_insurance[22].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_23": |
+        % if life_insurance.number_gathered() >= 23:
+        ${ thousands(life_insurance[22].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_24": |
+        % if life_insurance.number_gathered() >= 24:
+        ${ life_insurance[23].name.text }
+        % endif
+    - "life_insurance_type_24": |
+        % if life_insurance.number_gathered() >= 24:
+        ${ life_insurance[23].type }
+        % endif
+    - "life_insurance_benefit_24": |
+        % if life_insurance.number_gathered() >= 24:
+        ${ thousands(life_insurance[23].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_24": |
+        % if life_insurance.number_gathered() >= 24:
+        ${ thousands(life_insurance[23].value, show_decimals=True) }
+        % endif
+    - "life_insurance_company_25": |
+        % if life_insurance.number_gathered() >= 25:
+        ${ life_insurance[24].name.text }
+        % endif
+    - "life_insurance_type_25": |
+        % if life_insurance.number_gathered() >= 25:
+        ${ life_insurance[24].type }
+        % endif
+    - "life_insurance_benefit_25": |
+        % if life_insurance.number_gathered() >= 25:
+        ${ thousands(life_insurance[24].benefit, show_decimals=True) }
+        % endif
+    - "life_insurance_value_25": |
+        % if life_insurance.number_gathered() >= 25:
+        ${ thousands(life_insurance[24].value, show_decimals=True) }
+        % endif
+
+
+---
+############ FA ADDITIONAL RETIREMENT BENEFITS #############
+objects:
+  - additional_retirement: ALDocument.using(title="FA Additional Retirement", filename="FA_additional_retirement.pdf", has_addendum=False)
+---
+code: |
+  additional_retirement.enabled = retirement_plan.number_gathered() >= 4
+---
+attachment:
+  name: additional_retirement
+  variable name: additional_retirement[i]
+  filename: additional_retirement
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_retirement.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+    - "retirement_plan_4": |
+        % if retirement_plan.number_gathered() >= 4:
+        ${ retirement_plan[3].name.text }
+        % endif
+    - "retirement_type_4": |
+        % if retirement_plan.number_gathered() >= 4:
+        ${ retirement_plan[3].name.text }
+        % endif
+    - "retirement_balance_4": |
+        % if retirement_plan.number_gathered() >= 4:
+        ${ thousands(retirement_plan[3].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_5": |
+        % if retirement_plan.number_gathered() >= 5:
+        ${ retirement_plan[4].name.text }
+        % endif
+    - "retirement_type_5": |
+        % if retirement_plan.number_gathered() >= 5:
+        ${ retirement_plan[4].name.text }
+        % endif
+    - "retirement_balance_5": |
+        % if retirement_plan.number_gathered() >= 5:
+        ${ thousands(retirement_plan[4].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_6": |
+        % if retirement_plan.number_gathered() >= 6:
+        ${ retirement_plan[5].name.text }
+        % endif
+    - "retirement_type_6": |
+        % if retirement_plan.number_gathered() >= 6:
+        ${ retirement_plan[5].name.text }
+        % endif
+    - "retirement_balance_6": |
+        % if retirement_plan.number_gathered() >= 6:
+        ${ thousands(retirement_plan[5].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_7": |
+        % if retirement_plan.number_gathered() >= 7:
+        ${ retirement_plan[6].name.text }
+        % endif
+    - "retirement_type_7": |
+        % if retirement_plan.number_gathered() >= 7:
+        ${ retirement_plan[6].name.text }
+        % endif
+    - "retirement_balance_7": |
+        % if retirement_plan.number_gathered() >= 7:
+        ${ thousands(retirement_plan[6].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_8": |
+        % if retirement_plan.number_gathered() >= 8:
+        ${ retirement_plan[7].name.text }
+        % endif
+    - "retirement_type_8": |
+        % if retirement_plan.number_gathered() >= 8:
+        ${ retirement_plan[7].name.text }
+        % endif
+    - "retirement_balance_8": |
+        % if retirement_plan.number_gathered() >= 8:
+        ${ thousands(retirement_plan[7].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_9": |
+        % if retirement_plan.number_gathered() >= 9:
+        ${ retirement_plan[8].name.text }
+        % endif
+    - "retirement_type_9": |
+        % if retirement_plan.number_gathered() >= 9:
+        ${ retirement_plan[8].name.text }
+        % endif
+    - "retirement_balance_9": |
+        % if retirement_plan.number_gathered() >= 9:
+        ${ thousands(retirement_plan[8].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_10": |
+        % if retirement_plan.number_gathered() >= 10:
+        ${ retirement_plan[9].name.text }
+        % endif
+    - "retirement_type_10": |
+        % if retirement_plan.number_gathered() >= 10:
+        ${ retirement_plan[9].name.text }
+        % endif
+    - "retirement_balance_10": |
+        % if retirement_plan.number_gathered() >= 10:
+        ${ thousands(retirement_plan[9].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_11": |
+        % if retirement_plan.number_gathered() >= 11:
+        ${ retirement_plan[10].name.text }
+        % endif
+    - "retirement_type_11": |
+        % if retirement_plan.number_gathered() >= 11:
+        ${ retirement_plan[10].name.text }
+        % endif
+    - "retirement_balance_11": |
+        % if retirement_plan.number_gathered() >= 11:
+        ${ thousands(retirement_plan[10].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_12": |
+        % if retirement_plan.number_gathered() >= 12:
+        ${ retirement_plan[11].name.text }
+        % endif
+    - "retirement_type_12": |
+        % if retirement_plan.number_gathered() >= 12:
+        ${ retirement_plan[11].name.text }
+        % endif
+    - "retirement_balance_12": |
+        % if retirement_plan.number_gathered() >= 12:
+        ${ thousands(retirement_plan[11].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_13": |
+        % if retirement_plan.number_gathered() >= 13:
+        ${ retirement_plan[12].name.text }
+        % endif
+    - "retirement_type_13": |
+        % if retirement_plan.number_gathered() >= 13:
+        ${ retirement_plan[12].name.text }
+        % endif
+    - "retirement_balance_13": |
+        % if retirement_plan.number_gathered() >= 13:
+        ${ thousands(retirement_plan[12].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_14": |
+        % if retirement_plan.number_gathered() >= 14:
+        ${ retirement_plan[13].name.text }
+        % endif
+    - "retirement_type_14": |
+        % if retirement_plan.number_gathered() >= 14:
+        ${ retirement_plan[13].name.text }
+        % endif
+    - "retirement_balance_14": |
+        % if retirement_plan.number_gathered() >= 14:
+        ${ thousands(retirement_plan[13].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_15": |
+        % if retirement_plan.number_gathered() >= 15:
+        ${ retirement_plan[14].name.text }
+        % endif
+    - "retirement_type_15": |
+        % if retirement_plan.number_gathered() >= 15:
+        ${ retirement_plan[14].name.text }
+        % endif
+    - "retirement_balance_15": |
+        % if retirement_plan.number_gathered() >= 15:
+        ${ thousands(retirement_plan[14].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_16": |
+        % if retirement_plan.number_gathered() >= 16:
+        ${ retirement_plan[15].name.text }
+        % endif
+    - "retirement_type_16": |
+        % if retirement_plan.number_gathered() >= 16:
+        ${ retirement_plan[15].name.text }
+        % endif
+    - "retirement_balance_16": |
+        % if retirement_plan.number_gathered() >= 16:
+        ${ thousands(retirement_plan[15].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_17": |
+        % if retirement_plan.number_gathered() >= 17:
+        ${ retirement_plan[16].name.text }
+        % endif
+    - "retirement_type_17": |
+        % if retirement_plan.number_gathered() >= 17:
+        ${ retirement_plan[16].name.text }
+        % endif
+    - "retirement_balance_17": |
+        % if retirement_plan.number_gathered() >= 17:
+        ${ thousands(retirement_plan[16].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_18": |
+        % if retirement_plan.number_gathered() >= 18:
+        ${ retirement_plan[17].name.text }
+        % endif
+    - "retirement_type_18": |
+        % if retirement_plan.number_gathered() >= 18:
+        ${ retirement_plan[17].name.text }
+        % endif
+    - "retirement_balance_18": |
+        % if retirement_plan.number_gathered() >= 18:
+        ${ thousands(retirement_plan[17].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_19": |
+        % if retirement_plan.number_gathered() >= 19:
+        ${ retirement_plan[18].name.text }
+        % endif
+    - "retirement_type_19": |
+        % if retirement_plan.number_gathered() >= 19:
+        ${ retirement_plan[18].name.text }
+        % endif
+    - "retirement_balance_19": |
+        % if retirement_plan.number_gathered() >= 19:
+        ${ thousands(retirement_plan[18].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_20": |
+        % if retirement_plan.number_gathered() >= 20:
+        ${ retirement_plan[19].name.text }
+        % endif
+    - "retirement_type_20": |
+        % if retirement_plan.number_gathered() >= 20:
+        ${ retirement_plan[19].name.text }
+        % endif
+    - "retirement_balance_20": |
+        % if retirement_plan.number_gathered() >= 20:
+        ${ thousands(retirement_plan[19].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_21": |
+        % if retirement_plan.number_gathered() >= 21:
+        ${ retirement_plan[20].name.text }
+        % endif
+    - "retirement_type_21": |
+        % if retirement_plan.number_gathered() >= 21:
+        ${ retirement_plan[20].name.text }
+        % endif
+    - "retirement_balance_21": |
+        % if retirement_plan.number_gathered() >= 21:
+        ${ thousands(retirement_plan[20].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_22": |
+        % if retirement_plan.number_gathered() >= 22:
+        ${ retirement_plan[21].name.text }
+        % endif
+    - "retirement_type_22": |
+        % if retirement_plan.number_gathered() >= 22:
+        ${ retirement_plan[21].name.text }
+        % endif
+    - "retirement_balance_22": |
+        % if retirement_plan.number_gathered() >= 22:
+        ${ thousands(retirement_plan[21].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_23": |
+        % if retirement_plan.number_gathered() >= 23:
+        ${ retirement_plan[22].name.text }
+        % endif
+    - "retirement_type_23": |
+        % if retirement_plan.number_gathered() >= 23:
+        ${ retirement_plan[22].name.text }
+        % endif
+    - "retirement_balance_23": |
+        % if retirement_plan.number_gathered() >= 23:
+        ${ thousands(retirement_plan[22].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_24": |
+        % if retirement_plan.number_gathered() >= 24:
+        ${ retirement_plan[23].name.text }
+        % endif
+    - "retirement_type_24": |
+        % if retirement_plan.number_gathered() >= 24:
+        ${ retirement_plan[23].name.text }
+        % endif
+    - "retirement_balance_24": |
+        % if retirement_plan.number_gathered() >= 24:
+        ${ thousands(retirement_plan[23].balance, show_decimals=True) }
+        % endif
+    - "retirement_plan_25": |
+        % if retirement_plan.number_gathered() >= 25:
+        ${ retirement_plan[24].name.text }
+        % endif
+    - "retirement_type_25": |
+        % if retirement_plan.number_gathered() >= 25:
+        ${ retirement_plan[24].name.text }
+        % endif
+    - "retirement_balance_25": |
+        % if retirement_plan.number_gathered() >= 25:
+        ${ thousands(retirement_plan[24].balance, show_decimals=True) }
+        % endif
+
+
+---
+############ FA ADDITIONAL COLLECTIBLES #############
+objects:
+  - additional_collectibles: ALDocument.using(title="FA Additional Collectibles ", filename="FA_additional_collectibles.pdf", has_addendum=False)
+---
+code: |
+  additional_collectibles.enabled = collection.number_gathered() >= 4
+---
+attachment:
+  name: additional_collectibles
+  variable name: additional_collectibles[i]
+  filename: additional_collectibles
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_collectibles.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+    - "collection_description_4": |
+        % if collection.number_gathered() >= 4:
+        ${ collection[3].name.text }
+        % endif
+    - "collection_fmv_4": |
+        % if collection.number_gathered() >= 4:
+        ${ thousands(collection[3].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_5": |
+        % if collection.number_gathered() >= 5:
+        ${ collection[4].name.text }
+        % endif
+    - "collection_fmv_5": |
+        % if collection.number_gathered() >= 5:
+        ${ thousands(collection[4].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_6": |
+        % if collection.number_gathered() >= 6:
+        ${ collection[5].name.text }
+        % endif
+    - "collection_fmv_6": |
+        % if collection.number_gathered() >= 6:
+        ${ thousands(collection[5].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_7": |
+        % if collection.number_gathered() >= 7:
+        ${ collection[6].name.text }
+        % endif
+    - "collection_fmv_7": |
+        % if collection.number_gathered() >= 7:
+        ${ thousands(collection[6].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_8": |
+        % if collection.number_gathered() >= 8:
+        ${ collection[7].name.text }
+        % endif
+    - "collection_fmv_8": |
+        % if collection.number_gathered() >= 8:
+        ${ thousands(collection[7].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_9": |
+        % if collection.number_gathered() >= 9:
+        ${ collection[8].name.text }
+        % endif
+    - "collection_fmv_9": |
+        % if collection.number_gathered() >= 9:
+        ${ thousands(collection[8].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_10": |
+        % if collection.number_gathered() >= 10:
+        ${ collection[9].name.text }
+        % endif
+    - "collection_fmv_10": |
+        % if collection.number_gathered() >= 10:
+        ${ thousands(collection[9].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_11": |
+        % if collection.number_gathered() >= 11:
+        ${ collection[10].name.text }
+        % endif
+    - "collection_fmv_11": |
+        % if collection.number_gathered() >= 11:
+        ${ thousands(collection[10].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_12": |
+        % if collection.number_gathered() >= 12:
+        ${ collection[11].name.text }
+        % endif
+    - "collection_fmv_12": |
+        % if collection.number_gathered() >= 12:
+        ${ thousands(collection[11].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_13": |
+        % if collection.number_gathered() >= 13:
+        ${ collection[12].name.text }
+        % endif
+    - "collection_fmv_13": |
+        % if collection.number_gathered() >= 13:
+        ${ thousands(collection[12].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_14": |
+        % if collection.number_gathered() >= 14:
+        ${ collection[13].name.text }
+        % endif
+    - "collection_fmv_14": |
+        % if collection.number_gathered() >= 14:
+        ${ thousands(collection[13].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_15": |
+        % if collection.number_gathered() >= 15:
+        ${ collection[14].name.text }
+        % endif
+    - "collection_fmv_15": |
+        % if collection.number_gathered() >= 15:
+        ${ thousands(collection[14].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_16": |
+        % if collection.number_gathered() >= 16:
+        ${ collection[15].name.text }
+        % endif
+    - "collection_fmv_16": |
+        % if collection.number_gathered() >= 16:
+        ${ thousands(collection[15].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_17": |
+        % if collection.number_gathered() >= 17:
+        ${ collection[16].name.text }
+        % endif
+    - "collection_fmv_17": |
+        % if collection.number_gathered() >= 17:
+        ${ thousands(collection[16].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_18": |
+        % if collection.number_gathered() >= 18:
+        ${ collection[17].name.text }
+        % endif
+    - "collection_fmv_18": |
+        % if collection.number_gathered() >= 18:
+        ${ thousands(collection[17].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_19": |
+        % if collection.number_gathered() >= 19:
+        ${ collection[18].name.text }
+        % endif
+    - "collection_fmv_19": |
+        % if collection.number_gathered() >= 19:
+        ${ thousands(collection[18].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_20": |
+        % if collection.number_gathered() >= 20:
+        ${ collection[19].name.text }
+        % endif
+    - "collection_fmv_20": |
+        % if collection.number_gathered() >= 20:
+        ${ thousands(collection[19].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_21": |
+        % if collection.number_gathered() >= 21:
+        ${ collection[20].name.text }
+        % endif
+    - "collection_fmv_21": |
+        % if collection.number_gathered() >= 21:
+        ${ thousands(collection[20].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_22": |
+        % if collection.number_gathered() >= 22:
+        ${ collection[21].name.text }
+        % endif
+    - "collection_fmv_22": |
+        % if collection.number_gathered() >= 22:
+        ${ thousands(collection[21].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_23": |
+        % if collection.number_gathered() >= 23:
+        ${ collection[22].name.text }
+        % endif
+    - "collection_fmv_23": |
+        % if collection.number_gathered() >= 23:
+        ${ thousands(collection[22].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_24": |
+        % if collection.number_gathered() >= 24:
+        ${ collection[23].name.text }
+        % endif
+    - "collection_fmv_24": |
+        % if collection.number_gathered() >= 24:
+        ${ thousands(collection[23].fmv, show_decimals=True) }
+        % endif
+    - "collection_description_25": |
+        % if collection.number_gathered() >= 25:
+        ${ collection[24].name.text }
+        % endif
+    - "collection_fmv_25": |
+        % if collection.number_gathered() >= 25:
+        ${ thousands(collection[24].fmv, show_decimals=True) }
+        % endif
+
+
+---
+############ FA ADDITIONAL OTHER PROPERTY #############
+objects:
+  - additional_other_property: ALDocument.using(title="FA Additional Other Property", filename="FA_additional_other_property.pdf", has_addendum=False)
+---
+code: |
+  additional_other_property.enabled = collection.number_gathered() >= 4
+---
+attachment:
+  name: additional_other_property
+  variable name: additional_other_property[i]
+  filename: additional_other_property
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_other_property.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+    - "other_property_description_4": |
+        % if other_property.number_gathered() >= 4:
+        ${ other_property[3].name.text }
+        % endif
+    - "other_property_fmv_4": |
+        % if other_property.number_gathered() >= 4:
+        ${ thousands(other_property[3].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_5": |
+        % if other_property.number_gathered() >= 5:
+        ${ other_property[4].name.text }
+        % endif
+    - "other_property_fmv_5": |
+        % if other_property.number_gathered() >= 5:
+        ${ thousands(other_property[4].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_6": |
+        % if other_property.number_gathered() >= 6:
+        ${ other_property[5].name.text }
+        % endif
+    - "other_property_fmv_6": |
+        % if other_property.number_gathered() >= 6:
+        ${ thousands(other_property[5].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_7": |
+        % if other_property.number_gathered() >= 7:
+        ${ other_property[6].name.text }
+        % endif
+    - "other_property_fmv_7": |
+        % if other_property.number_gathered() >= 7:
+        ${ thousands(other_property[6].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_8": |
+        % if other_property.number_gathered() >= 8:
+        ${ other_property[7].name.text }
+        % endif
+    - "other_property_fmv_8": |
+        % if other_property.number_gathered() >= 8:
+        ${ thousands(other_property[7].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_9": |
+        % if other_property.number_gathered() >= 9:
+        ${ other_property[8].name.text }
+        % endif
+    - "other_property_fmv_9": |
+        % if other_property.number_gathered() >= 9:
+        ${ thousands(other_property[8].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_10": |
+        % if other_property.number_gathered() >= 10:
+        ${ other_property[9].name.text }
+        % endif
+    - "other_property_fmv_10": |
+        % if other_property.number_gathered() >= 10:
+        ${ thousands(other_property[9].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_11": |
+        % if other_property.number_gathered() >= 11:
+        ${ other_property[10].name.text }
+        % endif
+    - "other_property_fmv_11": |
+        % if other_property.number_gathered() >= 11:
+        ${ thousands(other_property[10].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_12": |
+        % if other_property.number_gathered() >= 12:
+        ${ other_property[11].name.text }
+        % endif
+    - "other_property_fmv_12": |
+        % if other_property.number_gathered() >= 12:
+        ${ thousands(other_property[11].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_13": |
+        % if other_property.number_gathered() >= 13:
+        ${ other_property[12].name.text }
+        % endif
+    - "other_property_fmv_13": |
+        % if other_property.number_gathered() >= 13:
+        ${ thousands(other_property[12].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_14": |
+        % if other_property.number_gathered() >= 14:
+        ${ other_property[13].name.text }
+        % endif
+    - "other_property_fmv_14": |
+        % if other_property.number_gathered() >= 14:
+        ${ thousands(other_property[13].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_15": |
+        % if other_property.number_gathered() >= 15:
+        ${ other_property[14].name.text }
+        % endif
+    - "other_property_fmv_15": |
+        % if other_property.number_gathered() >= 15:
+        ${ thousands(other_property[14].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_16": |
+        % if other_property.number_gathered() >= 16:
+        ${ other_property[15].name.text }
+        % endif
+    - "other_property_fmv_16": |
+        % if other_property.number_gathered() >= 16:
+        ${ thousands(other_property[15].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_17": |
+        % if other_property.number_gathered() >= 17:
+        ${ other_property[16].name.text }
+        % endif
+    - "other_property_fmv_17": |
+        % if other_property.number_gathered() >= 17:
+        ${ thousands(other_property[16].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_18": |
+        % if other_property.number_gathered() >= 18:
+        ${ other_property[17].name.text }
+        % endif
+    - "other_property_fmv_18": |
+        % if other_property.number_gathered() >= 18:
+        ${ thousands(other_property[17].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_19": |
+        % if other_property.number_gathered() >= 19:
+        ${ other_property[18].name.text }
+        % endif
+    - "other_property_fmv_19": |
+        % if other_property.number_gathered() >= 19:
+        ${ thousands(other_property[18].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_20": |
+        % if other_property.number_gathered() >= 20:
+        ${ other_property[19].name.text }
+        % endif
+    - "other_property_fmv_20": |
+        % if other_property.number_gathered() >= 20:
+        ${ thousands(other_property[19].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_21": |
+        % if other_property.number_gathered() >= 21:
+        ${ other_property[20].name.text }
+        % endif
+    - "other_property_fmv_21": |
+        % if other_property.number_gathered() >= 21:
+        ${ thousands(other_property[20].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_22": |
+        % if other_property.number_gathered() >= 22:
+        ${ other_property[21].name.text }
+        % endif
+    - "other_property_fmv_22": |
+        % if other_property.number_gathered() >= 22:
+        ${ thousands(other_property[21].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_23": |
+        % if other_property.number_gathered() >= 23:
+        ${ other_property[22].name.text }
+        % endif
+    - "other_property_fmv_23": |
+        % if other_property.number_gathered() >= 23:
+        ${ thousands(other_property[22].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_24": |
+        % if other_property.number_gathered() >= 24:
+        ${ other_property[23].name.text }
+        % endif
+    - "other_property_fmv_24": |
+        % if other_property.number_gathered() >= 24:
+        ${ thousands(other_property[23].fmv, show_decimals=True) }
+        % endif
+    - "other_property_description_25": |
+        % if other_property.number_gathered() >= 25:
+        ${ other_property[24].name.text }
+        % endif
+    - "other_property_fmv_25": |
+        % if other_property.number_gathered() >= 25:
+        ${ thousands(other_property[24].fmv, show_decimals=True) }
+        % endif
+
+---
+############ FA ADDITIONAL TRANSFER/SOLD PROPERTY #############
+objects:
+  - additional_transfer: ALDocument.using(title="FA Additional Transfer Sold Property", filename="FA_additional_transfer.pdf", has_addendum=False)
+---
+code: |
+  additional_transfer.enabled = collection.number_gathered() >= 4
+---
+attachment:
+  name: additional_transfer
+  variable name: additional_transfer[i]
+  filename: additional_transfer
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_transfer.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+    - "transfer_description_4": |
+        % if transfer.number_gathered() >= 4:
+        ${ transfer[3].name.text }
+        % endif
+    - "transfer_sold_4": |
+        % if transfer.number_gathered() >= 4:
+        ${ transfer[3].sold }
+        % endif
+    - "transfer_date_4": |
+        % if transfer.number_gathered() >= 4:
+        ${ transfer[3].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_4": |
+        % if transfer.number_gathered() >= 4:
+        ${ thousands(transfer[3].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_5": |
+        % if transfer.number_gathered() >= 5:
+        ${ transfer[4].name.text }
+        % endif
+    - "transfer_sold_5": |
+        % if transfer.number_gathered() >= 5:
+        ${ transfer[4].sold }
+        % endif
+    - "transfer_date_5": |
+        % if transfer.number_gathered() >= 5:
+        ${ transfer[4].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_5": |
+        % if transfer.number_gathered() >= 5:
+        ${ thousands(transfer[4].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_6": |
+        % if transfer.number_gathered() >= 6:
+        ${ transfer[5].name.text }
+        % endif
+    - "transfer_sold_6": |
+        % if transfer.number_gathered() >= 6:
+        ${ transfer[5].sold }
+        % endif
+    - "transfer_date_6": |
+        % if transfer.number_gathered() >= 6:
+        ${ transfer[5].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_6": |
+        % if transfer.number_gathered() >= 6:
+        ${ thousands(transfer[5].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_7": |
+        % if transfer.number_gathered() >= 7:
+        ${ transfer[6].name.text }
+        % endif
+    - "transfer_sold_7": |
+        % if transfer.number_gathered() >= 7:
+        ${ transfer[6].sold }
+        % endif
+    - "transfer_date_7": |
+        % if transfer.number_gathered() >= 7:
+        ${ transfer[6].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_7": |
+        % if transfer.number_gathered() >= 7:
+        ${ thousands(transfer[6].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_8": |
+        % if transfer.number_gathered() >= 8:
+        ${ transfer[7].name.text }
+        % endif
+    - "transfer_sold_8": |
+        % if transfer.number_gathered() >= 8:
+        ${ transfer[7].sold }
+        % endif
+    - "transfer_date_8": |
+        % if transfer.number_gathered() >= 8:
+        ${ transfer[7].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_8": |
+        % if transfer.number_gathered() >= 8:
+        ${ thousands(transfer[7].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_9": |
+        % if transfer.number_gathered() >= 9:
+        ${ transfer[8].name.text }
+        % endif
+    - "transfer_sold_9": |
+        % if transfer.number_gathered() >= 9:
+        ${ transfer[8].sold }
+        % endif
+    - "transfer_date_9": |
+        % if transfer.number_gathered() >= 9:
+        ${ transfer[8].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_9": |
+        % if transfer.number_gathered() >= 9:
+        ${ thousands(transfer[8].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_10": |
+        % if transfer.number_gathered() >= 10:
+        ${ transfer[9].name.text }
+        % endif
+    - "transfer_sold_10": |
+        % if transfer.number_gathered() >= 10:
+        ${ transfer[9].sold }
+        % endif
+    - "transfer_date_10": |
+        % if transfer.number_gathered() >= 10:
+        ${ transfer[9].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_10": |
+        % if transfer.number_gathered() >= 10:
+        ${ thousands(transfer[9].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_11": |
+        % if transfer.number_gathered() >= 11:
+        ${ transfer[10].name.text }
+        % endif
+    - "transfer_sold_11": |
+        % if transfer.number_gathered() >= 11:
+        ${ transfer[10].sold }
+        % endif
+    - "transfer_date_11": |
+        % if transfer.number_gathered() >= 11:
+        ${ transfer[10].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_11": |
+        % if transfer.number_gathered() >= 11:
+        ${ thousands(transfer[10].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_12": |
+        % if transfer.number_gathered() >= 12:
+        ${ transfer[11].name.text }
+        % endif
+    - "transfer_sold_12": |
+        % if transfer.number_gathered() >= 12:
+        ${ transfer[11].sold }
+        % endif
+    - "transfer_date_12": |
+        % if transfer.number_gathered() >= 12:
+        ${ transfer[11].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_12": |
+        % if transfer.number_gathered() >= 12:
+        ${ thousands(transfer[11].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_13": |
+        % if transfer.number_gathered() >= 13:
+        ${ transfer[12].name.text }
+        % endif
+    - "transfer_sold_13": |
+        % if transfer.number_gathered() >= 13:
+        ${ transfer[12].sold }
+        % endif
+    - "transfer_date_13": |
+        % if transfer.number_gathered() >= 13:
+        ${ transfer[12].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_13": |
+        % if transfer.number_gathered() >= 13:
+        ${ thousands(transfer[12].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_14": |
+        % if transfer.number_gathered() >= 14:
+        ${ transfer[13].name.text }
+        % endif
+    - "transfer_sold_14": |
+        % if transfer.number_gathered() >= 14:
+        ${ transfer[13].sold }
+        % endif
+    - "transfer_date_14": |
+        % if transfer.number_gathered() >= 14:
+        ${ transfer[13].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_14": |
+        % if transfer.number_gathered() >= 14:
+        ${ thousands(transfer[13].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_15": |
+        % if transfer.number_gathered() >= 15:
+        ${ transfer[14].name.text }
+        % endif
+    - "transfer_sold_15": |
+        % if transfer.number_gathered() >= 15:
+        ${ transfer[14].sold }
+        % endif
+    - "transfer_date_15": |
+        % if transfer.number_gathered() >= 15:
+        ${ transfer[14].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_15": |
+        % if transfer.number_gathered() >= 15:
+        ${ thousands(transfer[14].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_16": |
+        % if transfer.number_gathered() >= 16:
+        ${ transfer[15].name.text }
+        % endif
+    - "transfer_sold_16": |
+        % if transfer.number_gathered() >= 16:
+        ${ transfer[15].sold }
+        % endif
+    - "transfer_date_16": |
+        % if transfer.number_gathered() >= 16:
+        ${ transfer[15].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_16": |
+        % if transfer.number_gathered() >= 16:
+        ${ thousands(transfer[15].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_17": |
+        % if transfer.number_gathered() >= 17:
+        ${ transfer[16].name.text }
+        % endif
+    - "transfer_sold_17": |
+        % if transfer.number_gathered() >= 17:
+        ${ transfer[16].sold }
+        % endif
+    - "transfer_date_17": |
+        % if transfer.number_gathered() >= 17:
+        ${ transfer[16].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_17": |
+        % if transfer.number_gathered() >= 17:
+        ${ thousands(transfer[16].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_18": |
+        % if transfer.number_gathered() >= 18:
+        ${ transfer[17].name.text }
+        % endif
+    - "transfer_sold_18": |
+        % if transfer.number_gathered() >= 18:
+        ${ transfer[17].sold }
+        % endif
+    - "transfer_date_18": |
+        % if transfer.number_gathered() >= 18:
+        ${ transfer[17].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_18": |
+        % if transfer.number_gathered() >= 18:
+        ${ thousands(transfer[17].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_19": |
+        % if transfer.number_gathered() >= 19:
+        ${ transfer[18].name.text }
+        % endif
+    - "transfer_sold_19": |
+        % if transfer.number_gathered() >= 19:
+        ${ transfer[18].sold }
+        % endif
+    - "transfer_date_19": |
+        % if transfer.number_gathered() >= 19:
+        ${ transfer[18].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_19": |
+        % if transfer.number_gathered() >= 19:
+        ${ thousands(transfer[18].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_20": |
+        % if transfer.number_gathered() >= 20:
+        ${ transfer[19].name.text }
+        % endif
+    - "transfer_sold_20": |
+        % if transfer.number_gathered() >= 20:
+        ${ transfer[19].sold }
+        % endif
+    - "transfer_date_20": |
+        % if transfer.number_gathered() >= 20:
+        ${ transfer[19].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_20": |
+        % if transfer.number_gathered() >= 20:
+        ${ thousands(transfer[19].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_21": |
+        % if transfer.number_gathered() >= 21:
+        ${ transfer[20].name.text }
+        % endif
+    - "transfer_sold_21": |
+        % if transfer.number_gathered() >= 21:
+        ${ transfer[20].sold }
+        % endif
+    - "transfer_date_21": |
+        % if transfer.number_gathered() >= 21:
+        ${ transfer[20].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_21": |
+        % if transfer.number_gathered() >= 21:
+        ${ thousands(transfer[20].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_22": |
+        % if transfer.number_gathered() >= 22:
+        ${ transfer[21].name.text }
+        % endif
+    - "transfer_sold_22": |
+        % if transfer.number_gathered() >= 22:
+        ${ transfer[21].sold }
+        % endif
+    - "transfer_date_22": |
+        % if transfer.number_gathered() >= 22:
+        ${ transfer[21].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_22": |
+        % if transfer.number_gathered() >= 22:
+        ${ thousands(transfer[21].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_23": |
+        % if transfer.number_gathered() >= 23:
+        ${ transfer[22].name.text }
+        % endif
+    - "transfer_sold_23": |
+        % if transfer.number_gathered() >= 23:
+        ${ transfer[22].sold }
+        % endif
+    - "transfer_date_23": |
+        % if transfer.number_gathered() >= 23:
+        ${ transfer[22].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_23": |
+        % if transfer.number_gathered() >= 23:
+        ${ thousands(transfer[22].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_24": |
+        % if transfer.number_gathered() >= 24:
+        ${ transfer[23].name.text }
+        % endif
+    - "transfer_sold_24": |
+        % if transfer.number_gathered() >= 24:
+        ${ transfer[23].sold }
+        % endif
+    - "transfer_date_24": |
+        % if transfer.number_gathered() >= 24:
+        ${ transfer[23].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_24": |
+        % if transfer.number_gathered() >= 24:
+        ${ thousands(transfer[23].amount, show_decimals=True) }
+        % endif
+    - "transfer_description_25": |
+        % if transfer.number_gathered() >= 25:
+        ${ transfer[24].name.text }
+        % endif
+    - "transfer_sold_25": |
+        % if transfer.number_gathered() >= 25:
+        ${ transfer[24].sold }
+        % endif
+    - "transfer_date_25": |
+        % if transfer.number_gathered() >= 25:
+        ${ transfer[24].date.format('MM/dd/yyyy') }
+        % endif
+    - "transfer_amount_25": |
+        % if transfer.number_gathered() >= 25:
+        ${ thousands(transfer[24].amount, show_decimals=True) }
+        % endif
+---
+############ FA LAWSUITS AND CLAIMS #############
+objects:
+  - additional_lawsuits: ALDocument.using(title="FA Additional Transfer Sold Property", filename="FA_additional_lawsuits.pdf", has_addendum=False)
+---
+code: |
+  additional_lawsuits.enabled = lawsuits.number_gathered() >= 4
+---
+attachment:
+  name: additional_lawsuits
+  variable name: additional_lawsuits[i]
+  filename: additional_lawsuits
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_lawsuits.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "pre-judgment": ${ filing_status == "pre_judgment" }
+    - "post-judgment": ${ filing_status == "post_judgment" }
+    - "petitioner_name": |
+        % if party_label == 'petitioner':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if opposing_label == 'respondent':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+    - "petitioner_yes": ${ party_label == 'petitioner' }
+    - "respondent_yes": ${ party_label == 'respondent' }
+    - "lawsuit_number_4": |
+        % if lawsuits.number_gathered() >= 4:
+        ${ lawsuits[3].case }
+        % endif
+    - "lawsuit_date_4":  |
+        % if lawsuits.number_gathered() >= 4:
+        ${ lawsuits[3].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_4": |
+        % if lawsuits.number_gathered() >= 4:
+        ${ thousands(lawsuits[3].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_5": |
+        % if lawsuits.number_gathered() >= 5:
+        ${ lawsuits[4].case }
+        % endif
+    - "lawsuit_date_5":  |
+        % if lawsuits.number_gathered() >= 5:
+        ${ lawsuits[4].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_5": |
+        % if lawsuits.number_gathered() >= 5:
+        ${ thousands(lawsuits[4].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_6": |
+        % if lawsuits.number_gathered() >= 6:
+        ${ lawsuits[5].case }
+        % endif
+    - "lawsuit_date_6":  |
+        % if lawsuits.number_gathered() >= 6:
+        ${ lawsuits[5].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_6": |
+        % if lawsuits.number_gathered() >= 6:
+        ${ thousands(lawsuits[5].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_7": |
+        % if lawsuits.number_gathered() >= 7:
+        ${ lawsuits[6].case }
+        % endif
+    - "lawsuit_date_7":  |
+        % if lawsuits.number_gathered() >= 7:
+        ${ lawsuits[6].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_7": |
+        % if lawsuits.number_gathered() >= 7:
+        ${ thousands(lawsuits[6].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_8": |
+        % if lawsuits.number_gathered() >= 8:
+        ${ lawsuits[7].case }
+        % endif
+    - "lawsuit_date_8":  |
+        % if lawsuits.number_gathered() >= 8:
+        ${ lawsuits[7].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_8": |
+        % if lawsuits.number_gathered() >= 8:
+        ${ thousands(lawsuits[7].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_9": |
+        % if lawsuits.number_gathered() >= 9:
+        ${ lawsuits[8].case }
+        % endif
+    - "lawsuit_date_9":  |
+        % if lawsuits.number_gathered() >= 9:
+        ${ lawsuits[8].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_9": |
+        % if lawsuits.number_gathered() >= 9:
+        ${ thousands(lawsuits[8].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_10": |
+        % if lawsuits.number_gathered() >= 10:
+        ${ lawsuits[9].case }
+        % endif
+    - "lawsuit_date_10":  |
+        % if lawsuits.number_gathered() >= 10:
+        ${ lawsuits[9].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_10": |
+        % if lawsuits.number_gathered() >= 10:
+        ${ thousands(lawsuits[9].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_11": |
+        % if lawsuits.number_gathered() >= 11:
+        ${ lawsuits[10].case }
+        % endif
+    - "lawsuit_date_11":  |
+        % if lawsuits.number_gathered() >= 11:
+        ${ lawsuits[10].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_11": |
+        % if lawsuits.number_gathered() >= 11:
+        ${ thousands(lawsuits[10].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_12": |
+        % if lawsuits.number_gathered() >= 12:
+        ${ lawsuits[11].case }
+        % endif
+    - "lawsuit_date_12":  |
+        % if lawsuits.number_gathered() >= 12:
+        ${ lawsuits[11].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_12": |
+        % if lawsuits.number_gathered() >= 12:
+        ${ thousands(lawsuits[11].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_13": |
+        % if lawsuits.number_gathered() >= 13:
+        ${ lawsuits[12].case }
+        % endif
+    - "lawsuit_date_13":  |
+        % if lawsuits.number_gathered() >= 13:
+        ${ lawsuits[12].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_13": |
+        % if lawsuits.number_gathered() >= 13:
+        ${ thousands(lawsuits[12].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_14": |
+        % if lawsuits.number_gathered() >= 14:
+        ${ lawsuits[13].case }
+        % endif
+    - "lawsuit_date_14":  |
+        % if lawsuits.number_gathered() >= 14:
+        ${ lawsuits[13].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_14": |
+        % if lawsuits.number_gathered() >= 14:
+        ${ thousands(lawsuits[13].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_15": |
+        % if lawsuits.number_gathered() >= 15:
+        ${ lawsuits[14].case }
+        % endif
+    - "lawsuit_date_15":  |
+        % if lawsuits.number_gathered() >= 15:
+        ${ lawsuits[14].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_15": |
+        % if lawsuits.number_gathered() >= 15:
+        ${ thousands(lawsuits[14].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_16": |
+        % if lawsuits.number_gathered() >= 16:
+        ${ lawsuits[15].case }
+        % endif
+    - "lawsuit_date_16":  |
+        % if lawsuits.number_gathered() >= 16:
+        ${ lawsuits[15].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_16": |
+        % if lawsuits.number_gathered() >= 16:
+        ${ thousands(lawsuits[15].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_17": |
+        % if lawsuits.number_gathered() >= 17:
+        ${ lawsuits[16].case }
+        % endif
+    - "lawsuit_date_17":  |
+        % if lawsuits.number_gathered() >= 17:
+        ${ lawsuits[16].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_17": |
+        % if lawsuits.number_gathered() >= 17:
+        ${ thousands(lawsuits[16].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_18": |
+        % if lawsuits.number_gathered() >= 18:
+        ${ lawsuits[17].case }
+        % endif
+    - "lawsuit_date_18":  |
+        % if lawsuits.number_gathered() >= 18:
+        ${ lawsuits[17].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_18": |
+        % if lawsuits.number_gathered() >= 18:
+        ${ thousands(lawsuits[17].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_19": |
+        % if lawsuits.number_gathered() >= 19:
+        ${ lawsuits[18].case }
+        % endif
+    - "lawsuit_date_19":  |
+        % if lawsuits.number_gathered() >= 19:
+        ${ lawsuits[18].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_19": |
+        % if lawsuits.number_gathered() >= 19:
+        ${ thousands(lawsuits[18].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_20": |
+        % if lawsuits.number_gathered() >= 20:
+        ${ lawsuits[19].case }
+        % endif
+    - "lawsuit_date_20":  |
+        % if lawsuits.number_gathered() >= 20:
+        ${ lawsuits[19].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_20": |
+        % if lawsuits.number_gathered() >= 20:
+        ${ thousands(lawsuits[19].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_21": |
+        % if lawsuits.number_gathered() >= 21:
+        ${ lawsuits[20].case }
+        % endif
+    - "lawsuit_date_21":  |
+        % if lawsuits.number_gathered() >= 21:
+        ${ lawsuits[20].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_21": |
+        % if lawsuits.number_gathered() >= 21:
+        ${ thousands(lawsuits[20].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_22": |
+        % if lawsuits.number_gathered() >= 22:
+        ${ lawsuits[21].case }
+        % endif
+    - "lawsuit_date_22":  |
+        % if lawsuits.number_gathered() >= 22:
+        ${ lawsuits[21].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_22": |
+        % if lawsuits.number_gathered() >= 22:
+        ${ thousands(lawsuits[21].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_23": |
+        % if lawsuits.number_gathered() >= 23:
+        ${ lawsuits[22].case }
+        % endif
+    - "lawsuit_date_23":  |
+        % if lawsuits.number_gathered() >= 23:
+        ${ lawsuits[22].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_23": |
+        % if lawsuits.number_gathered() >= 23:
+        ${ thousands(lawsuits[22].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_24": |
+        % if lawsuits.number_gathered() >= 24:
+        ${ lawsuits[23].case }
+        % endif
+    - "lawsuit_date_24":  |
+        % if lawsuits.number_gathered() >= 24:
+        ${ lawsuits[23].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_24": |
+        % if lawsuits.number_gathered() >= 24:
+        ${ thousands(lawsuits[23].amount, show_decimals=True) }
+        % endif
+    - "lawsuit_number_25": |
+        % if lawsuits.number_gathered() >= 25:
+        ${ lawsuits[24].case }
+        % endif
+    - "lawsuit_date_25":  |
+        % if lawsuits.number_gathered() >= 25:
+        ${ lawsuits[24].date.format('MM/dd/yyyy') }
+        % endif
+    - "lawsuit_amount_25": |
+        % if lawsuits.number_gathered() >= 25:
+        ${ thousands(lawsuits[24].amount, show_decimals=True) }
+        % endif
+---

@@ -11,6 +11,7 @@ include:
   - docassemble.ILAO:ilao-interview-framework.yml
   - docassemble.ILAO:shared-basic-questions.yml
   - section_reviews.yml
+  - fa_additional.yml
 ---
 objects:
   - users: ALPeopleList.using(there_are_any=True)
@@ -19,8 +20,22 @@ objects:
   - employment[i].address: ALAddress
   - taxes: DAList.using(object_type=Thing, there_are_any=False)
   - insurance: DAList.using(object_type=Thing, complete_attribute='complete')
-  - debts: DAList.using(object_type=Thing, complete_attribute='complete')
-  - cash: DAList.using(object_type=Thing, complete_attribute='complete')
+  - debts: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - cash: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - cert_deposit: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - money: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - investments: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - securities: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - real_estate: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - real_estate[i].address: ALAddress
+  - motor_vehicle: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - business_interests: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - life_insurance: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - retirement_plan: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - collection: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - other_property: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - transfer: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - lawsuits: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
   - court_list: ALCourtLoader.using(file_name='docassemble.ILAO:data/sources/il_courts.xlsx')
 ---
 code: |
@@ -128,15 +143,43 @@ code: |
 
   set_progress(60)
   nav.set_section('section_debts')
-  if debts.there_are_any:
+  if has_debts:
     debts.gather()
 
   set_progress(70)
   nav.set_section('section_assets')
   assets_intro
-  if cash.there_are_any:
+  if has_cash_assets:
     cash.gather()
+  if has_cert_deposit:
+    cert_deposit.gather()
+  if has_money:
+    money.gather()
+  if has_investments:
+    investments.gather()
+  if has_securities:
+    securities.gather()
+  if has_real_estate:
+    real_estate.gather()
+  if has_motor_vehicle:
+    motor_vehicle.gather()
+  if has_business_interests:
+    business_interests.gather()
+  if has_life_insurance:
+    life_insurance.gather()
+  if has_retirement_plan:
+    retirement_plan.gather()
+  if has_collection:
+    collection.gather()
+  if has_other_property:
+    other_property.gather()
+  if has_transfer:
+    transfer.gather()
+  
 
+  if has_lawsuits:
+    lawsuits.gather()
+  e_signature
 
   set_progress(100)
   nav.set_section('section_download')
@@ -369,7 +412,8 @@ subquestion: |
   This includes income:
   
   * From employment by someone else,
-  * From self-employment as a sole proprietorship or independent contractor - as a member of a partnership,
+  * From self-employment as a sole proprietorship or independent contractor 
+  * As a member of a partnership,
   * As a member of a limited liability company (LLC) not treated as a corporation,
   * From a closely-held corporation, and
   * From any other flow-through business entities.
@@ -453,9 +497,9 @@ question: |
 subquestion: |
   **Note:** You must attach complete business federal and state business tax returns for the most recent tax year.
 fields:
-  - Last year (${ current_datetime().year - 1 }): employment[i].income_last_year
+  - Gross business receipts for last year (${ current_datetime().year - 1 }): employment[i].income_last_year
     datatype: currency
-  - So far this year (${ current_datetime().year }): employment[i].income_current_year
+  - Gross business receipts so far this year (${ current_datetime().year }): employment[i].income_current_year
     datatype: currency
   - note: |
       What were your necessary business expenses last year, and so far this year?
@@ -482,21 +526,21 @@ fields:
 ---
 id: filed taxes
 question: |
-  Did you file taxes last year?
+  Did you file taxes for ${ current_datetime().year - 1 }?
 fields:
   - no label: taxes_filed
     datatype: yesnoradio
 ---
 id: filed taxes two years
 question: |
-  Did you file taxes two years ago?
+  Did you file taxes for ${ current_datetime().year - 2 }?
 fields:
   - no label: taxes_filed_two_years
     datatype: yesnoradio
 ---
 id: filed taxes detail
 question: |
-  Income tax details for the previous year (${ current_datetime().year-1 })
+  Tax return details for the year ${ current_datetime().year-1 }
 fields:
   - What was your tax filing status last year?: taxes_filed_status
     datatype: radio
@@ -523,7 +567,7 @@ fields:
 ---
 id: federal state taxes last year
 question: |
-  Tax return detail for last year
+  Tax return details for ${ current_datetime().year-1 }
 fields: 
   - Federal: taxes[0].federal_tax
     datatype: radio
@@ -562,7 +606,7 @@ fields:
 ---
 id: federal state taxes two years ago
 question: |
-  Tax return detail for 2 years ago
+  Tax return details for ${ current_datetime().year-2 }
 fields: 
   - Federal: taxes[1].federal_tax
     datatype: radio
@@ -809,11 +853,12 @@ fields:
     show if: users[0].gifts_money_question
   - Do you receive other types of income?: users[0].other_income_question
     datatype: yesnowide
-  - Other: users[0].other_income
+  - "What is the source of the other income? (list all sources)": users[0].other_income_description
+    maxlength: 60
+    show if: users[0].other_income_question
+  - Total monthly income from other sources?: users[0].other_income
     datatype: currency
     min: 0
-    show if: users[0].other_income_question
-  - "What is the source of the other income? (list all sources)": users[0].other_income_description
     show if: users[0].other_income_question
 ---
 depends on:
@@ -1148,11 +1193,12 @@ question: |
 fields:
   - Other monthly household living expenses: users[0].living_other_question
     datatype: yesnowide
-  - Amount: users[0].living_other
+  - "What are the other monthly household living expenses?": users[0].living_other_description
+    maxlength: 60
+    show if: users[0].living_other_question
+  - Total monthly other expenses?: users[0].living_other
     datatype: currency
     min: 0
-    show if: users[0].living_other_question
-  - "What are the other monthly household living expenses?": users[0].living_other_description
     show if: users[0].living_other_question
 ---
 id: monthly transport expenses
@@ -1202,11 +1248,12 @@ question: |
 fields:
   - Other monthly transportation expenses: users[0].transport_other_question
     datatype: yesnowide
-  - Other monthly transportation expenses: users[0].transport_other
+  - "What are the other monthly transportation expenses?": users[0].transport_other_description
+    maxlength: 60
+    show if: users[0].transport_other_question
+  - Total monthly other transportation expenses?: users[0].transport_other
     datatype: currency
     min: 0
-    show if: users[0].transport_other_question
-  - "What are the other monthly transportation expenses?": users[0].transport_other_description
     show if: users[0].transport_other_question
 ---
 id: monthly personal medical expenses
@@ -1352,11 +1399,12 @@ question: |
 fields:
   - Do you have any other personal expenses not listed above?: users[0].personal_other_question
     datatype: yesnowide
-  - Amount: users[0].personal_other
+  - "What are the other monthly personal expenses?": users[0].personal_other_description
+    maxlength: 60
+    show if: users[0].personal_other_question
+  - Total monthly other personal expenses?: users[0].personal_other
     datatype: currency
     min: 0
-    show if: users[0].personal_other_question
-  - "What are the other monthly personal expenses?": users[0].personal_other_description
     show if: users[0].personal_other_question
 ---
 id: monthly children expenses
@@ -1528,12 +1576,13 @@ question: |
   Other monthly expenses for children:
 fields:
   - Do you have other expenses not mentioned above?: users[0].children_other_question
-    datatype: yesnowide
-  - Amount: users[0].children_other
+    datatype: yesnoradio
+  - "What are the other monthly minor and dependent children expenses?": users[0].children_other_description
+    maxlength: 60
+    show if: users[0].children_other_question
+  - Total monthly other expenses for the children?: users[0].children_other
     datatype: currency
     min: 0
-    show if: users[0].children_other_question
-  - "What are the other monthly minor and dependent children expenses?": users[0].children_other_description
     show if: users[0].children_other_question
 ---
 depends on:
@@ -1769,9 +1818,9 @@ question: |
   Who is covered under this policy?
 fields:
   - Number of people covered: insurance[i].total_covered
-    datatype: range
+    datatype: integer
     min: 1
-    max: 10
+    max: 20
   - Insurance coverage: insurance[i].coverage
     datatype: radio
     choices:
@@ -1779,7 +1828,18 @@ fields:
       - My spouse/partner: both
       - children of this relationship: children_current
       - children of this relationship and other children: children_other
-  - List the number of the other children covered and their ages: insurance[i].other_children_covered
+  
+  - note: |
+      List the number of the other children covered and their ages: 
+    js show if: |
+      val("insurance[i].coverage") == 'children_other'
+  - Number of children": insurance[i].other_children_count
+    datatype: integer
+    min: 0
+    js show if: |
+      val("insurance[i].coverage") == 'children_other'
+  - Ages of children: insurance[i].other_children_age_list
+    maxlength: 60
     js show if: |
       val("insurance[i].coverage") == 'children_other'
 ---
@@ -1797,6 +1857,7 @@ fields:
       - My spouse/partner: partner 
       - Other: other
   - Name the other payment source: insurance[i].other_description
+    maxlength: 30
     js show if: |
       val("insurance[i].paid") == 'other'
   - What are the monthly cost for this insurance for covering children?: insurance[i].cost_children 
@@ -1812,8 +1873,9 @@ fields:
     datatype: currency
     min: 0
   - Coinsurance (percentage of costs you pay, e.g. 20%): insurance[i].coinsurance
-    datatype: percentage
+    datatype: integer
     min: 0
+    max: 100
   - Copayment (a flat amount you pay per service, e.g. $20): insurance[i].copayment
     datatype: currency
     min: 0
@@ -1825,20 +1887,12 @@ question: |
 subquestion: |
   Debts including credit cards and past due bills. Do not include debt payments previously listed.
 fields:
-  - no label: debts.there_are_any
+  - no label: has_debts
     datatype: yesnoradio
----
-code: |
-  debts[i].name.text
-  debts[i].complete = True 
----
-code: |
-  if debts.number_gathered() >= 26:
-    debts.there_is_another = False
 ---
 id: additional debts
 question: |
-  Do you have other debts you need to include?
+  Do you have other ${ debts.number_gathered() } debts you need to include?
 subquestion: |
   So far you have told us about:
 
@@ -1857,16 +1911,26 @@ columns:
 ---
 id: debt information
 question: |
-  Details for the ${ordinal(i)} creditor: 
+  Details for the ${ordinal(i)} account: 
 fields:
   - Name of the creditor: debts[i].name.text
+    maxlength: 25
   - Describe nature of debt: debts[i].description
+    maxlength: 25
   - Amount owed: debts[i].amount
     datatype: currency
     min: 0
   - Monthly payment: debts[i].payment
     datatype: currency
     min: 0
+---
+code: |
+  debts[i].name.text
+  debts[i].complete = True 
+---
+code: |
+  if debts.number_gathered() > 5:
+    debts.there_is_another = False
 ---
 ########### FA ASSETS ###########
 id: assets intro
@@ -1897,16 +1961,8 @@ subquestion: |
   Cash and cash equivalents are checking, savings, money market, and other
   bank or credit union accounts. **Do not list account numbers.** 
 fields:
-  - no label: cash.there_are_any
+  - no label: has_cash_assets
     datatype: yesnoradio
----
-code: |
-  cash[i].name.text
-  cash[i].complete = True 
----
-code: |
-  if cash.number_gathered() >= 25:
-    cash.there_is_another = False
 ---
 id: additional cash
 question: |
@@ -1943,8 +1999,706 @@ fields:
     datatype: currency
     min: 0
 ---
+code: |
+  cash[i].name.text
+  cash[i].complete = True 
+---
+code: |
+  if cash.number_gathered() > 5:
+    cash.there_is_another = False
+---
+########### FA ASSETS - 15a Certificate of Deposit ###########
+id: certificate of deposit intro 
+question: |
+  Do you have any certificates of deposit?
+fields:
+  - no label: has_cert_deposit
+    datatype: yesnoradio
+---
+id: additional certificate of deposit
+question: |
+  Do you have other certificates of deposit to include?
+subquestion: |
+  So far you have told us about:
+  ${ cert_deposit_table }
+fields:
+  - Add another?: cert_deposit.there_is_another
+    datatype: yesnoradio
+---
+table: cert_deposit_table
+rows: cert_deposit
+columns:
+  - Name of bank/institution: row_item.name.text
+  - Name on account: row_item.account
+  - Balance: currency(row_item.balance)
+---
+id: certificate of deposit information
+question: |
+  Details for the ${ordinal(i)} certificate of deposit: 
+fields:
+  - Name of bank or institution: cert_deposit[i].name.text
+  - Name on the account: cert_deposit[i].account
+  - Balance: cert_deposit[i].balance
+    datatype: currency
+    min: 0
+---
+code: |
+  cert_deposit[i].name.text
+  cert_deposit[i].complete = True 
+---
+code: |
+  if cert_deposit.number_gathered() > 5:
+    cert_deposit.there_is_another = False
+---
+########### FA ASSETS - 15a money cash/card ###########
+id: money cash/card intro 
+question: |
+  Do you have any money on cash and prepaid debit cards or through
+  money transfer mobile apps like Venmo, PayPal, or Apple Pay?
+fields:
+  - no label: has_money
+    datatype: yesnoradio
+---
+id: additional money cash/card
+question: |
+  Do you have other cash/card or money app balances to include?
+subquestion: |
+  So far you have told us about:
+  ${ money_table }
+fields:
+  - Add another?: money.there_is_another
+    datatype: yesnoradio
+---
+table: money_table
+rows: money
+columns:
+  - Location of cash/card: row_item.name.text
+  - Held by: row_item.holder
+  - Balance: currency(row_item.balance)
+---
+id: money cash/card information
+question: |
+  Details for the ${ordinal(i)} cash/card or app: 
+fields:
+  - Location of cash/card: money[i].name.text
+  - Name of holder: money[i].holder
+  - Balance: money[i].balance
+    datatype: currency
+    min: 0
+---
+code: |
+  money[i].name.text
+  money[i].complete = True 
+---
+code: |
+  if money.number_gathered() > 5:
+    money.there_is_another = False
+---
+########### FA ASSETS - 15b Investment Accounts ###########
+id: investment accounts intro 
+question: |
+  Do you have any investment accounts and securities?
+subquestion: |
+  Stocks, bonds, options, employee stock ownership plans 
+fields:
+  - no label: has_investments
+    datatype: yesnoradio
+---
+id: additional investment accounts
+question: |
+  Do you have other investment accounts to include?
+subquestion: |
+  So far you have told us about:
+  ${ investments_table }
+fields:
+  - Add another?: investments.there_is_another
+    datatype: yesnoradio
+---
+table: investments_table
+rows: investments
+columns:
+  - Company name: row_item.name.text
+  - "# shares": row_item.shares
+  - Account type: row_item.type
+  - Owner: row_item.owner
+  - FMV: currency(row_item.fmv)
+---
+id: investments information
+question: |
+  Details for the ${ordinal(i)} investment account: 
+fields:
+  - Company name: investments[i].name.text
+  - Number of shares: investments[i].shares
+  - Type of account: investments[i].type
+    datatype: radio
+    choices:
+      - Stock
+      - Bond 
+      - Option
+      - Employee plan
+  - Who is the owner?: investments[i].owner
+  - Fair market value: investments[i].fmv
+    datatype: currency
+    min: 0
+---
+code: |
+  investments[i].name.text
+  investments[i].complete = True 
+---
+code: |
+  if investments.number_gathered() > 5:
+    investments.there_is_another = False
+---
+########### FA ASSETS - 15b Securities ###########
+id: securities intro 
+question: |
+  Do you have any investment accounts and securities?
+subquestion: |
+  Brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency
+fields:
+  - no label: has_securities
+    datatype: yesnoradio
+---
+id: additional securities
+question: |
+  Do you have other securities to include?
+subquestion: |
+  So far you have told us about:
+  ${ securities_table }
+fields:
+  - Add another?: securities.there_is_another
+    datatype: yesnoradio
+---
+table: securities_table
+rows: securities
+columns:
+  - Description: row_item.name.text
+  - Owner: row_item.owner
+  - Balance: currency(row_item.balance)
+---
+id: securities information
+question: |
+  Details for the ${ordinal(i)} investment: 
+fields:
+  - Description of asset: securities[i].name.text
+  - Who is the owner?: securities[i].owner
+  - Balance: securities[i].balance
+    datatype: currency
+    min: 0
+---
+code: |
+  securities[i].name.text
+  securities[i].complete = True 
+---
+code: |
+  if securities.number_gathered() > 5:
+    securities.there_is_another = False
+---
+########### FA ASSETS - 15c REAL ESTATE ###########
+id: real estate intro 
+question: |
+  Do you have any real estate?
+fields:
+  - no label: has_real_estate
+    datatype: yesnoradio
+---
+id: additional real estate
+question: |
+  Do you have other properties to include?
+subquestion: |
+  So far you have told us about:
+  ${ real_estate_table }
+fields:
+  - Add another?: real_estate.there_is_another
+    datatype: yesnoradio
+---
+table: real_estate_table
+rows: real_estate
+columns:
+  - Address: row_item.address.on_one_line()
+  - Name on Title: row_item.name.text
+  - FMV: currency(row_item.fmv)
+  - Balance: currency(row_item.balance)
+---
+id: real estate information
+question: |
+  Details for the ${ordinal(i)} property: 
+fields:
+  - Street address: real_estate[i].address.address
+    address autocomplete: True
+  - Address line 2: real_estate[i].address.unit
+    required: False
+  - City: real_estate[i].address.city
+  - State: real_estate[i].address.state
+    code: |
+      states_list()
+  - ZIP code: real_estate[i].address.zip
+  - Name on the title: real_estate[i].name.text
+  - Fair market value: real_estate[i].fmv
+    datatype: currency
+    min: 0
+  - Balance due: real_estate[i].balance
+    datatype: currency
+    min: 0
+---
+code: |
+  real_estate[i].address.address
+  real_estate[i].complete = True 
+---
+code: |
+  if real_estate.number_gathered() > 5:
+    real_estate.there_is_another = False
+---
+########### FA ASSETS - 15d Motor Vehicle ###########
+id: motor vehicle intro 
+question: |
+  Do you have any motor vehicles?
+subquestion: |
+  Brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency
+fields:
+  - no label: has_motor_vehicle
+    datatype: yesnoradio
+---
+id: additional motor vehicle
+question: |
+  Do you have other vehicles to include?
+subquestion: |
+  So far you have told us about:
+  ${ motor_vehicle_table }
+fields:
+  - Add another?: motor_vehicle.there_is_another
+    datatype: yesnoradio
+---
+table: motor_vehicle_table
+rows: motor_vehicle
+columns:
+  - Vehicle year: row_item.year 
+  - Vehicle make: row_item.make 
+  - Vehicle model: row_item.model
+  - Name on title: row_item.name.text
+  - FMV: currency(row_item.fmv)
+  - Balance: currency(row_item.balance)
+---
+id: motor vehicle information
+question: |
+  Details for the ${ordinal(i)} investment: 
+fields:
+  - Vehicle year: motor_vehicle[i].year
+    datatype: integer
+    maxlength: 4
+    min: 1900
+    max: 2100
+  - Vehicle make: motor_vehicle[i].make
+    maxlength: 15
+  - Vehicle model: motor_vehicle[i].model
+    maxlength: 10
+  - Name on title: motor_vehicle[i].name.text
+  - Fair market value: motor_vehicle[i].fmv
+    datatype: currency
+    min: 0
+  - Balance: motor_vehicle[i].balance
+    datatype: currency
+    min: 0
+---
+code: |
+  motor_vehicle[i].year
+  motor_vehicle[i].complete = True 
+---
+code: |
+  if motor_vehicle.number_gathered() > 5:
+    motor_vehicle.there_is_another = False
+---
+########### FA ASSETS - 15e Business Interests ###########
+id: business interests intro 
+question: |
+  Do you have any business interests?
+fields:
+  - no label: has_business_interests
+    datatype: yesnoradio
+---
+id: additional business interests
+question: |
+  Do you have other business interests to include?
+subquestion: |
+  So far you have told us about:
+  ${ business_interests_table }
+fields:
+  - Add another?: business_interests.there_is_another
+    datatype: yesnoradio
+---
+table: business_interests_table
+rows: business_interests
+columns:
+  - Name of business: row_item.name.text
+  - Type of business: row_item.type
+  - "% Ownership": row_item.ownership
+  - FMV: currency(row_item.fmv)
+---
+id: business_interests information
+question: |
+  Details for the ${ordinal(i)} investment: 
+fields:
+  - Name of business: business_interests[i].name.text
+  - Type of business: business_interests[i].type
+  - "How much ownership (1-100%)?": business_interests[i].ownership
+    datatype: integer
+    min: 1
+    max: 100
+  - Fair market value: business_interests[i].fmv
+    datatype: currency
+    min: 0
+---
+code: |
+  business_interests[i].name.text
+  business_interests[i].complete = True 
+---
+code: |
+  if business_interests.number_gathered() > 5:
+    business_interests.there_is_another = False
+---
+########### FA ASSETS - 15f Life Insurance ###########
+id: life insurance intro
+question: |
+  Do you have any life insurance policies?
+fields:
+  - no label: has_life_insurance
+    datatype: yesnoradio
+---
+id: additional investment accounts
+question: |
+  Do you have other investment accounts to include?
+subquestion: |
+  So far you have told us about:
+  ${ life_insurance_table }
+fields:
+  - Add another?: life_insurance.there_is_another
+    datatype: yesnoradio
+---
+table: life_insurance_table
+rows: life_insurance
+columns:
+  - Name of insurance company: row_item.name.text
+  - Type of policy: row_item.type
+  - Death benefit: currency(row_item.benefit)
+  - Cash value: currency(row_item.value)
+---
+id: life_insurance information
+question: |
+  Details for the ${ordinal(i)} investment account: 
+fields:
+  - Name of insurance company: life_insurance[i].name.text
+  - Type of policy: life_insurance[i].type
+    datatype: radio
+    choices:
+      - Whole
+      - Term
+      - Universal
+      - Variable
+      - Final expense
+  - Death benfit: life_insurance[i].benefit
+    datatype: currency
+    min: 0
+  - Cash value: life_insurance[i].value
+    datatype: currency
+    min: 0
+---
+code: |
+  life_insurance[i].name.text
+  life_insurance[i].complete = True 
+---
+code: |
+  if life_insurance.number_gathered() > 5:
+    life_insurance.there_is_another = False
+---
+########### FA ASSETS - 15g Retirement Benefits #######
+id: retirement benefits intro
+question: |
+  Do you have any retirement benefits or deferred compensation?
+subquestion: |
+  Pension plan, annuity, IRA, 401(k), 403(b), SEP
 
+  (balance as of the date of this affidavit)
+fields:
+  - no label: has_retirement_plan
+    datatype: yesnoradio
+---
+id: additional retirement benefits
+question: |
+  Do you have other retirement plan benefits to include?
+subquestion: |
+  So far you have told us about:
+  ${ retirement_plan_table }
+fields:
+  - Add another?: retirement_plan.there_is_another
+    datatype: yesnoradio
+---
+table: retirement_plan_table
+rows: retirement_plan
+columns:
+  - Name of plan: row_item.name.text
+  - Type of plan: row_item.type
+  - Balance: currency(row_item.balance)
+---
+id: retirement_plan information
+question: |
+  Details for the ${ordinal(i)} plan: 
+fields:
+  - Name of plan: retirement_plan[i].name.text
+  - Type of plan: retirement_plan[i].type
+  - Balance: retirement_plan[i].balance
+    datatype: currency
+    min: 0
+---
+code: |
+  retirement_plan[i].name.text
+  retirement_plan[i].complete = True 
+---
+code: |
+  if retirement_plan.number_gathered() > 5:
+    retirement_plan.there_is_another = False
+---
+########### FA ASSETS - 15h Valuable collectibles ###########
+id: collectibles intro 
+question: |
+  Do you have any valuable collectibles?
+subquestion: 
+  Things like coins, stamps, art, antiques, etc.
+fields:
+  - no label: has_collection
+    datatype: yesnoradio
+---
+id: additional collectibles 
+question: |
+  Do you have other collectibles to include?
+subquestion: |
+  So far you have told us about:
+  ${ collection_table }
+fields:
+  - Add another?: collection.there_is_another
+    datatype: yesnoradio
+---
+table: collection_table
+rows: collection
+columns:
+  - Description: row_item.name.text
+  - FMV: currency(row_item.fmv)
+---
+id: collectibles information
+question: |
+  Details for the ${ordinal(i)} cash/card or app: 
+fields:
+  - Description: collection[i].name.text
+  - Fair market value: collection[i].fmv
+    datatype: currency
+    min: 0
+---
+code: |
+  collection[i].name.text
+  collection[i].complete = True 
+---
+code: |
+  if collection.number_gathered() > 5:
+    collection.there_is_another = False
+---
+########### FA ASSETS - 15i Other Personal Property ###########
+id: other property intro 
+question: |
+  Do you have any other personal property valued over $500?
+fields:
+  - no label: has_other_property
+    datatype: yesnoradio
+---
+id: additional other_property 
+question: |
+  Do you have other personal property to include?
+subquestion: |
+  So far you have told us about:
+  ${ other_property_table }
+fields:
+  - Add another?: other_property.there_is_another
+    datatype: yesnoradio
+---
+table: other_property_table
+rows: other_property
+columns:
+  - Description: row_item.name.text
+  - FMV: currency(row_item.fmv)
+---
+id: other property information
+question: |
+  Details for the ${ordinal(i)} property: 
+fields:
+  - Description: other_property[i].name.text
+  - Fair market value: other_property[i].fmv
+    datatype: currency
+    min: 0
+---
+code: |
+  other_property[i].name.text
+  other_property[i].complete = True 
+---
+code: |
+  if other_property.number_gathered() > 5:
+    other_property.there_is_another = False
+---
+########### FA ASSETS - 15j Transfer or Sale of Assets #######
+id: transfer sale intro
+question: |
+  Have you had any transfer or sale of assets or property within the Last
+  two years with a fair market value of at least $1000?
+fields:
+  - no label: has_transfer
+    datatype: yesnoradio
+---
+id: additional transfer
+question: |
+  Do you have other transfer benefits to include?
+subquestion: |
+  So far you have told us about:
+  ${ transfer_table }
+fields:
+  - Add another?: transfer.there_is_another
+    datatype: yesnoradio
+---
+table: transfer_table
+rows: transfer
+columns:
+  - Description: row_item.name.text
+  - Transfer/Sold to: row_item.sold
+  - Date: row_item.date.format("MM/dd/yyyy")
+  - Amount: currency(row_item.amount)
+---
+id: transfer information
+question: |
+  Details for the ${ordinal(i)} plan: 
+fields:
+  - Description of asset/property: transfer[i].name.text
+  - Who received the transfer?: transfer[i].sold
+  - Date transfer/sold: transfer[i].date
+    datatype: ThreePartsDate
+    alMax: ${ today().format("MM/dd/yyyy") }
+  - Amount: transfer[i].amount
+    datatype: currency
+    min: 0
+---
+code: |
+  transfer[i].name.text
+  transfer[i].complete = True 
+---
+code: |
+  if transfer.number_gathered() > 5:
+    transfer.there_is_another = False
+---
+########### FA LAWSUITS AND CLAIMS #######
+id: lawsuits and claims intro
+question: |
+  Have you had any lawsuits or claims?
+fields:
+  - no label: has_lawsuits
+    datatype: yesnoradio
+---
+id: additional lawsuits
+question: |
+  Do you have other lawsuits or claims to include?
+subquestion: |
+  So far you have told us about:
+  ${ lawsuits_table }
+fields:
+  - Add another?: lawsuits.there_is_another
+    datatype: yesnoradio
+---
+table: lawsuits_table
+rows: lawsuits
+columns:
+  - Case number: row_item.case
+  - Date lawsuit/claim filed: row_item.date
+  - Amount received: currency(row_item.amount)
+---
+id: lawsuits information
+question: |
+  Details for the ${ordinal(i)} plan: 
+fields:
+  - Case number: lawsuits[i].case
+  - Date lawsuit/claim filed: lawsuits[i].date
+    datatype: ThreePartsDate
+    alMax: ${ today().format("yyyy-MM-dd") }
+  - Amount received: lawsuits[i].amount
+    datatype: currency
+    min: 0
+---
+code: |
+  lawsuits[i].case
+  lawsuits[i].complete = True 
+---
+code: |
+  if lawsuits.number_gathered() > 5:
+    lawsuits.there_is_another = False
+---
+id: e-signature
+question: |
+  Do you want to add your e-signature to your ${ form_name }?
+subquestion: |
+  This program can put "**/s/ ${users[0].name.full(middle='full')}**" where you would sign your name. The court will accept this as your signature.
 
+  If you do not add your **{e-signature}**, you must sign your paper form before you file it.
+
+  <div class="alert alert-info ilao-info" role="alert">
+    <h6 class="alert-heading">What it means to sign your forms</h6>
+    <p>By signing your <i>Application for Waiver of Court Fees</i>, you are certifying that:</p>
+    <p><ul>
+      <li>Everything on the forms is true and correct, and</li>
+      <li>You understand that making a false statement on the form is perjury, which can result in criminal penalties.</li>
+    </ul></p>
+  <p>See the <a href="https://www.ilga.gov/legislation/ilcs/documents/073500050k1-109.htm"><b>Code of Civil Procedure, 735 ILCS 5/1-109</b></a> for more information.</p>
+  </div>
+fields:
+  - "Add e-signature?": e_signature
+    datatype: yesnoradio
+terms:
+  - "e-signature": |
+      An e-signature is an electronic signature. It is a digital version of a signature that has the same effect as a hand-written signature. 
+---
+id: signature choice
+decoration: file-signature
+question: |
+  Sign your forms
+subquestion: |
+  Your forms are almost ready. 
+  
+  You need to sign your forms before you file. You can:
+  
+  * Sign with your finger on a smartphone,
+  * Sign with the mouse or touchpad on your computer,
+  * Add your name as an e-signature **(recommended)**, or
+  * Sign the forms by hand after you download and print.
+field: signature_choice
+buttons:  
+  - Sign on my phone: phone
+    image: mobile-alt
+  - Sign on this device: this device
+    image: desktop
+  - Just add my name: add name
+    image: keyboard
+  - Sign later: no signature
+    image: print
+continue button field: saw_signature_choice
+script: |
+  <script>
+    $(".da-field-buttons > div > .btn-da-custom").last().after("<br>")
+    $(".da-field-buttons > div > .btn-da-custom").first().before("<br>")
+  </script>
+---
+code: |
+  signature_fields = ['users[0].signature']
+---
+depends on:
+  - signature_choice
+id: persons signature
+question: |
+  ${ users[0].familiar() }, please sign in the box below
+signature: users[0].signature
+under: |
+  ${ users[0].name.full(middle="full") }
 ---
 id: forms assembling
 continue button field: forms_assembling
@@ -1990,6 +2744,19 @@ objects:
         additional_health_insurance_bundle,
         additional_debts,
         additional_cash,
+        additional_cd,
+        additional_money,
+        additional_investments,
+        additional_securities,
+        additional_real_estate,
+        additional_motor_vehicle,
+        additional_business_interests,
+        additional_life_insurance,
+        additional_retirement,
+        additional_collectibles,
+        additional_other_property,
+        additional_transfer,
+        additional_lawsuits,
       ])
 ---
 objects:
@@ -2057,7 +2824,7 @@ attachment:
           % endif
       - "employer_address": |
           % if employment.there_are_any and employment[0].type == "employed":
-          ${ employment[0].address.line_one() }
+          ${ employment[0].address.line_one(bare=True) }
           % endif
       - "employer_address2": |
           % if employment.there_are_any and employment[0].type == "employed":
@@ -2085,7 +2852,7 @@ attachment:
           % endif
       - "income_gross": |
           % if employment.there_are_any and employment[0].type == "employed":
-          ${ nice_number(employment[0].gross_income) }
+          ${ thousands(employment[0].gross_income, show_decimals=True) }
           % endif
       - "income_date": |
           % if employment.there_are_any and employment[0].type == "employed":
@@ -2122,7 +2889,7 @@ attachment:
           % endif
       - "business_address": |
           % if employment.there_are_any and employment[0].type != "employed":
-          ${ employment[0].address.line_one() }
+          ${ employment[0].address.line_one(bare=True) }
           % endif
       - "business_address2": |
           % if employment.there_are_any and employment[0].type != "employed":
@@ -2130,19 +2897,19 @@ attachment:
           % endif
       - "business_gross_last_year": |
           % if employment.there_are_any and employment[0].type != "employed":
-          ${ nice_number(employment[0].income_last_year) }
+          ${ thousands(employment[0].income_last_year, show_decimals=True) }
           % endif
       - "business_gross_current_year": |
           % if employment.there_are_any and employment[0].type != "employed":
-          ${ nice_number(employment[0].income_current_year) }
+          ${ thousands(employment[0].income_current_year, show_decimals=True) }
           % endif           
       - "business_expense_last_year": |
           % if employment.there_are_any and employment[0].type != "employed":
-          ${ nice_number(employment[0].expenses_last_year) }
+          ${ thousands(employment[0].expenses_last_year, show_decimals=True) }
           % endif
       - "business_expense_current_year": |
           % if employment.there_are_any and employment[0].type != "employed":
-          ${ nice_number(employment[0].expenses_current_year) }
+          ${ thousands(employment[0].expenses_current_year, show_decimals=True) }
           % endif
       - "business_meals": |
           % if employment.there_are_any and employment[0].type != "employed":
@@ -2758,53 +3525,53 @@ attachment:
           % endif
       - "other_children_covered": |
           % if insurance.there_are_any and insurance[0].coverage == "children_other":
-          ${ insurance[0].other_children_covered }
+          ${ insurance[0].other_children_count } " - " ${ insurance[0].other_children_age_list }
           % endif
-      - "insurance_monthly_cost":   |
+      - "insurance_monthly_cost": |
           % if insurance.there_are_any:
           ${ thousands(insurance[0].monthly_cost, show_decimals=True) }
           % endif
-      - "insurance_paid_myself":  |
+      - "insurance_paid_myself": |
           % if insurance.there_are_any:
           ${ insurance[0].paid == "myself" }
           % endif
-      - "insurance_paid_partner":  |
+      - "insurance_paid_partner": |
           % if insurance.there_are_any:
           ${ insurance[0].paid == "partner" }
           % endif
-      - "insurance_paid_other":  |
+      - "insurance_paid_other": |
           % if insurance.there_are_any:
           ${ insurance[0].paid == "other" }
           % endif
-      - "insurance_paid_other_description":   |
-          % if insurance.there_are_any:
+      - "insurance_paid_other_description": |
+          % if insurance.there_are_any and insurance[0].paid == "other":
           ${ insurance[0].other_description }
           % endif
-      - "cost_insurance_children":   |
+      - "cost_insurance_children": |
           % if insurance.there_are_any:
           ${ thousands(insurance[0].cost_children, show_decimals=True) }
           % endif
-      - "cost_insurance_children_current":   |
+      - "cost_insurance_children_current": |
           % if insurance.there_are_any:
           ${ thousands(insurance[0].cost_children_current, show_decimals=True) }
           % endif
-      - "individual_deductible":   |
+      - "individual_deductible": |
           % if insurance.there_are_any:
           ${ thousands(insurance[0].individual_deductible, show_decimals=True) }
           % endif
-      - "family_deductible":   |
+      - "family_deductible": |
           % if insurance.there_are_any:
           ${ thousands(insurance[0].family_deductible, show_decimals=True) }
           % endif
-      - "coinsurance":  |
+      - "coinsurance": |
           % if insurance.there_are_any:
           ${ nice_number(insurance[0].coinsurance, use_word=False) }
           % endif
-      - "copayment":  |
+      - "copayment": |
           % if insurance.there_are_any:
           ${ thousands(insurance[0].copayment, show_decimals=True) }
           % endif
-      - "insurance_addendum_yes": ${ insurance.number_gathered() == 1 }
+      - "insurance_addendum_yes": ${ insurance.number_gathered() > 1 }
       # 14 Debts
       - "creditor_name_1": |
           % if debts.there_are_any:
@@ -2823,47 +3590,47 @@ attachment:
           ${ thousands(debts[0].payment, show_decimals=True) }
           % endif
       - "creditor_name_2": |
-          % if debts.there_are_any and debts.number_gathered() >= 2:
+          % if debts.number_gathered() >= 2:
           ${ debts[1].name.text }
           % endif
       - "creditor_description_2": |
-          % if debts.there_are_any and debts.number_gathered() >= 2:
+          % if debts.number_gathered() >= 2:
           ${ debts[1].description }
           % endif
       - "creditor_amount_2": |
-          % if debts.there_are_any and debts.number_gathered() >= 2:
+          % if debts.number_gathered() >= 2:
           ${ thousands(debts[1].amount, show_decimals=True) }
           % endif
       - "creditor_payment_2": |
-          % if debts.there_are_any and debts.number_gathered() >= 2:
+          % if debts.number_gathered() >= 2:
           ${ thousands(debts[1].payment, show_decimals=True) }
           % endif
       - "creditor_name_3": |
-          % if debts.there_are_any and debts.number_gathered() >= 3:
+          % if debts.number_gathered() >= 3:
           ${ debts[2].name.text }
           % endif
       - "creditor_description_3": |
-          % if debts.there_are_any and debts.number_gathered() >= 3:
+          % if debts.number_gathered() >= 3:
           ${ debts[2].description }
           % endif
       - "creditor_amount_3": |
-          % if debts.there_are_any and debts.number_gathered() >= 3:
+          % if debts.number_gathered() >= 3:
           ${ thousands(debts[2].amount, show_decimals=True) }
           % endif
       - "creditor_payment_3": |
-          % if debts.there_are_any and debts.number_gathered() >= 3:
+          % if debts.number_gathered() >= 3:
           ${ thousands(debts[2].payment, show_decimals=True) }
           % endif
       - "creditor_addendum_yes": ${ debts.number_gathered() > 6 }
       - "total_aditional_debts": |
-          % if debts.there_are_any and debts.number_gathered() >= 7:
+          % if debts.number_gathered() >= 7:
           ${ thousands(sum(y.payment for y in debts[6:]), show_decimals=True) }
           % endif
       - "total_debt_payments": |
           % if debts.there_are_any:
           ${ thousands(sum(y.payment for y in debts), show_decimals=True) }
           % endif
-      # 15a Cash Assets
+      # 15 Assets - Cash/bank accounts
       - "cash_bank_name_1": |
           % if cash.there_are_any:
           ${ cash[0].name.text }
@@ -2881,43 +3648,608 @@ attachment:
           ${ thousands(cash[0].balance, show_decimals=True) }
           % endif
       - "cash_bank_name_2": |
-          % if cash.there_are_any and cash.number_gathered() >= 2:
+          % if cash.number_gathered() >= 2:
           ${ cash[1].name.text }
           % endif
       - "cash_account_name_2": |
-          % if cash.there_are_any and cash.number_gathered() >= 2:
+          % if cash.number_gathered() >= 2:
           ${ cash[1].account }
           % endif
       - "cash_account_type_2": |
-          % if cash.there_are_any and cash.number_gathered() >= 2:
+          % if cash.number_gathered() >= 2:
           ${ cash[1].type }
           % endif
       - "cash_balance_2": |
-          % if cash.there_are_any and cash.number_gathered() >= 2:
+          % if cash.number_gathered() >= 2:
           ${ thousands(cash[1].balance, show_decimals=True) }
           % endif
       - "cash_bank_name_3": |
-          % if cash.there_are_any and cash.number_gathered() >= 3:
+          % if cash.number_gathered() >= 3:
           ${ cash[2].name.text }
           % endif
       - "cash_account_name_3": |
-          % if cash.there_are_any and cash.number_gathered() >= 3:
+          % if cash.number_gathered() >= 3:
           ${ cash[2].account }
           % endif
       - "cash_account_type_3": |
-          % if cash.there_are_any and cash.number_gathered() >= 3:
+          % if cash.number_gathered() >= 3:
           ${ cash[2].type }
           % endif
       - "cash_balance_3": |
-          % if cash.there_are_any and cash.number_gathered() >= 3:
+          % if cash.number_gathered() >= 3:
           ${ thousands(cash[2].balance, show_decimals=True) }
           % endif
       - "cash_addendum_yes": ${ cash.number_gathered() > 3 }
-
-
-
-
-
+      # 15 Assets - Certificate of Deposit
+      - "cd_bank_name_1": |
+          % if cert_deposit.there_are_any:
+          ${ cert_deposit[0].name.text }
+          % endif
+      - "cd_account_name_1": |
+          % if cert_deposit.there_are_any:
+          ${ cert_deposit[0].account }
+          % endif
+      - "cd_balance_1": |
+          % if cert_deposit.there_are_any:
+          ${ thousands(cert_deposit[0].balance, show_decimals=True) }
+          % endif
+      - "cd_bank_name_2": |
+          % if cert_deposit.number_gathered() >= 2:
+          ${ cert_deposit[1].name.text }
+          % endif
+      - "cd_account_name_2": |
+          % if cert_deposit.number_gathered() >= 2:
+          ${ cert_deposit[1].account }
+          % endif
+      - "cd_balance_2": |
+          % if cert_deposit.number_gathered() >= 2:
+          ${ thousands(cert_deposit[1].balance, show_decimals=True) }
+          % endif
+      - "cd_bank_name_3": |
+          % if cert_deposit.number_gathered() >= 3:
+          ${ cert_deposit[2].name.text }
+          % endif
+      - "cd_account_name_3": |
+          % if cert_deposit.number_gathered() >= 3:
+          ${ cert_deposit[2].account }
+          % endif
+      - "cd_balance_3": |
+          % if cert_deposit.number_gathered() >= 3:
+          ${ thousands(cert_deposit[2].balance, show_decimals=True) }
+          % endif
+      - "cd_addendum_yes": ${ cert_deposit.number_gathered() > 3 }
+      # 15 Assets - Money cash/card/apps
+      - "money_card_1": |
+          % if money.there_are_any:
+          ${ money[0].name.text }
+          % endif
+      - "money_holder_1": |
+          % if money.there_are_any:
+          ${ money[0].holder }
+          % endif
+      - "money_balance_1": |
+          % if money.there_are_any:
+          ${ thousands(money[0].balance, show_decimals=True) }
+          % endif
+      - "money_card_2": |
+          % if money.number_gathered() >= 2:
+          ${ money[1].name.text }
+          % endif
+      - "money_holder_2": |
+          % if money.number_gathered() >= 2:
+          ${ money[1].holder }
+          % endif
+      - "money_balance_2": |
+          % if money.number_gathered() >= 2:
+          ${ thousands(money[1].balance, show_decimals=True) }
+          % endif
+      - "money_card_3": |
+          % if money.number_gathered() >= 3:
+          ${ money[2].name.text }
+          % endif
+      - "money_holder_3": |
+          % if money.number_gathered() >= 3:
+          ${ money[2].holder }
+          % endif
+      - "money_balance_3": |
+          % if money.number_gathered() >= 3:
+          ${ thousands(money[2].balance, show_decimals=True) }
+          % endif
+      - "money_addendum_yes": ${ money.number_gathered() > 3 }
+      # 15 Assets - Investments
+      - "investment_name_1": |
+          % if investments.there_are_any:
+          ${ investments[0].name.text }
+          % endif
+      - "investment_shares_1": |
+          % if investments.there_are_any:
+          ${ investments[0].shares }
+          % endif
+      - "investment_type_1": |
+          % if investments.there_are_any:
+          ${ investments[0].type }
+          % endif
+      - "investment_owner_1": |
+          % if investments.there_are_any:
+          ${ investments[0].owner }
+          % endif
+      - "investment_fmv_1": |
+          % if investments.there_are_any:
+          ${ thousands(investments[0].fmv, show_decimals=True) }
+          % endif
+      - "investment_name_2": |
+          % if investments.number_gathered() >= 2:
+          ${ investments[1].name.text }
+          % endif
+      - "investment_shares_2": |
+          % if investments.number_gathered() >= 2:
+          ${ investments[1].shares }
+          % endif
+      - "investment_type_2": |
+          % if investments.number_gathered() >= 2:
+          ${ investments[1].type }
+          % endif
+      - "investment_owner_2": |
+          % if investments.number_gathered() >= 2:
+          ${ investments[1].owner }
+          % endif
+      - "investment_fmv_2": |
+          % if investments.number_gathered() >= 2:
+          ${ thousands(investments[1].fmv, show_decimals=True) }
+          % endif
+      - "investment_name_3": |
+          % if investments.number_gathered() >= 2:
+          ${ investments[2].name.text }
+          % endif
+      - "investment_shares_3": |
+          % if investments.number_gathered() >= 2:
+          ${ investments[2].shares }
+          % endif
+      - "investment_type_3": |
+          % if investments.number_gathered() >= 2:
+          ${ investments[2].type }
+          % endif
+      - "investment_owner_3": |
+          % if investments.number_gathered() >= 2:
+          ${ investments[2].owner }
+          % endif
+      - "investment_fmv_3": |
+          % if investments.number_gathered() >= 3:
+          ${ thousands(investments[2].fmv, show_decimals=True) }
+          % endif
+      - "investment_addendum_yes": ${ investments.number_gathered() > 3 }
+      # 15 Assets - Investment securities
+      - "securities_description_1": |
+          % if securities.there_are_any:
+          ${ securities[0].name.text }
+          % endif
+      - "securities_owner_1": |
+          % if securities.there_are_any:
+          ${ securities[0].owner }
+          % endif
+      - "securities_balance_1": |
+          % if securities.there_are_any:
+          ${ thousands(securities[0].balance, show_decimals=True) }
+          % endif
+      - "securities_description_2": |
+          % if securities.number_gathered() >= 2:
+          ${ securities[1].name.text }
+          % endif
+      - "securities_owner_2": |
+          % if securities.number_gathered() >= 2:
+          ${ securities[1].owner }
+          % endif
+      - "securities_balance_2": |
+          % if securities.number_gathered() >= 2:
+          ${ thousands(securities[1].balance, show_decimals=True) }
+          % endif
+      - "securities_description_3": |
+          % if securities.number_gathered() >= 3:
+          ${ securities[2].name.text }
+          % endif
+      - "securities_owner_3": |
+          % if securities.number_gathered() >= 3:
+          ${ securities[2].owner }
+          % endif
+      - "securities_balance_3": |
+          % if securities.number_gathered() >= 3:
+          ${ thousands(securities[2].balance, show_decimals=True) }
+          % endif
+      - "securities_addendum_yes": ${ securities.number_gathered() > 3 }
+      # 15 Assets - Real Estate
+      - "real_estate_address_1": |
+          % if real_estate.there_are_any:
+          ${ real_estate[0].address.on_one_line() }
+          % endif
+      - "real_estate_title_1": |
+          % if real_estate.there_are_any:
+          ${ real_estate[0].name.text }
+          % endif
+      - "real_estate_fmv_1": |
+          % if real_estate.there_are_any:
+          ${ thousands(real_estate[0].balance, show_decimals=True) }
+          % endif
+      - "real_estate_balance_1": |
+          % if real_estate.there_are_any:
+          ${ thousands(real_estate[0].balance, show_decimals=True) }
+          % endif
+      - "real_estate_address_2": |
+          % if real_estate.number_gathered() >= 2:
+          ${ real_estate[1].address.on_one_line() }
+          % endif
+      - "real_estate_title_2": |
+          % if real_estate.number_gathered() >= 2:
+          ${ real_estate[1].name.text }
+          % endif
+      - "real_estate_fmv_2": |
+          % if real_estate.number_gathered() >= 2:
+          ${ thousands(real_estate[1].balance, show_decimals=True) }
+          % endif
+      - "real_estate_balance_2": |
+          % if real_estate.number_gathered() >= 2:
+          ${ thousands(real_estate[1].balance, show_decimals=True) }
+          % endif
+      - "real_estate_address_3": |
+          % if real_estate.number_gathered() >= 3:
+          ${ real_estate[2].address.on_one_line() }
+          % endif
+      - "real_estate_title_3": |
+          % if real_estate.number_gathered() >= 3:
+          ${ real_estate[2].name.text }
+          % endif
+      - "real_estate_fmv_3": |
+          % if real_estate.number_gathered() >= 3:
+          ${ thousands(real_estate[2].fmv, show_decimals=True) }
+          % endif
+      - "real_estate_balance_3": |
+          % if real_estate.number_gathered() >= 3:
+          ${ thousands(real_estate[2].balance, show_decimals=True) }
+          % endif
+      - "real_estate_addendum_yes": ${ real_estate.number_gathered() > 3 }
+      # 15 Assets - Motor Vehicles
+      - "motor_vehicle_info_1": |
+          % if motor_vehicle.there_are_any:
+          ${ motor_vehicle[0].year } ${ motor_vehicle[0].make } ${ motor_vehicle[0].model }
+          % endif
+      - "motor_vehicle_title_1": |
+          % if motor_vehicle.there_are_any:
+          ${ motor_vehicle[0].name.text }
+          % endif
+      - "motor_vehicle_fmv_1": |
+          % if motor_vehicle.there_are_any:
+          ${ thousands(motor_vehicle[0].fmv, show_decimals=True) }
+          % endif
+      - "motor_vehicle_balance_1": |
+          % if motor_vehicle.there_are_any:
+          ${ thousands(motor_vehicle[0].balance, show_decimals=True) }
+          % endif
+      - "motor_vehicle_info_2": |
+          % if motor_vehicle.number_gathered() >= 2:
+          ${ motor_vehicle[1].year } ${ motor_vehicle[1].make } ${ motor_vehicle[1].model }
+          % endif
+      - "motor_vehicle_title_2": |
+          % if motor_vehicle.number_gathered() >= 2:
+          ${ motor_vehicle[1].name.text }
+          % endif
+      - "motor_vehicle_fmv_2": |
+          % if motor_vehicle.number_gathered() >= 2:
+          ${ thousands(motor_vehicle[1].fmv, show_decimals=True) }
+          % endif
+      - "motor_vehicle_balance_2": |
+          % if motor_vehicle.number_gathered() >= 2:
+          ${ thousands(motor_vehicle[1].balance, show_decimals=True) }
+          % endif
+      - "motor_vehicle_info_3": |
+          % if motor_vehicle.number_gathered() >= 3:
+          ${ motor_vehicle[2].year } ${ motor_vehicle[2].make } ${ motor_vehicle[2].model }
+          % endif
+      - "motor_vehicle_title_3": |
+          % if motor_vehicle.number_gathered() >= 3:
+          ${ motor_vehicle[2].name.text }
+          % endif
+      - "motor_vehicle_fmv_3": |
+          % if motor_vehicle.number_gathered() >= 3:
+          ${ thousands(motor_vehicle[2].fmv, show_decimals=True) }
+          % endif
+      - "motor_vehicle_balance_3": |
+          % if motor_vehicle.number_gathered() >= 3:
+          ${ thousands(motor_vehicle[2].balance, show_decimals=True) }
+          % endif
+      - "motor_vehicle_info_4": |
+          % if motor_vehicle.number_gathered() >= 4:
+          ${ motor_vehicle[3].year } ${ motor_vehicle[3].make } ${ motor_vehicle[3].model }
+          % endif
+      - "motor_vehicle_title_4": |
+          % if motor_vehicle.number_gathered() >= 4:
+          ${ motor_vehicle[3].name.text }
+          % endif
+      - "motor_vehicle_fmv_4": |
+          % if motor_vehicle.number_gathered() >= 4:
+          ${ thousands(motor_vehicle[3].fmv, show_decimals=True) }
+          % endif
+      - "motor_vehicle_balance_4": |
+          % if motor_vehicle.number_gathered() >= 4:
+          ${ thousands(motor_vehicle[3].balance, show_decimals=True) }
+          % endif
+      - "motor_vehicle_addendum_yes": ${ motor_vehicle.number_gathered() > 4 }
+      # 15 Assets - Business interests
+      - "business_interests_name_1": |
+          % if business_interests.there_are_any:
+          ${ business_interests[0].name.text }
+          % endif
+      - "business_interests_type_1": |
+          % if business_interests.there_are_any:
+          ${ business_interests[0].name.text }
+          % endif
+      - "business_interests_ownership_1": |
+          % if business_interests.there_are_any:
+          ${ nice_number(business_interests[0].ownership, use_word=False) }
+          % endif
+      - "business_interests_fmv_1": |
+          % if business_interests.there_are_any:
+          ${ thousands(business_interests[0].fmv, show_decimals=True) }
+          % endif
+      - "business_interests_name_2": |
+          % if business_interests.number_gathered() >= 2:
+          ${ business_interests[1].name.text }
+          % endif
+      - "business_interests_type_2": |
+          % if business_interests.number_gathered() >= 2:
+          ${ business_interests[1].type }
+          % endif
+      - "business_interests_ownership_2": |
+          % if business_interests.number_gathered() >= 2:
+          ${ nice_number(business_interests[1].ownership, use_word=False) }
+          % endif
+      - "business_interests_fmv_2": |
+          % if business_interests.number_gathered() >= 2:
+          ${ thousands(business_interests[1].fmv, show_decimals=True) }
+          % endif
+      - "business_interests_name_3": |
+          % if business_interests.number_gathered() >= 3:
+          ${ business_interests[2].name.text }
+          % endif
+      - "business_interests_type_3": |
+          % if business_interests.number_gathered() >= 3:
+          ${ business_interests[2].type }
+          % endif
+      - "business_interests_ownership_3": |
+          % if business_interests.number_gathered() >= 3:
+          ${ nice_number(business_interests[2].ownership, use_word=False) }
+          % endif
+      - "business_interests_fmv_3": |
+          % if business_interests.number_gathered() >= 3:
+          ${ thousands(business_interests[2].fmv, show_decimals=True) }
+          % endif
+      - "business_interests_addendum_yes": ${ business_interests.number_gathered() > 3 }
+      # 15 Assets - Life insurance
+      - "life_insurance_company_1": |
+          % if life_insurance.there_are_any:
+          ${ life_insurance[0].name.text }
+          % endif
+      - "life_insurance_type_1": |
+          % if life_insurance.there_are_any:
+          ${ life_insurance[0].type }
+          % endif
+      - "life_insurance_benefit_1": |
+          % if life_insurance.there_are_any:
+          ${ thousands(life_insurance[0].benefit, show_decimals=True) }
+          % endif
+      - "life_insurance_value_1": |
+          % if life_insurance.there_are_any:
+          ${ thousands(life_insurance[0].value, show_decimals=True) }
+          % endif
+      - "life_insurance_company_2": |
+          % if life_insurance.number_gathered() >= 2:
+          ${ life_insurance[1].name.text }
+          % endif
+      - "life_insurance_type_2": |
+          % if life_insurance.number_gathered() >= 2:
+          ${ life_insurance[1].type }
+          % endif
+      - "life_insurance_benefit_2": |
+          % if life_insurance.number_gathered() >= 2:
+          ${ thousands(life_insurance[1].benefit, show_decimals=True) }
+          % endif
+      - "life_insurance_value_2": |
+          % if life_insurance.number_gathered() >= 2:
+          ${ thousands(life_insurance[1].value, show_decimals=True) }
+          % endif
+      - "life_insurance_company_3": |
+          % if life_insurance.number_gathered() >= 3:
+          ${ life_insurance[2].name.text }
+          % endif
+      - "life_insurance_type_3": |
+          % if life_insurance.number_gathered() >= 3:
+          ${ life_insurance[2].type }
+          % endif
+      - "life_insurance_benefit_3": |
+          % if life_insurance.number_gathered() >= 3:
+          ${ thousands(life_insurance[2].benefit, show_decimals=True) }
+          % endif
+      - "life_insurance_value_3": |
+          % if life_insurance.number_gathered() >= 3:
+          ${ thousands(life_insurance[2].value, show_decimals=True) }
+          % endif
+      - "life_insurance_addendum_yes": ${ life_insurance.number_gathered() > 3 }
+      # 15 Assets - retirement benefits
+      - "retirement_plan_1": |
+          % if retirement_plan.there_are_any:
+          ${ retirement_plan[0].name.text }
+          % endif
+      - "retirement_type_1": |
+          % if retirement_plan.there_are_any:
+          ${ retirement_plan[0].name.text }
+          % endif
+      - "retirement_balance_1": |
+          % if retirement_plan.there_are_any:
+          ${ thousands(retirement_plan[0].balance, show_decimals=True) }
+          % endif
+      - "retirement_plan_2": |
+          % if retirement_plan.number_gathered() >= 2:
+          ${ retirement_plan[1].name.text }
+          % endif
+      - "retirement_type_2": |
+          % if retirement_plan.number_gathered() >= 2:
+          ${ retirement_plan[1].name.text }
+          % endif
+      - "retirement_balance_2": |
+          % if retirement_plan.number_gathered() >= 2:
+          ${ thousands(retirement_plan[1].balance, show_decimals=True) }
+          % endif
+      - "retirement_plan_3": |
+          % if retirement_plan.number_gathered() >= 3:
+          ${ retirement_plan[2].name.text }
+          % endif
+      - "retirement_type_3": |
+          % if retirement_plan.number_gathered() >= 3:
+          ${ retirement_plan[2].name.text }
+          % endif
+      - "retirement_balance_3": |
+          % if retirement_plan.number_gathered() >= 3:
+          ${ thousands(retirement_plan[2].balance, show_decimals=True) }
+          % endif
+      - "retirement_addendum_yes": ${ retirement_plan.number_gathered() > 3 }
+      # 15 Assets - valuable collectibles
+      - "collection_description_1": |
+          % if collection.there_are_any:
+          ${ collection[0].name.text }
+          % endif
+      - "collection_fmv_1": |
+          % if collection.there_are_any:
+          ${ thousands(collection[0].fmv, show_decimals=True) }
+          % endif
+      - "collection_description_2": |
+          % if collection.number_gathered() >= 2:
+          ${ collection[1].name.text }
+          % endif
+      - "collection_fmv_2": |
+          % if collection.number_gathered() >= 2:
+          ${ thousands(collection[1].fmv, show_decimals=True) }
+          % endif
+      - "collection_description_3": |
+          % if collection.number_gathered() >= 3:
+          ${ collection[2].name.text }
+          % endif
+      - "collection_fmv_3": |
+          % if collection.number_gathered() >= 3:
+          ${ thousands(collection[2].fmv, show_decimals=True) }
+          % endif
+      - "collection_addendum_yes": ${ collection.number_gathered() > 3 }
+      # 15 Assets - other personal property
+      - "other_property_description_1": |
+          % if other_property.there_are_any:
+          ${ other_property[0].name.text }
+          % endif
+      - "other_property_fmv_1": |
+          % if other_property.there_are_any:
+          ${ thousands(other_property[0].fmv, show_decimals=True) }
+          % endif
+      - "other_property_description_2": |
+          % if other_property.number_gathered() >= 2:
+          ${ other_property[1].name.text }
+          % endif
+      - "other_property_fmv_2": |
+          % if other_property.number_gathered() >= 2:
+          ${ thousands(other_property[1].fmv, show_decimals=True) }
+          % endif
+      - "other_property_description_3": |
+          % if other_property.number_gathered() >= 3:
+          ${ other_property[2].name.text }
+          % endif
+      - "other_property_fmv_3": |
+          % if other_property.number_gathered() >= 3:
+          ${ thousands(other_property[2].fmv, show_decimals=True) }
+          % endif
+      - "other_property_addendum_yes": ${ other_property.number_gathered() > 3 }
+      # 15 Assets - transfer/sale property
+      - "transfer_description_1": |
+          % if transfer.there_are_any:
+          ${ transfer[0].name.text }
+          % endif
+      - "transfer_sold_1": |
+          % if transfer.there_are_any:
+          ${ transfer[0].sold }
+          % endif
+      - "transfer_date_1": |
+          % if transfer.there_are_any:
+          ${ transfer[0].date.format('MM/dd/yyyy') }
+          % endif
+      - "transfer_amount_1": |
+          % if transfer.there_are_any:
+          ${ thousands(transfer[0].amount, show_decimals=True) }
+          % endif
+      - "transfer_description_2": |
+          % if transfer.number_gathered() >= 2:
+          ${ transfer[1].name.text }
+          % endif
+      - "transfer_sold_2": |
+          % if transfer.number_gathered() >= 2:
+          ${ transfer[1].sold }
+          % endif
+      - "transfer_date_2": |
+          % if transfer.number_gathered() >= 2:
+          ${ transfer[1].date.format('MM/dd/yyyy') }
+          % endif
+      - "transfer_amount_2": |
+          % if transfer.number_gathered() >= 2:
+          ${ thousands(transfer[1].amount, show_decimals=True) }
+          % endif
+      - "transfer_description_3": |
+          % if transfer.number_gathered() >= 3:
+          ${ transfer[2].name.text }
+          % endif
+      - "transfer_sold_3": |
+          % if transfer.number_gathered() >= 3:
+          ${ transfer[2].sold }
+          % endif
+      - "transfer_date_3": |
+          % if transfer.number_gathered() >= 3:
+          ${ transfer[2].date.format('MM/dd/yyyy') }
+          % endif
+      - "transfer_amount_3": |
+          % if transfer.number_gathered() >= 3:
+          ${ thousands(transfer[2].amount, show_decimals=True) }
+          % endif
+      - "transfer_addendum_yes": ${ transfer.number_gathered() > 3 }
+      # 16 Lawsuits and Claims
+      - "lawsuit_number_1": |
+          % if lawsuits.there_are_any:
+          ${ lawsuits[0].case }
+          % endif
+      - "lawsuit_date_1":  |
+          % if lawsuits.there_are_any:
+          ${ lawsuits[0].date.format('MM/dd/yyyy') }
+          % endif
+      - "lawsuit_amount_1": |
+          % if lawsuits.there_are_any:
+          ${ thousands(lawsuits[0].amount, show_decimals=True) }
+          % endif
+      - "lawsuit_number_2": |
+          % if lawsuits.number_gathered() >= 2:
+          ${ lawsuits[1].case }
+          % endif
+      - "lawsuit_date_2":  |
+          % if lawsuits.number_gathered() >= 2:
+          ${ lawsuits[1].date.format('MM/dd/yyyy') }
+          % endif
+      - "lawsuit_amount_2": |
+          % if lawsuits.number_gathered() >= 2:
+          ${ thousands(lawsuits[1].amount, show_decimals=True) }
+          % endif
+      - "lawsuit_number_3": |
+          % if lawsuits.number_gathered() >= 3:
+          ${ lawsuits[2].case }
+          % endif
+      - "lawsuit_date_3":  |
+          % if lawsuits.number_gathered() >= 3:
+          ${ lawsuits[2].date.format('MM/dd/yyyy') }
+          % endif
+      - "lawsuit_amount_3": |
+          % if lawsuits.number_gathered() >= 3:
+          ${ thousands(lawsuits[2].amount, show_decimals=True) }
+          % endif
+      - "lawsuit_addendum_yes":  ${ lawsuits.number_gathered() > 3 }
       # 17 Income Tax Refund/Owed Amounts
       - "taxes_year1": |
           % if taxes_filed:
@@ -2992,6 +4324,10 @@ attachment:
           ${ thousands(taxes[1].state_owed, show_decimals=True) }
           % endif
 
+      - "users_signature": |
+          ${ "/s/ " + users[0].name.full(middle="full") if e_signature else ''  }
+      - "users_signed_date": ${ today() if e_signature else '' }
+
 ---
 ############ FA EMPLOYMENT/BUSINESS INCOME ADDENDUM #############
 objects:
@@ -3052,7 +4388,7 @@ attachment:
           % endif
       - "employer_address": |
           % if employment[i].type == "employed":
-          ${ employment[i].address.line_one() }
+          ${ employment[i].address.line_one(bare=True) }
           % endif
       - "employer_address2": |
           % if employment[i].type == "employed":
@@ -3080,7 +4416,7 @@ attachment:
           % endif
       - "income_gross": |
           % if employment[i].type == "employed":
-          ${ nice_number(employment[i].gross_income) }
+          ${ thousands(employment[i].gross_income, show_decimals=True) }
           % endif
       - "income_date": |
           % if employment[i].type == "employed":
@@ -3099,7 +4435,7 @@ attachment:
           % endif
       - "business_address": |
           % if employment[i].type != "employed":
-          ${ employment[i].address.line_one() }
+          ${ employment[i].address.line_one(bare=True) }
           % endif
       - "business_address2": |
           % if employment[i].type != "employed":
@@ -3107,19 +4443,19 @@ attachment:
           % endif
       - "business_gross_last_year": |
           % if employment[i].type != "employed":
-          ${ nice_number(employment[i].income_last_year) }
+          ${ thousands(employment[i].income_last_year, show_decimals=True) }
           % endif
       - "business_gross_current_year": |
           % if employment[i].type != "employed":
-          ${ nice_number(employment[i].income_current_year) }
+          ${ thousands(employment[i].income_current_year, show_decimals=True) }
           % endif           
       - "business_expense_last_year": |
           % if employment[i].type != "employed":
-          ${ nice_number(employment[i].expenses_last_year) }
+          ${ thousands(employment[i].expenses_last_year, show_decimals=True) }
           % endif
       - "business_expense_current_year": |
           % if employment[i].type != "employed":
-          ${ nice_number(employment[i].expenses_current_year) }
+          ${ thousands(employment[i].expenses_current_year, show_decimals=True) }
           % endif
       - "business_meals": |
           % if employment[i].type != "employed":
@@ -3285,7 +4621,7 @@ attachment:
           ${ insurance[i].paid == "other" }
           % endif
       - "insurance_paid_other_description":   |
-          % if insurance.there_are_any:
+          % if insurance.there_are_any and insurance[i].paid == "other":
           ${ insurance[i].other_description }
           % endif
       - "cost_insurance_children":   |
@@ -3317,752 +4653,4 @@ attachment:
           % if insurance.number_gathered() > 2:
           ${ insurance.number_gathered() - 1 }
           % endif 
----
-############ FA ADDITIONAL DEBTS #############
-objects:
-  - additional_debts: ALDocument.using(title="FA Additional Debts", filename="FA_additional_debts.pdf", has_addendum=False)
----
-code: |
-  additional_debts.enabled = debts.number_gathered() >= 7
----
-attachment:
-  name: additional_debts
-  variable name: additional_debts[i]
-  filename: additional_debts
-  skip undefined: True
-  editable: False
-  pdf template file: FA_additional_debts.pdf
-  fields:
-    - "county_name": ${ case_county }
-    - "case_number": ${ case_number }
-    - "pre-judgment": ${ filing_status == "pre_judgment" }
-    - "post-judgment": ${ filing_status == "post_judgment" }
-    - "petitioner_name": |
-        % if party_label == 'petitioner':
-        ${ users[0].name.full(middle='full') }
-        % else:
-        ${ other_parties[0].name.full(middle='full') }
-        % endif
-    - "respondent_name": |
-        % if opposing_label == 'respondent':
-        ${ other_parties[0].name.full(middle='full') }
-        % else:
-        ${ users[0].name.full(middle='full') }
-        % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
-
-    - "creditor_name_7": |
-        % if debts.there_are_any and debts.number_gathered() >= 7:
-        ${ debts[6].name.text }
-        % endif
-    - "creditor_description_7": |
-        % if debts.there_are_any and debts.number_gathered() >= 7:
-        ${ debts[6].description }
-        % endif
-    - "creditor_amount_7": |
-        % if debts.there_are_any and debts.number_gathered() >= 7:
-        ${ thousands(debts[6].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_7": |
-        % if debts.there_are_any  and debts.number_gathered() >= 7:
-        ${ thousands(debts[6].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_8": |
-        % if debts.there_are_any and debts.number_gathered() >= 8:
-        ${ debts[7].name.text }
-        % endif
-    - "creditor_description_8": |
-        % if debts.there_are_any and debts.number_gathered() >= 8:
-        ${ debts[7].description }
-        % endif
-    - "creditor_amount_8": |
-        % if debts.there_are_any and debts.number_gathered() >= 8:
-        ${ thousands(debts[7].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_8": |
-        % if debts.there_are_any and debts.number_gathered() >= 8:
-        ${ thousands(debts[7].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_9": |
-        % if debts.there_are_any and debts.number_gathered() >= 9:
-        ${ debts[8].name.text }
-        % endif
-    - "creditor_description_9": |
-        % if debts.there_are_any and debts.number_gathered() >= 9:
-        ${ debts[8].description }
-        % endif
-    - "creditor_amount_9": |
-        % if debts.there_are_any and debts.number_gathered() >= 9:
-        ${ thousands(debts[8].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_9": |
-        % if debts.there_are_any and debts.number_gathered() >= 9:
-        ${ thousands(debts[8].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_10": |
-        % if debts.there_are_any and debts.number_gathered() >= 10:
-        ${ debts[9].name.text }
-        % endif
-    - "creditor_description_10": |
-        % if debts.there_are_any and debts.number_gathered() >= 10:
-        ${ debts[9].description }
-        % endif
-    - "creditor_amount_10": |
-        % if debts.there_are_any and debts.number_gathered() >= 10:
-        ${ thousands(debts[9].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_10": |
-        % if debts.there_are_any and debts.number_gathered() >= 10:
-        ${ thousands(debts[9].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_11": |
-        % if debts.there_are_any and debts.number_gathered() >= 11:
-        ${ debts[10].name.text }
-        % endif
-    - "creditor_description_11": |
-        % if debts.there_are_any and debts.number_gathered() >= 11:
-        ${ debts[10].description }
-        % endif
-    - "creditor_amount_11": |
-        % if debts.there_are_any and debts.number_gathered() >= 11:
-        ${ thousands(debts[10].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_11": |
-        % if debts.there_are_any and debts.number_gathered() >= 11:
-        ${ thousands(debts[10].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_12": |
-        % if debts.there_are_any and debts.number_gathered() >= 12:
-        ${ debts[11].name.text }
-        % endif
-    - "creditor_description_12": |
-        % if debts.there_are_any and debts.number_gathered() >= 12:
-        ${ debts[11].description }
-        % endif
-    - "creditor_amount_12": |
-        % if debts.there_are_any and debts.number_gathered() >= 12:
-        ${ thousands(debts[11].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_12": |
-        % if debts.there_are_any and debts.number_gathered() >= 12:
-        ${ thousands(debts[11].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_13": |
-        % if debts.there_are_any and debts.number_gathered() >= 13:
-        ${ debts[12].name.text }
-        % endif
-    - "creditor_description_13": |
-        % if debts.there_are_any and debts.number_gathered() >= 13:
-        ${ debts[12].description }
-        % endif
-    - "creditor_amount_13": |
-        % if debts.there_are_any and debts.number_gathered() >= 13:
-        ${ thousands(debts[12].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_13": |
-        % if debts.there_are_any and debts.number_gathered() >= 13:
-        ${ thousands(debts[12].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_14": |
-        % if debts.there_are_any and debts.number_gathered() >= 14:
-        ${ debts[13].name.text }
-        % endif
-    - "creditor_description_14": |
-        % if debts.there_are_any and debts.number_gathered() >= 14:
-        ${ debts[13].description }
-        % endif
-    - "creditor_amount_14": |
-        % if debts.there_are_any and debts.number_gathered() >= 14:
-        ${ thousands(debts[13].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_14": |
-        % if debts.there_are_any and debts.number_gathered() >= 14:
-        ${ thousands(debts[13].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_15": |
-        % if debts.there_are_any and debts.number_gathered() >= 15:
-        ${ debts[14].name.text }
-        % endif
-    - "creditor_description_15": |
-        % if debts.there_are_any and debts.number_gathered() >= 15:
-        ${ debts[14].description }
-        % endif
-    - "creditor_amount_15": |
-        % if debts.there_are_any and debts.number_gathered() >= 15:
-        ${ thousands(debts[14].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_15": |
-        % if debts.there_are_any and debts.number_gathered() >= 15:
-        ${ thousands(debts[14].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_16": |
-        % if debts.there_are_any and debts.number_gathered() >= 16:
-        ${ debts[15].name.text }
-        % endif
-    - "creditor_description_16": |
-        % if debts.there_are_any and debts.number_gathered() >= 16:
-        ${ debts[15].description }
-        % endif
-    - "creditor_amount_16": |
-        % if debts.there_are_any and debts.number_gathered() >= 16:
-        ${ thousands(debts[15].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_16": |
-        % if debts.there_are_any and debts.number_gathered() >= 16:
-        ${ thousands(debts[15].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_17": |
-        % if debts.there_are_any and debts.number_gathered() >= 17:
-        ${ debts[16].name.text }
-        % endif
-    - "creditor_description_17": |
-        % if debts.there_are_any and debts.number_gathered() >= 17:
-        ${ debts[16].description }
-        % endif
-    - "creditor_amount_17": |
-        % if debts.there_are_any and debts.number_gathered() >= 17:
-        ${ thousands(debts[16].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_17": |
-        % if debts.there_are_any and debts.number_gathered() >= 17:
-        ${ thousands(debts[16].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_18": |
-        % if debts.there_are_any and debts.number_gathered() >= 18:
-        ${ debts[17].name.text }
-        % endif
-    - "creditor_description_18": |
-        % if debts.there_are_any and debts.number_gathered() >= 18:
-        ${ debts[17].description }
-        % endif
-    - "creditor_amount_18": |
-        % if debts.there_are_any and debts.number_gathered() >= 18:
-        ${ thousands(debts[17].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_18": |
-        % if debts.there_are_any and debts.number_gathered() >= 18:
-        ${ thousands(debts[17].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_19": |
-        % if debts.there_are_any and debts.number_gathered() >= 19:
-        ${ debts[18].name.text }
-        % endif
-    - "creditor_description_19": |
-        % if debts.there_are_any and debts.number_gathered() >= 19:
-        ${ debts[18].description }
-        % endif
-    - "creditor_amount_19": |
-        % if debts.there_are_any and debts.number_gathered() >= 19:
-        ${ thousands(debts[18].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_19": |
-        % if debts.there_are_any and debts.number_gathered() >= 19:
-        ${ thousands(debts[18].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_20": |
-        % if debts.there_are_any and debts.number_gathered() >= 20:
-        ${ debts[19].name.text }
-        % endif
-    - "creditor_description_20": |
-        % if debts.there_are_any and debts.number_gathered() >= 20:
-        ${ debts[19].description }
-        % endif
-    - "creditor_amount_20": |
-        % if debts.there_are_any and debts.number_gathered() >= 20:
-        ${ thousands(debts[19].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_20": |
-        % if debts.there_are_any and debts.number_gathered() >= 20:
-        ${ thousands(debts[19].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_21": |
-        % if debts.there_are_any and debts.number_gathered() >= 21:
-        ${ debts[20].name.text }
-        % endif
-    - "creditor_description_21": |
-        % if debts.there_are_any and debts.number_gathered() >= 21:
-        ${ debts[20].description }
-        % endif
-    - "creditor_amount_21": |
-        % if debts.there_are_any and debts.number_gathered() >= 21:
-        ${ thousands(debts[20].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_21": |
-        % if debts.there_are_any and debts.number_gathered() >= 21:
-        ${ thousands(debts[20].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_22": |
-        % if debts.there_are_any and debts.number_gathered() >= 22:
-        ${ debts[21].name.text }
-        % endif
-    - "creditor_description_22": |
-        % if debts.there_are_any and debts.number_gathered() >= 22:
-        ${ debts[21].description }
-        % endif
-    - "creditor_amount_22": |
-        % if debts.there_are_any and debts.number_gathered() >= 22:
-        ${ thousands(debts[21].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_22": |
-        % if debts.there_are_any and debts.number_gathered() >= 22:
-        ${ thousands(debts[21].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_23": |
-        % if debts.there_are_any and debts.number_gathered() >= 23:
-        ${ debts[22].name.text }
-        % endif
-    - "creditor_description_23": |
-        % if debts.there_are_any and debts.number_gathered() >= 23:
-        ${ debts[22].description }
-        % endif
-    - "creditor_amount_23": |
-        % if debts.there_are_any and debts.number_gathered() >= 23:
-        ${ thousands(debts[22].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_23": |
-        % if debts.there_are_any and debts.number_gathered() >= 23:
-        ${ thousands(debts[22].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_24": |
-        % if debts.there_are_any and debts.number_gathered() >= 24:
-        ${ debts[23].name.text }
-        % endif
-    - "creditor_description_24": |
-        % if debts.there_are_any and debts.number_gathered() >= 24:
-        ${ debts[23].description }
-        % endif
-    - "creditor_amount_24": |
-        % if debts.there_are_any and debts.number_gathered() >= 24:
-        ${ thousands(debts[23].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_24": |
-        % if debts.there_are_any and debts.number_gathered() >= 24:
-        ${ thousands(debts[23].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_25": |
-        % if debts.there_are_any and debts.number_gathered() >= 25:
-        ${ debts[24].name.text }
-        % endif
-    - "creditor_description_25": |
-        % if debts.there_are_any and debts.number_gathered() >= 25:
-        ${ debts[24].description }
-        % endif
-    - "creditor_amount_25": |
-        % if debts.there_are_any and debts.number_gathered() >= 25:
-        ${ thousands(debts[24].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_25": |
-        % if debts.there_are_any and debts.number_gathered() >= 25:
-        ${ thousands(debts[24].payment, show_decimals=True) }
-        % endif
-    - "creditor_name_26": |
-        % if debts.there_are_any and debts.number_gathered() == 26:
-        ${ debts[25].name.text }
-        % endif
-    - "creditor_description_26": |
-        % if debts.there_are_any and debts.number_gathered() == 26:
-        ${ debts[25].description }
-        % endif
-    - "creditor_amount_26": |
-        % if debts.there_are_any and debts.number_gathered() == 26:
-        ${ thousands(debts[25].amount, show_decimals=True) }
-        % endif
-    - "creditor_payment_26": |
-        % if debts.there_are_any and debts.number_gathered() == 26:
-        ${ thousands(debts[25].payment, show_decimals=True) }
-        % endif
-    - "total_aditional_debts": |
-        % if debts.there_are_any and debts.number_gathered() >= 7:
-        ${ thousands(sum(y.payment for y in debts[6:]), show_decimals=True) }
-        % endif
-
----
-############ FA ADDITIONAL CASH #############
-objects:
-  - additional_cash: ALDocument.using(title="FA Additional Cash", filename="FA_additional_cash.pdf", has_addendum=False)
----
-code: |
-  additional_cash.enabled = cash.number_gathered() >= 4
----
-attachment:
-  name: additional_cash
-  variable name: additional_cash[i]
-  filename: additional_cash
-  skip undefined: True
-  editable: False
-  pdf template file: FA_additional_cash.pdf
-  fields:
-    - "county_name": ${ case_county }
-    - "case_number": ${ case_number }
-    - "pre-judgment": ${ filing_status == "pre_judgment" }
-    - "post-judgment": ${ filing_status == "post_judgment" }
-    - "petitioner_name": |
-        % if party_label == 'petitioner':
-        ${ users[0].name.full(middle='full') }
-        % else:
-        ${ other_parties[0].name.full(middle='full') }
-        % endif
-    - "respondent_name": |
-        % if opposing_label == 'respondent':
-        ${ other_parties[0].name.full(middle='full') }
-        % else:
-        ${ users[0].name.full(middle='full') }
-        % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
-
-    - "cash_bank_name_4": |
-        % if cash.there_are_any and cash.number_gathered() >= 4:
-        ${ cash[3].name.text }
-        % endif
-    - "cash_account_name_4": |
-        % if cash.there_are_any and cash.number_gathered() >= 4:
-        ${ cash[3].account }
-        % endif
-    - "cash_account_type_4": |
-        % if cash.there_are_any and cash.number_gathered() >= 4:
-        ${ cash[3].type }
-        % endif
-    - "cash_balance_4": |
-        % if cash.there_are_any and cash.number_gathered() >= 4:
-        ${ thousands(cash[3].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_5": |
-        % if cash.there_are_any and cash.number_gathered() >= 5:
-        ${ cash[4].name.text }
-        % endif
-    - "cash_account_name_5": |
-        % if cash.there_are_any and cash.number_gathered() >= 5:
-        ${ cash[4].account }
-        % endif
-    - "cash_account_type_5": |
-        % if cash.there_are_any and cash.number_gathered() >= 5:
-        ${ cash[4].type }
-        % endif
-    - "cash_balance_5": |
-        % if cash.there_are_any and cash.number_gathered() >= 5:
-        ${ thousands(cash[4].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_6": |
-        % if cash.there_are_any and cash.number_gathered() >= 6:
-        ${ cash[5].name.text }
-        % endif
-    - "cash_account_name_6": |
-        % if cash.there_are_any and cash.number_gathered() >= 6:
-        ${ cash[5].account }
-        % endif
-    - "cash_account_type_6": |
-        % if cash.there_are_any and cash.number_gathered() >= 6:
-        ${ cash[5].type }
-        % endif
-    - "cash_balance_6": |
-        % if cash.there_are_any and cash.number_gathered() >= 6:
-        ${ thousands(cash[5].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_7": |
-        % if cash.there_are_any and cash.number_gathered() >= 7:
-        ${ cash[6].name.text }
-        % endif
-    - "cash_account_name_7": |
-        % if cash.there_are_any and cash.number_gathered() >= 7:
-        ${ cash[6].account }
-        % endif
-    - "cash_account_type_7": |
-        % if cash.there_are_any and cash.number_gathered() >= 7:
-        ${ cash[6].type }
-        % endif
-    - "cash_balance_7": |
-        % if cash.there_are_any and cash.number_gathered() >= 7:
-        ${ thousands(cash[6].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_8": |
-        % if cash.there_are_any and cash.number_gathered() >= 8:
-        ${ cash[7].name.text }
-        % endif
-    - "cash_account_name_8": |
-        % if cash.there_are_any and cash.number_gathered() >= 8:
-        ${ cash[7].account }
-        % endif
-    - "cash_account_type_8": |
-        % if cash.there_are_any and cash.number_gathered() >= 8:
-        ${ cash[7].type }
-        % endif
-    - "cash_balance_8": |
-        % if cash.there_are_any and cash.number_gathered() >= 8:
-        ${ thousands(cash[7].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_9": |
-        % if cash.there_are_any and cash.number_gathered() >= 9:
-        ${ cash[8].name.text }
-        % endif
-    - "cash_account_name_9": |
-        % if cash.there_are_any and cash.number_gathered() >= 9:
-        ${ cash[8].account }
-        % endif
-    - "cash_account_type_9": |
-        % if cash.there_are_any and cash.number_gathered() >= 9:
-        ${ cash[8].type }
-        % endif
-    - "cash_balance_9": |
-        % if cash.there_are_any and cash.number_gathered() >= 9:
-        ${ thousands(cash[8].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_10": |
-        % if cash.there_are_any and cash.number_gathered() >= 10:
-        ${ cash[9].name.text }
-        % endif
-    - "cash_account_name_10": |
-        % if cash.there_are_any and cash.number_gathered() >= 10:
-        ${ cash[9].account }
-        % endif
-    - "cash_account_type_10": |
-        % if cash.there_are_any and cash.number_gathered() >= 10:
-        ${ cash[9].type }
-        % endif
-    - "cash_balance_10": |
-        % if cash.there_are_any and cash.number_gathered() >= 10:
-        ${ thousands(cash[9].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_11": |
-        % if cash.there_are_any and cash.number_gathered() >= 11:
-        ${ cash[10].name.text }
-        % endif
-    - "cash_account_name_11": |
-        % if cash.there_are_any and cash.number_gathered() >= 11:
-        ${ cash[10].account }
-        % endif
-    - "cash_account_type_11": |
-        % if cash.there_are_any and cash.number_gathered() >= 11:
-        ${ cash[10].type }
-        % endif
-    - "cash_balance_11": |
-        % if cash.there_are_any and cash.number_gathered() >= 11:
-        ${ thousands(cash[10].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_12": |
-        % if cash.there_are_any and cash.number_gathered() >= 12:
-        ${ cash[11].name.text }
-        % endif
-    - "cash_account_name_12": |
-        % if cash.there_are_any and cash.number_gathered() >= 12:
-        ${ cash[11].account }
-        % endif
-    - "cash_account_type_12": |
-        % if cash.there_are_any and cash.number_gathered() >= 12:
-        ${ cash[11].type }
-        % endif
-    - "cash_balance_12": |
-        % if cash.there_are_any and cash.number_gathered() >= 12:
-        ${ thousands(cash[11].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_13": |
-        % if cash.there_are_any and cash.number_gathered() >= 13:
-        ${ cash[12].name.text }
-        % endif
-    - "cash_account_name_13": |
-        % if cash.there_are_any and cash.number_gathered() >= 13:
-        ${ cash[12].account }
-        % endif
-    - "cash_account_type_13": |
-        % if cash.there_are_any and cash.number_gathered() >= 13:
-        ${ cash[12].type }
-        % endif
-    - "cash_balance_13": |
-        % if cash.there_are_any and cash.number_gathered() >= 13:
-        ${ thousands(cash[12].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_14": |
-        % if cash.there_are_any and cash.number_gathered() >= 14:
-        ${ cash[13].name.text }
-        % endif
-    - "cash_account_name_14": |
-        % if cash.there_are_any and cash.number_gathered() >= 14:
-        ${ cash[13].account }
-        % endif
-    - "cash_account_type_14": |
-        % if cash.there_are_any and cash.number_gathered() >= 14:
-        ${ cash[13].type }
-        % endif
-    - "cash_balance_14": |
-        % if cash.there_are_any and cash.number_gathered() >= 14:
-        ${ thousands(cash[13].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_15": |
-        % if cash.there_are_any and cash.number_gathered() >= 15:
-        ${ cash[14].name.text }
-        % endif
-    - "cash_account_name_15": |
-        % if cash.there_are_any and cash.number_gathered() >= 15:
-        ${ cash[14].account }
-        % endif
-    - "cash_account_type_15": |
-        % if cash.there_are_any and cash.number_gathered() >= 15:
-        ${ cash[14].type }
-        % endif
-    - "cash_balance_15": |
-        % if cash.there_are_any and cash.number_gathered() >= 15:
-        ${ thousands(cash[14].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_16": |
-        % if cash.there_are_any and cash.number_gathered() >= 16:
-        ${ cash[15].name.text }
-        % endif
-    - "cash_account_name_16": |
-        % if cash.there_are_any and cash.number_gathered() >= 16:
-        ${ cash[15].account }
-        % endif
-    - "cash_account_type_16": |
-        % if cash.there_are_any and cash.number_gathered() >= 16:
-        ${ cash[15].type }
-        % endif
-    - "cash_balance_16": |
-        % if cash.there_are_any and cash.number_gathered() >= 16:
-        ${ thousands(cash[15].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_17": |
-        % if cash.there_are_any and cash.number_gathered() >= 17:
-        ${ cash[16].name.text }
-        % endif
-    - "cash_account_name_17": |
-        % if cash.there_are_any and cash.number_gathered() >= 17:
-        ${ cash[16].account }
-        % endif
-    - "cash_account_type_17": |
-        % if cash.there_are_any and cash.number_gathered() >= 17:
-        ${ cash[16].type }
-        % endif
-    - "cash_balance_17": |
-        % if cash.there_are_any and cash.number_gathered() >= 17:
-        ${ thousands(cash[16].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_18": |
-        % if cash.there_are_any and cash.number_gathered() >= 18:
-        ${ cash[17].name.text }
-        % endif
-    - "cash_account_name_18": |
-        % if cash.there_are_any and cash.number_gathered() >= 18:
-        ${ cash[17].account }
-        % endif
-    - "cash_account_type_18": |
-        % if cash.there_are_any and cash.number_gathered() >= 18:
-        ${ cash[17].type }
-        % endif
-    - "cash_balance_18": |
-        % if cash.there_are_any and cash.number_gathered() >= 18:
-        ${ thousands(cash[17].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_19": |
-        % if cash.there_are_any and cash.number_gathered() >= 19:
-        ${ cash[18].name.text }
-        % endif
-    - "cash_account_name_19": |
-        % if cash.there_are_any and cash.number_gathered() >= 19:
-        ${ cash[18].account }
-        % endif
-    - "cash_account_type_19": |
-        % if cash.there_are_any and cash.number_gathered() >= 19:
-        ${ cash[18].type }
-        % endif
-    - "cash_balance_19": |
-        % if cash.there_are_any and cash.number_gathered() >= 19:
-        ${ thousands(cash[18].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_20": |
-        % if cash.there_are_any and cash.number_gathered() >= 20:
-        ${ cash[19].name.text }
-        % endif
-    - "cash_account_name_20": |
-        % if cash.there_are_any and cash.number_gathered() >= 20:
-        ${ cash[19].account }
-        % endif
-    - "cash_account_type_20": |
-        % if cash.there_are_any and cash.number_gathered() >= 20:
-        ${ cash[19].type }
-        % endif
-    - "cash_balance_20": |
-        % if cash.there_are_any and cash.number_gathered() >= 20:
-        ${ thousands(cash[19].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_21": |
-        % if cash.there_are_any and cash.number_gathered() >= 21:
-        ${ cash[20].name.text }
-        % endif
-    - "cash_account_name_21": |
-        % if cash.there_are_any and cash.number_gathered() >= 21:
-        ${ cash[20].account }
-        % endif
-    - "cash_account_type_21": |
-        % if cash.there_are_any and cash.number_gathered() >= 21:
-        ${ cash[20].type }
-        % endif
-    - "cash_balance_21": |
-        % if cash.there_are_any and cash.number_gathered() >= 21:
-        ${ thousands(cash[20].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_22": |
-        % if cash.there_are_any and cash.number_gathered() >= 22:
-        ${ cash[21].name.text }
-        % endif
-    - "cash_account_name_22": |
-        % if cash.there_are_any and cash.number_gathered() >= 22:
-        ${ cash[21].account }
-        % endif
-    - "cash_account_type_22": |
-        % if cash.there_are_any and cash.number_gathered() >= 22:
-        ${ cash[21].type }
-        % endif
-    - "cash_balance_22": |
-        % if cash.there_are_any and cash.number_gathered() >= 22:
-        ${ thousands(cash[21].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_23": |
-        % if cash.there_are_any and cash.number_gathered() >= 23:
-        ${ cash[22].name.text }
-        % endif
-    - "cash_account_name_23": |
-        % if cash.there_are_any and cash.number_gathered() >= 23:
-        ${ cash[22].account }
-        % endif
-    - "cash_account_type_23": |
-        % if cash.there_are_any and cash.number_gathered() >= 23:
-        ${ cash[22].type }
-        % endif
-    - "cash_balance_23": |
-        % if cash.there_are_any and cash.number_gathered() >= 23:
-        ${ thousands(cash[22].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_24": |
-        % if cash.there_are_any and cash.number_gathered() >= 24:
-        ${ cash[23].name.text }
-        % endif
-    - "cash_account_name_24": |
-        % if cash.there_are_any and cash.number_gathered() >= 24:
-        ${ cash[23].account }
-        % endif
-    - "cash_account_type_24": |
-        % if cash.there_are_any and cash.number_gathered() >= 24:
-        ${ cash[23].type }
-        % endif
-    - "cash_balance_24": |
-        % if cash.there_are_any and cash.number_gathered() >= 24:
-        ${ thousands(cash[23].balance, show_decimals=True) }
-        % endif
-    - "cash_bank_name_25": |
-        % if cash.there_are_any and cash.number_gathered() >= 25:
-        ${ cash[24].name.text }
-        % endif
-    - "cash_account_name_25": |
-        % if cash.there_are_any and cash.number_gathered() >= 25:
-        ${ cash[24].account }
-        % endif
-    - "cash_account_type_25": |
-        % if cash.there_are_any and cash.number_gathered() >= 25:
-        ${ cash[24].type }
-        % endif
-    - "cash_balance_25": |
-        % if cash.there_are_any and cash.number_gathered() >= 25:
-        ${ thousands(cash[24].balance, show_decimals=True) }
-        % endif
-
 ---
