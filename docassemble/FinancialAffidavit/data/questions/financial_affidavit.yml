@@ -176,9 +176,12 @@ code: |
   if has_transfer:
     transfer.gather()
   
-
   if has_lawsuits:
     lawsuits.gather()
+
+  set_progress(90)
+  nav.set_section('section_final')
+  users[0].attached_documents
   e_signature
 
   set_progress(100)
@@ -186,14 +189,6 @@ code: |
   forms_assembling
   get_docs_screen
 ---
-# mandatory: True
-# code:
-#   users[0].other_income = 0
-#   users[0].living_other = 0
-#   users[0].transport_other = 0
-#   users[0].personal_other = 0
-#   users[0].children_other = 0
-# ---
 id: welcome
 question: |
   Financial Affidavit
@@ -552,8 +547,8 @@ fields:
   - How did you claim deductions last year?: deduction_type
     datatype: radio
     choices: 
-      - the standardized deduction: yes
-      - itemized deductions: no
+      - the standardized deduction: standard
+      - itemized deductions: itemized
   - Gross income (before taxes and deductions) last year: gross_income_last_year
     datatype: currency
   - Did you claim any of these? (check any that apply): tax_claimed
@@ -995,12 +990,12 @@ fields:
     datatype: currency
     min: 0
     show if: users[0].deductions_state_question
-  - FICA (or Social Security equivalent, such as Self-employment tax): users[0].deductions_FICA_question
+  - FICA (or Social Security equivalent, such as Self-employment tax): users[0].deductions_fica_question
     datatype: yesnowide
-  - Amount: users[0].deductions_FICA
+  - Amount: users[0].deductions_fica
     datatype: currency
     min: 0
-    show if: users[0].deductions_FICA_question
+    show if: users[0].deductions_fica_question
   - Medicare tax: users[0].deductions_medicare_question
     datatype: yesnowide
   - Amount: users[0].deductions_medicare
@@ -1822,26 +1817,29 @@ fields:
     min: 1
     max: 20
   - Insurance coverage: insurance[i].coverage
-    datatype: radio
+    datatype: checkboxes
     choices:
       - Me: myself
       - My spouse/partner: both
       - children of this relationship: children_current
       - children of this relationship and other children: children_other
-  
+    none of the above: False
   - note: |
       List the number of the other children covered and their ages: 
-    js show if: |
-      val("insurance[i].coverage") == 'children_other'
+    show if:
+      variable: insurance[i].coverage["children_other"]
+      is: True
   - Number of children": insurance[i].other_children_count
     datatype: integer
     min: 0
-    js show if: |
-      val("insurance[i].coverage") == 'children_other'
+    show if:
+      variable: insurance[i].coverage["children_other"]
+      is: True
   - Ages of children: insurance[i].other_children_age_list
     maxlength: 60
-    js show if: |
-      val("insurance[i].coverage") == 'children_other'
+    show if:
+      variable: insurance[i].coverage["children_other"]
+      is: True
 ---
 id: health insurance costs 
 question: |
@@ -1929,7 +1927,7 @@ code: |
   debts[i].complete = True 
 ---
 code: |
-  if debts.number_gathered() > 26:
+  if debts.number_gathered() == 26:
     debts.there_is_another = False
 ---
 ########### FA ASSETS ###########
@@ -2004,7 +2002,7 @@ code: |
   cash[i].complete = True 
 ---
 code: |
-  if cash.number_gathered() > 25:
+  if cash.number_gathered() == 25:
     cash.there_is_another = False
 ---
 ########### FA ASSETS - 15a Certificate of Deposit ###########
@@ -2047,7 +2045,7 @@ code: |
   cert_deposit[i].complete = True 
 ---
 code: |
-  if cert_deposit.number_gathered() > 25:
+  if cert_deposit.number_gathered() == 25:
     cert_deposit.there_is_another = False
 ---
 ########### FA ASSETS - 15a money cash/card ###########
@@ -2091,7 +2089,7 @@ code: |
   money[i].complete = True 
 ---
 code: |
-  if money.number_gathered() > 25:
+  if money.number_gathered() == 25:
     money.there_is_another = False
 ---
 ########### FA ASSETS - 15b Investment Accounts ###########
@@ -2132,10 +2130,10 @@ fields:
   - Type of account: investments[i].type
     datatype: radio
     choices:
-      - Stock
-      - Bond 
-      - Option
-      - Employee plan
+      - Stocks
+      - Bonds 
+      - Options
+      - Employee Stock Ownership Plans: ESOP
   - Who is the owner?: investments[i].owner
   - Fair market value: investments[i].fmv
     datatype: currency
@@ -2146,7 +2144,7 @@ code: |
   investments[i].complete = True 
 ---
 code: |
-  if investments.number_gathered() > 25:
+  if investments.number_gathered() == 25:
     investments.there_is_another = False
 ---
 ########### FA ASSETS - 15b Securities ###########
@@ -2191,7 +2189,7 @@ code: |
   securities[i].complete = True 
 ---
 code: |
-  if securities.number_gathered() > 25:
+  if securities.number_gathered() == 25:
     securities.there_is_another = False
 ---
 ########### FA ASSETS - 15c REAL ESTATE ###########
@@ -2246,7 +2244,7 @@ code: |
   real_estate[i].complete = True 
 ---
 code: |
-  if real_estate.number_gathered() > 25:
+  if real_estate.number_gathered() == 25:
     real_estate.there_is_another = False
 ---
 ########### FA ASSETS - 15d Motor Vehicle ###########
@@ -2305,7 +2303,7 @@ code: |
   motor_vehicle[i].complete = True 
 ---
 code: |
-  if motor_vehicle.number_gathered() > 25:
+  if motor_vehicle.number_gathered() == 25:
     motor_vehicle.there_is_another = False
 ---
 ########### FA ASSETS - 15e Business Interests ###########
@@ -2353,7 +2351,7 @@ code: |
   business_interests[i].complete = True 
 ---
 code: |
-  if business_interests.number_gathered() > 25:
+  if business_interests.number_gathered() == 25:
     business_interests.there_is_another = False
 ---
 ########### FA ASSETS - 15f Life Insurance ###########
@@ -2407,7 +2405,7 @@ code: |
   life_insurance[i].complete = True 
 ---
 code: |
-  if life_insurance.number_gathered() > 25:
+  if life_insurance.number_gathered() == 25:
     life_insurance.there_is_another = False
 ---
 ########### FA ASSETS - 15g Retirement Benefits #######
@@ -2454,7 +2452,7 @@ code: |
   retirement_plan[i].complete = True 
 ---
 code: |
-  if retirement_plan.number_gathered() > 25:
+  if retirement_plan.number_gathered() == 25:
     retirement_plan.there_is_another = False
 ---
 ########### FA ASSETS - 15h Valuable collectibles ###########
@@ -2497,7 +2495,7 @@ code: |
   collection[i].complete = True 
 ---
 code: |
-  if collection.number_gathered() > 25:
+  if collection.number_gathered() == 25:
     collection.there_is_another = False
 ---
 ########### FA ASSETS - 15i Other Personal Property ###########
@@ -2538,7 +2536,7 @@ code: |
   other_property[i].complete = True 
 ---
 code: |
-  if other_property.number_gathered() > 25:
+  if other_property.number_gathered() == 25:
     other_property.there_is_another = False
 ---
 ########### FA ASSETS - 15j Transfer or Sale of Assets #######
@@ -2586,7 +2584,7 @@ code: |
   transfer[i].complete = True 
 ---
 code: |
-  if transfer.number_gathered() > 25:
+  if transfer.number_gathered() == 25:
     transfer.there_is_another = False
 ---
 ########### FA LAWSUITS AND CLAIMS #######
@@ -2631,8 +2629,39 @@ code: |
   lawsuits[i].complete = True 
 ---
 code: |
-  if lawsuits.number_gathered() > 25:
+  if lawsuits.number_gathered() == 25:
     lawsuits.there_is_another = False
+---
+id: attach documents 
+question: |
+  Attach documents to your Financial Affidavit
+subquestion: |
+  You must attach the below documents.
+
+  **Note:** Check all that apply. You must attach these documents if you have or can get them.
+fields:
+  - I am attaching: users[0].attached_documents
+    datatype: checkboxes
+    choices:
+      - pay stubs or other proof of income: stubs
+      - income tax returns: returns
+      - bank statements: statements
+      - other docs tha verify your debts and assets: other
+    none of the above: False
+  - Debts - list attached documents: users[0].attachment_debts
+    input type: area
+    rows: 3
+    maxlength: 150
+    show if:
+      variable: users[0].attached_documents["other"]
+      is: True      
+  - Assets - list attached documents: users[0].attachment_assets
+    input type: area
+    rows: 3
+    maxlength: 150
+    show if:
+      variable: users[0].attached_documents["other"]
+      is: True    
 ---
 id: e-signature
 question: |
@@ -2796,6 +2825,18 @@ attachment:
       - "petitioner_yes": ${ party_label == 'petitioner' }
       - "respondent_yes": ${ party_label == 'respondent' }
       - "date_affirm": ${ today().format('MM/dd/yyyy') }
+      - "attached_pay_stubs": ${ users[0].attached_documents["stubs"] }
+      - "attached_tax_return": ${ users[0].attached_documents["returns"] }
+      - "attached_bank_statements": ${ users[0].attached_documents["statements"] }
+      - "attached_other_documents": ${ users[0].attached_documents["other"] }
+      - "other_document1": |
+          % if users[0].attached_documents["other"]:
+          ${ comma_and_list(users[0].attachment_debts) }
+          % endif
+      - "other_document2": |
+          % if users[0].attached_documents["other"]:
+          ${ comma_and_list(users[0].attachment_assets) }
+          % endif
       - "users_name": ${ users[0].name.full(middle='full') }
       - "users_phone_number": |
           % if not hide_contact:
@@ -2928,7 +2969,7 @@ attachment:
           ${ employment[0].perks['other'] }
           % endif
       - "business_other_detail": |
-          % if employment.there_are_any and employment[0].type != "employed":
+          % if employment.there_are_any and employment[0].type != "employed" and employment[0].perks == "other":
           ${ employment[0].other_perks }
           % endif
       - "employment_addendum_yes": ${ employment.number_gathered() > 1 }
@@ -2953,11 +2994,11 @@ attachment:
       - "taxes_not_filed": ${ not taxes_filed }   
       - "deduction_standard": |
           % if taxes_filed:
-          ${ deduction_type }
+          ${ deduction_type == "standard" }
           % endif
       - "deduction_itemized": |
           % if taxes_filed:
-          ${ not deduction_type }
+          ${ deduction_type == "itemized" }
           % endif
       - "Gross income (before taxes and deductions) last year": |
           % if taxes_filed:
@@ -3111,23 +3152,23 @@ attachment:
           % if users[0].deductions_federal_question:
           ${ thousands(users[0].deductions_federal, show_decimals=True)}
           % endif
-      - "deductions_state":  |
+      - "deductions_state": |
           % if users[0].deductions_state_question:
           ${ thousands(users[0].deductions_state, show_decimals=True)}
           % endif
-      - "deductions_FICA":  |
-          % if users[0].deductions_FICA_question:
-          ${ thousands(users[0].deductions_FICA, show_decimals=True)}
+      - "deductions_fica": |
+          % if users[0].deductions_fica_question:
+          ${ thousands(users[0].deductions_fica, show_decimals=True)}
           % endif
-      - "deductions_medicare":  |
+      - "deductions_medicare": |
           % if users[0].deductions_medicare_question:
           ${ thousands(users[0].deductions_medicare, show_decimals=True)}
           % endif
-      - "deductions_retirement":  |
+      - "deductions_retirement": |
           % if users[0].deductions_retirement_question:
           ${ thousands(users[0].deductions_retirement, show_decimals=True)}
           % endif
-      - "total_deductions":  |
+      - "total_deductions": |
           ${ thousands(total_monthly_deductions, show_decimals=True)}
       - "maintenance_paid_court": |
           % if users[0].maintenance_paid_court_question:
@@ -3268,7 +3309,7 @@ attachment:
           ${ users[0].transport_other_description }
           % endif
       - "subtotal_transport":  |
-          ${ thousands(subtotal_monthly_transportation_expenses) }
+          ${ thousands(subtotal_monthly_transportation_expenses, show_decimals=True)}
       - "personal_doctor": |
           % if users[0].personal_doctor_question:
           ${ thousands(users[0].personal_doctor, show_decimals=True)}
@@ -3525,7 +3566,11 @@ attachment:
           % endif
       - "other_children_covered": |
           % if insurance.there_are_any and insurance[0].coverage == "children_other":
-          ${ insurance[0].other_children_count } " - " ${ insurance[0].other_children_age_list }
+            % if insurance[0].other_children_count == 1:
+            1 child - ${ insurance[0].other_children_age_list }
+            % else:
+            ${ insurance[0].other_children_count } children - ${ insurance[0].other_children_age_list }
+            % endif
           % endif
       - "insurance_monthly_cost": |
           % if insurance.there_are_any:
@@ -3620,6 +3665,54 @@ attachment:
       - "creditor_payment_3": |
           % if debts.number_gathered() >= 3:
           ${ thousands(debts[2].payment, show_decimals=True) }
+          % endif
+      - "creditor_name_4": |
+          % if debts.number_gathered() >= 4:
+          ${ debts[3].name.text }
+          % endif
+      - "creditor_description_4": |
+          % if debts.number_gathered() >= 4:
+          ${ debts[3].description }
+          % endif
+      - "creditor_amount_4": |
+          % if debts.number_gathered() >= 4:
+          ${ thousands(debts[3].amount, show_decimals=True) }
+          % endif
+      - "creditor_payment_4": |
+          % if debts.number_gathered() >= 4:
+          ${ thousands(debts[3].payment, show_decimals=True) }
+          % endif
+      - "creditor_name_5": |
+          % if debts.number_gathered() >= 5:
+          ${ debts[4].name.text }
+          % endif
+      - "creditor_description_5": |
+          % if debts.number_gathered() >= 5:
+          ${ debts[4].description }
+          % endif
+      - "creditor_amount_5": |
+          % if debts.number_gathered() >= 5:
+          ${ thousands(debts[4].amount, show_decimals=True) }
+          % endif
+      - "creditor_payment_5": |
+          % if debts.number_gathered() >= 5:
+          ${ thousands(debts[4].payment, show_decimals=True) }
+          % endif
+      - "creditor_name_6": |
+          % if debts.number_gathered() >= 6:
+          ${ debts[5].name.text }
+          % endif
+      - "creditor_description_6": |
+          % if debts.number_gathered() >= 6:
+          ${ debts[5].description }
+          % endif
+      - "creditor_amount_6": |
+          % if debts.number_gathered() >= 6:
+          ${ thousands(debts[5].amount, show_decimals=True) }
+          % endif
+      - "creditor_payment_6": |
+          % if debts.number_gathered() >= 6:
+          ${ thousands(debts[5].payment, show_decimals=True) }
           % endif
       - "creditor_addendum_yes": ${ debts.number_gathered() > 6 }
       - "total_aditional_debts": |
@@ -4474,7 +4567,7 @@ attachment:
           ${ employment[i].perks['other'] }
           % endif
       - "business_other_detail": |
-          % if employment[i].type != "employed":
+          % if employment[i].type != "employed" and employment[i].perks == "other":
           ${ employment[i].other_perks }
           % endif
 ---
@@ -4602,7 +4695,11 @@ attachment:
           % endif
       - "other_children_covered": |
           % if insurance.there_are_any and insurance[i].coverage == "children_other":
-          ${ insurance[i].other_children_covered }
+            % if insurance[i].other_children_count == 1:
+            1 child - ${ insurance[i].other_children_age_list }
+            % else:
+            ${ insurance[i].other_children_count } children - ${ insurance[i].other_children_age_list }
+            % endif
           % endif
       - "insurance_monthly_cost":   |
           % if insurance.there_are_any:
