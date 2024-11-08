@@ -2650,15 +2650,15 @@ fields:
     none of the above: False
   - Debts - list attached documents: users[0].attachment_debts
     input type: area
-    rows: 3
-    maxlength: 150
+    rows: 2
+    maxlength: 100
     show if:
       variable: users[0].attached_documents["other"]
       is: True      
   - Assets - list attached documents: users[0].attachment_assets
     input type: area
-    rows: 3
-    maxlength: 150
+    rows: 2
+    maxlength: 100
     show if:
       variable: users[0].attached_documents["other"]
       is: True    
@@ -3550,22 +3550,22 @@ attachment:
           % endif
       - "insurance_covers_myself": |
           % if insurance.there_are_any:
-          ${ insurance[0].coverage == "myself" }
+          ${ insurance[0].coverage["myself"] }
           % endif
       - "insurance_covers_both": |
           % if insurance.there_are_any:
-          ${ insurance[0].coverage == "both" }
+          ${ insurance[0].coverage["both"] }
           % endif
       - "insurance_covers_children_current": |
           % if insurance.there_are_any:
-          ${ insurance[0].coverage == "children_current" }
+          ${ insurance[0].coverage["children_current"] }
           % endif
       - "insurance_covers_children_other": |
           % if insurance.there_are_any:
-          ${ insurance[0].coverage == "children_other" }
+          ${ insurance[0].coverage["children_other"] }
           % endif
       - "other_children_covered": |
-          % if insurance.there_are_any and insurance[0].coverage == "children_other":
+          % if insurance.there_are_any and insurance[0].coverage["children_other"]:
             % if insurance[0].other_children_count == 1:
             1 child - ${ insurance[0].other_children_age_list }
             % else:
@@ -3716,11 +3716,11 @@ attachment:
           % endif
       - "creditor_addendum_yes": ${ debts.number_gathered() > 6 }
       - "total_aditional_debts": |
-          % if debts.number_gathered() >= 7:
+          % if has_debts and debts.number_gathered() >= 7:
           ${ thousands(sum(y.payment for y in debts[6:]), show_decimals=True) }
           % endif
       - "total_debt_payments": |
-          % if debts.there_are_any:
+          % if has_debts:
           ${ thousands(sum(y.payment for y in debts), show_decimals=True) }
           % endif
       # 15 Assets - Cash/bank accounts
@@ -4419,7 +4419,7 @@ attachment:
 
       - "users_signature": |
           ${ "/s/ " + users[0].name.full(middle="full") if e_signature else ''  }
-      - "users_signed_date": ${ today() if e_signature else '' }
+      - "users_signed_date": ${ today().format("MM/dd/yyyy") if e_signature else '' }
 
 ---
 ############ FA EMPLOYMENT/BUSINESS INCOME ADDENDUM #############
@@ -4455,7 +4455,7 @@ attachment:
   editable: False
   pdf template file: fa_additional_employment_business.pdf
   fields:
-      - "county_name": ${ case_county }
+      - "county_name": ${ case_county.upper() }
       - "case_number": ${ case_number }
       - "pre-judgment": ${ filing_status == "pre_judgment" }
       - "post-judgment": ${ filing_status == "post_judgment" }
@@ -4604,7 +4604,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_health_insurance.pdf
   fields:
-      - "county_name": ${ case_county }
+      - "county_name": ${ case_county.upper() }
       - "case_number": ${ case_number }
       - "pre-judgment": ${ filing_status == "pre_judgment" }
       - "post-judgment": ${ filing_status == "post_judgment" }
@@ -4679,22 +4679,22 @@ attachment:
           % endif
       - "insurance_covers_myself": |
           % if insurance.there_are_any:
-          ${ insurance[i].coverage == "myself" }
+          ${ insurance[i].coverage["myself"] }
           % endif
       - "insurance_covers_both": |
           % if insurance.there_are_any:
-          ${ insurance[i].coverage == "both" }
+          ${ insurance[i].coverage["both"] }
           % endif
       - "insurance_covers_children_current": |
           % if insurance.there_are_any:
-          ${ insurance[i].coverage == "children_current" }
+          ${ insurance[i].coverage["children_current"] }
           % endif
       - "insurance_covers_children_other": |
           % if insurance.there_are_any:
-          ${ insurance[i].coverage == "children_other" }
+          ${ insurance[i].coverage["children_other"] }
           % endif
       - "other_children_covered": |
-          % if insurance.there_are_any and insurance[i].coverage == "children_other":
+          % if insurance.there_are_any and insurance[i].coverage["children_other"]:
             % if insurance[i].other_children_count == 1:
             1 child - ${ insurance[i].other_children_age_list }
             % else:
