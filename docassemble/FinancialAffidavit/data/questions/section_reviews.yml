@@ -2,18 +2,14 @@
 id: income summary review
 continue button field: income_summary
 question: |
-  Income summary for ${ users[0] }
+  Monthly income summary
 subquestion: |
-  Below are your answers so far for ${ users[0] }. Please 
-  check your work and use the "Edit" button to make any
-  necessary changes.
-
-  Click "Continue" when you are finished.
+  Here's a summary of your monthly income. You can click **Edit** to see details and make changes.
   <span style="display: none">
   ${ currency(total_monthly_employment_income) }
   ${ currency(total_monthly_investment_income) }
-  ${ currency(total_monthly_benefits_income) }
   ${ currency(total_other_monthly_business_income) }
+  ${ currency(total_monthly_benefits_income) }
   ${ currency(total_monthly_maintenance_support_income) }
   ${ currency(total_monthly_gifts_other_income) }
   ${ currency(total_gross_monthly_income) }
@@ -28,13 +24,13 @@ review:
     button: |
       <h2 class="h4">Monthly investment income: ${ currency(total_monthly_investment_income) }</h2>
   - Edit:
-      - users[0].social_retirement_question
-    button: |
-      <h2 class="h4">Monthly benefits: ${ currency(total_monthly_benefits_income) }</h2>
-  - Edit:
       - users[0].rental_income_question
     button: |
       <h2 class="h4">Other monthly business income: ${ currency(total_other_monthly_business_income) }</h2>
+  - Edit:
+      - users[0].social_retirement_question
+    button: |
+      <h2 class="h4">Monthly benefits income: ${ currency(total_monthly_benefits_income) }</h2>
   - Edit:
       - users[0].maintenance_current_question
     button: |
@@ -44,18 +40,14 @@ review:
     button: |
       <h2 class="h4">Monthly gifts and other income: ${ currency(total_monthly_gifts_other_income) }</h2>
   - note: |
-      <h2 class="h4">Total Gross Monthly Income: ${ currency(total_gross_monthly_income) }</h2>
+      <h2 class="h4">Total gross monthly income: ${ currency(total_gross_monthly_income) }</h2>
 ---
 id: expenses summary review
 continue button field: expenses_summary
 question: |
-  Monthly expenses summary for ${ users[0] }
+  Monthly expenses summary
 subquestion: |
-  Below are your answers so far for ${ users[0] }. Please 
-  check your work and use the "Edit" button to make any
-  necessary changes.
-
-  Click "Continue" when you are finished.
+  Here's a summary of your monthly expenses. You can click **Edit** to see details and make changes.
   <span style="display: none">
   ${ currency(total_monthly_deductions) }
   ${ currency(total_maintenance_payments) }
