@@ -66,6 +66,7 @@ code: |
   set_progress(5)
   how_to_use
   accept_terms
+  about_the_financial_affidavit
   if family_case == False:
     family_kickout
   set_progress(10)
@@ -190,15 +191,15 @@ code: |
   get_docs_screen
 ---
 id: welcome
+continue button field: sees_nav_bar
 question: |
-  Financial Affidavit
+  Financial affidavit
 subquestion: |
-  Welcome to Illinois Legal Aid Online's Financial Affidavit program.
+  Welcome to Illinois Legal Aid Online's **Financial affidavit** Easy Form.
 
-  To use this program, you must be asking or being asked to pay child support, 
-  children's expenses, college expenses, spousal maintenance (alimony), or 
-  attorney's fees.
-field: sees_nav_bar
+    If you are in a court case for divorce, child support, or temporary maintenance, you and the other person will probably have to share infomration about your income, property, and expenses. 
+
+  This program helps you make forms that provide financial information and documents to the other party in family law cases.
 ---
 id: how to use
 continue button field: how_to_use
@@ -217,8 +218,7 @@ subquestion: |
  
   ${ collapse_template(help_example) }  
 
-  Click on **{green words}** to learn what they mean. Some questions have a question mark in a circle 
-  ${ fa_icon("question-circle", color_css="#0dcaf0" ) } that also gives help.
+  Click on **{green words}** to learn what they mean. Some questions have a question mark in a circle ${ fa_icon("question-circle", color_css="#0dcaf0" ) } that also gives help.
 ---
 template: help_example
 subject: |
@@ -226,11 +226,25 @@ subject: |
 content: |  
   This is an example of help. Click again to hide.
 ---
+id: whats next
+continue button field: about_the_financial_affidavit
+question: |
+  About the *Financial Affidavit*
+subquestion: |
+  The *Financial Affidavit* is a very long form. This program will help you fill it out and avoid mistakes.
+  
+  After you complete this Easy Form, you must send a copy of the completed *Financial Affidavit* and supporting documents to the other party in the case. If a party has a lawyer, send it to the lawyer.
+
+  You can use ILAO's [**Proof of delivery**](https://www.illinoislegalaid.org/node/86991) Easy Form to make the other forms that show when you sent your Financial Affidavit and supporting documents.
+  
+  **Note:** You do not need to file your *Financial Affidavit* with the Circuit Clerk. However, you do need to file your *Proof of Delivery*.
+  
+---
 id: family case 
 question: |
   Do you have a family law case in Illinois?
 subquestion: |
-  If you have any active case or one where a judgment was already entered (Ex: divorce).
+  The case can be ongoing or one where a final Judgment or Order was entered.
 fields:
   - no label: family_case
     datatype: yesnoradio
@@ -240,7 +254,9 @@ event: family_kickout
 question: |
   Sorry
 subquestion: |
-  You can only use this program if you have an active family law case in Illinois.
+  You can only use this program if you have a family law case in Illinois.
+
+  Use **[Get Legal Help](https://www.illinoislegalaid.org/get-legal-help)** to find free or low-cost legal services in your area.
 buttons:
   - Exit: exit
   - Restart: restart
@@ -267,23 +283,31 @@ template: case_number_help
 subject: |
   **Learn about case numbers**
 content: |  
-  The case number should be on your court papers. Look at the Complaint or Petition, or the
-  Summons if you received one. It is usually in the top-right part of the first page.
+  The case number should be on your court papers. Look at the Complaint or Petition, or the Summons if you received one. It is usually in the top-right part of the first page.
   
   If you started the case, the court clerk should have given you the case number.
+  
+  In this example, the case number is **2022 EXAMPLE 123**.
+  
+  [FILE case_number_example.png, 100%, Summons form showing case number]
 ---  
 id: case filing status
 question: |
-  Are you filing your Financial Affidavit into a case that has a final 
-  judgment or order?
+  What is the status of your family law case?
 subquestion: |
-  For example, a Judgment of Dissolution of Marriage would be a final order in a divorce case.": 
+  If your case is complete, there should be a final order or judgment that was entered.
+
+  If no such order was entered, your case is "pending," and you probably have another court date scheduled.
+
+  For example, a *Judgment of Dissolution of Marriage/Civil Union* would be a final order in a divorce case.
+
+  Select **Pre-judgment** if a final judgment or order **has not** been entered in your case or if you do not know.
 fields:
-  - Filing status: filing_status
+  - Case status: filing_status
     datatype: radio
     choices:
-      - Pre-Judgment: pre_judgment
-      - Post-Judement: post_judgment
+      - Pre-judgment: pre_judgment
+      - Post-judgment: post_judgment
 ---  
 id: party label
 question: |
@@ -292,7 +316,9 @@ subquestion: |
   ${ collapse_template(which_party) }  
 field: party_label
 choices:
+  - Plaintiff: plaintiff
   - Petitioner: petitioner
+  - Defendant: defendant
   - Respondent: respondent
 ---
 template: which_party
@@ -303,8 +329,10 @@ content: |
 
   If someone filed the case against you, you are either the Defendant or the Respondent.
 
-  The other court forms in the case should help you figure it out. Look at the top (the caption)
-  of the Complaint or Petition. That form should have a label by your name.
+  Most family law cases use Petitioner and Respondent.
+  
+  The other court papers in the case should help you figure it out. Look at the top (the caption)
+  of the Petition, Complaint, or Order. That form should have a label by your name.
 ---
 id: your name
 sets:
@@ -319,6 +347,10 @@ fields:
       users[0].name_fields()
 ---
 code: |
+  if party_label == 'plaintiff':
+    opposing_label = 'defendant'
+  if party_label == 'defendant':
+    opposing_label = 'plaintiff'
   if party_label == 'petitioner':
     opposing_label = 'respondent'
   if party_label == 'respondent':
@@ -336,8 +368,9 @@ fields:
 ############### ABOUT YOU ###############
 id: hide contact 
 question: |
-  Is your contact information is protected pursuant to court order because of 
-  domestic violence or abuse?
+  Are your address and phone number protected by court order because of domestic violence or abuse?
+subquestion: |
+  If your contact information does not appear on other court papers because you have a protective order, you do not have to list them on your *Financial Affidavit*. 
 fields:
   - no label: hide_contact
     datatype: yesnoradio
@@ -350,6 +383,8 @@ sets:
   - users[0].address.zip
 question: |
   What is your address?
+subquestion: |
+  **This address will appear on your form.** If you do not want this, click **Back** to keep your address hidden.
 fields:
   - Street address: users[0].address.address
     address autocomplete: True
@@ -365,9 +400,12 @@ fields:
 id: user phone
 question: |
   What is your phone number?
+subquestion: |
+  **This number will appear on your form.** If you do not want this, leave it blank.
 fields:
   - Phone Number: users[0].phone_number
     datatype: al_international_phone
+    required: False
 ---
 id: user birthdate
 question: |
@@ -392,6 +430,7 @@ question: |
 subquestion: |
   <div class="alert alert-info ilao-info" role="alert">
     <h2 class="h4">Important</h2>
+    <p>The information you provide in the <i>Financial Affidavit</i> must be true.</p>
     <p>If you intentionally or recklessly enter inaccurate or misleading information on this form, 
     you may face significant penalties and sanctions, including costs and attorney's fees.</p>
     <p>Do not file this document and the enclosures with the Circuit Clerk unless a local rule or 
@@ -402,16 +441,18 @@ subquestion: |
 ########### INCOME ####################
 id: income intro 
 question: |
-  Are you employed or do you have other forms of business income?
+  Do you have a job or other business income?
 subquestion: |
   This includes income:
   
-  * From employment by someone else,
-  * From self-employment as a sole proprietorship or independent contractor 
+  * From employment by a company or someone else,
+  * From self-employment as a sole proprietorship or independent contractor, 
   * As a member of a partnership,
   * As a member of a limited liability company (LLC) not treated as a corporation,
   * From a closely-held corporation, and
   * From any other flow-through business entities.
+
+  If you do not currently have a job or other business income, select **No**.
 fields:
   - no label: employment.there_are_any
     datatype: yesnoradio
@@ -428,7 +469,7 @@ code: |
 ---
 id: other employment
 question: |
-  Do you have any other employers or business to include?
+  Do you have any other job or business income to include?
 subquestion: |
   So far you have told us about ${comma_and_list(employment.complete_elements())}.
 fields:
@@ -439,10 +480,10 @@ id: employment info
 question: |
   What is your ${ordinal(i)} source of employment or business income? 
 fields:
-  - "What type of employment or income is this?": employment[i].type
+  - "Employment or business income source": employment[i].type
     datatype: radio
     choices:
-			- Employed by someone else: employed
+			- Employed by a company or someone else: employed
       - Own business as a sole proprietorship: own
       - Independent contractor: contractor
       - Member of a partnership: partnership
@@ -450,11 +491,22 @@ fields:
 			- A closely-held corporation: corp
 			- Other flow-through business entity: other_entity
 ---
-id: employer or business name 
+id: employer or business info 
 question: |
-  Employer or business info
+  % if employment[i].type == 'employed':
+  Employer information
+  % else:
+  Business information
+  % endif
 fields: 
-  - Employer or business name: employment[i].name.text
+  - Employer name: employment[i].name.text
+    show if: 
+      code: |
+        employment[i].type == 'employed'
+  - Business name: employment[i].name.text
+    show if: 
+      code: |
+        employment[i].type != 'employed'
   - Street address: employment[i].address.address
     address autocomplete: True
   - Address line 2: employment[i].address.unit
@@ -2840,7 +2892,7 @@ attachment:
       - "users_name": ${ users[0].name.full(middle='full') }
       - "users_phone_number": |
           % if not hide_contact:
-          ${ users[0].address.line_two() }
+          ${ phone_number_formatted(users[0].phone_number) }
           % endif
       - "users_address": |
           % if not hide_contact:
