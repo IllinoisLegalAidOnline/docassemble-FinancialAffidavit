@@ -52,8 +52,7 @@ sections:
   - section_case: Case information
   - section_user: About you
   - section_income: Income
-  - section_expenses: Expenses
-  - section_debts: Debts
+  - section_expenses: Expenses and debts
   - section_assets: Assets
   - section_final: Final steps
   - section_download: Download
@@ -63,6 +62,7 @@ mandatory: True
 code: |
   nav.set_section('section_intro')
   sees_nav_bar
+  snapshot_start
   set_progress(5)
   how_to_use
   accept_terms
@@ -138,7 +138,6 @@ code: |
     insurance.gather()
 
   set_progress(60)
-  nav.set_section('section_debts')
   if has_debts:
     debts.gather()
 
@@ -183,7 +182,36 @@ code: |
   set_progress(100)
   nav.set_section('section_download')
   forms_assembling
+  snapshot_forms
   get_docs_screen
+---
+code: |
+  stuff_to_snapshot = {
+  	'start_time': str(current_datetime().format_datetime()),
+  	'started_interview': True, 
+  	}
+
+  try:
+    stuff_to_snapshot['ip_address'] = device(ip=True)
+  except:
+    pass
+
+  stuff_to_snapshot['zip'] = showifdef('users[0].address.zip')
+
+  stuff_to_snapshot['downloaded_forms'] = showifdef('forms_assembling')
+  
+  store_variables_snapshot(
+  	data=stuff_to_snapshot, persistent=True
+  	)
+  snapshot_interview_state = True
+---
+code: |
+  snapshot_interview_state
+  snapshot_start = True  
+---
+code: |
+  reconsider('snapshot_interview_state')
+  snapshot_forms = True
 ---
 id: welcome
 continue button field: sees_nav_bar
@@ -2834,48 +2862,6 @@ terms:
   - "e-signature": |
       An e-signature is an electronic signature. It is a digital version of a signature that has the same effect as a hand-written signature. 
 ---
-id: signature choice
-decoration: file-signature
-question: |
-  Sign your forms
-subquestion: |
-  Your forms are almost ready. 
-  
-  You need to sign your forms before you file. You can:
-  
-  * Sign with your finger on a smartphone,
-  * Sign with the mouse or touchpad on your computer,
-  * Add your name as an e-signature **(recommended)**, or
-  * Sign the forms by hand after you download and print.
-field: signature_choice
-buttons:  
-  - Sign on my phone: phone
-    image: mobile-alt
-  - Sign on this device: this device
-    image: desktop
-  - Just add my name: add name
-    image: keyboard
-  - Sign later: no signature
-    image: print
-continue button field: saw_signature_choice
-script: |
-  <script>
-    $(".da-field-buttons > div > .btn-da-custom").last().after("<br>")
-    $(".da-field-buttons > div > .btn-da-custom").first().before("<br>")
-  </script>
----
-code: |
-  signature_fields = ['users[0].signature']
----
-depends on:
-  - signature_choice
-id: persons signature
-question: |
-  ${ users[0].familiar() }, please sign in the box below
-signature: users[0].signature
-under: |
-  ${ users[0].name.full(middle="full") }
----
 id: forms assembling
 continue button field: forms_assembling
 question: |
@@ -2893,6 +2879,8 @@ question: |
   Download
 subquestion: |
   Your form is ready. View and download your form below. Click **Make changes** to fix any mistakes.
+
+  This program does not deliver your *Financial Affidavit* to other party in your case. You will need to do this yourself.
   
   ${ action_button_html(url_action('review_answers'), label=':edit: Make changes', color='success', size="md") }
 
@@ -2902,6 +2890,8 @@ subquestion: |
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
 
+  **Note:** This program does not deliver your *Financial Affidavit* to other party in your case. You will need to do this yourself.
+  
   Thank you for using ILAO Easy Forms!
 under: |
   % if not user_logged_in():
