@@ -1094,7 +1094,7 @@ id: monthly deduction expenses
 question: |
   Monthly income deductions
 subquestion: |
-  Monthly deductions are payments you must make every month. They may be automatically deducted from your paycheck, or you may have to make them on your own.
+  Monthly deductions are payments you must make every month. They may be automatically deducted from your paycheck, or you may have to make them on your own. Your pay stubs or tax records can help you find deduction details.
 fields:
   - Federal income tax: users[0].deductions_federal_question
     datatype: yesnowide
@@ -1888,6 +1888,8 @@ fields:
       - HMO
       - PPO
       - Other
+    help: |
+      The health insurance policy type should be listed on the insurance card. You can also get this by contacting the plan administrator. HMO stands for Health Maintenance Organization. PPO stands for Preferred Provider Organization.
   - Provided through: insurance[i].provider
     datatype: radio
     choices:
@@ -1957,12 +1959,16 @@ fields:
     datatype: currency
     min: 0
     help: |
-      The deductible is the amount you pay before your insurance starts to pay.
+      The deductible is the amount of money you must pay out of your own pocket for expenses before your insurance plan starts to pay. The deductible may not apply to some types of claims or services. Some types of payments, such as co-pays, may not count towards meeting the deductible.
+
+      The individual deductible may be calculated in terms of the amount the covered individual in the plan must pay before the plan starts to pay. Check with the plan administrator for details.
   - What is the family deductible?: insurance[i].family_deductible
     datatype: currency
     min: 0
     help: |
-      The deductible is the amount you pay before your insurance starts to pay.
+      The deductible is the amount of money you must pay out of your own pocket for expenses before your insurance plan starts to pay. The deductible may not apply to some types of claims or services. Some types of payments, such as co-pays, may not count towards meeting the deductible.
+
+      The family deductible may be calculated in terms of the amount all the family members in the plan must pay before the plan starts to pay. Check with the plan administrator for details.
   - Coinsurance (up to 100%): insurance[i].coinsurance
     datatype: integer
     min: 0
@@ -2044,7 +2050,7 @@ subquestion: |
   On the *Financial Affidavit*, you are required to list all of your belongings, also known as your assets. The form puts assets in the following groups.
 
   * Cash and cash equivalents 
-  * Certificates of Deposit
+  * Certificates of deposit
   * Money on cash cards, prepaid debit cards, and money transfer apps 
   * Investment accounts and securities
   * Investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency
@@ -2119,14 +2125,16 @@ code: |
 ########### FA ASSETS - 15a Certificate of Deposit ###########
 id: certificate of deposit intro 
 question: |
-  Do you have any Certificates of Deposit?
+  Do you have any certificates of deposit?
+subquestion: |
+  A certificate of deposit is often called a "CD" for short. You agree to deposit a certain amount of money at a bank or credit union for a fixed amount of time, such as 60 days, three months, or a year. In return, the bank or credit union pays you interest on the money in the account.
 fields:
   - no label: has_cert_deposit
     datatype: yesnoradio
 ---
 id: additional certificate of deposit
 question: |
-  Do you have other Certificates of Deposit?
+  Do you have other certificates of deposit?
 subquestion: |
   So far you have told us about:
   ${ cert_deposit_table }
@@ -2143,7 +2151,7 @@ columns:
 ---
 id: certificate of deposit information
 question: |
-  Details for the ${ordinal(i)} Certificate of Deposit: 
+  Details for the ${ordinal(i)} certificate of deposit: 
 fields:
   - Bank or institution name: cert_deposit[i].name.text
     maxlength: 25
@@ -2167,6 +2175,8 @@ question: |
   Do you have any money on debit cards or in money transfer apps?
 subquestion: |
   These include any money you have on cash cards, prepaid debit cards, and money transfer mobile apps like Venmo, PayPal, or Apple Pay.
+
+  A prepaid debit card can be used to make purchases like you would use cash. The amount of money on the card must be "loaded" onto the card before the purchase. Many prepaid cards carry the brand, like MasterCard, Visa, or American Express, and can be used anywhere that type of card is accepted.
 fields:
   - no label: has_money
     datatype: yesnoradio
@@ -2194,7 +2204,7 @@ question: |
 fields:
   - Location of cash/card: money[i].name.text
     maxlength: 25
-  - Name of holder: money[i].holder
+  - Name of holder of card or account: money[i].holder
     maxlength: 25
   - Balance: money[i].balance
     datatype: currency
@@ -2334,14 +2344,16 @@ code: |
 ########### FA ASSETS - 15c REAL ESTATE ###########
 id: real estate intro 
 question: |
-  Do you have any real estate?
+  Do you own any real estate?
+subquestion: |
+  This can be a house, a condominium unit, or a parcel of land (sometimes called a "lot").
 fields:
   - no label: has_real_estate
     datatype: yesnoradio
 ---
 id: additional real estate
 question: |
-  Do you have other real estate?
+  Do you own other real estate?
 subquestion: |
   So far you have told us about:
   ${ real_estate_table }
@@ -2460,6 +2472,8 @@ code: |
 id: business interests intro 
 question: |
   Do you have any business interests?
+subquestion: |
+  A business interest is an ownership stake that you hold in a business.
 fields:
   - no label: has_business_interests
     datatype: yesnoradio
@@ -2512,6 +2526,8 @@ code: |
 id: life insurance intro
 question: |
   Do you have any life insurance policies?
+subquestions: |
+  These can be life insurance policies you have for yourself, the other party, or your children. 
 fields:
   - no label: has_life_insurance
     datatype: yesnoradio
@@ -2565,9 +2581,12 @@ code: |
 ########### FA ASSETS - 15g Retirement Benefits #######
 id: retirement benefits intro
 question: |
-  Do you have any retirement benefits or deferred compensation?
+  Do you have any retirement benefits or deferred compensation?  
 subquestion: |
   These could be a pension plan, annuity, IRA, 401(k), 403(b), or a Simplified Employee Pension (SEP).
+
+  Retirement benefits that are "vested" are owned by you. Non-vested benefits are not yet fully owned by you. You must continue to remain employed by the employer through the vesting period in order to own them. You should list both vested and non-vested benefits in your *Financial Affidavit*.
+
 fields:
   - no label: has_retirement_plan
     datatype: yesnoradio
@@ -2613,8 +2632,17 @@ code: |
 id: collectibles intro 
 question: |
   Do you have any valuable collectibles?
-subquestion: 
-  Collectibles are things like coins, stamps, art or antiques.
+subquestion: |
+  A collectible is an item that has value to someone who collects items of that type, whether for fun, as a hobby, or as an investment. Examples include:
+
+  * Antiques,
+  * Art,
+  * Coins,
+  * Dolls and other toys,
+  * Sports memorabilia,
+  * Record albums,
+  * Postage stamps, and
+  * Comic books.
 fields:
   - no label: has_collection
     datatype: yesnoradio
