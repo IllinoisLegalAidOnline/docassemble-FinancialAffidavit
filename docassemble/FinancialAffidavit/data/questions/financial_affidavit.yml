@@ -311,10 +311,8 @@ subquestion: |
   ${ collapse_template(which_party) }  
 field: party_label
 choices:
-  - Plaintiff: plaintiff
-  - Petitioner: petitioner
-  - Defendant: defendant
-  - Respondent: respondent
+  - Petitioner or Plaintiff: petitioner
+  - Respondent or Defendant: respondent
 ---
 template: which_party
 subject: |
@@ -342,10 +340,6 @@ fields:
       users[0].name_fields()
 ---
 code: |
-  if party_label == 'plaintiff':
-    opposing_label = 'defendant'
-  if party_label == 'defendant':
-    opposing_label = 'plaintiff'
   if party_label == 'petitioner':
     opposing_label = 'respondent'
   if party_label == 'respondent':
@@ -570,7 +564,7 @@ fields:
   - Other benefits: employment[i].other_perks
     input type: area
     rows: 2
-    maxlength: 75
+    maxlength: 60
     show if: 
       variable: employment[i].perks['other']
       is: True
@@ -1826,7 +1820,7 @@ id: health insurance intro
 question: |
   Do you have health insurance?
 subquestion: |
-  If theree are children/dependents you should select Yes
+  This includes health insurance for yourself and for any of your children.
 fields:
   - no label: insurance.there_are_any
     datatype: yesnoradio
@@ -1839,7 +1833,7 @@ code: |
 ---
 id: additional health insurance
 question: |
-  Do you have another insurance policy you want to include?
+  Do you have another health insurance policy?
 subquestion: |
   So far you have told us about ${comma_and_list(insurance.complete_elements())}.
 fields:
@@ -1848,9 +1842,9 @@ fields:
 ---
 id: health insurance name
 question: |
-  Details for the ${ordinal(i)} insurance provider: 
+  Details for the ${ordinal(i)} health insurance provider
 fields:
-  - Name of the insurance company: insurance[i].name.text
+  - Name of insurance company: insurance[i].name.text
   - Type of insurance: insurance[i].type
     datatype: radio
     choices:
@@ -1874,42 +1868,42 @@ fields:
 ---
 id: health insurance coverage
 question: |
-  Who is covered under this policy?
+  ${insurance[i].name.text} coverage
 fields:
   - Number of people covered: insurance[i].total_covered
     datatype: integer
     min: 1
     max: 20
-  - Insurance coverage: insurance[i].coverage
+  - Who is covered?: insurance[i].coverage
     datatype: checkboxes
     choices:
       - Me: myself
       - My spouse/partner: both
-      - children of this relationship: children_current
-      - children of this relationship and other children: children_other
+      - Children of this relationship: children_current
+      - Children of this relationship and other children: children_other
     none of the above: False
   - note: |
-      List the number of the other children covered and their ages: 
+      List the number of the **other children** covered and their ages: 
     show if:
       variable: insurance[i].coverage["children_other"]
       is: True
-  - Number of children": insurance[i].other_children_count
+  - Number of other children: insurance[i].other_children_count
     datatype: integer
     min: 0
     show if:
       variable: insurance[i].coverage["children_other"]
       is: True
-  - Ages of children: insurance[i].other_children_age_list
-    maxlength: 60
+  - Ages of other children: insurance[i].other_children_age_list
+    maxlength: 40
     show if:
       variable: insurance[i].coverage["children_other"]
       is: True
 ---
 id: health insurance costs 
 question: |
-  What are the monthly costs for this insurance policy?
+  ${insurance[i].name.text} monthly costs
 fields:
-  - Total monthly costs for this insurance: insurance[i].monthly_cost
+  - Total monthly cost for this insurance: insurance[i].monthly_cost
     datatype: currency
     min: 0
   - This is paid for by: insurance[i].paid
@@ -1918,47 +1912,60 @@ fields:
       - Me: myself 
       - My spouse/partner: partner 
       - Other: other
-  - Name the other payment source: insurance[i].other_description
+  - Name of other payment source: insurance[i].other_description
     maxlength: 30
-    js show if: |
-      val("insurance[i].paid") == 'other'
-  - What are the monthly cost for this insurance for covering children?: insurance[i].cost_children 
+    show if:
+      variable: insurance[i].paid
+      is: "other"
+  - What is the monthly cost for this insurance for covering children?: insurance[i].cost_children 
     datatype: currency
     min: 0
-  - What are the monthly cost for this insurance for covering children of this relationship (if known)?: insurance[i].cost_children_current
+  - What is the monthly cost for this insurance for covering children of this relationship (if known)?: insurance[i].cost_children_current
     datatype: currency
     min: 0
-  - What is the individual deductible?: insurance[i].individual_deductible
+  - What is the individual yearly deductible?: insurance[i].individual_deductible
     datatype: currency
     min: 0
+    help: |
+      The deductible is the amount you pay before your insurance starts to pay.
   - What is the family deductible?: insurance[i].family_deductible
     datatype: currency
     min: 0
-  - Coinsurance (percentage of costs you pay, e.g. 20%): insurance[i].coinsurance
+    help: |
+      The deductible is the amount you pay before your insurance starts to pay.
+  - Coinsurance (up to 100%): insurance[i].coinsurance
     datatype: integer
     min: 0
     max: 100
-  - Copayment (a flat amount you pay per service, e.g. $20): insurance[i].copayment
+    help: |
+       Coninsurance is the percentage of costs you pay.
+  - Copayment amount: insurance[i].copayment
     datatype: currency
     min: 0
+    help: |
+      A copayment amount is a flat amount you pay per service, such as an office visit or an x-ray.
 ---
 ########### FA DEBTS ###########
 id: debt intro 
 question: |
   Do you have any debts?
 subquestion: |
-  Debts including credit cards and past due bills. Do not include debt payments previously listed.
+  This includes debts like credit cards and past due bills.
+  
+  You do not need to include include debt payments already listed like mortgage or car loans.
 fields:
   - no label: has_debts
     datatype: yesnoradio
 ---
 id: additional debts
 question: |
-  Do you have other ${ debts.number_gathered() } debts you need to include?
+  Do you have any other debts?
 subquestion: |
   So far you have told us about:
 
   ${ debts_table }
+
+  Remember, you do not need to include include debt payments already listed like mortgage or car loans.
 fields:
   - Add another?: debts.there_is_another
     datatype: yesnoradio
@@ -1967,19 +1974,23 @@ table: debts_table
 rows: debts
 columns:
   - Creditor: row_item.name.text
-  - Describe debt: row_item.description
+  - Desciption: row_item.description
   - Amount owed: currency(row_item.amount)
   - Monthly payment: currency(row_item.payment)
 ---
 id: debt information
 question: |
-  Details for the ${ordinal(i)} account: 
+  Details for the ${ordinal(i)} debt 
 fields:
-  - Name of the creditor: debts[i].name.text
+  - Name of creditor: debts[i].name.text
     maxlength: 25
-  - Describe nature of debt: debts[i].description
+    help: |
+      The creditor is the company, institution, or person you owe money to.
+  - What the debt is for?: debts[i].description
     maxlength: 25
-  - Amount owed: debts[i].amount
+    help: |
+      Examples: credit card, parking tickets, household goods, are lawyer's fees
+  - Total amount owed: debts[i].amount
     datatype: currency
     min: 0
   - Monthly payment: debts[i].payment
@@ -1998,37 +2009,39 @@ code: |
 id: assets intro
 continue button field: assets_intro
 question: |
-  Consider your assets
+  Your belongings
 subquestion: |
-  * Cash and Cash Equivalents 
+  On the *Financial Affidavit*, you are required to list all of your belongings, also known as your assets. The form puts assets in the following groups.
+
+  * Cash and cash equivalents 
   * Certificates of Deposit
-  * Cash, Prepaid Debit Cards and Money Transfer Apps like Venmo, PayPal, Apple pay, 
-  * Investment Accounts and Securities
-  * Investment/Brokerage Accounts, Mutual Funds, Secured or Unsecured Notes, and 
-  * Cryptocurrency
-  * Real Estate 
-  * Motor Vehicles
-  * Business Interests
-  * Life Insurance Policies
-  * Retirement Benefits and Deferred Compensation
-  * Valuable Collectibles 
-  * Other Personal Property Valued Over $500
-  * Transfer or Sale of Assets or Property Within the Last 2 Years With a FMV of at Least $1,000
+  * Money on cash cards, prepaid debit cards, and money transfer apps 
+  * Investment accounts and securities
+  * Investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency
+  * Real estate 
+  * Motor vehicles
+  * Business interests
+  * Life insurance policies
+  * Retirement benefits and deferred compensation
+  * Valuable collectibles 
+  * Other personal property valued over $500
+  * Transfer or sale of assets or property valued over $1,000 within the last 2 years
 ---
 ########### FA ASSETS - 15a Cash/Cash Equivalents ###########
 id: cash equivalent intro 
 question: |
-  Do you have any cash assets?
+  Do you have any cash or cash equivalents?
 subquestion: |
-  Cash and cash equivalents are checking, savings, money market, and other
-  bank or credit union accounts. **Do not list account numbers.** 
+  These include checking, savings, money market, and other bank or credit union accounts.
+  
+  **Do not list account numbers on your forms.** 
 fields:
   - no label: has_cash_assets
     datatype: yesnoradio
 ---
 id: additional cash
 question: |
-  Do you have other cash or cash equivalent accounts to include?
+  Do you have other cash or cash equivalent accounts?
 subquestion: |
   So far you have told us about:
   ${ cash_table }
@@ -2039,17 +2052,21 @@ fields:
 table: cash_table
 rows: cash
 columns:
-  - Bank name: row_item.name.text
+  - Bank or institution name: row_item.name.text
   - Name on account: row_item.account
   - Account type: row_item.type
   - Balance: currency(row_item.balance)
 ---
 id: cash information
 question: |
-  Details for the ${ordinal(i)} creditor: 
+  Details for the ${ordinal(i)} cash or cash equivalent account
+subquestion: |
+  **Do not list account numbers on your forms.** 
 fields:
-  - Bank name: cash[i].name.text
-  - Name on the account: cash[i].account
+  - Bank or institution name: cash[i].name.text
+    maxlength: 25
+  - Name on account: cash[i].account
+    maxlength: 25
   - Account type: cash[i].type
     datatype: radio
     choices:
@@ -2057,7 +2074,7 @@ fields:
       - Savings 
       - Money market
       - Credit union
-  - Balance: cash[i].balance
+  - Account balance: cash[i].balance
     datatype: currency
     min: 0
 ---
@@ -2072,14 +2089,14 @@ code: |
 ########### FA ASSETS - 15a Certificate of Deposit ###########
 id: certificate of deposit intro 
 question: |
-  Do you have any certificates of deposit?
+  Do you have any Certificates of Deposit?
 fields:
   - no label: has_cert_deposit
     datatype: yesnoradio
 ---
 id: additional certificate of deposit
 question: |
-  Do you have other certificates of deposit to include?
+  Do you have other Certificates of Deposit?
 subquestion: |
   So far you have told us about:
   ${ cert_deposit_table }
@@ -2090,16 +2107,18 @@ fields:
 table: cert_deposit_table
 rows: cert_deposit
 columns:
-  - Name of bank/institution: row_item.name.text
+  - Bank or institution name: row_item.name.text
   - Name on account: row_item.account
   - Balance: currency(row_item.balance)
 ---
 id: certificate of deposit information
 question: |
-  Details for the ${ordinal(i)} certificate of deposit: 
+  Details for the ${ordinal(i)} Certificate of Deposit: 
 fields:
-  - Name of bank or institution: cert_deposit[i].name.text
-  - Name on the account: cert_deposit[i].account
+  - Bank or institution name: cert_deposit[i].name.text
+    maxlength: 25
+  - Name on account: cert_deposit[i].account
+    maxlength: 25
   - Balance: cert_deposit[i].balance
     datatype: currency
     min: 0
@@ -2115,15 +2134,16 @@ code: |
 ########### FA ASSETS - 15a money cash/card ###########
 id: money cash/card intro 
 question: |
-  Do you have any money on cash and prepaid debit cards or through
-  money transfer mobile apps like Venmo, PayPal, or Apple Pay?
+  Do you have any money on debit cards or in money transfer apps?
+subquestion: |
+  These include any money you have on cash cards, prepaid debit cards, and money transfer mobile apps like Venmo, PayPal, or Apple Pay.
 fields:
   - no label: has_money
     datatype: yesnoradio
 ---
 id: additional money cash/card
 question: |
-  Do you have other cash/card or money app balances to include?
+  Do you have other debit cards or money transfer app balances?
 subquestion: |
   So far you have told us about:
   ${ money_table }
@@ -2140,10 +2160,12 @@ columns:
 ---
 id: money cash/card information
 question: |
-  Details for the ${ordinal(i)} cash/card or app: 
+  Details for the ${ordinal(i)} debit card or money transfer app 
 fields:
   - Location of cash/card: money[i].name.text
+    maxlength: 25
   - Name of holder: money[i].holder
+    maxlength: 25
   - Balance: money[i].balance
     datatype: currency
     min: 0
@@ -2159,19 +2181,23 @@ code: |
 ########### FA ASSETS - 15b Investment Accounts ###########
 id: investment accounts intro 
 question: |
-  Do you have any investment accounts and securities?
+  Do you have any investment accounts or securities?
 subquestion: |
-  Stocks, bonds, options, employee stock ownership plans 
+  These include stocks, bonds, options, and Employee Stock Ownership Plans (ESOP).
+
+  **Note:** These do not include investement/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency.
 fields:
   - no label: has_investments
     datatype: yesnoradio
 ---
 id: additional investment accounts
 question: |
-  Do you have other investment accounts to include?
+  Do you have other investment accounts or securities?
 subquestion: |
   So far you have told us about:
   ${ investments_table }
+
+  Reminder: These do not include investement/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency.
 fields:
   - Add another?: investments.there_is_another
     datatype: yesnoradio
@@ -2180,17 +2206,22 @@ table: investments_table
 rows: investments
 columns:
   - Company name: row_item.name.text
-  - "# shares": row_item.shares
+  - "Number of shares": row_item.shares
   - Account type: row_item.type
   - Owner: row_item.owner
   - FMV: currency(row_item.fmv)
 ---
 id: investments information
 question: |
-  Details for the ${ordinal(i)} investment account: 
+  Details for the ${ordinal(i)} investment account or securities
+subquestion: |
+  ${ collapse_template(FMV_help) }
 fields:
   - Company name: investments[i].name.text
+    maxlength: 25
   - Number of shares: investments[i].shares
+    datatype: integer
+    min: 1
   - Type of account: investments[i].type
     datatype: radio
     choices:
@@ -2199,9 +2230,18 @@ fields:
       - Options
       - Employee Stock Ownership Plans: ESOP
   - Who is the owner?: investments[i].owner
-  - Fair market value: investments[i].fmv
+    maxlength: 25
+  - Fair market value (FMV): investments[i].fmv
     datatype: currency
     min: 0
+---
+template: FMV_help
+subject: |
+  **How to determine Fair Market Value (FMV)**
+content: |  
+  Fair Market Value (FMV) is generally defined as a selling price for an item to which an unrelated buyer and seller can agree. You may look at what similar items have sold for recently, getting the item appraised, or by using a third-party website like Zillow.com for real estate or Kelley Blue Book for automobiles.
+
+  Attach any documents you have that verify FMV to your *Financial Affidavit*. 
 ---
 code: |
   investments[i].name.text
@@ -2211,22 +2251,25 @@ code: |
   if investments.number_gathered() == 25:
     investments.there_is_another = False
 ---
-########### FA ASSETS - 15b Securities ###########
-id: securities intro 
+########### FA ASSETS - 15b Brokerage accounts ###########
+id: brokerage accounts intro 
 question: |
-  Do you have any investment accounts and securities?
+  Do you have any other investment assets?
 subquestion: |
-  Brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency
+  These include investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency.
 fields:
   - no label: has_securities
     datatype: yesnoradio
 ---
 id: additional securities
 question: |
-  Do you have other securities to include?
+  Do you have other investment assets?
 subquestion: |
   So far you have told us about:
   ${ securities_table }
+
+  Remember: These include investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency.
+
 fields:
   - Add another?: securities.there_is_another
     datatype: yesnoradio
@@ -2240,10 +2283,12 @@ columns:
 ---
 id: securities information
 question: |
-  Details for the ${ordinal(i)} investment: 
+  Details for the ${ordinal(i)} investment asset
 fields:
   - Description of asset: securities[i].name.text
+    maxlength: 30
   - Who is the owner?: securities[i].owner
+    maxlength: 30
   - Balance: securities[i].balance
     datatype: currency
     min: 0
@@ -2266,7 +2311,7 @@ fields:
 ---
 id: additional real estate
 question: |
-  Do you have other properties to include?
+  Do you have other real estate?
 subquestion: |
   So far you have told us about:
   ${ real_estate_table }
@@ -2278,13 +2323,15 @@ table: real_estate_table
 rows: real_estate
 columns:
   - Address: row_item.address.on_one_line()
-  - Name on Title: row_item.name.text
+  - Name on title: row_item.name.text
   - FMV: currency(row_item.fmv)
   - Balance: currency(row_item.balance)
 ---
 id: real estate information
 question: |
-  Details for the ${ordinal(i)} property: 
+  Details for the ${ordinal(i)} property
+subquestion: |
+  ${ collapse_template(FMV_help) }
 fields:
   - Street address: real_estate[i].address.address
     address autocomplete: True
@@ -2296,7 +2343,8 @@ fields:
       states_list()
   - ZIP code: real_estate[i].address.zip
   - Name on the title: real_estate[i].name.text
-  - Fair market value: real_estate[i].fmv
+    maxlength: 25
+  - Fair market value (FMV): real_estate[i].fmv
     datatype: currency
     min: 0
   - Balance due: real_estate[i].balance
@@ -2316,14 +2364,14 @@ id: motor vehicle intro
 question: |
   Do you have any motor vehicles?
 subquestion: |
-  Brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency
+  These include cars, boats, trailers, motorcycles, and aircrafts.
 fields:
   - no label: has_motor_vehicle
     datatype: yesnoradio
 ---
 id: additional motor vehicle
 question: |
-  Do you have other vehicles to include?
+  Do you have other vehicles?
 subquestion: |
   So far you have told us about:
   ${ motor_vehicle_table }
@@ -2343,7 +2391,10 @@ columns:
 ---
 id: motor vehicle information
 question: |
-  Details for the ${ordinal(i)} investment: 
+  Details for the ${ordinal(i)} motor vehicle 
+subquestion: |
+
+  ${ collapse_template(FMV_help) }  
 fields:
   - Vehicle year: motor_vehicle[i].year
     datatype: integer
@@ -2352,10 +2403,15 @@ fields:
     max: 2100
   - Vehicle make: motor_vehicle[i].make
     maxlength: 15
+    help: |
+      Car examples: Chevrolet, Honda, and Ford    
   - Vehicle model: motor_vehicle[i].model
     maxlength: 10
+    help: |
+      Car examples: Malibu, Civic, and Mustang
   - Name on title: motor_vehicle[i].name.text
-  - Fair market value: motor_vehicle[i].fmv
+    maxlength: 25
+  - Fair market value (FMV): motor_vehicle[i].fmv
     datatype: currency
     min: 0
   - Balance: motor_vehicle[i].balance
@@ -2380,7 +2436,7 @@ fields:
 ---
 id: additional business interests
 question: |
-  Do you have other business interests to include?
+  Do you have other business interests?
 subquestion: |
   So far you have told us about:
   ${ business_interests_table }
@@ -2393,20 +2449,24 @@ rows: business_interests
 columns:
   - Name of business: row_item.name.text
   - Type of business: row_item.type
-  - "% Ownership": row_item.ownership
+  - "% ownership": row_item.ownership
   - FMV: currency(row_item.fmv)
 ---
 id: business_interests information
 question: |
-  Details for the ${ordinal(i)} investment: 
+  Details for the ${ordinal(i)} business interest 
+subquestion: |
+  ${ collapse_template(FMV_help) }  
 fields:
   - Name of business: business_interests[i].name.text
+    maxlength: 30
   - Type of business: business_interests[i].type
-  - "How much ownership (1-100%)?": business_interests[i].ownership
+    maxlength: 25
+  - "What percent do you own? (1-100%)": business_interests[i].ownership
     datatype: integer
     min: 1
     max: 100
-  - Fair market value: business_interests[i].fmv
+  - Fair market value (FMV): business_interests[i].fmv
     datatype: currency
     min: 0
 ---
@@ -2428,7 +2488,7 @@ fields:
 ---
 id: additional investment accounts
 question: |
-  Do you have other investment accounts to include?
+  Do you have other life insurance policies?
 subquestion: |
   So far you have told us about:
   ${ life_insurance_table }
@@ -2446,7 +2506,7 @@ columns:
 ---
 id: life_insurance information
 question: |
-  Details for the ${ordinal(i)} investment account: 
+  Details for the ${ordinal(i)} life insurance policy 
 fields:
   - Name of insurance company: life_insurance[i].name.text
   - Type of policy: life_insurance[i].type
@@ -2457,7 +2517,7 @@ fields:
       - Universal
       - Variable
       - Final expense
-  - Death benfit: life_insurance[i].benefit
+  - Death benefit: life_insurance[i].benefit
     datatype: currency
     min: 0
   - Cash value: life_insurance[i].value
@@ -2477,16 +2537,14 @@ id: retirement benefits intro
 question: |
   Do you have any retirement benefits or deferred compensation?
 subquestion: |
-  Pension plan, annuity, IRA, 401(k), 403(b), SEP
-
-  (balance as of the date of this affidavit)
+  These could be a pension plan, annuity, IRA, 401(k), 403(b), or a Simplified Employee Pension (SEP).
 fields:
   - no label: has_retirement_plan
     datatype: yesnoradio
 ---
 id: additional retirement benefits
 question: |
-  Do you have other retirement plan benefits to include?
+  Do you have other retirement benefits or deferred compensation?
 subquestion: |
   So far you have told us about:
   ${ retirement_plan_table }
@@ -2503,10 +2561,12 @@ columns:
 ---
 id: retirement_plan information
 question: |
-  Details for the ${ordinal(i)} plan: 
+  Details for the ${ordinal(i)} retirement benefit or deferred compensation 
 fields:
   - Name of plan: retirement_plan[i].name.text
+    maxlength: 25
   - Type of plan: retirement_plan[i].type
+    maxlength: 30
   - Balance: retirement_plan[i].balance
     datatype: currency
     min: 0
@@ -2524,14 +2584,14 @@ id: collectibles intro
 question: |
   Do you have any valuable collectibles?
 subquestion: 
-  Collectables are things like coins, stamps, art or antiques.
+  Collectibles are things like coins, stamps, art or antiques.
 fields:
   - no label: has_collection
     datatype: yesnoradio
 ---
 id: additional collectibles 
 question: |
-  Do you have other collectibles to include?
+  Do you have other valuable collectibles?
 subquestion: |
   So far you have told us about:
   ${ collection_table }
@@ -2547,10 +2607,15 @@ columns:
 ---
 id: collectibles information
 question: |
-  Details for the ${ordinal(i)} cash/card or app: 
+  Details for the ${ordinal(i)} collectible
+subquestion: |
+
+  ${ collapse_template(FMV_help) }  
+  
 fields:
   - Description: collection[i].name.text
-  - Fair market value: collection[i].fmv
+    maxlength: 50
+  - Fair market value (FMV): collection[i].fmv
     datatype: currency
     min: 0
 ---
@@ -2566,13 +2631,15 @@ code: |
 id: other property intro 
 question: |
   Do you have any other personal property valued over $500?
+subquestion: |
+  ${ collapse_template(FMV_help) }  
 fields:
   - no label: has_other_property
     datatype: yesnoradio
 ---
 id: additional other_property 
 question: |
-  Do you have other personal property to include?
+  Do you have other personal property valued over $500?
 subquestion: |
   So far you have told us about:
   ${ other_property_table }
@@ -2589,9 +2656,12 @@ columns:
 id: other property information
 question: |
   Details for the ${ordinal(i)} property: 
+subquestion: |
+  ${ collapse_template(FMV_help) }  
 fields:
   - Description: other_property[i].name.text
-  - Fair market value: other_property[i].fmv
+    maxlength: 50
+  - Fair market value (FMV): other_property[i].fmv
     datatype: currency
     min: 0
 ---
@@ -2606,15 +2676,16 @@ code: |
 ########### FA ASSETS - 15j Transfer or Sale of Assets #######
 id: transfer sale intro
 question: |
-  Have you had any transfer or sale of assets or property within the Last
-  two years with a fair market value of at least $1000?
+  Have you transferred or sold any assets or property valued at or over $1,000 within the last two years?
+subquestion: |
+  ${ collapse_template(FMV_help) }  
 fields:
   - no label: has_transfer
     datatype: yesnoradio
 ---
 id: additional transfer
 question: |
-  Do you have other transfer benefits to include?
+  Did you have other asset or property transfers or sales within the last two years?
 subquestion: |
   So far you have told us about:
   ${ transfer_table }
@@ -2626,17 +2697,21 @@ table: transfer_table
 rows: transfer
 columns:
   - Description: row_item.name.text
-  - Transfer/Sold to: row_item.sold
+  - Transfer/sold to: row_item.sold
   - Date: row_item.date.format("MM/dd/yyyy")
   - Amount: currency(row_item.amount)
 ---
 id: transfer information
 question: |
-  Details for the ${ordinal(i)} plan: 
+  Details for the ${ordinal(i)} transfer or sale
+subquestion: |
+  ${ collapse_template(FMV_help) }  
 fields:
-  - Description of asset/property: transfer[i].name.text
-  - Who received the transfer?: transfer[i].sold
-  - Date transfer/sold: transfer[i].date
+  - Description of asset or property: transfer[i].name.text
+    maxlength: 25
+  - Who was it transferred or sold to?: transfer[i].sold
+    maxlength: 25
+  - Date of transfer or sale: transfer[i].date
     datatype: ThreePartsDate
     alMax: ${ today().format("MM/dd/yyyy") }
   - Amount: transfer[i].amount
@@ -2654,14 +2729,16 @@ code: |
 ########### FA LAWSUITS AND CLAIMS #######
 id: lawsuits and claims intro
 question: |
-  Have you had any lawsuits or claims?
+  Do you have any lawsuits or claims?
+subquestion: |
+  These include Workers' Compensation, disability, or lawsuits brought against other companies or individuals. These also include lawsuits or claims brought against you. 
 fields:
   - no label: has_lawsuits
     datatype: yesnoradio
 ---
 id: additional lawsuits
 question: |
-  Do you have other lawsuits or claims to include?
+  Do you have other lawsuits or claims?
 subquestion: |
   So far you have told us about:
   ${ lawsuits_table }
@@ -2674,19 +2751,23 @@ rows: lawsuits
 columns:
   - Case number: row_item.case
   - Date lawsuit/claim filed: row_item.date
-  - Amount received: currency(row_item.amount)
+  - Amount recovered: currency(row_item.amount)
 ---
 id: lawsuits information
 question: |
-  Details for the ${ordinal(i)} plan: 
+  Details for the ${ordinal(i)} lawsuit or claim
+subquestion: |
+ 
 fields:
   - Case number: lawsuits[i].case
-  - Date lawsuit/claim filed: lawsuits[i].date
+  - Date lawsuit or claim filed: lawsuits[i].date
     datatype: ThreePartsDate
     alMax: ${ today().format("yyyy-MM-dd") }
-  - Amount received: lawsuits[i].amount
+  - Amount recovered: lawsuits[i].amount
     datatype: currency
     min: 0
+    help: |
+      If you did not recover anything, enter $0. If your case is still pending or has not yet been filed, enter unknown.
 ---
 code: |
   lawsuits[i].case
@@ -2698,28 +2779,30 @@ code: |
 ---
 id: attach documents 
 question: |
-  Attach documents to your Financial Affidavit
+  Attach documents to your *Financial Affidavit*
 subquestion: |
-  You must attach the below documents.
+  The *Financial Affidavit* requires that you attach the most recent copies of certain documents.
 
-  **Note:** Check all that apply. You must attach these documents if you have or can get them.
+  **Note:** You must attach these documents if you have them or can get them.
+
+  Check all that apply.
 fields:
   - I am attaching: users[0].attached_documents
     datatype: checkboxes
     choices:
-      - pay stubs or other proof of income: stubs
-      - income tax returns: returns
-      - bank statements: statements
-      - other docs tha verify your debts and assets: other
+      - Pay stubs or other proof of income: stubs
+      - Income tax returns: returns
+      - Bank statements: statements
+      - Other documents that verify my debts and assets: other
     none of the above: False
-  - Debts - list attached documents: users[0].attachment_debts
+  - List of documents that verify debts: users[0].attachment_debts
     input type: area
     rows: 2
     maxlength: 100
     show if:
       variable: users[0].attached_documents["other"]
       is: True      
-  - Assets - list attached documents: users[0].attachment_assets
+  - List of documents that verify assets: users[0].attachment_assets
     input type: area
     rows: 2
     maxlength: 100
@@ -2733,11 +2816,11 @@ question: |
 subquestion: |
   This program can put "**/s/ ${users[0].name.full(middle='full')}**" where you would sign your name. The court will accept this as your signature.
 
-  If you do not add your **{e-signature}**, you must sign your paper form before you file it.
+  If you do not add your **{e-signature}**, you must sign your paper form before you send it to the other party in your case or their lawyer.
 
   <div class="alert alert-info ilao-info" role="alert">
-    <h6 class="alert-heading">What it means to sign your forms</h6>
-    <p>By signing your <i>Application for Waiver of Court Fees</i>, you are certifying that:</p>
+    <h6 class="alert-heading">What it means to sign your form</h6>
+    <p>By signing your <i>Financial Affidavit</i>, you are certifying that:</p>
     <p><ul>
       <li>Everything on the forms is true and correct, and</li>
       <li>You understand that making a false statement on the form is perjury, which can result in criminal penalties.</li>
@@ -3033,7 +3116,7 @@ attachment:
           ${ employment[0].perks['other'] }
           % endif
       - "business_other_detail": |
-          % if employment.there_are_any and employment[0].type != "employed" and employment[0].perks == "other":
+          % if employment.there_are_any and employment[0].type != "employed" and employment[i].perks["other"] == True:
           ${ employment[0].other_perks }
           % endif
       - "employment_addendum_yes": ${ employment.number_gathered() > 1 }
@@ -3631,9 +3714,9 @@ attachment:
       - "other_children_covered": |
           % if insurance.there_are_any and insurance[0].coverage["children_other"]:
             % if insurance[0].other_children_count == 1:
-            1 child - ${ insurance[0].other_children_age_list }
+            1 child, age: ${ insurance[0].other_children_age_list }
             % else:
-            ${ insurance[0].other_children_count } children - ${ insurance[0].other_children_age_list }
+            ${ insurance[0].other_children_count } children, ages: ${ insurance[0].other_children_age_list }
             % endif
           % endif
       - "insurance_monthly_cost": |
@@ -4631,7 +4714,7 @@ attachment:
           ${ employment[i].perks['other'] }
           % endif
       - "business_other_detail": |
-          % if employment[i].type != "employed" and employment[i].perks == "other":
+          % if employment[i].type != "employed" and employment[i].perks["other"] == True:
           ${ employment[i].other_perks }
           % endif
 ---
@@ -4759,10 +4842,10 @@ attachment:
           % endif
       - "other_children_covered": |
           % if insurance.there_are_any and insurance[i].coverage["children_other"]:
-            % if insurance[i].other_children_count == 1:
-            1 child - ${ insurance[i].other_children_age_list }
+            % if insurance[0].other_children_count == 1:
+            1 child, age: ${ insurance[0].other_children_age_list }
             % else:
-            ${ insurance[i].other_children_count } children - ${ insurance[i].other_children_age_list }
+            ${ insurance[0].other_children_count } children, ages: ${ insurance[0].other_children_age_list }
             % endif
           % endif
       - "insurance_monthly_cost":   |
