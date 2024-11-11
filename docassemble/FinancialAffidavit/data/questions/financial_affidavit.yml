@@ -49,7 +49,7 @@ code: |
 ---
 sections:
   - section_intro: Start
-  - section_case: Case information
+  - section_case: Case info
   - section_user: About you
   - section_income: Income
   - section_expenses: Expenses and debts
@@ -388,6 +388,8 @@ question: |
   Are your address and phone number protected by court order because of domestic violence or abuse?
 subquestion: |
   If your contact information does not appear on other court papers because you have a protective order, you do not have to list them on your *Financial Affidavit*. 
+
+  Click **No** to list your address and phone number on your *Financial Affidavit*.
 fields:
   - no label: hide_contact
     datatype: yesnoradio
@@ -727,7 +729,7 @@ continue button field: monthly_income_intro
 question: |
   Monthly income from all sources
 subquestion: |
-  The next screens will ask you about the income you receive each month. The *Fiancial Affidavit* includes almost 30 types of income. Here's how we break it down.
+  The next screens will ask you about the income you receive each month. The *Financial Affidavit* includes almost 30 types of income. Here's how we break it down:
 
   * Employment income
   * Investment income
@@ -940,7 +942,7 @@ question: |
 subquestion: |
   **Remember:** List the income you receive each month.
 fields:
-  - Gifts of money: users[0].gifts_money_question
+  - Gifts of money you receive from others: users[0].gifts_money_question
     datatype: yesnowide
   - Monthly amount: users[0].gifts_money
     datatype: currency
@@ -1064,7 +1066,7 @@ continue button field: expenses_intro
 question: |
   Monthly expenses
 subquestion: |
-  The next screens will ask you about your monthly expenses. The *Fiancial Affidavit* includes many types of expenses. Here's how we break it down.
+  The next screens will ask you about your monthly expenses. The *Financial Affidavit* includes many types of expenses. Here's how we break it down:
 
   * Income deductions
   * Maintenance payments, if any
@@ -1133,19 +1135,19 @@ id: monthly maintenance expenses
 question: |
   Monthly maintenance payments
 fields:
-  - "Maintenance being paid or payable to the other party by you under a court order **in this case**": users[0].maintenance_paid_court_question
+  - "Maintenance being paid or payable to the other party by you under a court order in this case": users[0].maintenance_paid_court_question
     datatype: yesnowide
   - Monthly amount: users[0].maintenance_paid_court
     datatype: currency
     min: 0
     show if: users[0].maintenance_paid_court_question
-  - "Maintenance being paid under a court order to a former spouse by you, which is **tax deductible** to you": users[0].maintenance_paid_no_tax_question
+  - "Maintenance being paid under a court order to a former spouse by you, which is tax deductible to you": users[0].maintenance_paid_no_tax_question
     datatype: yesnowide
   - Monthly amount: users[0].maintenance_paid_no_tax
     datatype: currency
     min: 0
     show if: users[0].maintenance_paid_no_tax_question
-  - "Maintenance being paid under a court order to a former spouse by you, which is **not tax deductible** to you": users[0].maintenance_paid_taxed_question
+  - "Maintenance being paid under a court order to a former spouse by you, which is not tax deductible to you": users[0].maintenance_paid_taxed_question
     datatype: yesnowide
   - Monthly amount: users[0].maintenance_paid_taxed
     datatype: currency
@@ -1168,7 +1170,7 @@ fields:
     datatype: currency
     min: 0
     show if: users[0].child_support_2_question
-  - Child support being paid, **but there is no court order**, for children not shared with the other party and who are not part of this case. These are children[NEWLINE](1) that are presumed to be yours,[NEWLINE](2) for whom there is a Voluntary Acknowledgment of Paternity (VAP) signed by you and the other parent, **or**[NEWLINE](3) for whom there is a court order naming you as a parent, but there is no support order: users[0].child_support_3_question
+  - Child support being paid, **but there is no court order**, for children not shared with the other party and who are not part of this case. These are children[NEWLINE](1) that are presumed to be yours,[NEWLINE](2) for whom there is a Voluntary Acknowledgment of Paternity (VAP) signed by you and the other parent, or[NEWLINE](3) for whom there is a court order naming you as a parent, but there is no support order: users[0].child_support_3_question
     datatype: yesnowide
   - Monthly amount: users[0].child_support_3
     datatype: currency
@@ -1325,7 +1327,7 @@ fields:
     datatype: currency
     min: 0
     show if: users[0].transport_insurance_question
-  - Gasoline/EV-charging: users[0].transport_fuel_question
+  - Gasoline: users[0].transport_fuel_question
     datatype: yesnowide
   - Monthly amount: users[0].transport_fuel
     datatype: currency
@@ -1454,7 +1456,7 @@ id: monthly personal gifts expenses
 question: |
   Monthly gifts, donations, and other expenses
 fields:
-  - Gifts: users[0].personal_gifts_question
+  - Gifts you give to others: users[0].personal_gifts_question
     datatype: yesnowide
   - Monthly amount: users[0].personal_gifts  
     datatype: currency
@@ -1588,13 +1590,13 @@ fields:
     datatype: currency
     min: 0
     show if: users[0].children_therapy_question 
-  - Dental and orthodontia: users[0].children_dental_question 
+  - Dental and orthodontics (braces): users[0].children_dental_question 
     datatype: yesnowide
   - Monthly amount: users[0].children_dental
     datatype: currency
     min: 0
     show if: users[0].children_dental_question 
-  - Optical: users[0].children_vision_question
+  - Vision: users[0].children_vision_question
     datatype: yesnowide
   - Monthly amount: users[0].children_vision
     datatype: currency
@@ -1880,7 +1882,7 @@ fields:
     choices:
       - Medical
       - Dental
-      - Orthodontic
+      - Orthodontic (braces)
       - Vision
   - Type of policy: insurance[i].policy
     datatype: radio
@@ -2047,7 +2049,7 @@ continue button field: assets_intro
 question: |
   Your belongings
 subquestion: |
-  On the *Financial Affidavit*, you are required to list all of your belongings, also known as your assets. The form puts assets in the following groups.
+  On the *Financial Affidavit*, you are required to list all of your belongings, also known as your assets. The form puts assets in the following groups:
 
   * Cash and cash equivalents 
   * Certificates of deposit
@@ -2505,7 +2507,7 @@ fields:
   - Name of business: business_interests[i].name.text
     maxlength: 30
   - Type of business: business_interests[i].type
-    maxlength: 25
+    maxlength: 20
   - "What percent do you own? (1-100%)": business_interests[i].ownership
     datatype: integer
     min: 1

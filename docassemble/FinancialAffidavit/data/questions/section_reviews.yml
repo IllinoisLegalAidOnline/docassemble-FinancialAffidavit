@@ -90,3 +90,157 @@ review:
   - note: |
       <h2 class="h4">Total Monthly Living Expenses: ${ currency(total_monthly_household_expenses) }</h2>
 ---
+id: review screen
+event: review_answers
+question: |
+  Review screen
+subquestion: |
+  Edit your answers below.
+review: 
+  - Edit: users[0].name.first
+    button: |
+      **Your name:**
+      ${users[0].name.full(middle="full")}
+  - Edit: party_label
+    button: |
+      **Your party label:**
+      ${ party_label.capitalize() }
+  - Edit: other_parties[0].name.first
+    button: |
+      **The other party's name:**
+      ${other_parties[0].name.full(middle="full")}
+  - Edit: case_county
+    button: |
+      **County where this case is filed:**
+      ${ case_county }
+  - Edit: case_number
+    button: |
+      **Case number:**
+      ${ case_number }
+  - Edit: filing_status
+    button: |
+      **Status of your family law case:**
+      % if filing_status == "pre_judgment":
+      Pre-judgment
+      % else:
+      Post-judgment
+      % endif
+      
+  - Edit: hide_contact
+    button: |
+      **Are your address and phone number protected?**
+      ${ word(yesno(hide_contact))}  
+  - Edit: users[0].address.address
+    button: |
+      **Your address:**
+      ${ users[0].address.on_one_line(bare=True) }
+    show if: hide_contact == False
+  - Edit: users[0].phone_number
+    button: |
+      **Your phone number:**
+      ${ phone_number_formatted(users[0].phone_number) }
+    show if: hide_contact == False
+  - Edit: users[0].birthdate
+    button: |
+      **Your birthdate:**
+      ${ users[0].birthdate }
+  - Edit: household_expenses
+    button: |
+      **Do you live with another adult that helps pay your expenses?**
+      ${ word(yesno(household_expenses))}  
+  - Edit: employment.there_are_any
+    button: |
+      **Do you have income from employment?**
+      ${word(yesno(employment.there_are_any))}
+
+
+---
+id: case info review screen
+section: Case info
+event: section_case
+question: |
+  Case info
+subquestion: |
+  Edit your answers below.
+review: 
+  - Edit: users[0].name.first
+    button: |
+      **Your name:**
+      ${users[0].name.full(middle="full")}
+  - Edit: party_label
+    button: |
+      **Your party label:**
+      ${ party_label.capitalize() }
+  - Edit: other_parties[0].name.first
+    button: |
+      **The other party's name:**
+      ${other_parties[0].name.full(middle="full")}
+  - Edit: case_county
+    button: |
+      **County where this case is filed:**
+      ${ case_county }
+  - Edit: case_number
+    button: |
+      **Case number:**
+      ${ case_number }
+  - Edit: filing_status
+    button: |
+      **Status of your family law case:**
+      % if filing_status == "pre_judgment":
+      Pre-judgment
+      % else:
+      Post-judgment
+      % endif
+
+
+---
+id: about you review screen
+section: About you
+event: section_user
+question: |
+  About you
+subquestion: |
+  Edit your answers below.
+review:
+  - Edit: users[0].name.first
+    button: |
+      **Your name:**
+      ${ users[0].name.full(middle="full") }
+  - Edit: hide_contact
+    button: |
+      **Are your address and phone number protected?**
+      ${ word(yesno(hide_contact))}  
+  - Edit: users[0].address.address
+    button: |
+      **Your address:**
+      ${ users[0].address.on_one_line(bare=True) }
+    show if: hide_contact == False
+  - Edit: users[0].phone_number
+    button: |
+      **Your phone number:**
+      ${ phone_number_formatted(users[0].phone_number) }
+    show if: hide_contact == False
+  - Edit: users[0].birthdate
+    button: |
+      **Your birthdate:**
+      ${ users[0].birthdate }
+  - Edit: household_expenses
+    button: |
+      **Do you live with another adult that helps pay your expenses?**
+      ${ word(yesno(household_expenses))}  
+
+
+---
+id: income review screen
+section: Income
+event: section_income
+question: |
+  Income
+subquestion: |
+  Edit your answers below.
+review: 
+  - Edit: employment.there_are_any
+    button: |
+      **Do you have income from employment?**
+      ${word(yesno(employment.there_are_any))}
+      
