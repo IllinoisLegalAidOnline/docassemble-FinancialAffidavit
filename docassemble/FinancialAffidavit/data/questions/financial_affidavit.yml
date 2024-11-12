@@ -3022,7 +3022,7 @@ attachment:
       - "users_birthdate": ${ users[0].birthdate.format('MM/dd/yyyy') }
       - "household_expenses": ${ household_expenses }
       # Page 2: 6. My Employment/Business
-      - "unemployed_yes": ${ employment.number_gathered() == 0 }  
+      - "unemployed_yes": ${ employment.there_are_any == False }  
       # employed
       - "employed_yes": |
           % if employment.there_are_any:
@@ -4603,7 +4603,7 @@ code: |
   employment_to_bundle = []
   additional_employment_bundle.enabled = False
 
-  if employment.number_gathered():
+  if employment.there_are_any:
     for index, el in enumerate(employment):
       # No need for additional employment or business income unless employment.number_gathered() >= 1
       if index == 0:

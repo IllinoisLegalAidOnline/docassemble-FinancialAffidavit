@@ -230,6 +230,32 @@ review:
       ${ word(yesno(household_expenses))}  
 
 
+  - Edit: employment.there_are_any
+    button: |
+      **Do you have income from employment?**
+      ${word(yesno(employment.there_are_any))}      
+
+      
+  - Edit: users[0].deductions_federal_question
+    button: |
+      **Do you have federal taxes deducted from your pay?**
+      ${word(yesno(users[0].deductions_federal_question))}
+
+
+  - Edit: has_cash_assets
+    button: |
+      **Do you have any cash or cash equivalents?**
+      ${word(yesno(has_cash_assets))}
+      
+
+  - Edit: e_signature
+    button: |
+      **Do you want to add your electronic signature to your forms?**
+      ${word(yesno(e_signature))}
+
+
+
+
 ---
 id: income review screen
 section: Income
@@ -243,4 +269,50 @@ review:
     button: |
       **Do you have income from employment?**
       ${word(yesno(employment.there_are_any))}
-      
+
+
+
+---
+id: expenses and debts review screen
+section: Expenses and debts
+event: section_expenses
+question: |
+  Expenses and debts
+subquestion: |
+  Edit your answers below.
+review:
+  - Edit: users[0].deductions_federal_question
+    button: |
+      **Do you have federal taxes deducted from your pay?**
+      ${word(yesno(users[0].deductions_federal_question))}
+
+
+
+---
+id: assets review screen
+section: Assets
+event: section_assets
+question: |
+  Assets
+subquestion: |
+  Edit your answers below.
+review:
+  - Edit: has_cash_assets
+    button: |
+      **Do you have any cash or cash equivalents?**
+      ${word(yesno(has_cash_assets))}
+
+
+---
+id: Final steps review screen
+section: Final steps
+event: section_final
+question: |
+  Final steps
+subquestion: |
+  Edit your answers below.
+review:
+  - Edit: e_signature
+    button: |
+      **Do you want to add your electronic signature to your forms?**
+      ${word(yesno(e_signature))}
