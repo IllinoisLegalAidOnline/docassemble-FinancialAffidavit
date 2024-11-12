@@ -97,6 +97,7 @@ question: |
 subquestion: |
   Edit your answers below.
 review: 
+################ Case info
   - Edit: users[0].name.first
     button: |
       **Your name:**
@@ -125,7 +126,8 @@ review:
       % else:
       Post-judgment
       % endif
-      
+
+################ About you      
   - Edit: hide_contact
     button: |
       **Are your address and phone number protected?**
@@ -148,10 +150,52 @@ review:
     button: |
       **Do you live with another adult that helps pay your expenses?**
       ${ word(yesno(household_expenses))}  
+
+################ Income
   - Edit: employment.there_are_any
     button: |
       **Do you have income from employment?**
-      ${word(yesno(employment.there_are_any))}
+      ${word(yesno(employment.there_are_any))}      
+  - Edit: employment.revisit
+    button: |
+      **Employment and business income: (Edit to change details)**
+
+      % for job in employment:
+        * ${ job.name.text }, ${ job.type }
+      % endfor
+    show if: employment.there_are_any
+  
+################ Expenses and debts      
+  - Edit: users[0].deductions_federal_question
+    button: |
+      **Do you have federal taxes deducted from your pay?**
+      ${word(yesno(users[0].deductions_federal_question))}
+  - Edit: has_debts
+    button: |
+      **Do you have any debts?**
+      ${word(yesno(has_debts))}
+  - Edit: debts.revisit
+    button: |
+      **Debts: (Edit to change details)**
+
+      % for debt in debts:
+        * ${ debt.name.text }, ${ currency(debt.amount) }
+      % endfor
+    show if: has_debts
+
+################ Assets
+  - Edit: has_cash_assets
+    button: |
+      **Do you have any cash or cash equivalents?**
+      ${word(yesno(has_cash_assets))}
+      
+################ Final steps
+  - Edit: e_signature
+    button: |
+      **Do you want to add your electronic signature to your forms?**
+      ${word(yesno(e_signature))}
+
+
 
 
 ---
@@ -230,32 +274,6 @@ review:
       ${ word(yesno(household_expenses))}  
 
 
-  - Edit: employment.there_are_any
-    button: |
-      **Do you have income from employment?**
-      ${word(yesno(employment.there_are_any))}      
-
-      
-  - Edit: users[0].deductions_federal_question
-    button: |
-      **Do you have federal taxes deducted from your pay?**
-      ${word(yesno(users[0].deductions_federal_question))}
-
-
-  - Edit: has_cash_assets
-    button: |
-      **Do you have any cash or cash equivalents?**
-      ${word(yesno(has_cash_assets))}
-      
-
-  - Edit: e_signature
-    button: |
-      **Do you want to add your electronic signature to your forms?**
-      ${word(yesno(e_signature))}
-
-
-
-
 ---
 id: income review screen
 section: Income
@@ -269,6 +287,14 @@ review:
     button: |
       **Do you have income from employment?**
       ${word(yesno(employment.there_are_any))}
+  - Edit: employment.revisit
+    button: |
+      **Employment and business income: (Edit to change details)**
+
+      % for job in employment:
+        * ${ job.name.text }, ${ job.type }
+      % endfor
+    show if: employment.there_are_any
 
 
 
@@ -286,6 +312,18 @@ review:
       **Do you have federal taxes deducted from your pay?**
       ${word(yesno(users[0].deductions_federal_question))}
 
+  - Edit: has_debts
+    button: |
+      **Do you have any debts?**
+      ${word(yesno(has_debts))}
+  - Edit: debts.revisit
+    button: |
+      **Debts: (Edit to change details)**
+
+      % for debt in debts:
+        * ${ debt.name.text }, ${ currency(debt.amount) }
+      % endfor
+    show if: has_debts
 
 
 ---
@@ -316,3 +354,87 @@ review:
     button: |
       **Do you want to add your electronic signature to your forms?**
       ${word(yesno(e_signature))}
+
+
+############ revisit, table, and sub-review screens
+---
+id: employment table
+table: employment.table
+rows: employment
+columns:
+  - Name of employer or business: |
+      row_item.name.text
+  - Type: |
+      row_item.type
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("review_employment")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
+---
+id: employment review screen
+continue button field: employment.revisit
+question: |
+  Edit the information about your employment and business income
+subquestion: |
+  ${ employment.table }
+
+  ${ employment.add_action() }
+---
+id: employment review screen
+continue button field: x.review_employment
+section: Income
+generic object: DAObject
+question: |
+  Edit your response
+review: 
+  - Edit: x.name.text
+    button: |
+      **Employer or business name:**
+      ${ x.name.text  }
+  - Edit: x.type
+    button: |
+      **Business type:**
+      ${ x.type }
+# add others below - all attributes whether employed or other business type
+  - Edit: x.cash_payment
+    button: |
+      **Paid in cash?**
+      ${ word(yesno(x.cash_payment))}
+    show if: x.type == "employed"
+  
+  - Edit: x.income_last_year
+    button: |
+      **Income last year:**
+      $${ thousands(x.income_last_year, show_decimals=True) }
+    show if: x.type != "employed"
+
+
+
+---
+id: debts table
+table: debts.table
+rows: debts
+columns:
+  - Creditor: |
+      row_item.name.text
+  - Desciption: |
+      row_item.description
+  - Amount owed: |
+      currency(row_item.amount)
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
+---
+id: debts review screen
+continue button field: debts.revisit
+question: |
+  Edit the information about your debts
+subquestion: |
+  ${ debts.table }
+
+  % if debts.number_gathered() < 26:
+  ${ debts.add_action() }
+  % endif
+
+  
