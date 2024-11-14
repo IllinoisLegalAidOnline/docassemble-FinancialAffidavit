@@ -748,31 +748,31 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].regular_pay
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].regular_pay_question
   - Overtime: users[0].overtime_pay_question
     datatype: yesnowide
   - Monthly amount: users[0].overtime_pay
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].overtime_pay_question
   - Commission: users[0].commission_pay_question
     datatype: yesnowide
   - Monthly amount: users[0].commission_pay
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].commission_pay_question
   - Tips and gratuities: users[0].tips_question
     datatype: yesnowide
   - Monthly amount: users[0].tips
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].tips_question
   - Bonus: users[0].bonus_question
     datatype: yesnowide
   - Bonus: users[0].bonus
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].bonus_question
 ---
 id: monthly investment income 
@@ -785,37 +785,37 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].pension
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].pension_question
   - Annuity: users[0].annuity_question
     datatype: yesnowide
   - Monthly amount: users[0].annuity
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].annuity_question
   - Interest income: users[0].interest_question
     datatype: yesnowide
   - Monthly amount: users[0].interest
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].interest_question
   - Dividend income: users[0].dividend_question
     datatype: yesnowide
   - Monthly amount: users[0].dividend
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].dividend_question
   - Trust income: users[0].trust_question
     datatype: yesnowide
   - Monthly amount: users[0].trust
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].trust_question
   - Investment income: users[0].investment_question
     datatype: yesnowide
   - Monthly amount: users[0].investment
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].investment_question
 ---
 id: monthly benefits income
@@ -828,49 +828,49 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].social_retirement
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].social_retirement_question
   - Social Security Disability: users[0].social_disability_question
     datatype: yesnowide
   - Monthly amount: users[0].social_disability
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].social_disability_question
   - Social Security Income (SSI) (*not included as income for child support purposes*): users[0].social_income_question
     datatype: yesnowide
   - Monthly amount: users[0].social_income
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].social_income_question
   - Unemployment: users[0].unemployment_benefits_question
     datatype: yesnowide
   - Monthly amount: users[0].unemployment_benefits
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].unemployment_benefits_question
   - Disability payment (*not Social Security*): users[0].disability_benefits_question
     datatype: yesnowide
   - Monthly amount: users[0].disability_benefits
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].disability_benefits_question
   - Workers' Compensation: users[0].workers_comp_benefits_question
     datatype: yesnowide
   - Monthly amount: users[0].workers_comp_benefits
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].workers_comp_benefits_question
   - TANF and SNAP (*not included as income for child support purposes*): users[0].child_benefits_question
     datatype: yesnowide
   - Monthly amount: users[0].child_benefits
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].child_benefits_question
   - Military allowances: users[0].military_allowances_question
     datatype: yesnowide
   - Monthly amount: users[0].military_allowances
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].military_allowances_question
 ---
 id: other monthly business income
@@ -883,25 +883,25 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].rental_income
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].rental_income_question
   - Partnership income: users[0].partnership_income_question
     datatype: yesnowide
   - Monthly amount: users[0].partnership_income
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].partnership_income_question
   - Distributions and draws: users[0].distributions_draws_question
     datatype: yesnowide
   - Monthly amount: users[0].distributions_draws
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].distributions_draws_question
   - Royalty income: users[0].royalty_income_question
     datatype: yesnowide
   - Monthly amount: users[0].royalty_income
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].royalty_income_question
 ---
 id: monthly maintenance and support 
@@ -914,25 +914,25 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].maintenance_current
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].maintenance_current_question
   - "Maintenance received under an order entered in this case or another case that you do not have to report as income on your tax return": users[0].maintenance_alternate_question
     datatype: yesnowide
   - Monthly amount: users[0].maintenance_alternate
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].maintenance_alternate_question
   - "Child support for children of this relationship (if this support is paid by the other parent, it does not affect the support calculation)": users[0].child_support_current_question
     datatype: yesnowide
   - Monthly amount: users[0].child_support_current
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].child_support_current_question
   - "Social Security payment made to the children of this relationship based on your disability or retirement": users[0].social_security_current_question
     datatype: yesnowide
   - Monthly amount: users[0].social_security_current
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].social_security_current_question
 ---
 id: monthly gifts other income
@@ -945,7 +945,7 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].gifts_money
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].gifts_money_question
   - Do you receive other types of income?: users[0].other_income_question
     datatype: yesnowide
@@ -954,7 +954,7 @@ fields:
     show if: users[0].other_income_question
   - Total monthly income from other sources?: users[0].other_income
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].other_income_question
 ---
 depends on:
@@ -1101,25 +1101,25 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].deductions_federal
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].deductions_federal_question
   - State income tax: users[0].deductions_state_question
     datatype: yesnowide
   - Monthly amount: users[0].deductions_state
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].deductions_state_question
   - FICA (or Social Security equivalent, such as Self-employment tax): users[0].deductions_fica_question
     datatype: yesnowide
   - Monthly amount: users[0].deductions_fica
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].deductions_fica_question
   - Medicare tax: users[0].deductions_medicare_question
     datatype: yesnowide
   - Monthly amount: users[0].deductions_medicare
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].deductions_medicare_question
   - Mandatory retirement contributions: users[0].deductions_retirement_question
     datatype: yesnowide
@@ -1127,7 +1127,7 @@ fields:
       These are retirement contributions that are required by law or condition of employment, but only if there is no FICA or Social Security equivalent.
   - Monthly amount: users[0].deductions_retirement
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].deductions_retirement_question
 ---
 id: monthly maintenance expenses
@@ -1138,19 +1138,19 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].maintenance_paid_court
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].maintenance_paid_court_question
   - "Maintenance being paid under a court order to a former spouse by you, which is tax deductible to you": users[0].maintenance_paid_no_tax_question
     datatype: yesnowide
   - Monthly amount: users[0].maintenance_paid_no_tax
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].maintenance_paid_no_tax_question
   - "Maintenance being paid under a court order to a former spouse by you, which is not tax deductible to you": users[0].maintenance_paid_taxed_question
     datatype: yesnowide
   - Monthly amount: users[0].maintenance_paid_taxed
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].maintenance_paid_taxed_question
 ---
 id: monthly child support expenses
@@ -1161,19 +1161,19 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].child_support_1
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].child_support_1_question
   - Child support being paid **under a court order** for children not shared with the other party and who are not part of this case: users[0].child_support_2_question
     datatype: yesnowide
   - Monthly amount: users[0].child_support_2
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].child_support_2_question
   - Child support being paid, **but there is no court order**, for children not shared with the other party and who are not part of this case. These are children[NEWLINE](1) that are presumed to be yours,[NEWLINE](2) for whom there is a Voluntary Acknowledgment of Paternity (VAP) signed by you and the other parent, or[NEWLINE](3) for whom there is a court order naming you as a parent, but there is no support order: users[0].child_support_3_question
     datatype: yesnowide
   - Monthly amount: users[0].child_support_3
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].child_support_3_question
 ---
 id: monthly housing expenses
@@ -1184,7 +1184,7 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].living_house_payment
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_house_payment_question
   - Home equity (HELOC) and second mortgage payment: users[0].living_heloc_question
     datatype: yesnowide
@@ -1192,25 +1192,25 @@ fields:
       HELOC stands for home equity line of credit.
   - Monthly amount: users[0].living_heloc
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_heloc_question
   - Real estate taxes: users[0].living_property_taxes_question
     datatype: yesnowide
   - Monthly amount: users[0].living_property_taxes
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_property_taxes_question
   - Homeowners or condo association dues and assessments: users[0].living_hoa_question
     datatype: yesnowide
   - Monthly amount: users[0].living_hoa
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_hoa_question
   - Homeowners or renters insurance: users[0].living_insurance_question
     datatype: yesnowide
   - Monthly amount: users[0].living_insurance
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_insurance_question
 ---
 id: monthly utility expenses
@@ -1221,43 +1221,43 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].living_gas
     datatype: currency
-    min: 0
+    min: 0.01
     show if:  users[0].living_gas_question
   - Electric: users[0].living_power_question
     datatype: yesnowide
   - Monthly amount: users[0].living_power
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_power_question
   - Telephone: users[0].living_phone_question
     datatype: yesnowide
   - Monthly amount: users[0].living_phone
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_phone_question
   - Cable or satellite TV: users[0].living_cable_question
     datatype: yesnowide
   - Monthly amount: users[0].living_cable
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_cable_question
   - Internet: users[0].living_internet_question
     datatype: yesnowide
   - Monthly amount: users[0].living_internet
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_internet_question
   - Water and sewer: users[0].living_water_question
     datatype: yesnowide
   - Monthly amount: users[0].living_water
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_water_question
   - Garbage removal: users[0].living_trash_question
     datatype: yesnowide
   - Monthly amount: users[0].living_trash
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_trash_question
 ---
 id: monthly living expenses
@@ -1268,31 +1268,31 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].living_laundry
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_laundry_question
   - House cleaning service: users[0].living_cleaner_question
     datatype: yesnowide
   - Monthly amount: users[0].living_cleaner
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_cleaner_question
   - Necessary repairs and maintenance to my property: users[0].living_repairs_question
     datatype: yesnowide
   - Monthly amount: users[0].living_repairs
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_repairs_question
   - Pet care: users[0].living_pets_question
     datatype: yesnowide
   - Monthly amount: users[0].living_pets
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_pets_question
   - Groceries, household supplies, and toiletries: users[0].living_groceries_question
     datatype: yesnowide
   - Monthly amount: users[0].living_groceries
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_groceries_question
   - Other monthly household living expenses (transportation expenses will be entered on another screen): users[0].living_other_question
     datatype: yesnowide
@@ -1301,7 +1301,7 @@ fields:
     show if: users[0].living_other_question
   - Total monthly other expenses?: users[0].living_other
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].living_other_question
 ---
 id: monthly transport expenses
@@ -1312,37 +1312,37 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].transport_payment
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].transport_payment_question
   - Repairs and maintenance: users[0].transport_maintenance_question
     datatype: yesnowide
   - Monthly amount: users[0].transport_maintenance
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].transport_maintenance_question
   - Insurance, license, registration, and city stickers: users[0].transport_insurance_question
     datatype: yesnowide
   - Monthly amount: users[0].transport_insurance
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].transport_insurance_question
   - Gasoline: users[0].transport_fuel_question
     datatype: yesnowide
   - Monthly amount: users[0].transport_fuel
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].transport_fuel_question
   - Taxi, ride-share, bus, and train: users[0].transport_public_question
     datatype: yesnowide
   - Monthly amount: users[0].transport_public
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].transport_public_question
   - Parking: users[0].transport_parking_question
     datatype: yesnowide
   - Monthly amount: users[0].transport_parking
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].transport_parking_question
   - Other monthly transportation expenses: users[0].transport_other_question
     datatype: yesnowide
@@ -1351,7 +1351,7 @@ fields:
     show if: users[0].transport_other_question
   - Total monthly other transportation expenses?: users[0].transport_other
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].transport_other_question
 ---
 id: monthly personal medical expenses
@@ -1364,31 +1364,31 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].personal_doctor
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_doctor_question
   - Therapy and counseling: users[0].personal_therapy_question
     datatype: yesnowide
   - Monthly amount: users[0].personal_therapy
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_therapy_question
   - Dental and orthodontia: users[0].personal_dental_question
     datatype: yesnowide
   - Monthly amount: users[0].personal_dental
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_dental_question
   - Optical: users[0].personal_vision_question
     datatype: yesnowide
   - Monthly amount: users[0].personal_vision
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_vision_question
   - Medicine and prescriptions: users[0].personal_medications_question
     datatype: yesnowide
   - Monthly amount: users[0].personal_medications
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_medications_question
 ---
 id: monthly personal insurance expenses
@@ -1401,13 +1401,13 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].personal_life_term
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_life_term_question
   - Life (whole or annuity): users[0].personal_life_whole_question
     datatype: yesnowide
   - Monthly amount: users[0].personal_life_whole
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_life_whole_question
 ---
 id: monthly personal expenses
@@ -1418,37 +1418,37 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].personal_clothing  
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_clothing_question 
   - Grooming, such as hair, nails, or spa: users[0].personal_stylist_question
     datatype: yesnowide
   - Monthly amount: users[0].personal_stylist  
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_stylist_question 
   - Gym & Club membership dues: users[0].personal_memberships_question
     datatype: yesnowide
   - Monthly amount: users[0].personal_memberships  
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_memberships_question 
   - Entertainment, dining out, and hobbies: users[0].personal_entertainment_question
     datatype: yesnowide
   - Monthly amount: users[0].personal_entertainment  
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_entertainment_question 
   - Newspapers, magazines, and subscriptions: users[0].personal_subscriptions_question
     datatype: yesnowide
   - Monthly amount: users[0].personal_subscriptions  
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_subscriptions_question 
   - Vacations: users[0].personal_vacations_question
     datatype: yesnowide
   - Monthly amount: users[0].personal_vacations  
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_vacations_question
 ---
 id: monthly personal gifts expenses
@@ -1459,13 +1459,13 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].personal_gifts  
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_gifts_question 
   - Donations, such as political, religious, or charity: users[0].personal_donations_question
     datatype: yesnowide
   - Monthly amount: users[0].personal_donations  
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_donations_question
   - Other personal expenses not already listed: users[0].personal_other_question
     datatype: yesnowide
@@ -1474,7 +1474,7 @@ fields:
     show if: users[0].personal_other_question
   - Monthly total amount of other personal expenses: users[0].personal_other
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_other_question
 --- 
 id: monthly personal dues expenses
@@ -1485,13 +1485,13 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].personal_associations  
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].personal_associations_question 
   - Professional fees, such as accountants, tax preparers, or lawyers: users[0].peronsal_professional_question
     datatype: yesnowide
   - Monthly amount: users[0].peronsal_professional  
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].peronsal_professional_question 
 ---
 id: monthly children expenses
@@ -1509,13 +1509,13 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].children_clothing  
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_clothing_question 
   - Grooming, such as hair, nails, or spa: users[0].children_grooming_question
     datatype: yesnowide
   - Monthly amount: users[0].children_grooming  
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_grooming_question 
 ---
 id: monthly children education expenses
@@ -1526,49 +1526,49 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].children_tuition
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_tuition_question
   - Books, fees, and supplies: users[0].children_books_question
     datatype: yesnowide
   - Monthly amount: users[0].children_books
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_books_question 
   - School lunch: users[0].children_school_lunch_question
     datatype: yesnowide
   - Monthly amount: users[0].children_school_lunch
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_school_lunch_question 
   - Transportation: users[0].children_transportation_question
     datatype: yesnowide
   - Monthly amount: users[0].children_transportation
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_transportation_question 
   - School-sponsored trips and special events: users[0].children_school_events_question
     datatype: yesnowide
   - Monthly amount: users[0].children_school_events
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_school_events_question 
   - Uniforms: users[0].children_school_uniforms_question
     datatype: yesnowide
   - Monthly amount: users[0].children_school_uniforms
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_school_uniforms_question 
   - Before and after-school care: users[0].children_after_school_question
     datatype: yesnowide
   - Monthly amount: users[0].children_after_school
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_after_school_question 
   - Tutoring and summer school: users[0].children_tutor_question
     datatype: yesnowide
   - Monthly amount: users[0].children_tutor
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_tutor_question 
 ---
 id: monthly children medical expenses
@@ -1581,31 +1581,31 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].children_doctor
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_doctor_question 
   - Therapy and counseling: users[0].children_therapy_question
     datatype: yesnowide
   - Monthly amount: users[0].children_therapy
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_therapy_question 
   - Dental and orthodontics (braces): users[0].children_dental_question 
     datatype: yesnowide
   - Monthly amount: users[0].children_dental
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_dental_question 
   - Vision: users[0].children_vision_question
     datatype: yesnowide
   - Monthly amount: users[0].children_vision
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_vision_question 
   - Medicine: users[0].children_medications_question
     datatype: yesnowide
   - Monthly amount: users[0].children_medications
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_medications_question 
 ---
 id: monthly children additional expenses
@@ -1616,25 +1616,25 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].children_allowance
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_allowance_question 
   - Childcare and sitters: users[0].children_childcare_question 
     datatype: yesnowide
   - Monthly amount: users[0].children_childcare
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_childcare_question 
   - Extracurricular activities and sports, such as equipment or uniforms: users[0].children_sports_question
     datatype: yesnowide
   - Monthly amount: users[0].children_sports
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_sports_question 
   - Summer and school-break camps: users[0].children_camps_question 
     datatype: yesnowide
   - Monthly amount: users[0].children_camps
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_camps_question 
 ---
 id: monthly children vacation expenses
@@ -1645,19 +1645,19 @@ fields:
     datatype: yesnowide
   - Monthly amount: users[0].children_vacations
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_vacations_question 
   - Entertainment, dining out, and hobbies (children only): users[0].children_entertainment_question
     datatype: yesnowide
   - Monthly amount: users[0].children_entertainment
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_entertainment_question 
   - Gifts children give to others: users[0].children_party_gifts_question 
     datatype: yesnowide
   - Monthly amount: users[0].children_party_gifts
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_party_gifts_question 
   - Other expenses for children not already listed: users[0].children_other_question
     datatype: yesnowide
@@ -1666,7 +1666,7 @@ fields:
     show if: users[0].children_other_question
   - Total monthly other expenses for the children?: users[0].children_other
     datatype: currency
-    min: 0
+    min: 0.01
     show if: users[0].children_other_question
 ---
 depends on:
@@ -2831,14 +2831,14 @@ fields:
   - Date lawsuit or claim filed: lawsuits[i].date
     datatype: ThreePartsDate
     alMax: ${ today().format("yyyy-MM-dd") }
-  - Has there been a final judgement yet?: lawsuits[i].judgement
+  - Was any money recovered?: lawsuits[i].judgement
     datatype: yesnoradio
+    help: |
+      If you did not recover anything or if your case is still pending or has not yet been filed, select No.
   - Amount recovered: lawsuits[i].amount
     datatype: currency
     min: 0
     default: 0.00
-    help: |
-      If you did not recover anything, enter $0. If your case is still pending or has not yet been filed, enter unknown.
     show if: lawsuits[i].judgement
 ---
 code: |

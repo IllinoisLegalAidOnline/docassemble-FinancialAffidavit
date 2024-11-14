@@ -106,6 +106,7 @@ review:
 ---
 id: review screen
 event: review_answers
+section: Final steps
 skip undefined: False
 question: |
   Review screen
@@ -270,127 +271,115 @@ review:
     button: |
       **Monthly employment income**
 
-      **Regular employment or self-employment earnings from all jobs, such as 
-      salary, wages, or base pay:** ${ word(yesno(users[0].regular_pay_question)) }
-      - ${ currency(showifdef('users[0].regular_pay')) if showifdef('users[0].regular_pay_question') else '$0.00' }
+      * Regular employment:
+      ${ currency(showifdef('users[0].regular_pay')) if showifdef('users[0].regular_pay_question') else '$0.00' }
 
-      **Overtime:** ${ word(yesno(users[0].overtime_pay_question)) }
-      - ${ currency(showifdef('users[0].overtime_pay')) if showifdef('users[0].overtime_pay_question') else '$0.00' }
+      * Overtime:
+      ${ currency(showifdef('users[0].overtime_pay')) if showifdef('users[0].overtime_pay_question') else '$0.00' }
 
-      **Commission:** ${ word(yesno(users[0].commission_pay_question)) }
-      - ${ currency(showifdef('users[0].commission_pay')) if showifdef('users[0].commission_pay_question') else '$0.00'}
+      * Commission:
+      ${ currency(showifdef('users[0].commission_pay')) if showifdef('users[0].commission_pay_question') else '$0.00'}
 
-      **Tips and gratuities:** ${ word(yesno(users[0].tips_question)) }
-      - ${ currency(showifdef('users[0].tips')) if showifdef('users[0].tips_question') else '$0.00'}
+      * Tips and gratuities:
+      ${ currency(showifdef('users[0].tips')) if showifdef('users[0].tips_question') else '$0.00'}
 
-      **Bonus:** ${ word(yesno(users[0].bonus_question)) }
-      - ${ currency(showifdef('users[0].bonus')) if showifdef('users[0].bonus_question') else '$0.00'}
-
-      **Monthly employment income:** ${ currency(total_monthly_employment_income) }
+      * Bonus:
+      ${ currency(showifdef('users[0].bonus')) if showifdef('users[0].bonus_question') else '$0.00'}
   - Edit: users[0].pension_question
     button: |
       **Monthly investment income**
 
-      **Pension:** ${ word(yesno(users[0].pension_question)) }
-      - ${ currency(showifdef('users[0].pension')) if showifdef('users[0].pension_question') else '$0.00' }
+      * Pension: 
+      ${ currency(showifdef('users[0].pension')) if showifdef('users[0].pension_question') else '$0.00' }
 
-      **Annuity:** ${ word(yesno(users[0].annuity_question)) }
-      - ${ currency(showifdef('users[0].annuity'))  if showifdef('users[0].annuity_question') else '$0.00' }
+      * Annuity: 
+      ${ currency(showifdef('users[0].annuity'))  if showifdef('users[0].annuity_question') else '$0.00' }
 
-      **Interest income:** ${ word(yesno(users[0].interest_question)) }
-      - ${ currency(showifdef('users[0].interest'))  if showifdef('users[0].interest_question') else '$0.00' }
+      * Interest income: 
+      ${ currency(showifdef('users[0].interest'))  if showifdef('users[0].interest_question') else '$0.00' }
 
-      **Dividend income:** ${ word(yesno(users[0].dividend_question)) }
-      **-** ${ currency(showifdef('users[0].dividend'))  if showifdef('users[0].dividend_question') else '$0.00' }
+      * Dividend income: 
+      -** ${ currency(showifdef('users[0].dividend'))  if showifdef('users[0].dividend_question') else '$0.00' }
 
-      **Trust income:** ${ word(yesno(users[0].trust_question)) }
-      - ${ currency(showifdef('users[0].trust'))  if showifdef('users[0].trust_question') else '$0.00' }
+      * Trust income: 
+      ${ currency(showifdef('users[0].trust'))  if showifdef('users[0].trust_question') else '$0.00' }
 
-      **Investment income:** ${ word(yesno(users[0].investment_question)) }
-      - ${ currency(showifdef('users[0].investment'))  if showifdef('users[0].investment_question') else '$0.00' }
-
-      **Monthly investment income:** ${ currency(total_monthly_investment_income) }
+      * Investment income: 
+      ${ currency(showifdef('users[0].investment'))  if showifdef('users[0].investment_question') else '$0.00' }
   - Edit: users[0].social_retirement_question
     button: |
       **Monthly Benefits Income**
 
-      **Social Security Retirement:** ${ word(yesno(users[0].social_retirement_question)) }
-      - ${ currency(showifdef('users[0].social_retirement')) if showifdef('users[0].social_retirement_question') else '$0.00' }
+      * Social Security Retirement: 
+      ${ currency(showifdef('users[0].social_retirement')) if showifdef('users[0].social_retirement_question') else '$0.00' }
 
-      **Social Security Disability:** ${ word(yesno(users[0].social_disability_question)) }
-      - ${ currency(showifdef('users[0].social_disability')) if showifdef('users[0].social_disability_question') else '$0.00' }
+      * Social Security Disability: 
+      ${ currency(showifdef('users[0].social_disability')) if showifdef('users[0].social_disability_question') else '$0.00' }
 
-      **Social Security Income (SSI) (*not included as income for child support purposes*):** ${ word(yesno(users[0].social_income_question)) }
-      - ${ currency(showifdef('users[0].social_income')) if showifdef('users[0].social_income_question') else '$0.00' }
+      * Social Security Income (SSI) (*not included as income for child support purposes*): 
+      ${ currency(showifdef('users[0].social_income')) if showifdef('users[0].social_income_question') else '$0.00' }
 
-      **Unemployment:** ${ word(yesno(users[0].unemployment_benefits_question)) }
-      - ${ currency(showifdef('users[0].unemployment_benefits')) if showifdef('users[0].unemployment_benefits_question') else '$0.00' }
+      * Unemployment: 
+      ${ currency(showifdef('users[0].unemployment_benefits')) if showifdef('users[0].unemployment_benefits_question') else '$0.00' }
 
-      **Disability payment (*not Social Security*):** ${ word(yesno(users[0].disability_benefits_question)) }
-      - ${ currency(showifdef('users[0].disability_benefits')) if showifdef('users[0].disability_benefits_question') else '$0.00' }
+      * Disability payment (*not Social Security*): 
+      ${ currency(showifdef('users[0].disability_benefits')) if showifdef('users[0].disability_benefits_question') else '$0.00' }
 
-      **Workers' Compensation:** ${ word(yesno(users[0].workers_comp_benefits_question)) }
-      - ${ currency(showifdef('users[0].workers_comp_benefits')) if showifdef('users[0].workers_comp_benefits_question') else '$0.00' }
+      * Workers' Compensation: 
+      ${ currency(showifdef('users[0].workers_comp_benefits')) if showifdef('users[0].workers_comp_benefits_question') else '$0.00' }
 
-      **TANF and SNAP (*not included as income for child support purposes*):** ${ word(yesno(users[0].child_benefits_question)) }
-      - ${ currency(showifdef('users[0].child_benefits')) if showifdef('users[0].child_benefits_question') else '$0.00' }
+      * TANF and SNAP (*not included as income for child support purposes*): 
+      ${ currency(showifdef('users[0].child_benefits')) if showifdef('users[0].child_benefits_question') else '$0.00' }
 
-      **Military allowances:** ${ word(yesno(users[0].military_allowances_question)) }
-      - ${ currency(showifdef('users[0].military_allowances')) if showifdef('users[0].military_allowances_question') else '$0.00' }
-
-      **Monthly benefits income:** ${ currency(total_monthly_benefits_income) }
+      * Military allowances: 
+      ${ currency(showifdef('users[0].military_allowances')) if showifdef('users[0].military_allowances_question') else '$0.00' }
   - Edit: users[0].rental_income_question
     button: |
       **Other monthly business income**
 
-      **Rental income:** ${ word(yesno(users[0].rental_income_question)) }
-      - ${ currency(showifdef('users[0].rental_income')) if showifdef('users[0].rental_income_question') else '$0.00'}
+      * Rental income: 
+      ${ currency(showifdef('users[0].rental_income')) if showifdef('users[0].rental_income_question') else '$0.00'}
 
-      **Partnership income:** ${ word(yesno(users[0].partnership_income_question)) }
-      - ${ currency(showifdef('users[0].partnership_income')) if showifdef('users[0].partnership_income_question') else '$0.00'}
+      * Partnership income: 
+      ${ currency(showifdef('users[0].partnership_income')) if showifdef('users[0].partnership_income_question') else '$0.00'}
 
-      **Distributions and draws:** ${ word(yesno(users[0].distributions_draws_question)) }
-      - ${ currency(showifdef('users[0].distributions_draws')) if showifdef('users[0].distributions_draws_question') else '$0.00'}
+      * Distributions and draws: 
+      ${ currency(showifdef('users[0].distributions_draws')) if showifdef('users[0].distributions_draws_question') else '$0.00'}
 
-      **Royalty income:** ${ word(yesno(users[0].royalty_income_question)) }
-      - ${ currency(showifdef('users[0].royalty_income')) if showifdef('users[0].royalty_income_question') else '$0.00'}
-
-      **Other monthly business income:** ${ currency(total_other_monthly_business_income) }
+      * Royalty income: 
+      ${ currency(showifdef('users[0].royalty_income')) if showifdef('users[0].royalty_income_question') else '$0.00'}
   - Edit: users[0].maintenance_current_question
     button: |
       **Monthly maintenance and support**
 
-      **Maintenance received under an order entered in this case or another case that you must report as income on your tax return:** ${ word(yesno(users[0].maintenance_current_question)) }
-      - ${ currency(showifdef('users[0].maintenance_current')) if showifdef('users[0].maintenance_current_question') else '$0.00'}
+      * Maintenance received under an order entered in this case or another case that you must report as income on your tax return: 
+      ${ currency(showifdef('users[0].maintenance_current')) if showifdef('users[0].maintenance_current_question') else '$0.00'}
 
-      **Maintenance received under an order entered in this case or another case that you do not have to report as income on your tax return:** ${ word(yesno(users[0].maintenance_alternate_question)) }
-      - ${ currency(showifdef('users[0].maintenance_alternate')) if showifdef('users[0].maintenance_alternate_question') else '$0.00'}
+      * Maintenance received under an order entered in this case or another case that you do not have to report as income on your tax return: 
+      ${ currency(showifdef('users[0].maintenance_alternate')) if showifdef('users[0].maintenance_alternate_question') else '$0.00'}
 
-      **Child support for children of this relationship (if this support is paid by the other parent, it does not affect the support calculation):** ${ word(yesno(users[0].child_support_current_question)) }
-      - ${ currency(showifdef('users[0].child_support_current')) if showifdef('users[0].child_support_current_question') else '$0.00'}
+      * Child support for children of this relationship (if this support is paid by the other parent, it does not affect the support calculation): 
+      ${ currency(showifdef('users[0].child_support_current')) if showifdef('users[0].child_support_current_question') else '$0.00'}
 
-      **Social Security payment made to the children of this relationship based on your disability or retirement:** ${ word(yesno(users[0].social_security_current_question)) }
-      - ${ currency(showifdef('users[0].social_security_current')) if showifdef('users[0].social_security_current_question') else '$0.00'}
-
-      **Monthly maintenance and support:** ${ currency(total_monthly_maintenance_support_income) }
+      * Social Security payment made to the children of this relationship based on your disability or retirement: 
+      ${ currency(showifdef('users[0].social_security_current')) if showifdef('users[0].social_security_current_question') else '$0.00'}
   - Edit: users[0].gifts_money_question
     button: |
       **Monthly gifts and other income**
 
-      **Gifts of money you receive from others:** ${ word(yesno(users[0].gifts_money_question)) }
-      - ${ currency(showifdef('users[0].gifts_money')) if showifdef('users[0].gifts_money_question') else '$0.00'}
+      * Gifts of money you receive from others: 
+      ${ currency(showifdef('users[0].gifts_money')) if showifdef('users[0].gifts_money_question') else '$0.00'}
 
-      **Do you receive other types of income?:** ${ word(yesno(users[0].other_income_question)) }
+      * Do you receive other types of income?: 
       % if showifdef('users[0].other_income_question'):
-      **What is the source of the other income? (list all sources):**
+      Other income sources: 
       ${ showifdef('users[0].other_income_description') }
 
-      **Total monthly income from other sources?:**
+      Total monthly income from other sources: 
       ${ currency(showifdef('users[0].other_income')) }
+      % else:
+      $0.00
       % endif
-
-      **Monthly gifts and other income:** ${ currency(total_monthly_gifts_other_income) }
-
 
   - note: | ################ Expenses and debts
       **Expenses and Debts**
@@ -398,234 +387,224 @@ review:
     button: |
       **Monthly income deductions**
 
-      **Federal income tax:** ${ word(yesno(users[0].deductions_federal_question)) }
-      - ${ currency(showifdef('users[0].deductions_federal')) if showifdef('users[0].deductions_federal_question') else '$0.00'}
+      * Federal income tax: 
+      ${ currency(showifdef('users[0].deductions_federal')) if showifdef('users[0].deductions_federal_question') else '$0.00'}
 
-      **State income tax:** ${ word(yesno(users[0].deductions_state_question)) }
-      - ${ currency(showifdef('users[0].deductions_state')) if showifdef('users[0].deductions_state_question') else '$0.00'}
+      * State income tax: 
+      ${ currency(showifdef('users[0].deductions_state')) if showifdef('users[0].deductions_state_question') else '$0.00'}
 
-      **FICA (or Social Security equivalent, such as Self-employment tax):** ${ word(yesno(users[0].deductions_fica_question)) }
-      - ${ currency(showifdef('users[0].deductions_fica')) if showifdef('users[0].deductions_fica_question') else '$0.00'}
+      * FICA (or Social Security equivalent, such as Self-employment tax): 
+      ${ currency(showifdef('users[0].deductions_fica')) if showifdef('users[0].deductions_fica_question') else '$0.00'}
 
-      **Medicare tax:** ${ word(yesno(users[0].deductions_medicare_question)) }
-      - ${ currency(showifdef('users[0].deductions_medicare')) if showifdef('users[0].deductions_medicare_question') else '$0.00'}
+      * Medicare tax: 
+      ${ currency(showifdef('users[0].deductions_medicare')) if showifdef('users[0].deductions_medicare_question') else '$0.00'}
 
-      **Mandatory retirement contributions:** ${ word(yesno(users[0].deductions_retirement_question)) }
-      - ${ currency(showifdef('users[0].deductions_retirement')) if showifdef('users[0].deductions_retirement_question') else '$0.00'}
-
-      **Monthly payroll deductions:** ${ currency(total_monthly_deductions) }
+      * Mandatory retirement contributions: 
+      ${ currency(showifdef('users[0].deductions_retirement')) if showifdef('users[0].deductions_retirement_question') else '$0.00'}
   - Edit: users[0].maintenance_paid_court_question
     button: |
       **Monthly maintenance payments**
 
-      **Maintenance being paid or payable to the other party by you under a court order in this case:** ${ word(yesno(users[0].maintenance_paid_court_question)) }
-      - ${ currency(showifdef('users[0].maintenance_paid_court')) if showifdef('users[0].maintenance_paid_court_question') else '$0.00'}
+      * Maintenance being paid or payable to the other party by you under a court order in this case: 
+      ${ currency(showifdef('users[0].maintenance_paid_court')) if showifdef('users[0].maintenance_paid_court_question') else '$0.00'}
 
-      **Maintenance being paid under a court order to a former spouse by you, which is tax deductible to you:** ${ word(yesno(users[0].maintenance_paid_no_tax_question)) }
-      - ${ currency(showifdef('users[0].maintenance_paid_no_tax')) if showifdef('users[0].maintenance_paid_no_tax_question') else '$0.00'}
+      * Maintenance being paid under a court order to a former spouse by you, which is tax deductible to you: 
+      ${ currency(showifdef('users[0].maintenance_paid_no_tax')) if showifdef('users[0].maintenance_paid_no_tax_question') else '$0.00'}
 
-      **Maintenance being paid under a court order to a former spouse by you, which is not tax deductible to you:** ${ word(yesno(users[0].maintenance_paid_taxed_question)) }
-      - ${ currency(showifdef('users[0].maintenance_paid_taxed')) if showifdef('users[0].maintenance_paid_taxed_question') else '$0.00'}
-
-      **Monthly maintenance payments:** ${ currency(total_maintenance_payments) }
+      * Maintenance being paid under a court order to a former spouse by you, which is not tax deductible to you: 
+      ${ currency(showifdef('users[0].maintenance_paid_taxed')) if showifdef('users[0].maintenance_paid_taxed_question') else '$0.00'}
   - Edit: users[0].child_support_1_question
     button: |
       **Monthly child support payments**
 
-      **Court-ordered child support being paid for the children of this relationship:** ${ word(yesno(users[0].child_support_1_question)) }
-      - ${ currency(showifdef('users[0].child_support_1')) if showifdef('users[0].child_support_1_question') else '$0.00'}
+      * Court-ordered child support being paid for the children of this relationship: 
+      ${ currency(showifdef('users[0].child_support_1')) if showifdef('users[0].child_support_1_question') else '$0.00'}
 
-      **Child support being paid *under a court order* for children not shared with the other party and who are not part of this case:** ${ word(yesno(users[0].child_support_2_question)) }
-      - ${ currency(showifdef('users[0].child_support_2')) if showifdef('users[0].child_support_2_question') else '$0.00'}
+      * Child support being paid *under a court order* for children not shared with the other party and who are not part of this case: 
+      ${ currency(showifdef('users[0].child_support_2')) if showifdef('users[0].child_support_2_question') else '$0.00'}
 
-      **Child support being paid, *but there is no court order*, for children not shared with the other party and who are not part of this case:** ${ word(yesno(users[0].child_support_3_question)) }
-      - ${ currency(showifdef('users[0].child_support_3')) if showifdef('users[0].child_support_3_question') else '$0.00'}
-
-      **Monthly child support payments:** ${ currency(total_child_support_payments) }
+      * Child support being paid, *but there is no court order*, for children not shared with the other party and who are not part of this case: 
+      ${ currency(showifdef('users[0].child_support_3')) if showifdef('users[0].child_support_3_question') else '$0.00'}
   - Edit: users[0].living_house_payment_question
     button: |
       **Monthly household living expenses**
 
-      **Mortgage or rent payment:** ${ word(yesno(users[0].living_house_payment_question)) }
-      - ${ currency(showifdef('users[0].living_house_payment')) if showifdef('users[0].living_house_payment_question') else '$0.00'}
+      * Mortgage or rent payment: 
+      ${ currency(showifdef('users[0].living_house_payment')) if showifdef('users[0].living_house_payment_question') else '$0.00'}
 
-      **Home equity (HELOC) and second mortgage payment:** ${ word(yesno(users[0].living_heloc_question)) }
-      - ${ currency(showifdef('users[0].living_heloc')) if showifdef('users[0].living_heloc_question') else '$0.00'}
+      * Home equity (HELOC) and second mortgage payment: 
+      ${ currency(showifdef('users[0].living_heloc')) if showifdef('users[0].living_heloc_question') else '$0.00'}
 
-      **Real estate taxes:** ${ word(yesno(users[0].living_property_taxes_question)) }
-      - ${ currency(showifdef('users[0].living_property_taxes')) if showifdef('users[0].living_property_taxes_question') else '$0.00'}
+      * Real estate taxes: 
+      ${ currency(showifdef('users[0].living_property_taxes')) if showifdef('users[0].living_property_taxes_question') else '$0.00'}
 
-      **Homeowners or condo association dues and assessments:** ${ word(yesno(users[0].living_hoa_question)) }
-      - ${ currency(showifdef('users[0].living_hoa')) if showifdef('users[0].living_hoa_question') else '$0.00'}
+      * Homeowners or condo association dues and assessments: 
+      ${ currency(showifdef('users[0].living_hoa')) if showifdef('users[0].living_hoa_question') else '$0.00'}
 
-      **Homeowners or renters insurance:** ${ word(yesno(users[0].living_insurance_question)) }
-      - ${ currency(showifdef('users[0].living_insurance')) if showifdef('users[0].living_insurance_question') else '$0.00'}
-
-      **Subtotal monthly household living expenses:** ${ currency(subtotal_monthly_household_expenses) }
+      * Homeowners or renters insurance: 
+      ${ currency(showifdef('users[0].living_insurance')) if showifdef('users[0].living_insurance_question') else '$0.00'}
   - Edit: users[0].living_gas_question
     button: |
       **Monthly utility expenses**
 
-      **Gas:** ${ word(yesno(users[0].living_gas_question)) }
-      - ${ currency(showifdef('users[0].living_gas')) if showifdef('users[0].living_gas_question') else '$0.00'}
+      * Gas: 
+      ${ currency(showifdef('users[0].living_gas')) if showifdef('users[0].living_gas_question') else '$0.00'}
 
-      **Electric:** ${ word(yesno(users[0].living_power_question)) }
-      - ${ currency(showifdef('users[0].living_power')) if showifdef('users[0].living_power_question') else '$0.00'}
+      * Electric: 
+      ${ currency(showifdef('users[0].living_power')) if showifdef('users[0].living_power_question') else '$0.00'}
 
-      **Telephone:** ${ word(yesno(users[0].living_phone_question)) }
-      - ${ currency(showifdef('users[0].living_phone')) if showifdef('users[0].living_phone_question') else '$0.00'}
+      * Telephone: 
+      ${ currency(showifdef('users[0].living_phone')) if showifdef('users[0].living_phone_question') else '$0.00'}
 
-      **Cable or satellite TV:** ${ word(yesno(users[0].living_cable_question)) }
-      - ${ currency(showifdef('users[0].living_cable')) if showifdef('users[0].living_cable_question') else '$0.00'}
+      * Cable or satellite TV: 
+      ${ currency(showifdef('users[0].living_cable')) if showifdef('users[0].living_cable_question') else '$0.00'}
 
-      **Internet:** ${ word(yesno(users[0].living_internet_question)) }
-      - ${ currency(showifdef('users[0].living_internet')) if showifdef('users[0].living_internet_question') else '$0.00'}
+      * Internet: 
+      ${ currency(showifdef('users[0].living_internet')) if showifdef('users[0].living_internet_question') else '$0.00'}
 
-      **Water and sewer:** ${ word(yesno(users[0].living_water_question)) }
-      - ${ currency(showifdef('users[0].living_water')) if showifdef('users[0].living_water_question') else '$0.00'}
+      * Water and sewer: 
+      ${ currency(showifdef('users[0].living_water')) if showifdef('users[0].living_water_question') else '$0.00'}
 
-      **Garbage removal:** ${ word(yesno(users[0].living_trash_question)) }
-      - ${ currency(showifdef('users[0].living_trash')) if showifdef('users[0].living_trash_question') else '$0.00'}
-
-      **Subtotal monthly utility expenses:** ${ currency(subtotal_monthly_utility_expenses) }
+      * Garbage removal: 
+      ${ currency(showifdef('users[0].living_trash')) if showifdef('users[0].living_trash_question') else '$0.00'}
   - Edit: users[0].living_laundry_question
     button: |
       **Monthly living expenses**
 
-      **Laundry and dry cleaning:** ${ word(yesno(users[0].living_laundry_question)) }
-      - ${ currency(showifdef('users[0].living_laundry')) if showifdef('users[0].living_laundry_question') else '$0.00'}
+      * Laundry and dry cleaning: 
+      ${ currency(showifdef('users[0].living_laundry')) if showifdef('users[0].living_laundry_question') else '$0.00'}
 
-      **House cleaning service:** ${ word(yesno(users[0].living_cleaner_question)) }
-      - ${ currency(showifdef('users[0].living_cleaner')) if showifdef('users[0].living_cleaner_question') else '$0.00'}
+      * House cleaning service: 
+      ${ currency(showifdef('users[0].living_cleaner')) if showifdef('users[0].living_cleaner_question') else '$0.00'}
 
-      **Necessary repairs and maintenance to my property:** ${ word(yesno(users[0].living_repairs_question)) }
-      - ${ currency(showifdef('users[0].living_repairs')) if showifdef('users[0].living_repairs_question') else '$0.00'}
+      * Necessary repairs and maintenance to my property: 
+      ${ currency(showifdef('users[0].living_repairs')) if showifdef('users[0].living_repairs_question') else '$0.00'}
 
-      **Pet care:** ${ word(yesno(users[0].living_pets_question)) }
-      - ${ currency(showifdef('users[0].living_pets')) if showifdef('users[0].living_pets_question') else '$0.00'}
+      * Pet care: 
+      ${ currency(showifdef('users[0].living_pets')) if showifdef('users[0].living_pets_question') else '$0.00'}
 
-      **Groceries, household supplies, and toiletries:** ${ word(yesno(users[0].living_groceries_question)) }
-      - ${ currency(showifdef('users[0].living_groceries')) if showifdef('users[0].living_groceries_question') else '$0.00'}
+      * Groceries, household supplies, and toiletries: 
+      ${ currency(showifdef('users[0].living_groceries')) if showifdef('users[0].living_groceries_question') else '$0.00'}
 
-      **Other monthly household living expenses (transportation expenses will be entered on another screen):** ${ word(yesno(users[0].living_other_question)) }
+      * Other monthly household living expenses (transportation expenses will be entered on another screen): 
       % if showifdef('users[0].living_other_question'):
-      **What are the other monthly household living expenses?:**
+      What are the other monthly household living expenses?: 
       ${ showifdef('users[0].living_other_description') if showifdef('users[0].living_other_question') else '$0.00'}
 
-      **Total monthly other expenses?:**
+      Total monthly other expenses?: 
       ${ currency(showifdef('users[0].living_other')) if showifdef('users[0].living_other_question') else '$0.00'}
+      % else:
+      $0.00
       % endif 
-      **Subtotal monthly living expenses:** ${ currency(subtotal_monthly_living_expenses) }
   - Edit: users[0].transport_payment_question
     button: |
       **Monthly transportation expenses**
 
-      **Car payment:** ${ word(yesno(users[0].transport_payment_question)) }
-      - ${ currency(showifdef('users[0].transport_payment')) if showifdef('users[0].transport_payment_question') else '$0.00'}
+      * Car payment: 
+      ${ currency(showifdef('users[0].transport_payment')) if showifdef('users[0].transport_payment_question') else '$0.00'}
 
-      **Repairs and maintenance:** ${ word(yesno(users[0].transport_maintenance_question)) }
-      - ${ currency(showifdef('users[0].transport_maintenance')) if showifdef('users[0].transport_maintenance_question') else '$0.00'}
+      * Repairs and maintenance: 
+      ${ currency(showifdef('users[0].transport_maintenance')) if showifdef('users[0].transport_maintenance_question') else '$0.00'}
 
-      **Insurance, license, registration, and city stickers:** ${ word(yesno(users[0].transport_insurance_question)) }
-      - ${ currency(showifdef('users[0].transport_insurance')) if showifdef('users[0].transport_insurance_question') else '$0.00'}
+      * Insurance, license, registration, and city stickers: 
+      ${ currency(showifdef('users[0].transport_insurance')) if showifdef('users[0].transport_insurance_question') else '$0.00'}
 
-      **Gasoline:** ${ word(yesno(users[0].transport_fuel_question)) }
-      - ${ currency(showifdef('users[0].transport_fuel')) if showifdef('users[0].transport_fuel_question') else '$0.00'}
+      * Gasoline: 
+      ${ currency(showifdef('users[0].transport_fuel')) if showifdef('users[0].transport_fuel_question') else '$0.00'}
 
-      **Taxi, ride-share, bus, and train:** ${ word(yesno(users[0].transport_public_question)) }
-      - ${ currency(showifdef('users[0].transport_public')) if showifdef('users[0].transport_public_question') else '$0.00'}
+      * Taxi, ride-share, bus, and train: 
+      ${ currency(showifdef('users[0].transport_public')) if showifdef('users[0].transport_public_question') else '$0.00'}
 
-      **Parking:** ${ word(yesno(users[0].transport_parking_question)) }
-      - ${ currency(showifdef('users[0].transport_parking')) if showifdef('users[0].transport_parking_question') else '$0.00'}
+      * Parking: 
+      ${ currency(showifdef('users[0].transport_parking')) if showifdef('users[0].transport_parking_question') else '$0.00'}
 
-      **Other monthly transportation expenses:** ${ word(yesno(users[0].transport_other_question)) }
+      * Other monthly transportation expenses: 
       % if showifdef('users[0].transport_other_question'):
       What are the other monthly transportation expenses?: 
 
       ${ showifdef('users[0].transport_other_description') if showifdef('users[0].transport_other_question') else '$0.00'}
       Total monthly other transportation expenses?: 
       ${ currency(showifdef('users[0].transport_other')) if showifdef('users[0].transport_other_question') else '$0.00'}
+      % else:
+      $0.00
       % endif
-
-      **Subtotal monthly transportation expenses:** ${ currency(subtotal_monthly_transportation_expenses) }
   - Edit: users[0].personal_doctor_question
     button: |
       **Monthly medical expenses**
 
-      **Doctor visits:** ${ word(yesno(users[0].personal_doctor_question)) }
-      - ${ currency(showifdef('users[0].personal_doctor')) if showifdef('users[0].personal_doctor_question') else '$0.00'}
+      * Doctor visits: 
+      ${ currency(showifdef('users[0].personal_doctor')) if showifdef('users[0].personal_doctor_question') else '$0.00'}
 
-      **Therapy and counseling:** ${ word(yesno(users[0].personal_therapy_question)) }
-      - ${ currency(showifdef('users[0].personal_therapy')) if showifdef('users[0].personal_therapy_question') else '$0.00'}
+      * Therapy and counseling: 
+      ${ currency(showifdef('users[0].personal_therapy')) if showifdef('users[0].personal_therapy_question') else '$0.00'}
 
-      **Dental and orthodontia:** ${ word(yesno(users[0].personal_dental_question)) }
-      - ${ currency(showifdef('users[0].personal_dental')) if showifdef('users[0].personal_dental_question') else '$0.00'}
+      * Dental and orthodontia: 
+      ${ currency(showifdef('users[0].personal_dental')) if showifdef('users[0].personal_dental_question') else '$0.00'}
 
-      **Optical:** ${ word(yesno(users[0].personal_vision_question)) }
-      - ${ currency(showifdef('users[0].personal_vision')) if showifdef('users[0].personal_vision_question') else '$0.00'}
+      * Optical: 
+      ${ currency(showifdef('users[0].personal_vision')) if showifdef('users[0].personal_vision_question') else '$0.00'}
 
-      **Medicine and prescriptions:** ${ word(yesno(users[0].personal_medications_question)) }
-      - ${ currency(showifdef('users[0].personal_medications')) if showifdef('users[0].personal_medications_question') else '$0.00'}
+      * Medicine and prescriptions: 
+      ${ currency(showifdef('users[0].personal_medications')) if showifdef('users[0].personal_medications_question') else '$0.00'}
   - Edit: users[0].personal_associations_question
     button: |
       **Monthly professional dues and fees**
 
-      **Mandatory or voluntary union, trade, or professional association dues:** ${ word(yesno(users[0].personal_associations_question)) }
-      - ${ currency(showifdef('users[0].personal_associations')) if showifdef('users[0].personal_associations_question') else '$0.00'}
+      * Mandatory or voluntary union, trade, or professional association dues: 
+      ${ currency(showifdef('users[0].personal_associations')) if showifdef('users[0].personal_associations_question') else '$0.00'}
 
-      **Professional fees, such as accountants, tax preparers, or lawyers:** ${ word(yesno(users[0].peronsal_professional_question)) }
-      - ${ currency(showifdef('users[0].peronsal_professional')) if showifdef('users[0].peronsal_professional_question') else '$0.00'}
-
+      * Professional fees, such as accountants, tax preparers, or lawyers: 
+      ${ currency(showifdef('users[0].peronsal_professional')) if showifdef('users[0].peronsal_professional_question') else '$0.00'}
   - Edit: users[0].personal_life_term_question
     button: |
       **Monthly insurance expenses**
 
-      **Life (term):** ${ word(yesno(users[0].personal_life_term_question)) }
-      - ${ currency(showifdef('users[0].personal_life_term')) if showifdef('users[0].personal_life_term_question') else '$0.00'}
+      * Life (term): 
+      ${ currency(showifdef('users[0].personal_life_term')) if showifdef('users[0].personal_life_term_question') else '$0.00'}
 
-      **Life (whole or annuity):** ${ word(yesno(users[0].personal_life_whole_question)) }
-      - ${ currency(showifdef('users[0].personal_life_whole')) if showifdef('users[0].personal_life_whole_question') else '$0.00'}
+      * Life (whole or annuity): 
+      ${ currency(showifdef('users[0].personal_life_whole')) if showifdef('users[0].personal_life_whole_question') else '$0.00'}
   - Edit: users[0].personal_clothing_question
     button: |
       **Monthly personal, entertainment, and vacation expenses**
 
-      **Clothing:** ${ word(yesno(users[0].personal_clothing_question)) }
-      - ${ currency(showifdef('users[0].personal_clothing')) if showifdef('users[0].personal_clothing_question') else '$0.00'}
+      * Clothing: 
+      ${ currency(showifdef('users[0].personal_clothing')) if showifdef('users[0].personal_clothing_question') else '$0.00'}
 
-      **Grooming, such as hair, nails, or spa:** ${ word(yesno(users[0].personal_stylist_question)) }
-      - ${ currency(showifdef('users[0].personal_stylist')) if showifdef('users[0].personal_stylist_question') else '$0.00'}
+      * Grooming, such as hair, nails, or spa: 
+      ${ currency(showifdef('users[0].personal_stylist')) if showifdef('users[0].personal_stylist_question') else '$0.00'}
 
-      **Gym & Club membership dues:** ${ word(yesno(users[0].personal_memberships_question)) }
-      - ${ currency(showifdef('users[0].personal_memberships')) if showifdef('users[0].personal_memberships_question') else '$0.00'}
+      * Gym & Club membership dues: 
+      ${ currency(showifdef('users[0].personal_memberships')) if showifdef('users[0].personal_memberships_question') else '$0.00'}
 
-      **Entertainment, dining out, and hobbies:** ${ word(yesno(users[0].personal_entertainment_question)) }
-      - ${ currency(showifdef('users[0].personal_entertainment')) if showifdef('users[0].personal_entertainment_question') else '$0.00'}
+      * Entertainment, dining out, and hobbies: 
+      ${ currency(showifdef('users[0].personal_entertainment')) if showifdef('users[0].personal_entertainment_question') else '$0.00'}
 
-      **Newspapers, magazines, and subscriptions:** ${ word(yesno(users[0].personal_subscriptions_question)) }
-      - ${ currency(showifdef('users[0].personal_subscriptions')) if showifdef('users[0].personal_subscriptions_question') else '$0.00'}
+      * Newspapers, magazines, and subscriptions: 
+      ${ currency(showifdef('users[0].personal_subscriptions')) if showifdef('users[0].personal_subscriptions_question') else '$0.00'}
 
-      **Vacations:** ${ word(yesno(users[0].personal_vacations_question)) }
-      - ${ currency(showifdef('users[0].personal_vacations')) if showifdef('users[0].personal_vacations_question') else '$0.00'}
+      * Vacations: 
+      ${ currency(showifdef('users[0].personal_vacations')) if showifdef('users[0].personal_vacations_question') else '$0.00'}
   - Edit: users[0].personal_gifts_question
     button: |
       **Monthly gifts, donations, and other expenses**
 
-      **Gifts you give to others:** ${ word(yesno(users[0].personal_gifts_question)) }
-      - ${ currency(showifdef('users[0].personal_gifts')) if showifdef('users[0].personal_gifts_question') else '$0.00'}
+      * Gifts you give to others: 
+      ${ currency(showifdef('users[0].personal_gifts')) if showifdef('users[0].personal_gifts_question') else '$0.00'}
 
-      **Donations, such as political, religious, or charity:** ${ word(yesno(users[0].personal_donations_question)) }
-      - ${ currency(showifdef('users[0].personal_donations')) if showifdef('users[0].personal_donations_question') else '$0.00'}
+      * Donations, such as political, religious, or charity: 
+      ${ currency(showifdef('users[0].personal_donations')) if showifdef('users[0].personal_donations_question') else '$0.00'}
 
-      **Other personal expenses not already listed:** ${ word(yesno(users[0].personal_other_question)) }
+      * Other personal expenses not already listed: 
       % if showifdef('users[0].personal_other_question'):
-      **What are the other monthly personal expenses?:**
+      What are the other monthly personal expenses?: 
       ${ showifdef('users[0].personal_other_description') }
 
-      **Monthly total amount of other personal expenses:** 
+      Monthly total amount of other personal expenses: 
       ${ currency(showifdef('users[0].personal_other')) }
+      % else:
+      $0.00
       % endif
-
-      **Subtotal monthly personal expenses:** ${ currency(subtotal_monthly_personal_expenses) }
   - Edit: users[0].children_expenses_question
     button: |
       **Do you have any expenses for minor or dependent children?**
@@ -634,106 +613,112 @@ review:
     button: |
       **Monthly personal expenses for children**
 
-      **Clothing:** ${ word(yesno(users[0].children_clothing_question)) }
-      - ${ currency(showifdef('users[0].children_clothing')) if showifdef('users[0].children_clothing_question') else '$0.00' }
+      * Clothing: 
+      ${ currency(showifdef('users[0].children_clothing')) if showifdef('users[0].children_clothing_question') else '$0.00' }
 
-      **Grooming, such as hair, nails, or spa:** ${ word(yesno(users[0].children_grooming_question)) }
-      - ${ currency(showifdef('users[0].children_grooming')) if showifdef('users[0].children_grooming_question') else '$0.00' }
+      * Grooming, such as hair, nails, or spa: 
+      ${ currency(showifdef('users[0].children_grooming')) if showifdef('users[0].children_grooming_question') else '$0.00' }
     show if: users[0].children_expenses_question
   - Edit: users[0].children_tuition_question
     button: |
       **Monthly education expenses for children**
 
-      **Tuition:** ${ word(yesno(users[0].children_tuition_question)) }
-      - ${ currency(showifdef('users[0].children_tuition')) if showifdef('users[0].children_tuition_question') else '$0.00' }
+      * Tuition: 
+      ${ currency(showifdef('users[0].children_tuition')) if showifdef('users[0].children_tuition_question') else '$0.00' }
 
-      **Books, fees, and supplies:** ${ word(yesno(users[0].children_books_question)) }
-      - ${ currency(showifdef('users[0].children_books')) if showifdef('users[0].children_books_question') else '$0.00' }
+      * Books, fees, and supplies: 
+      ${ currency(showifdef('users[0].children_books')) if showifdef('users[0].children_books_question') else '$0.00' }
 
-      **School lunch:** ${ word(yesno(users[0].children_school_lunch_question)) }
-      - ${ currency(showifdef('users[0].children_school_lunch')) if showifdef('users[0].children_school_lunch_question') else '$0.00' }
+      * School lunch: 
+      ${ currency(showifdef('users[0].children_school_lunch')) if showifdef('users[0].children_school_lunch_question') else '$0.00' }
 
-      **Transportation:** ${ word(yesno(users[0].children_transportation_question)) }
-      - ${ currency(showifdef('users[0].children_transportation')) if showifdef('users[0].children_transportation_question') else '$0.00' }
+      * Transportation: 
+      ${ currency(showifdef('users[0].children_transportation')) if showifdef('users[0].children_transportation_question') else '$0.00' }
 
-      **School-sponsored trips and special events:** ${ word(yesno(users[0].children_school_events_question)) }
-      - ${ currency(showifdef('users[0].children_school_events')) if showifdef('users[0].children_school_events_question') else '$0.00' }
+      * School-sponsored trips and special events: 
+      ${ currency(showifdef('users[0].children_school_events')) if showifdef('users[0].children_school_events_question') else '$0.00' }
 
-      **Uniforms:** ${ word(yesno(users[0].children_school_uniforms_question)) }
-      - ${ currency(showifdef('users[0].children_school_uniforms')) if showifdef('users[0].children_school_uniforms_question') else '$0.00' }
+      * Uniforms: 
+      ${ currency(showifdef('users[0].children_school_uniforms')) if showifdef('users[0].children_school_uniforms_question') else '$0.00' }
 
-      **Before and after-school care:** ${ word(yesno(users[0].children_after_school_question)) }
-      - ${ currency(showifdef('users[0].children_after_school')) if showifdef('users[0].children_after_school_question') else '$0.00' }
+      * Before and after-school care: 
+      ${ currency(showifdef('users[0].children_after_school')) if showifdef('users[0].children_after_school_question') else '$0.00' }
 
-      **Tutoring and summer school:** ${ word(yesno(users[0].children_tutor_question)) }
-      - ${ currency(showifdef('users[0].children_tutor')) if showifdef('users[0].children_tutor_question') else '$0.00' }
+      * Tutoring and summer school: 
+      ${ currency(showifdef('users[0].children_tutor')) if showifdef('users[0].children_tutor_question') else '$0.00' }
     show if: users[0].children_expenses_question
   - Edit: users[0].children_doctor_question
     button: |
       **Monthly medical for children**
 
-      **Doctor visits:** ${ word(yesno(users[0].children_doctor_question)) }
-      - ${ currency(showifdef('users[0].children_doctor')) if showifdef('users[0].children_doctor_question') else '$0.00' }
+      * Doctor visits: 
+      ${ currency(showifdef('users[0].children_doctor')) if showifdef('users[0].children_doctor_question') else '$0.00' }
 
-      **Therapy and counseling:** ${ word(yesno(users[0].children_therapy_question)) }
-      - ${ currency(showifdef('users[0].children_therapy')) if showifdef('users[0].children_therapy_question') else '$0.00' }
+      * Therapy and counseling: 
+      ${ currency(showifdef('users[0].children_therapy')) if showifdef('users[0].children_therapy_question') else '$0.00' }
 
-      **Dental and orthodontics (braces):** ${ word(yesno(users[0].children_dental_question)) }
-      - ${ currency(showifdef('users[0].children_dental')) if showifdef('users[0].children_dental_question') else '$0.00' }
+      * Dental and orthodontics (braces): 
+      ${ currency(showifdef('users[0].children_dental')) if showifdef('users[0].children_dental_question') else '$0.00' }
 
-      **Vision:** ${ word(yesno(users[0].children_vision_question)) }
-      - ${ currency(showifdef('users[0].children_vision')) if showifdef('users[0].children_vision_question') else '$0.00' }
+      * Vision: 
+      ${ currency(showifdef('users[0].children_vision')) if showifdef('users[0].children_vision_question') else '$0.00' }
 
-      **Medicine:** ${ word(yesno(users[0].children_medications_question)) }
-      - ${ currency(showifdef('users[0].children_medications')) if showifdef('users[0].children_medications_question') else '$0.00' }
+      * Medicine: 
+      ${ currency(showifdef('users[0].children_medications')) if showifdef('users[0].children_medications_question') else '$0.00' }
     show if: users[0].children_expenses_question
   - Edit: users[0].children_allowance_question
     button: |
       **Additional monthly expenses for children**
 
-      **Allowance:** ${ word(yesno(users[0].children_allowance_question)) }
-      - ${ currency(showifdef('users[0].children_allowance')) if showifdef('users[0].children_allowance_question') else '$0.00' }
+      * Allowance: 
+      ${ currency(showifdef('users[0].children_allowance')) if showifdef('users[0].children_allowance_question') else '$0.00' }
 
-      **Childcare and sitters:** ${ word(yesno(users[0].children_childcare_question)) }
-      - ${ currency(showifdef('users[0].children_childcare')) if showifdef('users[0].children_childcare_question') else '$0.00' }
+      * Childcare and sitters: 
+      ${ currency(showifdef('users[0].children_childcare')) if showifdef('users[0].children_childcare_question') else '$0.00' }
 
-      **Extracurricular activities and sports, such as equipment or uniforms:** ${ word(yesno(users[0].children_sports_question)) }
-      - ${ currency(showifdef('users[0].children_sports')) if showifdef('users[0].children_sports_question') else '$0.00' }
+      * Extracurricular activities and sports, such as equipment or uniforms: 
+      ${ currency(showifdef('users[0].children_sports')) if showifdef('users[0].children_sports_question') else '$0.00' }
 
-      **Summer and school-break camps:** ${ word(yesno(users[0].children_camps_question)) }
-      - ${ currency(showifdef('users[0].children_camps')) if showifdef('users[0].children_camps_question') else '$0.00' }
+      * Summer and school-break camps: 
+      ${ currency(showifdef('users[0].children_camps')) if showifdef('users[0].children_camps_question') else '$0.00' }
     show if: users[0].children_expenses_question
   - Edit: users[0].children_vacations_question
     button: |
       **Monthly vacation, entertainment, and other expenses for children**
 
-      **Vacations (children only):** ${ word(yesno(users[0].children_vacations_question)) }
-      - ${ currency(showifdef('users[0].children_vacations')) if showifdef('users[0].children_vacations_question') else '$0.00' }
+      * Vacations (children only): 
+      ${ currency(showifdef('users[0].children_vacations')) if showifdef('users[0].children_vacations_question') else '$0.00' }
 
-      **Entertainment, dining out, and hobbies (children only):** ${ word(yesno(users[0].children_entertainment_question)) }
-      - ${ currency(showifdef('users[0].children_entertainment')) if showifdef('users[0].children_entertainment_question') else '$0.00' }
+      * Entertainment, dining out, and hobbies (children only): 
+      ${ currency(showifdef('users[0].children_entertainment')) if showifdef('users[0].children_entertainment_question') else '$0.00' }
 
-      **Gifts children give to others:** ${ word(yesno(users[0].children_party_gifts_question)) }
-      - ${ currency(showifdef('users[0].children_party_gifts')) if showifdef('users[0].children_party_gifts_question') else '$0.00' }
+      * Gifts children give to others: 
+      ${ currency(showifdef('users[0].children_party_gifts')) if showifdef('users[0].children_party_gifts_question') else '$0.00' }
 
-      **Other expenses for children not already listed:** ${ word(yesno(users[0].children_other_question)) }
+      * Other expenses for children not already listed: 
       % if showifdef('users[0].children_other_question'):
-      **What are the other monthly expenses for children?:**
+      Describe other monthly expenses: 
       ${ showifdef('users[0].children_other_description') }
 
-      **Total monthly other expenses for the children?:** 
+      Total monthly other expenses: 
       ${ currency(showifdef('users[0].children_other')) }
+      % else:
+      $0.00
       % endif
-
-      **Subtotal monthly minor and dependent children expenses:** ${ currency(subtotal_monthly_children_expenses) }
     show if: users[0].children_expenses_question
 
-  - Edit: |-
-      insurance.there_are_any
+  - Edit: insurance.there_are_any
     button: |
       **Do you have health insurance?**
       ${ word(yesno(insurance.there_are_any)) }
+  - Edit: insurance.revisit
+    button: |
+      **Health insurance: (Edit to change details)**
 
+      % for policy in insurance:
+        * ${ policy.name.text }, ${ policy.type }
+      % endfor
+    show if: insurance.there_are_any
   - Edit: has_debts
     button: |
       **Do you have any debts?**
@@ -770,7 +755,7 @@ review:
       **Certificate of Deposits: (Edit to change details)**
 
       % for asset in cert_deposit:
-        * ${ asset.name.text }, ${ currency(asset.amount) }
+        * ${ asset.name.text }, ${ currency(asset.balance) }
       % endfor
     show if: has_cert_deposit
   - Edit: has_money
@@ -926,21 +911,20 @@ review:
 
       **I am attaching:**
       % if users[0].attached_documents["stubs"]:
-      - Pay stubs or other proof of income
-      % elif users[0].attached_documents["returns"]:
-      - Income tax returns
-      % elif users[0].attached_documents["statements"]:
-      - Bank statements
-      % elif users[0].attached_documents["other"]:
-      - Other documents that verify my debts and assets
+      * Pay stubs or other proof of income
       % endif
+      % if users[0].attached_documents["returns"]:
+      * Income tax returns
+      % endif
+      % if users[0].attached_documents["statements"]:
+      * Bank statements
+      % endif
+      % if users[0].attached_documents["other"]:
+      * Other documents that verify my debts and assets
 
-      % if users[0].attached_documents["other"] == "True":
       **List of documents that verify debts:**
       ${ showifdef('users[0].attachment_debts') }
-      % endif
 
-      % if users[0].attached_documents["other"] == "True":
       **List of documents that verify assets:**
       ${ showifdef('users[0].attachment_assets') }
       % endif
@@ -1151,7 +1135,8 @@ review:
       ${ x.name.text  }
   - Edit: x.address.address
     button: |
-      $( x.address.on_one_line() )
+      **Address:**
+      ${ x.address.on_one_line() }
   - Edit: x.type
     button: |
       **Business type:**
@@ -1200,20 +1185,152 @@ review:
   - Edit: x.perks
     button: |
       **Benefits:**
+
       % if showifdef('x.perks["meals"]'):
-      - Reimbursed meals 
+      * Reimbursed meals 
       % endif
       % if showifdef('x.perks["car"]'):
-      - Company car
+      * Company car
       % endif
       % if showifdef('x.perks["housing"]'):
-      - Free housing/allowance
+      * Free housing/allowance
       % endif
       % if showifdef('x.perks["other"]'):
-      **Other benefits:**
-      ${ showifdef('x.other_perks') }
+      * Other: ${ showifdef('x.other_perks') }
       % endif
     show if: x.type != "employed"
+---
+id: insurance table
+table: insurance.table
+rows: insurance
+columns:
+  - Name of insurance company: |
+      row_item.name.text
+  - Type: |
+      row_item.type
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("review_insurance")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
+---
+id: insurance review screen
+continue button field: insurance.revisit
+question: |
+  Edit the information about your health insurance
+subquestion: |
+  ${ insurance.table }
+
+  ${ insurance.add_action() }
+---
+id: insurance review screen
+continue button field: x.review_insurance
+section: Expenses and debts
+generic object: DAObject
+question: |
+  Edit your response
+review: 
+  - Edit: x.name.text
+    button: |
+      **Name of insurance company:**
+      ${ x.name.text  }
+  - Edit: x.type 
+    button: |
+      **Type of insurance:**
+
+      % if x.type["medical"]:
+      * Medical
+      % endif 
+      % if x.type["dental"]:
+      * Dental
+      % endif 
+      % if x.type["orthodontic"]:
+      * Orthodontic
+      % endif 
+      % if x.type["vision"]:
+      * Vision
+      % endif 
+  - Edit: x.policy
+    button: |
+      **Type of policy:**
+      % if x.policy == "HMO":
+      HMO
+      % elif x.policy == "PPO":
+      PPO
+      % elif x.policy == "Other":
+      Other
+      % endif
+  - Edit: x.provider
+    button: |
+      **Provided through:** 
+      % if x.provider == "employer":
+      Employer
+      % elif x.provider == "private":
+      Private policy
+      % elif x.provider == "group":
+      Other group policy
+      % elif x.provider == "public":
+      Medicaid/All Kids
+      % endif
+  - Edit: x.total_covered
+    button: |
+      **Number of people covered: **
+      ${ x.total_covered }
+  - Edit: x.coverage
+    button: |
+      **Who is covered?:**
+
+      % if x.coverage["myself"]:
+      * Me
+      % endif
+      % if x.coverage["both"]:
+      * My spouse/partner
+      % endif
+      % if x.coverage["children_current"]:
+      * Children of this relationship
+      % endif
+      % if x.coverage["children_other"]:
+      * Children of this relationship and other children
+
+      Number of other children: ${ x.other_children_count }
+
+      Ages of other children: ${ x.other_children_age_list }
+      % endif
+  - Edit: x.monthly_cost
+    button: |
+      **Total monthly cost for this insurance:**
+      ${ currency(x.monthly_cost) }
+    
+      **This is paid for by:**
+
+      % if x.paid["myself"]:
+      * Me 
+      % endif 
+      % if x.paid["partner"]:
+      * My spouse/partner 
+      % endif 
+      % if x.paid["other"]:
+      * Other: ${ x.other_description }
+      % endif 
+  - Edit: x.cost_children
+    button: |
+      **What is the monthly cost for this insurance for covering children?:**
+      ${ currency(x.cost_children) }
+      
+      **What is the monthly cost for this insurance for covering children 
+      of this relationship (if known)?:**
+      ${ currency(x.cost_children_current) }
+
+      **Individual deductible?:**
+      ${ currency(x.individual_deductible) }
+
+      **Family deductible:**
+      ${ currency(x.family_deductible) }
+      
+      **Coinsurance:**
+      ${ x.coinsurance }%
+
+      **Copayment amount:**
+      ${ currency(x.copayment) }
 ---
 id: debts table
 table: debts.table
