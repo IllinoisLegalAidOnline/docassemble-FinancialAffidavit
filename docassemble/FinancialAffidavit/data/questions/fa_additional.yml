@@ -1816,20 +1816,20 @@ attachment:
         ${ thousands(investments[24].fmv, show_decimals=True) }
         % endif
 ---
-############ FA ADDITIONAL SECURITIES #############
+############ FA ADDITIONAL OTHER INVESTMENTS #############
 objects:
-  - additional_securities: ALDocument.using(title="FA Additional Securities", filename="FA_additional_securities.pdf", has_addendum=False)
+  - additional_other_investments: ALDocument.using(title="FA Additional Other Investments", filename="FA_additional_other_investments.pdf", has_addendum=False)
 ---
 code: |
-  additional_securities.enabled = securities.number_gathered() >= 4
+  additional_other_investments.enabled = other_investments.number_gathered() >= 4
 ---
 attachment:
-  name: additional_securities
-  variable name: additional_securities[i]
-  filename: additional_securities
+  name: additional_other_investments
+  variable name: additional_other_investments[i]
+  filename: additional_other_investments
   skip undefined: True
   editable: False
-  pdf template file: FA_additional_securities.pdf
+  pdf template file: FA_additional_other_investments.pdf
   fields:
     - "county_name": ${ case_county.upper() }
     - "case_number": ${ case_number }
@@ -1849,269 +1849,269 @@ attachment:
         % endif
     - "petitioner_yes": ${ party_label == 'petitioner' }
     - "respondent_yes": ${ party_label == 'respondent' }
-    - "securities_description_4": |
-        % if securities.number_gathered() >= 4:
-        ${ securities[3].name.text }
-        % endif
-    - "securities_owner_4": |
-        % if securities.number_gathered() >= 4:
-        ${ securities[3].owner }
-        % endif
-    - "securities_balance_4": |
-        % if securities.number_gathered() >= 4:
-        ${ thousands(securities[3].balance, show_decimals=True) }
-        % endif
-    - "securities_description_5": |
-        % if securities.number_gathered() >= 5:
-        ${ securities[4].name.text }
-        % endif
-    - "securities_owner_5": |
-        % if securities.number_gathered() >= 5:
-        ${ securities[4].owner }
-        % endif
-    - "securities_balance_5": |
-        % if securities.number_gathered() >= 5:
-        ${ thousands(securities[4].balance, show_decimals=True) }
-        % endif
-    - "securities_description_6": |
-        % if securities.number_gathered() >= 6:
-        ${ securities[5].name.text }
-        % endif
-    - "securities_owner_6": |
-        % if securities.number_gathered() >= 6:
-        ${ securities[5].owner }
-        % endif
-    - "securities_balance_6": |
-        % if securities.number_gathered() >= 6:
-        ${ thousands(securities[5].balance, show_decimals=True) }
-        % endif
-    - "securities_description_7": |
-        % if securities.number_gathered() >= 7:
-        ${ securities[6].name.text }
-        % endif
-    - "securities_owner_7": |
-        % if securities.number_gathered() >= 7:
-        ${ securities[6].owner }
-        % endif
-    - "securities_balance_7": |
-        % if securities.number_gathered() >= 7:
-        ${ thousands(securities[6].balance, show_decimals=True) }
-        % endif
-    - "securities_description_8": |
-        % if securities.number_gathered() >= 8:
-        ${ securities[7].name.text }
-        % endif
-    - "securities_owner_8": |
-        % if securities.number_gathered() >= 8:
-        ${ securities[7].owner }
-        % endif
-    - "securities_balance_8": |
-        % if securities.number_gathered() >= 8:
-        ${ thousands(securities[7].balance, show_decimals=True) }
-        % endif
-    - "securities_description_9": |
-        % if securities.number_gathered() >= 9:
-        ${ securities[8].name.text }
-        % endif
-    - "securities_owner_9": |
-        % if securities.number_gathered() >= 9:
-        ${ securities[8].owner }
-        % endif
-    - "securities_balance_9": |
-        % if securities.number_gathered() >= 9:
-        ${ thousands(securities[8].balance, show_decimals=True) }
-        % endif
-    - "securities_description_10": |
-        % if securities.number_gathered() >= 10:
-        ${ securities[9].name.text }
-        % endif
-    - "securities_owner_10": |
-        % if securities.number_gathered() >= 10:
-        ${ securities[9].owner }
-        % endif
-    - "securities_balance_10": |
-        % if securities.number_gathered() >= 10:
-        ${ thousands(securities[9].balance, show_decimals=True) }
-        % endif
-    - "securities_description_11": |
-        % if securities.number_gathered() >= 11:
-        ${ securities[10].name.text }
-        % endif
-    - "securities_owner_11": |
-        % if securities.number_gathered() >= 11:
-        ${ securities[10].owner }
-        % endif
-    - "securities_balance_11": |
-        % if securities.number_gathered() >= 11:
-        ${ thousands(securities[10].balance, show_decimals=True) }
-        % endif
-    - "securities_description_12": |
-        % if securities.number_gathered() >= 12:
-        ${ securities[11].name.text }
-        % endif
-    - "securities_owner_12": |
-        % if securities.number_gathered() >= 12:
-        ${ securities[11].owner }
-        % endif
-    - "securities_balance_12": |
-        % if securities.number_gathered() >= 12:
-        ${ thousands(securities[11].balance, show_decimals=True) }
-        % endif
-    - "securities_description_13": |
-        % if securities.number_gathered() >= 13:
-        ${ securities[12].name.text }
-        % endif
-    - "securities_owner_13": |
-        % if securities.number_gathered() >= 13:
-        ${ securities[12].owner }
-        % endif
-    - "securities_balance_13": |
-        % if securities.number_gathered() >= 13:
-        ${ thousands(securities[12].balance, show_decimals=True) }
-        % endif
-    - "securities_description_14": |
-        % if securities.number_gathered() >= 14:
-        ${ securities[13].name.text }
-        % endif
-    - "securities_owner_14": |
-        % if securities.number_gathered() >= 14:
-        ${ securities[13].owner }
-        % endif
-    - "securities_balance_14": |
-        % if securities.number_gathered() >= 14:
-        ${ thousands(securities[13].balance, show_decimals=True) }
-        % endif
-    - "securities_description_15": |
-        % if securities.number_gathered() >= 15:
-        ${ securities[14].name.text }
-        % endif
-    - "securities_owner_15": |
-        % if securities.number_gathered() >= 15:
-        ${ securities[14].owner }
-        % endif
-    - "securities_balance_15": |
-        % if securities.number_gathered() >= 15:
-        ${ thousands(securities[14].balance, show_decimals=True) }
-        % endif
-    - "securities_description_16": |
-        % if securities.number_gathered() >= 16:
-        ${ securities[15].name.text }
-        % endif
-    - "securities_owner_16": |
-        % if securities.number_gathered() >= 16:
-        ${ securities[15].owner }
-        % endif
-    - "securities_balance_16": |
-        % if securities.number_gathered() >= 16:
-        ${ thousands(securities[15].balance, show_decimals=True) }
-        % endif
-    - "securities_description_17": |
-        % if securities.number_gathered() >= 17:
-        ${ securities[16].name.text }
-        % endif
-    - "securities_owner_17": |
-        % if securities.number_gathered() >= 17:
-        ${ securities[16].owner }
-        % endif
-    - "securities_balance_17": |
-        % if securities.number_gathered() >= 17:
-        ${ thousands(securities[16].balance, show_decimals=True) }
-        % endif
-    - "securities_description_18": |
-        % if securities.number_gathered() >= 18:
-        ${ securities[17].name.text }
-        % endif
-    - "securities_owner_18": |
-        % if securities.number_gathered() >= 18:
-        ${ securities[17].owner }
-        % endif
-    - "securities_balance_18": |
-        % if securities.number_gathered() >= 18:
-        ${ thousands(securities[17].balance, show_decimals=True) }
-        % endif
-    - "securities_description_19": |
-        % if securities.number_gathered() >= 19:
-        ${ securities[18].name.text }
-        % endif
-    - "securities_owner_19": |
-        % if securities.number_gathered() >= 19:
-        ${ securities[18].owner }
-        % endif
-    - "securities_balance_19": |
-        % if securities.number_gathered() >= 19:
-        ${ thousands(securities[18].balance, show_decimals=True) }
-        % endif
-    - "securities_description_20": |
-        % if securities.number_gathered() >= 20:
-        ${ securities[19].name.text }
-        % endif
-    - "securities_owner_20": |
-        % if securities.number_gathered() >= 20:
-        ${ securities[19].owner }
-        % endif
-    - "securities_balance_20": |
-        % if securities.number_gathered() >= 20:
-        ${ thousands(securities[19].balance, show_decimals=True) }
-        % endif
-    - "securities_description_21": |
-        % if securities.number_gathered() >= 21:
-        ${ securities[20].name.text }
-        % endif
-    - "securities_owner_21": |
-        % if securities.number_gathered() >= 21:
-        ${ securities[20].owner }
-        % endif
-    - "securities_balance_21": |
-        % if securities.number_gathered() >= 21:
-        ${ thousands(securities[20].balance, show_decimals=True) }
-        % endif
-    - "securities_description_22": |
-        % if securities.number_gathered() >= 22:
-        ${ securities[21].name.text }
-        % endif
-    - "securities_owner_22": |
-        % if securities.number_gathered() >= 22:
-        ${ securities[21].owner }
-        % endif
-    - "securities_balance_22": |
-        % if securities.number_gathered() >= 22:
-        ${ thousands(securities[21].balance, show_decimals=True) }
-        % endif
-    - "securities_description_23": |
-        % if securities.number_gathered() >= 23:
-        ${ securities[22].name.text }
-        % endif
-    - "securities_owner_23": |
-        % if securities.number_gathered() >= 23:
-        ${ securities[22].owner }
-        % endif
-    - "securities_balance_23": |
-        % if securities.number_gathered() >= 23:
-        ${ thousands(securities[22].balance, show_decimals=True) }
-        % endif
-    - "securities_description_24": |
-        % if securities.number_gathered() >= 24:
-        ${ securities[23].name.text }
-        % endif
-    - "securities_owner_24": |
-        % if securities.number_gathered() >= 24:
-        ${ securities[23].owner }
-        % endif
-    - "securities_balance_24": |
-        % if securities.number_gathered() >= 24:
-        ${ thousands(securities[23].balance, show_decimals=True) }
-        % endif
-    - "securities_description_25": |
-        % if securities.number_gathered() >= 25:
-        ${ securities[24].name.text }
-        % endif
-    - "securities_owner_25": |
-        % if securities.number_gathered() >= 25:
-        ${ securities[24].owner }
-        % endif
-    - "securities_balance_25": |
-        % if securities.number_gathered() >= 25:
-        ${ thousands(securities[24].balance, show_decimals=True) }
+    - "other_investments_description_4": |
+        % if other_investments.number_gathered() >= 4:
+        ${ other_investments[3].name.text }
+        % endif
+    - "other_investments_owner_4": |
+        % if other_investments.number_gathered() >= 4:
+        ${ other_investments[3].owner }
+        % endif
+    - "other_investments_balance_4": |
+        % if other_investments.number_gathered() >= 4:
+        ${ thousands(other_investments[3].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_5": |
+        % if other_investments.number_gathered() >= 5:
+        ${ other_investments[4].name.text }
+        % endif
+    - "other_investments_owner_5": |
+        % if other_investments.number_gathered() >= 5:
+        ${ other_investments[4].owner }
+        % endif
+    - "other_investments_balance_5": |
+        % if other_investments.number_gathered() >= 5:
+        ${ thousands(other_investments[4].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_6": |
+        % if other_investments.number_gathered() >= 6:
+        ${ other_investments[5].name.text }
+        % endif
+    - "other_investments_owner_6": |
+        % if other_investments.number_gathered() >= 6:
+        ${ other_investments[5].owner }
+        % endif
+    - "other_investments_balance_6": |
+        % if other_investments.number_gathered() >= 6:
+        ${ thousands(other_investments[5].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_7": |
+        % if other_investments.number_gathered() >= 7:
+        ${ other_investments[6].name.text }
+        % endif
+    - "other_investments_owner_7": |
+        % if other_investments.number_gathered() >= 7:
+        ${ other_investments[6].owner }
+        % endif
+    - "other_investments_balance_7": |
+        % if other_investments.number_gathered() >= 7:
+        ${ thousands(other_investments[6].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_8": |
+        % if other_investments.number_gathered() >= 8:
+        ${ other_investments[7].name.text }
+        % endif
+    - "other_investments_owner_8": |
+        % if other_investments.number_gathered() >= 8:
+        ${ other_investments[7].owner }
+        % endif
+    - "other_investments_balance_8": |
+        % if other_investments.number_gathered() >= 8:
+        ${ thousands(other_investments[7].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_9": |
+        % if other_investments.number_gathered() >= 9:
+        ${ other_investments[8].name.text }
+        % endif
+    - "other_investments_owner_9": |
+        % if other_investments.number_gathered() >= 9:
+        ${ other_investments[8].owner }
+        % endif
+    - "other_investments_balance_9": |
+        % if other_investments.number_gathered() >= 9:
+        ${ thousands(other_investments[8].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_10": |
+        % if other_investments.number_gathered() >= 10:
+        ${ other_investments[9].name.text }
+        % endif
+    - "other_investments_owner_10": |
+        % if other_investments.number_gathered() >= 10:
+        ${ other_investments[9].owner }
+        % endif
+    - "other_investments_balance_10": |
+        % if other_investments.number_gathered() >= 10:
+        ${ thousands(other_investments[9].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_11": |
+        % if other_investments.number_gathered() >= 11:
+        ${ other_investments[10].name.text }
+        % endif
+    - "other_investments_owner_11": |
+        % if other_investments.number_gathered() >= 11:
+        ${ other_investments[10].owner }
+        % endif
+    - "other_investments_balance_11": |
+        % if other_investments.number_gathered() >= 11:
+        ${ thousands(other_investments[10].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_12": |
+        % if other_investments.number_gathered() >= 12:
+        ${ other_investments[11].name.text }
+        % endif
+    - "other_investments_owner_12": |
+        % if other_investments.number_gathered() >= 12:
+        ${ other_investments[11].owner }
+        % endif
+    - "other_investments_balance_12": |
+        % if other_investments.number_gathered() >= 12:
+        ${ thousands(other_investments[11].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_13": |
+        % if other_investments.number_gathered() >= 13:
+        ${ other_investments[12].name.text }
+        % endif
+    - "other_investments_owner_13": |
+        % if other_investments.number_gathered() >= 13:
+        ${ other_investments[12].owner }
+        % endif
+    - "other_investments_balance_13": |
+        % if other_investments.number_gathered() >= 13:
+        ${ thousands(other_investments[12].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_14": |
+        % if other_investments.number_gathered() >= 14:
+        ${ other_investments[13].name.text }
+        % endif
+    - "other_investments_owner_14": |
+        % if other_investments.number_gathered() >= 14:
+        ${ other_investments[13].owner }
+        % endif
+    - "other_investments_balance_14": |
+        % if other_investments.number_gathered() >= 14:
+        ${ thousands(other_investments[13].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_15": |
+        % if other_investments.number_gathered() >= 15:
+        ${ other_investments[14].name.text }
+        % endif
+    - "other_investments_owner_15": |
+        % if other_investments.number_gathered() >= 15:
+        ${ other_investments[14].owner }
+        % endif
+    - "other_investments_balance_15": |
+        % if other_investments.number_gathered() >= 15:
+        ${ thousands(other_investments[14].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_16": |
+        % if other_investments.number_gathered() >= 16:
+        ${ other_investments[15].name.text }
+        % endif
+    - "other_investments_owner_16": |
+        % if other_investments.number_gathered() >= 16:
+        ${ other_investments[15].owner }
+        % endif
+    - "other_investments_balance_16": |
+        % if other_investments.number_gathered() >= 16:
+        ${ thousands(other_investments[15].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_17": |
+        % if other_investments.number_gathered() >= 17:
+        ${ other_investments[16].name.text }
+        % endif
+    - "other_investments_owner_17": |
+        % if other_investments.number_gathered() >= 17:
+        ${ other_investments[16].owner }
+        % endif
+    - "other_investments_balance_17": |
+        % if other_investments.number_gathered() >= 17:
+        ${ thousands(other_investments[16].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_18": |
+        % if other_investments.number_gathered() >= 18:
+        ${ other_investments[17].name.text }
+        % endif
+    - "other_investments_owner_18": |
+        % if other_investments.number_gathered() >= 18:
+        ${ other_investments[17].owner }
+        % endif
+    - "other_investments_balance_18": |
+        % if other_investments.number_gathered() >= 18:
+        ${ thousands(other_investments[17].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_19": |
+        % if other_investments.number_gathered() >= 19:
+        ${ other_investments[18].name.text }
+        % endif
+    - "other_investments_owner_19": |
+        % if other_investments.number_gathered() >= 19:
+        ${ other_investments[18].owner }
+        % endif
+    - "other_investments_balance_19": |
+        % if other_investments.number_gathered() >= 19:
+        ${ thousands(other_investments[18].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_20": |
+        % if other_investments.number_gathered() >= 20:
+        ${ other_investments[19].name.text }
+        % endif
+    - "other_investments_owner_20": |
+        % if other_investments.number_gathered() >= 20:
+        ${ other_investments[19].owner }
+        % endif
+    - "other_investments_balance_20": |
+        % if other_investments.number_gathered() >= 20:
+        ${ thousands(other_investments[19].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_21": |
+        % if other_investments.number_gathered() >= 21:
+        ${ other_investments[20].name.text }
+        % endif
+    - "other_investments_owner_21": |
+        % if other_investments.number_gathered() >= 21:
+        ${ other_investments[20].owner }
+        % endif
+    - "other_investments_balance_21": |
+        % if other_investments.number_gathered() >= 21:
+        ${ thousands(other_investments[20].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_22": |
+        % if other_investments.number_gathered() >= 22:
+        ${ other_investments[21].name.text }
+        % endif
+    - "other_investments_owner_22": |
+        % if other_investments.number_gathered() >= 22:
+        ${ other_investments[21].owner }
+        % endif
+    - "other_investments_balance_22": |
+        % if other_investments.number_gathered() >= 22:
+        ${ thousands(other_investments[21].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_23": |
+        % if other_investments.number_gathered() >= 23:
+        ${ other_investments[22].name.text }
+        % endif
+    - "other_investments_owner_23": |
+        % if other_investments.number_gathered() >= 23:
+        ${ other_investments[22].owner }
+        % endif
+    - "other_investments_balance_23": |
+        % if other_investments.number_gathered() >= 23:
+        ${ thousands(other_investments[22].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_24": |
+        % if other_investments.number_gathered() >= 24:
+        ${ other_investments[23].name.text }
+        % endif
+    - "other_investments_owner_24": |
+        % if other_investments.number_gathered() >= 24:
+        ${ other_investments[23].owner }
+        % endif
+    - "other_investments_balance_24": |
+        % if other_investments.number_gathered() >= 24:
+        ${ thousands(other_investments[23].balance, show_decimals=True) }
+        % endif
+    - "other_investments_description_25": |
+        % if other_investments.number_gathered() >= 25:
+        ${ other_investments[24].name.text }
+        % endif
+    - "other_investments_owner_25": |
+        % if other_investments.number_gathered() >= 25:
+        ${ other_investments[24].owner }
+        % endif
+    - "other_investments_balance_25": |
+        % if other_investments.number_gathered() >= 25:
+        ${ thousands(other_investments[24].balance, show_decimals=True) }
         % endif
 ---  
 ############ FA ADDITIONAL REAL ESTATE #############

@@ -25,7 +25,7 @@ objects:
   - cert_deposit: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
   - money: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
   - investments: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
-  - securities: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - other_investments: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
   - real_estate: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
   - real_estate[i].address: ALAddress
   - motor_vehicle: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
@@ -152,8 +152,8 @@ code: |
     money.gather()
   if has_investments:
     investments.gather()
-  if has_securities:
-    securities.gather()
+  if has_other_investments:
+    other_investments.gather()
   if has_real_estate:
     real_estate.gather()
   if has_motor_vehicle:
@@ -502,13 +502,13 @@ fields:
   - "Employment or business income source": employment[i].type
     datatype: radio
     choices:
-			- Employed by a company or someone else: employed
+      - Employed by a company or someone else: employed
       - Own a business as a sole proprietorship: own
       - Independent contractor: contractor
       - Member of a partnership: partnership
       - As a member of a limited liability company (LLC) not treated as a corporation: llc
-			- A closely-held corporation: corp
-			- Other flow-through business entity: other_entity
+      - A closely-held corporation: corp
+      - Other flow-through business entity: other_entity
 ---
 id: employer or business info 
 question: |
@@ -590,7 +590,6 @@ fields:
       - Company car: car
       - Free housing or housing allowance: housing
       - Other: other
-    none of the above: False
   - Other benefits: employment[i].other_perks
     input type: area
     rows: 2
@@ -1772,14 +1771,18 @@ code: |
     'users[0].living_heloc',
     'users[0].living_property_taxes',
     'users[0].living_hoa',
-    'users[0].living_insurance',
+    'users[0].living_insurance')
+
+  subtotal_monthly_utility_expenses = sum_if_defined(
     'users[0].living_gas',
     'users[0].living_power',
     'users[0].living_phone',
     'users[0].living_cable',
     'users[0].living_internet',
     'users[0].living_water',
-    'users[0].living_trash',
+    'users[0].living_trash')
+
+  subtotal_monthly_living_expenses = sum_if_defined(
     'users[0].living_laundry',
     'users[0].living_cleaner',
     'users[0].living_repairs',
@@ -1843,6 +1846,8 @@ code: |
 
   total_monthly_household_expenses = sum_if_defined(
     'subtotal_monthly_household_expenses',
+    'subtotal_monthly_utility_expenses',
+    'subtotal_monthly_living_expenses',
     'subtotal_monthly_transportation_expenses',
     'subtotal_monthly_personal_expenses',
     'subtotal_monthly_children_expenses')
@@ -1878,12 +1883,13 @@ question: |
 fields:
   - Name of insurance company: insurance[i].name.text
   - Type of insurance: insurance[i].type
-    datatype: radio
+    datatype: checkboxes
     choices:
-      - Medical
-      - Dental
-      - Orthodontic (braces)
-      - Vision
+      - Medical: medical
+      - Dental: dental
+      - Orthodontic (braces): orthodontic
+      - Vision: vision
+    none of the above: False
   - Type of policy: insurance[i].policy
     datatype: radio
     choices:
@@ -1941,16 +1947,17 @@ fields:
     datatype: currency
     min: 0
   - This is paid for by: insurance[i].paid
-    datatype: radio
+    datatype: checkboxes
     choices:
       - Me: myself 
       - My spouse/partner: partner 
       - Other: other
+    none of the above: False
   - Name of other payment source: insurance[i].other_description
     maxlength: 30
     show if:
-      variable: insurance[i].paid
-      is: "other"
+      variable: insurance[i].paid["other"]
+      is: True
   - What is the monthly cost for this insurance for covering children?: insurance[i].cost_children 
     datatype: currency
     min: 0
@@ -2293,55 +2300,55 @@ code: |
   if investments.number_gathered() == 25:
     investments.there_is_another = False
 ---
-########### FA ASSETS - 15b Brokerage accounts ###########
+########### FA ASSETS - 15b Other investments ###########
 id: brokerage accounts intro 
 question: |
   Do you have any other investment assets?
 subquestion: |
   These include investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency.
 fields:
-  - no label: has_securities
+  - no label: has_other_investments
     datatype: yesnoradio
 ---
-id: additional securities
+id: additional other investments
 question: |
   Do you have other investment assets?
 subquestion: |
   So far you have told us about:
-  ${ securities_table }
+  ${ other_investments_table }
 
   Remember: These include investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency.
 
 fields:
-  - Add another?: securities.there_is_another
+  - Add another?: other_investments.there_is_another
     datatype: yesnoradio
 ---
-table: securities_table
-rows: securities
+table: other_investments_table
+rows: other_investments
 columns:
   - Description: row_item.name.text
   - Owner: row_item.owner
   - Balance: currency(row_item.balance)
 ---
-id: securities information
+id: other investments information
 question: |
   Details for the ${ordinal(i)} investment asset
 fields:
-  - Description of asset: securities[i].name.text
+  - Description of asset: other_investments[i].name.text
     maxlength: 30
-  - Who is the owner?: securities[i].owner
+  - Who is the owner?: other_investments[i].owner
     maxlength: 30
-  - Balance: securities[i].balance
+  - Balance: other_investments[i].balance
     datatype: currency
     min: 0
 ---
 code: |
-  securities[i].name.text
-  securities[i].complete = True 
+  other_investments[i].name.text
+  other_investments[i].complete = True 
 ---
 code: |
-  if securities.number_gathered() == 25:
-    securities.there_is_another = False
+  if other_investments.number_gathered() == 25:
+    other_investments.there_is_another = False
 ---
 ########### FA ASSETS - 15c REAL ESTATE ###########
 id: real estate intro 
@@ -2811,7 +2818,8 @@ rows: lawsuits
 columns:
   - Case number: row_item.case
   - Date lawsuit/claim filed: row_item.date
-  - Amount recovered: currency(row_item.amount)
+  - Amount recovered: |
+      currency(row_item.amount) if row_item.judgement else 'unknown'
 ---
 id: lawsuits information
 question: |
@@ -2823,11 +2831,15 @@ fields:
   - Date lawsuit or claim filed: lawsuits[i].date
     datatype: ThreePartsDate
     alMax: ${ today().format("yyyy-MM-dd") }
+  - Has there been a final judgement yet?: lawsuits[i].judgement
+    datatype: yesnoradio
   - Amount recovered: lawsuits[i].amount
     datatype: currency
     min: 0
+    default: 0.00
     help: |
       If you did not recover anything, enter $0. If your case is still pending or has not yet been filed, enter unknown.
+    show if: lawsuits[i].judgement
 ---
 code: |
   lawsuits[i].case
@@ -2945,7 +2957,7 @@ objects:
         additional_cd,
         additional_money,
         additional_investments,
-        additional_securities,
+        additional_other_investments,
         additional_real_estate,
         additional_motor_vehicle,
         additional_business_interests,
@@ -3138,8 +3150,10 @@ attachment:
           ${ employment[0].perks['other'] }
           % endif
       - "business_other_detail": |
-          % if employment.there_are_any and employment[0].type != "employed" and employment[i].perks["other"] == True:
-          ${ employment[0].other_perks }
+          % if employment.there_are_any and employment[0].type != "employed":
+            % if employment[0].perks["other"]:
+            ${ employment[0].other_perks }
+            % endif
           % endif
       - "employment_addendum_yes": ${ employment.number_gathered() > 1 }
 
@@ -3197,118 +3211,176 @@ attachment:
       - "regular_pay": |
           % if users[0].regular_pay_question:
           ${thousands(users[0].regular_pay, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "overtime_pay": |
           % if users[0].overtime_pay_question:
           ${ thousands(users[0].overtime_pay, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "commission_pay": |
           % if users[0].commission_pay_question:
           ${ thousands(users[0].commission_pay, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "tips": |
           % if users[0].tips_question:
           ${ thousands(users[0].tips, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "bonus": |
           % if users[0].bonus_question:
           ${ thousands(users[0].bonus, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "pension": |
           % if users[0].pension_question:
           ${ thousands(users[0].pension, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "annuity": |
           % if users[0].annuity_question:
           ${ thousands(users[0].annuity, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "interest_income": |
           % if users[0].interest_question:
           ${ thousands(users[0].interest, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "dividend_income": |
           % if users[0].dividend_question:
           ${ thousands(users[0].dividend, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "trust_income": |
           % if users[0].trust_question:
           ${ thousands(users[0].trust, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "investment_income": |
           % if users[0].investment_question:
           ${ thousands(users[0].investment, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "social_retirement": |
           % if users[0].social_retirement_question:
           ${ thousands(users[0].social_retirement, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "social_disability": |
           % if users[0].social_disability_question:
           ${ thousands(users[0].social_disability, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "social_income": |
           % if users[0].social_income_question:
           ${ thousands(users[0].social_income, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "unemployment_benefits": |
           % if users[0].unemployment_benefits_question:
           ${ thousands(users[0].unemployment_benefits, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "disability_benefits": |
           % if users[0].disability_benefits_question:
           ${ thousands(users[0].disability_benefits, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "workers_comp_benefits": |
           % if users[0].workers_comp_benefits_question:
           ${ thousands(users[0].workers_comp_benefits, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "child_benefits": |
           % if users[0].child_benefits_question:
           ${ thousands(users[0].child_benefits, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "military_allowances": |
           % if users[0].military_allowances_question:
           ${ thousands(users[0].military_allowances, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "rental_income": |
           % if users[0].rental_income_question:
           ${ thousands(users[0].rental_income, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "partnership_income": |
           % if users[0].partnership_income_question:
           ${ thousands(users[0].partnership_income, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "distributions_draws": |
           % if users[0].distributions_draws_question:
           ${ thousands(users[0].distributions_draws, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "royalty_income": |
           % if users[0].royalty_income_question:
           ${ thousands(users[0].royalty_income, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "maintenance_current": |
           % if users[0].maintenance_current_question:
           ${ thousands(users[0].maintenance_current, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "maintenance_alternate": |
           % if users[0].maintenance_alternate_question:
           ${ thousands(users[0].maintenance_alternate, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "child_support_current": |
           % if users[0].child_support_current_question:
           ${ thousands(users[0].child_support_current, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "social_security_current": |
           % if users[0].social_security_current_question:
           ${ thousands(users[0].social_security_current, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "gifts_money": |
           % if users[0].gifts_money_question:
           ${ thousands(users[0].gifts_money, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "other_income": |
           % if users[0].other_income_question:
           ${ thousands(users[0].other_income, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "other_income_description": |
           % if users[0].other_income_question:
@@ -3320,124 +3392,182 @@ attachment:
       - "deductions_federal": |
           % if users[0].deductions_federal_question:
           ${ thousands(users[0].deductions_federal, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "deductions_state": |
           % if users[0].deductions_state_question:
           ${ thousands(users[0].deductions_state, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "deductions_fica": |
           % if users[0].deductions_fica_question:
           ${ thousands(users[0].deductions_fica, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "deductions_medicare": |
           % if users[0].deductions_medicare_question:
           ${ thousands(users[0].deductions_medicare, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "deductions_retirement": |
           % if users[0].deductions_retirement_question:
           ${ thousands(users[0].deductions_retirement, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "total_deductions": |
           ${ thousands(total_monthly_deductions, show_decimals=True)}
       - "maintenance_paid_court": |
           % if users[0].maintenance_paid_court_question:
           ${ thousands(users[0].maintenance_paid_court, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "maintenance_paid_no_tax": |
           % if users[0].maintenance_paid_no_tax_question:
           ${ thousands(users[0].maintenance_paid_no_tax, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "maintenance_paid_taxed": |
           % if users[0].maintenance_paid_taxed_question:
           ${ thousands(users[0].maintenance_paid_taxed, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "total_maintenance": |
           ${ thousands(total_maintenance_payments, show_decimals=True)}
       - "child_support_1": |
           % if users[0].child_support_1_question:
           ${ thousands(users[0].child_support_1, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "child_support_2": |
           % if users[0].child_support_2_question:
           ${ thousands(users[0].child_support_2, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "child_support_3": |
           % if users[0].child_support_3_question:
           ${ thousands(users[0].child_support_3, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "total_child_support": |
           ${ thousands(total_child_support_payments, show_decimals=True)}
       - "living_house_payment": |
           % if users[0].living_house_payment_question:
           ${ thousands(users[0].living_house_payment, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_heloc": |
           % if users[0].living_heloc_question:
           ${ thousands(users[0].living_heloc, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_property_taxes": |
           % if users[0].living_property_taxes_question:
           ${ thousands(users[0].living_property_taxes, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_hoa": |
           % if users[0].living_hoa_question:
           ${ thousands(users[0].living_hoa, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_insurance": |
           % if users[0].living_insurance_question:
           ${ thousands(users[0].living_insurance, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_gas": |
           % if users[0].living_gas_question:
           ${ thousands(users[0].living_gas, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_power": |
           % if users[0].living_power_question:
           ${ thousands(users[0].living_power, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_phone": |
           % if users[0].living_phone_question:
           ${ thousands(users[0].living_phone, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_cable": |
           % if users[0].living_cable_question:
           ${ thousands(users[0].living_cable, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_internet": |
           % if users[0].living_internet_question:
           ${ thousands(users[0].living_internet, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_water": |
           % if users[0].living_water_question:
           ${ thousands(users[0].living_water, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_trash": |
           % if users[0].living_trash_question:
           ${ thousands(users[0].living_trash, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_laundry": |
           % if users[0].living_laundry_question:
           ${ thousands(users[0].living_laundry, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_cleaner": |
           % if users[0].living_cleaner_question:
           ${ thousands(users[0].living_cleaner, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_repairs": |
           % if users[0].living_repairs_question:
           ${ thousands(users[0].living_repairs, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_pets": |
           % if users[0].living_pets_question:
           ${ thousands(users[0].living_pets, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_groceries": |
           % if users[0].living_groceries_question:
           ${ thousands(users[0].living_groceries, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_other": |
           % if users[0].living_other_question:
           ${ thousands(users[0].living_other, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "living_other_description": |
           % if users[0].living_other_question:
@@ -3448,30 +3578,44 @@ attachment:
       - "transport_payment": |
           % if users[0].transport_payment_question:
           ${ thousands(users[0].transport_payment, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "transport_maintenance": |
           % if users[0].transport_maintenance_question:
           ${ thousands(users[0].transport_maintenance, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "transport_insurance": |
           % if users[0].transport_insurance_question:
           ${ thousands(users[0].transport_insurance, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "transport_fuel": |
           % if users[0].transport_fuel_question:
           ${ thousands(users[0].transport_fuel, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "transport_public": |
           % if users[0].transport_public_question:
           ${ thousands(users[0].transport_public, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "transport_parking": |
           % if users[0].transport_parking_question:
           ${ thousands(users[0].transport_parking, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "transport_other": |
           % if users[0].transport_other_question:
           ${ thousands(users[0].transport_other, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "transport_other_description": |
           % if users[0].transport_other_question:
@@ -3482,78 +3626,116 @@ attachment:
       - "personal_doctor": |
           % if users[0].personal_doctor_question:
           ${ thousands(users[0].personal_doctor, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_therapy": |
           % if users[0].personal_therapy_question:
           ${ thousands(users[0].personal_therapy, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_dental": |
           % if users[0].personal_dental_question:
           ${ thousands(users[0].personal_dental, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_vision": |
           % if users[0].personal_vision_question:
           ${ thousands(users[0].personal_vision, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_medications": |
           % if users[0].personal_medications_question:
           ${ thousands(users[0].personal_medications, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_life_term": |
           % if users[0].personal_life_term_question:
           ${ thousands(users[0].personal_life_term, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_life_whole": |
           % if users[0].personal_life_whole_question:
           ${ thousands(users[0].personal_life_whole, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_clothing": |
           % if users[0].personal_clothing_question:
           ${ thousands(users[0].personal_clothing, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_stylist": |
           % if users[0].personal_stylist_question:
           ${ thousands(users[0].personal_stylist, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_memberships": |
           % if users[0].personal_memberships_question:
           ${ thousands(users[0].personal_memberships, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_subscriptions": |
           % if users[0].personal_subscriptions_question:
           ${ thousands(users[0].personal_subscriptions, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_entertainment": |
           % if users[0].personal_entertainment_question:
           ${ thousands(users[0].personal_entertainment, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_gifts": |
           % if users[0].personal_gifts_question:
           ${ thousands(users[0].personal_gifts, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_donations": |
           % if users[0].personal_donations_question:
           ${ thousands(users[0].personal_donations, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_vacations": |
           % if users[0].personal_vacations_question:
           ${ thousands(users[0].personal_vacations, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_associations": |
           % if users[0].personal_associations_question:
           ${ thousands(users[0].personal_associations, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "peronsal_professional": |
           % if users[0].peronsal_professional_question:
           ${ thousands(users[0].peronsal_professional, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_other": |
           % if users[0].personal_other_question:
           ${ thousands(users[0].personal_other, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_other": |
           % if users[0].personal_other_question:
           ${ thousands(users[0].personal_other, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "personal_other_description": |
           % if users[0].personal_other_question:
@@ -3564,94 +3746,140 @@ attachment:
       - "children_clothing": |
           % if users[0].children_expenses_question and users[0].children_clothing_question:
           ${ thousands(users[0].children_clothing, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_grooming": |
           % if users[0].children_expenses_question and users[0].children_grooming_question:
           ${ thousands(users[0].children_grooming, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_tuition": |
           % if users[0].children_expenses_question and users[0].children_tuition_question:
           ${ thousands(users[0].children_tuition, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_books": |
           % if users[0].children_expenses_question and users[0].children_books_question:
           ${ thousands(users[0].children_books, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_school_lunch": |
           % if users[0].children_expenses_question and users[0].children_school_lunch_question:
           ${ thousands(users[0].children_school_lunch, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_transportation": |
           % if users[0].children_expenses_question and users[0].children_transportation_question:
           ${ thousands(users[0].children_transportation, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_school_events": |
           % if users[0].children_expenses_question and users[0].children_school_events_question:
           ${ thousands(users[0].children_school_events, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_school_uniforms": |
           % if users[0].children_expenses_question and users[0].children_school_uniforms_question:
           ${ thousands(users[0].children_school_uniforms, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_after_school": |
           % if users[0].children_expenses_question and users[0].children_after_school_question:
           ${ thousands(users[0].children_after_school, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_tutor": |
           % if users[0].children_expenses_question and users[0].children_tutor_question:
           ${ thousands(users[0].children_tutor, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_doctor": |
           % if users[0].children_expenses_question and users[0].children_doctor_question:
           ${ thousands(users[0].children_doctor, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_therapy": |
           % if users[0].children_expenses_question and users[0].children_therapy_question:
           ${ thousands(users[0].children_therapy, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_dental": |
           % if users[0].children_expenses_question and users[0].children_dental_question:
           ${ thousands(users[0].children_dental, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_vision": |
           % if users[0].children_expenses_question and users[0].children_vision_question:
           ${ thousands(users[0].children_vision, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_medications": |
           % if users[0].children_expenses_question and users[0].children_medications_question:
           ${ thousands(users[0].children_medications, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_allowance": |
           % if users[0].children_expenses_question and users[0].children_allowance_question:
           ${ thousands(users[0].children_allowance, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_childcare": |
           % if users[0].children_expenses_question and users[0].children_childcare_question:
           ${ thousands(users[0].children_childcare, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_sports": |
           % if users[0].children_expenses_question and users[0].children_sports_question:
           ${ thousands(users[0].children_sports, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_camps": |
           % if users[0].children_expenses_question and users[0].children_camps_question:
           ${ thousands(users[0].children_camps, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_vacations": |
           % if users[0].children_expenses_question and users[0].children_vacations_question:
           ${ thousands(users[0].children_vacations, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_entertainment": |
           % if users[0].children_expenses_question and users[0].children_entertainment_question:
           ${ thousands(users[0].children_entertainment, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_party_gifts": |
           % if users[0].children_expenses_question and users[0].children_party_gifts_question:
           ${ thousands(users[0].children_party_gifts, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_other": |
           % if users[0].children_expenses_question and users[0].children_other_question:
           ${ thousands(users[0].children_other, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "children_other_description": |
           % if users[0].children_expenses_question and users[0].children_other_question:
@@ -3671,19 +3899,19 @@ attachment:
           % endif
       - "insurance_type_dental": |
           % if insurance.there_are_any:
-          ${ insurance[0].type == "Dental" }
+          ${ insurance[0].type["dental"] }
           % endif
       - "insurance_type_medical": |
           % if insurance.there_are_any:
-          ${ insurance[0].type == "Medical" }
+          ${ insurance[0].type["medical"] }
           % endif
       - "insurance_type_vision": |
           % if insurance.there_are_any:
-          ${ insurance[0].type == "Vision" }
+          ${ insurance[0].type["vision"] }
           % endif          
       - "insurance_type_orthodontic": |
           % if insurance.there_are_any:
-          ${ insurance[0].type == "Orthodontic" }
+          ${ insurance[0].type["orthodontic"] }
           % endif          
       - "policy_type_ppo": |
           % if insurance.there_are_any:
@@ -3734,11 +3962,13 @@ attachment:
           ${ insurance[0].coverage["children_other"] }
           % endif
       - "other_children_covered": |
-          % if insurance.there_are_any and insurance[0].coverage["children_other"]:
-            % if insurance[0].other_children_count == 1:
-            1 child, age: ${ insurance[0].other_children_age_list }
-            % else:
-            ${ insurance[0].other_children_count } children, ages: ${ insurance[0].other_children_age_list }
+          % if insurance.there_are_any:
+            % if insurance[0].coverage["children_other"]:
+              % if insurance[0].other_children_count == 1:
+              1 child, age: ${ insurance[0].other_children_age_list }
+              % else:
+              ${ insurance[0].other_children_count } children, ages: ${ insurance[0].other_children_age_list }
+              % endif
             % endif
           % endif
       - "insurance_monthly_cost": |
@@ -3747,35 +3977,45 @@ attachment:
           % endif
       - "insurance_paid_myself": |
           % if insurance.there_are_any:
-          ${ insurance[0].paid == "myself" }
+          ${ insurance[0].paid["myself"] }
           % endif
       - "insurance_paid_partner": |
           % if insurance.there_are_any:
-          ${ insurance[0].paid == "partner" }
+          ${ insurance[0].paid["partner"] }
           % endif
       - "insurance_paid_other": |
           % if insurance.there_are_any:
-          ${ insurance[0].paid == "other" }
+          ${ insurance[0].paid["other"] }
           % endif
       - "insurance_paid_other_description": |
-          % if insurance.there_are_any and insurance[0].paid == "other":
-          ${ insurance[0].other_description }
+          % if insurance.there_are_any:
+            % if insurance[0].paid["other"]:
+            ${ insurance[0].other_description }
+            % endif
           % endif
       - "cost_insurance_children": |
           % if insurance.there_are_any:
-          ${ thousands(insurance[0].cost_children, show_decimals=True) }
+          ${ thousands(insurance[0].cost_children, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "cost_insurance_children_current": |
           % if insurance.there_are_any:
-          ${ thousands(insurance[0].cost_children_current, show_decimals=True) }
+          ${ thousands(insurance[0].cost_children_current, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "individual_deductible": |
           % if insurance.there_are_any:
-          ${ thousands(insurance[0].individual_deductible, show_decimals=True) }
+          ${ thousands(insurance[0].individual_deductible, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "family_deductible": |
           % if insurance.there_are_any:
-          ${ thousands(insurance[0].family_deductible, show_decimals=True) }
+          ${ thousands(insurance[0].family_deductible, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "coinsurance": |
           % if insurance.there_are_any:
@@ -3783,7 +4023,9 @@ attachment:
           % endif
       - "copayment": |
           % if insurance.there_are_any:
-          ${ thousands(insurance[0].copayment, show_decimals=True) }
+          ${ thousands(insurance[0].copayment, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "insurance_addendum_yes": ${ insurance.number_gathered() > 1 }
       # 14 Debts
@@ -3797,11 +4039,15 @@ attachment:
           % endif
       - "creditor_amount_1": |
           % if has_debts:
-          ${ thousands(debts[0].amount, show_decimals=True) }
+          ${ thousands(debts[0].amount, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "creditor_payment_1": |
           % if has_debts:
-          ${ thousands(debts[0].payment, show_decimals=True) }
+          ${ thousands(debts[0].payment, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "creditor_name_2": |
           % if debts.number_gathered() >= 2:
@@ -3813,11 +4059,15 @@ attachment:
           % endif
       - "creditor_amount_2": |
           % if debts.number_gathered() >= 2:
-          ${ thousands(debts[1].amount, show_decimals=True) }
+          ${ thousands(debts[1].amount, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "creditor_payment_2": |
           % if debts.number_gathered() >= 2:
-          ${ thousands(debts[1].payment, show_decimals=True) }
+          ${ thousands(debts[1].payment, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "creditor_name_3": |
           % if debts.number_gathered() >= 3:
@@ -3829,11 +4079,15 @@ attachment:
           % endif
       - "creditor_amount_3": |
           % if debts.number_gathered() >= 3:
-          ${ thousands(debts[2].amount, show_decimals=True) }
+          ${ thousands(debts[2].amount, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "creditor_payment_3": |
           % if debts.number_gathered() >= 3:
-          ${ thousands(debts[2].payment, show_decimals=True) }
+          ${ thousands(debts[2].payment, show_decimals=True)}
+          % else:
+          0.00
           % endif
       - "creditor_name_4": |
           % if debts.number_gathered() >= 4:
@@ -4080,44 +4334,44 @@ attachment:
           ${ thousands(investments[2].fmv, show_decimals=True) }
           % endif
       - "investment_addendum_yes": ${ investments.number_gathered() > 3 }
-      # 15 Assets - Investment securities
-      - "securities_description_1": |
-          % if has_securities:
-          ${ securities[0].name.text }
+      # 15 Assets - Other Investments
+      - "other_investments_description_1": |
+          % if has_other_investments:
+          ${ other_investments[0].name.text }
           % endif
-      - "securities_owner_1": |
-          % if has_securities:
-          ${ securities[0].owner }
+      - "other_investments_owner_1": |
+          % if has_other_investments:
+          ${ other_investments[0].owner }
           % endif
-      - "securities_balance_1": |
-          % if has_securities:
-          ${ thousands(securities[0].balance, show_decimals=True) }
+      - "other_investments_balance_1": |
+          % if has_other_investments:
+          ${ thousands(other_investments[0].balance, show_decimals=True) }
           % endif
-      - "securities_description_2": |
-          % if securities.number_gathered() >= 2:
-          ${ securities[1].name.text }
+      - "other_investments_description_2": |
+          % if other_investments.number_gathered() >= 2:
+          ${ other_investments[1].name.text }
           % endif
-      - "securities_owner_2": |
-          % if securities.number_gathered() >= 2:
-          ${ securities[1].owner }
+      - "other_investments_owner_2": |
+          % if other_investments.number_gathered() >= 2:
+          ${ other_investments[1].owner }
           % endif
-      - "securities_balance_2": |
-          % if securities.number_gathered() >= 2:
-          ${ thousands(securities[1].balance, show_decimals=True) }
+      - "other_investments_balance_2": |
+          % if other_investments.number_gathered() >= 2:
+          ${ thousands(other_investments[1].balance, show_decimals=True) }
           % endif
-      - "securities_description_3": |
-          % if securities.number_gathered() >= 3:
-          ${ securities[2].name.text }
+      - "other_investments_description_3": |
+          % if other_investments.number_gathered() >= 3:
+          ${ other_investments[2].name.text }
           % endif
-      - "securities_owner_3": |
-          % if securities.number_gathered() >= 3:
-          ${ securities[2].owner }
+      - "other_investments_owner_3": |
+          % if other_investments.number_gathered() >= 3:
+          ${ other_investments[2].owner }
           % endif
-      - "securities_balance_3": |
-          % if securities.number_gathered() >= 3:
-          ${ thousands(securities[2].balance, show_decimals=True) }
+      - "other_investments_balance_3": |
+          % if other_investments.number_gathered() >= 3:
+          ${ thousands(other_investments[2].balance, show_decimals=True) }
           % endif
-      - "securities_addendum_yes": ${ securities.number_gathered() > 3 }
+      - "other_investments_addendum_yes": ${ other_investments.number_gathered() > 3 }
       # 15 Assets - Real Estate
       - "real_estate_address_1": |
           % if has_real_estate:
@@ -4485,7 +4739,11 @@ attachment:
           % endif
       - "lawsuit_amount_1": |
           % if has_lawsuits:
-          ${ thousands(lawsuits[0].amount, show_decimals=True) }
+            % if lawsuits[0].judgement:
+            ${ thousands(lawsuits[0].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
           % endif
       - "lawsuit_number_2": |
           % if lawsuits.number_gathered() >= 2:
@@ -4497,7 +4755,11 @@ attachment:
           % endif
       - "lawsuit_amount_2": |
           % if lawsuits.number_gathered() >= 2:
-          ${ thousands(lawsuits[1].amount, show_decimals=True) }
+            % if lawsuits[1].judgement:
+            ${ thousands(lawsuits[1].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
           % endif
       - "lawsuit_number_3": |
           % if lawsuits.number_gathered() >= 3:
@@ -4509,7 +4771,11 @@ attachment:
           % endif
       - "lawsuit_amount_3": |
           % if lawsuits.number_gathered() >= 3:
-          ${ thousands(lawsuits[2].amount, show_decimals=True) }
+            % if lawsuits[2].judgement:
+            ${ thousands(lawsuits[2].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
           % endif
       - "lawsuit_addendum_yes":  ${ lawsuits.number_gathered() > 3 }
       # 17 Income Tax Refund/Owed Amounts
@@ -4736,8 +5002,10 @@ attachment:
           ${ employment[i].perks['other'] }
           % endif
       - "business_other_detail": |
-          % if employment[i].type != "employed" and employment[i].perks["other"] == True:
-          ${ employment[i].other_perks }
+          % if employment.there_are_any and employment[i].type != "employed":
+            % if employment[i].perks["other"]:
+            ${ employment[i].other_perks }
+            % endif
           % endif
 ---
 ############ FA ADDITIONAL HEALTH INSURANCE #############
@@ -4800,19 +5068,19 @@ attachment:
           % endif
       - "insurance_type_dental": |
           % if insurance.there_are_any:
-          ${ insurance[i].type == "Dental" }
+          ${ insurance[i].type["Dental"] }
           % endif
       - "insurance_type_medical": |
           % if insurance.there_are_any:
-          ${ insurance[i].type == "Medical" }
+          ${ insurance[i].type["Medical"] }
           % endif
       - "insurance_type_vision": |
           % if insurance.there_are_any:
-          ${ insurance[i].type == "Vision" }
+          ${ insurance[i].type["Vision"] }
           % endif          
       - "insurance_type_orthodontic": |
           % if insurance.there_are_any:
-          ${ insurance[i].type == "Orthodontic" }
+          ${ insurance[i].type["Orthodontic"] }
           % endif          
       - "policy_type_ppo": |
           % if insurance.there_are_any:
@@ -4863,11 +5131,13 @@ attachment:
           ${ insurance[i].coverage["children_other"] }
           % endif
       - "other_children_covered": |
-          % if insurance.there_are_any and insurance[i].coverage["children_other"]:
-            % if insurance[0].other_children_count == 1:
-            1 child, age: ${ insurance[0].other_children_age_list }
-            % else:
-            ${ insurance[0].other_children_count } children, ages: ${ insurance[0].other_children_age_list }
+          % if insurance.there_are_any:
+            % if insurance[i].coverage["children_other"]:
+              % if insurance[i].other_children_count == 1:
+              1 child, age: ${ insurance[i].other_children_age_list }
+              % else:
+              ${ insurance[i].other_children_count } children, ages: ${ insurance[i].other_children_age_list }
+              % endif
             % endif
           % endif
       - "insurance_monthly_cost":   |
@@ -4876,18 +5146,18 @@ attachment:
           % endif
       - "insurance_paid_myself":  |
           % if insurance.there_are_any:
-          ${ insurance[i].paid == "myself" }
+          ${ insurance[i].paid["myself"] }
           % endif
       - "insurance_paid_partner":  |
           % if insurance.there_are_any:
-          ${ insurance[i].paid == "partner" }
+          ${ insurance[i].paid["partner"] }
           % endif
       - "insurance_paid_other":  |
           % if insurance.there_are_any:
-          ${ insurance[i].paid == "other" }
+          ${ insurance[i].paid["other"] }
           % endif
       - "insurance_paid_other_description":   |
-          % if insurance.there_are_any and insurance[i].paid == "other":
+          % if insurance.there_are_any and insurance[i].paid["other"]:
           ${ insurance[i].other_description }
           % endif
       - "cost_insurance_children":   |
