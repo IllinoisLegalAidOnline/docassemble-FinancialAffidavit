@@ -19,19 +19,17 @@ attachment:
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
-        % if party_label == 'petitioner':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
         % else:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent':
+        % if opposing_label == 'respondent' or opposing_label == 'defendant':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
     - "creditor_name_7": |
         % if debts.number_gathered() >= 7:
         ${ debts[6].name.text }
@@ -378,19 +376,17 @@ attachment:
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
-        % if party_label == 'petitioner':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
         % else:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent':
+        % if opposing_label == 'respondent' or opposing_label == 'defendant':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
     - "cash_bank_name_4": |
         % if cash.number_gathered() >= 4:
         ${ cash[3].name.text }
@@ -764,19 +760,17 @@ attachment:
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
-        % if party_label == 'petitioner':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
         % else:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent':
+        % if opposing_label == 'respondent' or opposing_label == 'defendant':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
     - "cd_bank_name_4": |
         % if cert_deposit.number_gathered() >= 4:
         ${ cert_deposit[3].name.text }
@@ -1064,19 +1058,17 @@ attachment:
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
-        % if party_label == 'petitioner':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
         % else:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent':
+        % if opposing_label == 'respondent' or opposing_label == 'defendant':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
     - "money_card_4": |
         % if money.number_gathered() >= 4:
         ${ money[3].name.text }
@@ -1362,19 +1354,17 @@ attachment:
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
-        % if party_label == 'petitioner':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
         % else:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent':
+        % if opposing_label == 'respondent' or opposing_label == 'defendant':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
     - "investment_name_4": |
         % if investments.number_gathered() >= 4:
         ${ investments[3].name.text }
@@ -1836,19 +1826,18 @@ attachment:
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
-        % if party_label == 'petitioner':
+    - "petitioner_name": |
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
         % else:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent':
+        % if opposing_label == 'respondent' or opposing_label == 'defendant':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
     - "other_investments_description_4": |
         % if other_investments.number_gathered() >= 4:
         ${ other_investments[3].name.text }
@@ -2134,19 +2123,17 @@ attachment:
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
-        % if party_label == 'petitioner':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
         % else:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent':
+        % if opposing_label == 'respondent' or opposing_label == 'defendant':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
     - "real_estate_address_4": |
         % if real_estate.number_gathered() >= 4:
         ${ real_estate[3].address.on_one_line() }
@@ -2520,19 +2507,17 @@ attachment:
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
-        % if party_label == 'petitioner':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
         % else:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent':
+        % if opposing_label == 'respondent' or opposing_label == 'defendant':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
     - "motor_vehicle_info_4": |
         % if motor_vehicle.number_gathered() >= 4:
         ${ motor_vehicle[3].year } ${ motor_vehicle[3].make } ${ motor_vehicle[3].model }
@@ -2907,19 +2892,17 @@ attachment:
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
-        % if party_label == 'petitioner':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
         % else:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent':
+        % if opposing_label == 'respondent' or opposing_label == 'defendant':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
     - "business_interests_name_4": |
         % if business_interests.number_gathered() >= 4:
         ${ business_interests[3].name.text }
@@ -3295,19 +3278,17 @@ attachment:
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
-        % if party_label == 'petitioner':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
         % else:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent':
+        % if opposing_label == 'respondent' or opposing_label == 'defendant':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
     - "life_insurance_company_4": |
         % if life_insurance.number_gathered() >= 4:
         ${ life_insurance[3].name.text }
@@ -3683,19 +3664,17 @@ attachment:
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
-        % if party_label == 'petitioner':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
         % else:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent':
+        % if opposing_label == 'respondent' or opposing_label == 'defendant':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
     - "retirement_plan_4": |
         % if retirement_plan.number_gathered() >= 4:
         ${ retirement_plan[3].name.text }
@@ -3983,19 +3962,17 @@ attachment:
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
-        % if party_label == 'petitioner':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
         % else:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent':
+        % if opposing_label == 'respondent' or opposing_label == 'defendant':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
     - "collection_description_4": |
         % if collection.number_gathered() >= 4:
         ${ collection[3].name.text }
@@ -4195,19 +4172,17 @@ attachment:
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
-        % if party_label == 'petitioner':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
         % else:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent':
+        % if opposing_label == 'respondent' or opposing_label == 'defendant':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
     - "other_property_description_4": |
         % if other_property.number_gathered() >= 4:
         ${ other_property[3].name.text }
@@ -4406,19 +4381,17 @@ attachment:
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
-        % if party_label == 'petitioner':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
         % else:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent':
+        % if opposing_label == 'respondent' or opposing_label == 'defendant':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
     - "transfer_description_4": |
         % if transfer.number_gathered() >= 4:
         ${ transfer[3].name.text }
@@ -4792,19 +4765,17 @@ attachment:
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
-        % if party_label == 'petitioner':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
         % else:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent':
+        % if opposing_label == 'respondent' or opposing_label == 'defendant':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
-    - "petitioner_yes": ${ party_label == 'petitioner' }
-    - "respondent_yes": ${ party_label == 'respondent' }
     - "lawsuit_number_4": |
         % if lawsuits.number_gathered() >= 4:
         ${ lawsuits[3].case }

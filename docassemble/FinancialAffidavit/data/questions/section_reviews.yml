@@ -114,6 +114,8 @@ subquestion: |
   Edit your answers below.
 review: 
 ################ Case info
+  - note: |
+      [**-------- Case info --------**](${ url_action('section_case') })
   - Edit: users[0].name.first
     button: |
       **Your name:**
@@ -143,8 +145,11 @@ review:
       Post-judgment
       % endif
 
-  - note: | ################ About you     
-      **About You**
+  - note: |
+      [**-------- About you --------**](${ url_action('section_user') })
+      
+#  - note: | ################ About you     
+#      **About You**
   - Edit: hide_contact
     button: |
       **Are your address and phone number protected?**
@@ -167,9 +172,12 @@ review:
     button: |
       **Do you live with another adult that helps pay your expenses?**
       ${ word(yesno(household_expenses))}  
+
+  - note: |
+      [**-------- Income --------**](${ url_action('section_income') })
       
-  - note: | ################ Income
-      **Income**
+#  - note: | ################ Income
+#      **Income**
   - Edit: employment.there_are_any
     button: |
       **Do you have income from employment?**
@@ -273,16 +281,12 @@ review:
 
       * Regular employment:
       ${ currency(showifdef('users[0].regular_pay')) if showifdef('users[0].regular_pay_question') else '$0.00' }
-
       * Overtime:
       ${ currency(showifdef('users[0].overtime_pay')) if showifdef('users[0].overtime_pay_question') else '$0.00' }
-
       * Commission:
       ${ currency(showifdef('users[0].commission_pay')) if showifdef('users[0].commission_pay_question') else '$0.00'}
-
       * Tips and gratuities:
       ${ currency(showifdef('users[0].tips')) if showifdef('users[0].tips_question') else '$0.00'}
-
       * Bonus:
       ${ currency(showifdef('users[0].bonus')) if showifdef('users[0].bonus_question') else '$0.00'}
   - Edit: users[0].pension_question
@@ -291,19 +295,14 @@ review:
 
       * Pension: 
       ${ currency(showifdef('users[0].pension')) if showifdef('users[0].pension_question') else '$0.00' }
-
       * Annuity: 
       ${ currency(showifdef('users[0].annuity'))  if showifdef('users[0].annuity_question') else '$0.00' }
-
       * Interest income: 
       ${ currency(showifdef('users[0].interest'))  if showifdef('users[0].interest_question') else '$0.00' }
-
       * Dividend income: 
-      -** ${ currency(showifdef('users[0].dividend'))  if showifdef('users[0].dividend_question') else '$0.00' }
-
+      ${ currency(showifdef('users[0].dividend'))  if showifdef('users[0].dividend_question') else '$0.00' }
       * Trust income: 
       ${ currency(showifdef('users[0].trust'))  if showifdef('users[0].trust_question') else '$0.00' }
-
       * Investment income: 
       ${ currency(showifdef('users[0].investment'))  if showifdef('users[0].investment_question') else '$0.00' }
   - Edit: users[0].social_retirement_question
@@ -312,25 +311,18 @@ review:
 
       * Social Security Retirement: 
       ${ currency(showifdef('users[0].social_retirement')) if showifdef('users[0].social_retirement_question') else '$0.00' }
-
       * Social Security Disability: 
       ${ currency(showifdef('users[0].social_disability')) if showifdef('users[0].social_disability_question') else '$0.00' }
-
-      * Social Security Income (SSI) (*not included as income for child support purposes*): 
+      * Social Security Income (SSI): 
       ${ currency(showifdef('users[0].social_income')) if showifdef('users[0].social_income_question') else '$0.00' }
-
       * Unemployment: 
       ${ currency(showifdef('users[0].unemployment_benefits')) if showifdef('users[0].unemployment_benefits_question') else '$0.00' }
-
       * Disability payment (*not Social Security*): 
       ${ currency(showifdef('users[0].disability_benefits')) if showifdef('users[0].disability_benefits_question') else '$0.00' }
-
       * Workers' Compensation: 
       ${ currency(showifdef('users[0].workers_comp_benefits')) if showifdef('users[0].workers_comp_benefits_question') else '$0.00' }
-
-      * TANF and SNAP (*not included as income for child support purposes*): 
+      * TANF and SNAP: 
       ${ currency(showifdef('users[0].child_benefits')) if showifdef('users[0].child_benefits_question') else '$0.00' }
-
       * Military allowances: 
       ${ currency(showifdef('users[0].military_allowances')) if showifdef('users[0].military_allowances_question') else '$0.00' }
   - Edit: users[0].rental_income_question
@@ -339,29 +331,23 @@ review:
 
       * Rental income: 
       ${ currency(showifdef('users[0].rental_income')) if showifdef('users[0].rental_income_question') else '$0.00'}
-
       * Partnership income: 
       ${ currency(showifdef('users[0].partnership_income')) if showifdef('users[0].partnership_income_question') else '$0.00'}
-
       * Distributions and draws: 
       ${ currency(showifdef('users[0].distributions_draws')) if showifdef('users[0].distributions_draws_question') else '$0.00'}
-
       * Royalty income: 
       ${ currency(showifdef('users[0].royalty_income')) if showifdef('users[0].royalty_income_question') else '$0.00'}
   - Edit: users[0].maintenance_current_question
     button: |
       **Monthly maintenance and support**
 
-      * Maintenance received under an order entered in this case or another case that you must report as income on your tax return: 
+      * Maintenance received that you must report as income on your tax return: 
       ${ currency(showifdef('users[0].maintenance_current')) if showifdef('users[0].maintenance_current_question') else '$0.00'}
-
-      * Maintenance received under an order entered in this case or another case that you do not have to report as income on your tax return: 
+      * Maintenance received that you do not have to report as income on your tax return: 
       ${ currency(showifdef('users[0].maintenance_alternate')) if showifdef('users[0].maintenance_alternate_question') else '$0.00'}
-
-      * Child support for children of this relationship (if this support is paid by the other parent, it does not affect the support calculation): 
+      * Child support for children of this relationship: 
       ${ currency(showifdef('users[0].child_support_current')) if showifdef('users[0].child_support_current_question') else '$0.00'}
-
-      * Social Security payment made to the children of this relationship based on your disability or retirement: 
+      * Social Security payment made to the children of this relationship: 
       ${ currency(showifdef('users[0].social_security_current')) if showifdef('users[0].social_security_current_question') else '$0.00'}
   - Edit: users[0].gifts_money_question
     button: |
@@ -369,7 +355,6 @@ review:
 
       * Gifts of money you receive from others: 
       ${ currency(showifdef('users[0].gifts_money')) if showifdef('users[0].gifts_money_question') else '$0.00'}
-
       * Do you receive other types of income?: 
       % if showifdef('users[0].other_income_question'):
       Other income sources: 
@@ -381,37 +366,34 @@ review:
       $0.00
       % endif
 
-  - note: | ################ Expenses and debts
-      **Expenses and Debts**
+  - note: |
+      [**-------- Expenses and debts --------**](${ url_action('section_expenses') })
+      
+#  - note: | ################ Expenses and debts
+#      **Expenses and Debts**
   - Edit: users[0].deductions_federal_question
     button: |
       **Monthly income deductions**
 
       * Federal income tax: 
       ${ currency(showifdef('users[0].deductions_federal')) if showifdef('users[0].deductions_federal_question') else '$0.00'}
-
       * State income tax: 
       ${ currency(showifdef('users[0].deductions_state')) if showifdef('users[0].deductions_state_question') else '$0.00'}
-
-      * FICA (or Social Security equivalent, such as Self-employment tax): 
+      * FICA (or Social Security equivalent such as Self-employment tax): 
       ${ currency(showifdef('users[0].deductions_fica')) if showifdef('users[0].deductions_fica_question') else '$0.00'}
-
       * Medicare tax: 
       ${ currency(showifdef('users[0].deductions_medicare')) if showifdef('users[0].deductions_medicare_question') else '$0.00'}
-
       * Mandatory retirement contributions: 
       ${ currency(showifdef('users[0].deductions_retirement')) if showifdef('users[0].deductions_retirement_question') else '$0.00'}
   - Edit: users[0].maintenance_paid_court_question
     button: |
       **Monthly maintenance payments**
 
-      * Maintenance being paid or payable to the other party by you under a court order in this case: 
+      * Maintenance being paid or payable to the other party by you in this case: 
       ${ currency(showifdef('users[0].maintenance_paid_court')) if showifdef('users[0].maintenance_paid_court_question') else '$0.00'}
-
-      * Maintenance being paid under a court order to a former spouse by you, which is tax deductible to you: 
+      * Maintenance being paid to a former spouse, which is tax deductible: 
       ${ currency(showifdef('users[0].maintenance_paid_no_tax')) if showifdef('users[0].maintenance_paid_no_tax_question') else '$0.00'}
-
-      * Maintenance being paid under a court order to a former spouse by you, which is not tax deductible to you: 
+      * Maintenance being paid to a former spouse, which is not tax deductible: 
       ${ currency(showifdef('users[0].maintenance_paid_taxed')) if showifdef('users[0].maintenance_paid_taxed_question') else '$0.00'}
   - Edit: users[0].child_support_1_question
     button: |
@@ -419,11 +401,9 @@ review:
 
       * Court-ordered child support being paid for the children of this relationship: 
       ${ currency(showifdef('users[0].child_support_1')) if showifdef('users[0].child_support_1_question') else '$0.00'}
-
-      * Child support being paid *under a court order* for children not shared with the other party and who are not part of this case: 
+      * Child support for other children being paid *under a court order*: 
       ${ currency(showifdef('users[0].child_support_2')) if showifdef('users[0].child_support_2_question') else '$0.00'}
-
-      * Child support being paid, *but there is no court order*, for children not shared with the other party and who are not part of this case: 
+      * Child support for other childre being paid, *but there is no court order*: 
       ${ currency(showifdef('users[0].child_support_3')) if showifdef('users[0].child_support_3_question') else '$0.00'}
   - Edit: users[0].living_house_payment_question
     button: |
@@ -431,16 +411,12 @@ review:
 
       * Mortgage or rent payment: 
       ${ currency(showifdef('users[0].living_house_payment')) if showifdef('users[0].living_house_payment_question') else '$0.00'}
-
       * Home equity (HELOC) and second mortgage payment: 
       ${ currency(showifdef('users[0].living_heloc')) if showifdef('users[0].living_heloc_question') else '$0.00'}
-
       * Real estate taxes: 
       ${ currency(showifdef('users[0].living_property_taxes')) if showifdef('users[0].living_property_taxes_question') else '$0.00'}
-
       * Homeowners or condo association dues and assessments: 
       ${ currency(showifdef('users[0].living_hoa')) if showifdef('users[0].living_hoa_question') else '$0.00'}
-
       * Homeowners or renters insurance: 
       ${ currency(showifdef('users[0].living_insurance')) if showifdef('users[0].living_insurance_question') else '$0.00'}
   - Edit: users[0].living_gas_question
@@ -449,22 +425,16 @@ review:
 
       * Gas: 
       ${ currency(showifdef('users[0].living_gas')) if showifdef('users[0].living_gas_question') else '$0.00'}
-
       * Electric: 
       ${ currency(showifdef('users[0].living_power')) if showifdef('users[0].living_power_question') else '$0.00'}
-
       * Telephone: 
       ${ currency(showifdef('users[0].living_phone')) if showifdef('users[0].living_phone_question') else '$0.00'}
-
       * Cable or satellite TV: 
       ${ currency(showifdef('users[0].living_cable')) if showifdef('users[0].living_cable_question') else '$0.00'}
-
       * Internet: 
       ${ currency(showifdef('users[0].living_internet')) if showifdef('users[0].living_internet_question') else '$0.00'}
-
       * Water and sewer: 
       ${ currency(showifdef('users[0].living_water')) if showifdef('users[0].living_water_question') else '$0.00'}
-
       * Garbage removal: 
       ${ currency(showifdef('users[0].living_trash')) if showifdef('users[0].living_trash_question') else '$0.00'}
   - Edit: users[0].living_laundry_question
@@ -473,20 +443,15 @@ review:
 
       * Laundry and dry cleaning: 
       ${ currency(showifdef('users[0].living_laundry')) if showifdef('users[0].living_laundry_question') else '$0.00'}
-
       * House cleaning service: 
       ${ currency(showifdef('users[0].living_cleaner')) if showifdef('users[0].living_cleaner_question') else '$0.00'}
-
       * Necessary repairs and maintenance to my property: 
       ${ currency(showifdef('users[0].living_repairs')) if showifdef('users[0].living_repairs_question') else '$0.00'}
-
       * Pet care: 
       ${ currency(showifdef('users[0].living_pets')) if showifdef('users[0].living_pets_question') else '$0.00'}
-
       * Groceries, household supplies, and toiletries: 
       ${ currency(showifdef('users[0].living_groceries')) if showifdef('users[0].living_groceries_question') else '$0.00'}
-
-      * Other monthly household living expenses (transportation expenses will be entered on another screen): 
+      * Other monthly household living expenses (not transportation): 
       % if showifdef('users[0].living_other_question'):
       What are the other monthly household living expenses?: 
       ${ showifdef('users[0].living_other_description') if showifdef('users[0].living_other_question') else '$0.00'}
@@ -502,22 +467,16 @@ review:
 
       * Car payment: 
       ${ currency(showifdef('users[0].transport_payment')) if showifdef('users[0].transport_payment_question') else '$0.00'}
-
       * Repairs and maintenance: 
       ${ currency(showifdef('users[0].transport_maintenance')) if showifdef('users[0].transport_maintenance_question') else '$0.00'}
-
       * Insurance, license, registration, and city stickers: 
       ${ currency(showifdef('users[0].transport_insurance')) if showifdef('users[0].transport_insurance_question') else '$0.00'}
-
       * Gasoline: 
       ${ currency(showifdef('users[0].transport_fuel')) if showifdef('users[0].transport_fuel_question') else '$0.00'}
-
       * Taxi, ride-share, bus, and train: 
       ${ currency(showifdef('users[0].transport_public')) if showifdef('users[0].transport_public_question') else '$0.00'}
-
       * Parking: 
       ${ currency(showifdef('users[0].transport_parking')) if showifdef('users[0].transport_parking_question') else '$0.00'}
-
       * Other monthly transportation expenses: 
       % if showifdef('users[0].transport_other_question'):
       What are the other monthly transportation expenses?: 
@@ -534,25 +493,20 @@ review:
 
       * Doctor visits: 
       ${ currency(showifdef('users[0].personal_doctor')) if showifdef('users[0].personal_doctor_question') else '$0.00'}
-
       * Therapy and counseling: 
       ${ currency(showifdef('users[0].personal_therapy')) if showifdef('users[0].personal_therapy_question') else '$0.00'}
-
       * Dental and orthodontia: 
       ${ currency(showifdef('users[0].personal_dental')) if showifdef('users[0].personal_dental_question') else '$0.00'}
-
       * Optical: 
       ${ currency(showifdef('users[0].personal_vision')) if showifdef('users[0].personal_vision_question') else '$0.00'}
-
       * Medicine and prescriptions: 
       ${ currency(showifdef('users[0].personal_medications')) if showifdef('users[0].personal_medications_question') else '$0.00'}
   - Edit: users[0].personal_associations_question
     button: |
       **Monthly professional dues and fees**
 
-      * Mandatory or voluntary union, trade, or professional association dues: 
+      * Union, trade, or professional association dues: 
       ${ currency(showifdef('users[0].personal_associations')) if showifdef('users[0].personal_associations_question') else '$0.00'}
-
       * Professional fees, such as accountants, tax preparers, or lawyers: 
       ${ currency(showifdef('users[0].peronsal_professional')) if showifdef('users[0].peronsal_professional_question') else '$0.00'}
   - Edit: users[0].personal_life_term_question
@@ -561,7 +515,6 @@ review:
 
       * Life (term): 
       ${ currency(showifdef('users[0].personal_life_term')) if showifdef('users[0].personal_life_term_question') else '$0.00'}
-
       * Life (whole or annuity): 
       ${ currency(showifdef('users[0].personal_life_whole')) if showifdef('users[0].personal_life_whole_question') else '$0.00'}
   - Edit: users[0].personal_clothing_question
@@ -570,19 +523,14 @@ review:
 
       * Clothing: 
       ${ currency(showifdef('users[0].personal_clothing')) if showifdef('users[0].personal_clothing_question') else '$0.00'}
-
       * Grooming, such as hair, nails, or spa: 
       ${ currency(showifdef('users[0].personal_stylist')) if showifdef('users[0].personal_stylist_question') else '$0.00'}
-
       * Gym & Club membership dues: 
       ${ currency(showifdef('users[0].personal_memberships')) if showifdef('users[0].personal_memberships_question') else '$0.00'}
-
       * Entertainment, dining out, and hobbies: 
       ${ currency(showifdef('users[0].personal_entertainment')) if showifdef('users[0].personal_entertainment_question') else '$0.00'}
-
       * Newspapers, magazines, and subscriptions: 
       ${ currency(showifdef('users[0].personal_subscriptions')) if showifdef('users[0].personal_subscriptions_question') else '$0.00'}
-
       * Vacations: 
       ${ currency(showifdef('users[0].personal_vacations')) if showifdef('users[0].personal_vacations_question') else '$0.00'}
   - Edit: users[0].personal_gifts_question
@@ -591,10 +539,8 @@ review:
 
       * Gifts you give to others: 
       ${ currency(showifdef('users[0].personal_gifts')) if showifdef('users[0].personal_gifts_question') else '$0.00'}
-
       * Donations, such as political, religious, or charity: 
       ${ currency(showifdef('users[0].personal_donations')) if showifdef('users[0].personal_donations_question') else '$0.00'}
-
       * Other personal expenses not already listed: 
       % if showifdef('users[0].personal_other_question'):
       What are the other monthly personal expenses?: 
@@ -615,7 +561,6 @@ review:
 
       * Clothing: 
       ${ currency(showifdef('users[0].children_clothing')) if showifdef('users[0].children_clothing_question') else '$0.00' }
-
       * Grooming, such as hair, nails, or spa: 
       ${ currency(showifdef('users[0].children_grooming')) if showifdef('users[0].children_grooming_question') else '$0.00' }
     show if: users[0].children_expenses_question
@@ -625,25 +570,18 @@ review:
 
       * Tuition: 
       ${ currency(showifdef('users[0].children_tuition')) if showifdef('users[0].children_tuition_question') else '$0.00' }
-
       * Books, fees, and supplies: 
       ${ currency(showifdef('users[0].children_books')) if showifdef('users[0].children_books_question') else '$0.00' }
-
       * School lunch: 
       ${ currency(showifdef('users[0].children_school_lunch')) if showifdef('users[0].children_school_lunch_question') else '$0.00' }
-
       * Transportation: 
       ${ currency(showifdef('users[0].children_transportation')) if showifdef('users[0].children_transportation_question') else '$0.00' }
-
       * School-sponsored trips and special events: 
       ${ currency(showifdef('users[0].children_school_events')) if showifdef('users[0].children_school_events_question') else '$0.00' }
-
       * Uniforms: 
       ${ currency(showifdef('users[0].children_school_uniforms')) if showifdef('users[0].children_school_uniforms_question') else '$0.00' }
-
       * Before and after-school care: 
       ${ currency(showifdef('users[0].children_after_school')) if showifdef('users[0].children_after_school_question') else '$0.00' }
-
       * Tutoring and summer school: 
       ${ currency(showifdef('users[0].children_tutor')) if showifdef('users[0].children_tutor_question') else '$0.00' }
     show if: users[0].children_expenses_question
@@ -653,16 +591,12 @@ review:
 
       * Doctor visits: 
       ${ currency(showifdef('users[0].children_doctor')) if showifdef('users[0].children_doctor_question') else '$0.00' }
-
       * Therapy and counseling: 
       ${ currency(showifdef('users[0].children_therapy')) if showifdef('users[0].children_therapy_question') else '$0.00' }
-
       * Dental and orthodontics (braces): 
       ${ currency(showifdef('users[0].children_dental')) if showifdef('users[0].children_dental_question') else '$0.00' }
-
       * Vision: 
       ${ currency(showifdef('users[0].children_vision')) if showifdef('users[0].children_vision_question') else '$0.00' }
-
       * Medicine: 
       ${ currency(showifdef('users[0].children_medications')) if showifdef('users[0].children_medications_question') else '$0.00' }
     show if: users[0].children_expenses_question
@@ -672,13 +606,10 @@ review:
 
       * Allowance: 
       ${ currency(showifdef('users[0].children_allowance')) if showifdef('users[0].children_allowance_question') else '$0.00' }
-
       * Childcare and sitters: 
       ${ currency(showifdef('users[0].children_childcare')) if showifdef('users[0].children_childcare_question') else '$0.00' }
-
       * Extracurricular activities and sports, such as equipment or uniforms: 
       ${ currency(showifdef('users[0].children_sports')) if showifdef('users[0].children_sports_question') else '$0.00' }
-
       * Summer and school-break camps: 
       ${ currency(showifdef('users[0].children_camps')) if showifdef('users[0].children_camps_question') else '$0.00' }
     show if: users[0].children_expenses_question
@@ -688,13 +619,10 @@ review:
 
       * Vacations (children only): 
       ${ currency(showifdef('users[0].children_vacations')) if showifdef('users[0].children_vacations_question') else '$0.00' }
-
       * Entertainment, dining out, and hobbies (children only): 
       ${ currency(showifdef('users[0].children_entertainment')) if showifdef('users[0].children_entertainment_question') else '$0.00' }
-
       * Gifts children give to others: 
       ${ currency(showifdef('users[0].children_party_gifts')) if showifdef('users[0].children_party_gifts_question') else '$0.00' }
-
       * Other expenses for children not already listed: 
       % if showifdef('users[0].children_other_question'):
       Describe other monthly expenses: 
@@ -732,8 +660,11 @@ review:
       % endfor
     show if: has_debts
 
-  - note: | ################ Assets
-      **Assets**
+  - note: |
+      [**-------- Assets --------**](${ url_action('section_assets') })
+  
+#  - note: | ################ Assets
+#      **Assets**
   - Edit: has_cash_assets
     button: |
       **Do you have any cash or cash equivalents?**
@@ -903,8 +834,11 @@ review:
       % endfor
     show if: has_lawsuits
 
-  - note: | ################ Final steps
-      **Final Steps**
+  - note: |
+      [**-------- Final steps --------**](${ url_action('section_final') })
+  
+#  - note: | ################ Final steps
+#      **Final Steps**
   - Edit: users[0].attached_documents
     button: |
       **Attach documents to your *Financial Affidavit***

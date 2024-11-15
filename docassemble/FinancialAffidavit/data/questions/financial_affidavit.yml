@@ -220,9 +220,10 @@ question: |
 subquestion: |
   Welcome to Illinois Legal Aid Online's **Financial affidavit** Easy Form.
 
+  This program helps you make forms that provide financial information and documents to the other party in family law cases.
+  
     If you are in a court case for divorce, child support, or temporary maintenance, you and the other person will probably have to share infomration about your income, property, and expenses. 
 
-  This program helps you make forms that provide financial information and documents to the other party in family law cases.
 ---
 id: how to use
 continue button field: how_to_use
@@ -339,16 +340,18 @@ subquestion: |
   ${ collapse_template(which_party) }  
 field: party_label
 choices:
-  - Petitioner or Plaintiff: petitioner
-  - Respondent or Defendant: respondent
+  - Petitioner: petitioner
+  - Plaintiff: plaintiff
+  - Respondent: respondent
+  - Defendant: defendant
 ---
 template: which_party
 subject: |
   **Learn more about party labels**
 content: |
-  If you filed a new case, you are either the Plaintiff or the Petitioner.
+  If you filed a new case, you are either the Petitioner or the Plaintiff.
 
-  If someone filed the case against you, you are either the Defendant or the Respondent.
+  If someone filed the case against you, you are either the Respondent or the Defendant.
 
   Most family law cases use Petitioner and Respondent.
   
@@ -368,6 +371,10 @@ fields:
       users[0].name_fields()
 ---
 code: |
+  if party_label == 'plaintiff':
+    opposing_label = 'defendant'
+  if party_label == 'defendant':
+    opposing_label = 'plaintiff'
   if party_label == 'petitioner':
     opposing_label = 'respondent'
   if party_label == 'respondent':
@@ -2535,7 +2542,7 @@ code: |
 id: life insurance intro
 question: |
   Do you have any life insurance policies?
-subquestions: |
+subquestion: |
   These can be life insurance policies you have for yourself, the other party, or your children. 
 fields:
   - no label: has_life_insurance
@@ -2834,7 +2841,7 @@ fields:
   - Was any money recovered?: lawsuits[i].judgement
     datatype: yesnoradio
     help: |
-      If you did not recover anything or if your case is still pending or has not yet been filed, select No.
+      If you did not recover anything or if your case is still pending or has not yet been filed, select **No**.
   - Amount recovered: lawsuits[i].amount
     datatype: currency
     min: 0
@@ -2992,19 +2999,19 @@ attachment:
       - "pre-judgment": ${ filing_status == "pre_judgment" }
       - "post-judgment": ${ filing_status == "post_judgment" }
       - "petitioner_name": |
-          % if party_label == 'petitioner':
+          % if party_label == 'petitioner' or party_label == 'plaintiff':
           ${ users[0].name.full(middle='full') }
           % else:
           ${ other_parties[0].name.full(middle='full') }
           % endif
       - "respondent_name": |
-          % if opposing_label == 'respondent':
+          % if opposing_label == 'respondent' or opposing_label == 'defendant':
           ${ other_parties[0].name.full(middle='full') }
           % else:
           ${ users[0].name.full(middle='full') }
           % endif
-      - "petitioner_yes": ${ party_label == 'petitioner' }
-      - "respondent_yes": ${ party_label == 'respondent' }
+      - "petitioner_yes": ${ party_label == 'petitioner' or party_label == 'plaintiff' }
+      - "respondent_yes": ${ party_label == 'respondent' or party_label == 'defendant' }
       - "date_affirm": ${ today().format('MM/dd/yyyy') }
       - "attached_pay_stubs": ${ users[0].attached_documents["stubs"] }
       - "attached_tax_return": ${ users[0].attached_documents["returns"] }
@@ -4895,19 +4902,17 @@ attachment:
       - "pre-judgment": ${ filing_status == "pre_judgment" }
       - "post-judgment": ${ filing_status == "post_judgment" }
       - "petitioner_name": |
-          % if party_label == 'petitioner':
+          % if party_label == 'petitioner' or party_label == 'plaintiff':
           ${ users[0].name.full(middle='full') }
           % else:
           ${ other_parties[0].name.full(middle='full') }
           % endif
       - "respondent_name": |
-          % if opposing_label == 'respondent':
+          % if opposing_label == 'respondent' or opposing_label == 'defendant':
           ${ other_parties[0].name.full(middle='full') }
           % else:
           ${ users[0].name.full(middle='full') }
           % endif
-      - "petitioner_yes": ${ party_label == 'petitioner' }
-      - "respondent_yes": ${ party_label == 'respondent' }
 
       - "employed_yes": ${ employment[i].type == 'employed' }
       - "employer_name": |
@@ -5046,19 +5051,17 @@ attachment:
       - "pre-judgment": ${ filing_status == "pre_judgment" }
       - "post-judgment": ${ filing_status == "post_judgment" }
       - "petitioner_name": |
-          % if party_label == 'petitioner':
+          % if party_label == 'petitioner' or party_label == 'plaintiff':
           ${ users[0].name.full(middle='full') }
           % else:
           ${ other_parties[0].name.full(middle='full') }
           % endif
       - "respondent_name": |
-          % if opposing_label == 'respondent':
+          % if opposing_label == 'respondent' or opposing_label == 'defendant':
           ${ other_parties[0].name.full(middle='full') }
           % else:
           ${ users[0].name.full(middle='full') }
           % endif
-      - "petitioner_yes": ${ party_label == 'petitioner' }
-      - "respondent_yes": ${ party_label == 'respondent' }
 
       - "health_insurance_yes": ${ insurance.there_are_any }
       - "health_insurance_no": ${ insurance.number_gathered() == 0 }
