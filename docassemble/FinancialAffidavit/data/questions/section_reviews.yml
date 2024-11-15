@@ -1,105 +1,105 @@
----
-id: income summary review
-continue button field: income_summary
-question: |
-  Monthly income summary
-subquestion: |
-  Here's a summary of your monthly income. You can click **Edit** to see details and make changes.
-  <span style="display: none">
-  ${ currency(total_monthly_employment_income) }
-  ${ currency(total_monthly_investment_income) }
-  ${ currency(total_other_monthly_business_income) }
-  ${ currency(total_monthly_benefits_income) }
-  ${ currency(total_monthly_maintenance_support_income) }
-  ${ currency(total_monthly_gifts_other_income) }
-  ${ currency(total_gross_monthly_income) }
-  </span>
-review:
-  - Edit: 
-      - users[0].regular_pay_question
-    button: |
-      <h2 class="h4">Monthly employment income: ${ currency(total_monthly_employment_income) }</h2>
-  - Edit:
-      - users[0].pension_question
-    button: |
-      <h2 class="h4">Monthly investment income: ${ currency(total_monthly_investment_income) }</h2>
-  - Edit:
-      - users[0].rental_income_question
-    button: |
-      <h2 class="h4">Other monthly business income: ${ currency(total_other_monthly_business_income) }</h2>
-  - Edit:
-      - users[0].social_retirement_question
-    button: |
-      <h2 class="h4">Monthly benefits income: ${ currency(total_monthly_benefits_income) }</h2>
-  - Edit:
-      - users[0].maintenance_current_question
-    button: |
-      <h2 class="h4">Monthly maintenance and support: ${ currency(total_monthly_maintenance_support_income) }</h2>
-  - Edit:
-      - users[0].gifts_money_question
-    button: |
-      <h2 class="h4">Monthly gifts and other income: ${ currency(total_monthly_gifts_other_income) }</h2>
-  - note: |
-      <h2 class="h4">Total gross monthly income: ${ currency(total_gross_monthly_income) }</h2>
----
-id: expenses summary review
-continue button field: expenses_summary
-question: |
-  Monthly expenses summary
-subquestion: |
-  Here's a summary of your monthly expenses. You can click **Edit** to see details and make changes.
-  <span style="display: none">
-  ${ currency(total_monthly_deductions) }
-  ${ currency(total_maintenance_payments) }
-  ${ currency(total_child_support_payments) }
-  ${ currency(subtotal_monthly_household_expenses) }
-  ${ currency(subtotal_monthly_utility_expenses) }
-  ${ currency(subtotal_monthly_living_expenses) }
-  ${ currency(subtotal_monthly_transportation_expenses) }
-  ${ currency(subtotal_monthly_personal_expenses) }
-  ${ currency(subtotal_monthly_children_expenses) }
-  ${ currency(total_monthly_household_expenses) }
-  </span>
-review:
-  - Edit:
-      - users[0].deductions_federal_question
-    button: |
-      <h2 class="h4">Monthly payroll deductions: ${ currency(total_monthly_deductions) }</h2>
-  - Edit:
-      - users[0].maintenance_paid_court_question
-    button: |
-      <h2 class="h4">Monthly maintenance payments: ${ currency(total_maintenance_payments) }</h2>
-  - Edit:
-      - users[0].child_support_1_question
-    button: |
-      <h2 class="h4">Monthly child support payments: ${ currency(total_child_support_payments) }</h2>
-  - Edit:
-      - users[0].living_house_payment_question
-    button: |
-      <h2 class="h4">Subtotal monthly household expenses: ${ currency(subtotal_monthly_household_expenses) }</h2>
-  - Edit:
-      - users[0].living_gas_question
-    button: |
-      <h2 class="h4">Subtotal monthly utility expenses: ${ currency(subtotal_monthly_utility_expenses) }</h2>
-  - Edit:
-      - users[0].living_laundry_question
-    button: |
-      <h2 class="h4">Subtotal monthly living expenses: ${ currency(subtotal_monthly_living_expenses) }</h2>
-  - Edit:
-      - users[0].transport_payment_question
-    button: |
-      <h2 class="h4">Subtotal monthly transportation expenses: ${ currency(subtotal_monthly_transportation_expenses) }</h2>
-  - Edit:
-      - users[0].personal_doctor_question
-    button: |
-      <h2 class="h4">Subtotal monthly personal expenses: ${ currency(subtotal_monthly_personal_expenses) }</h2>
-  - Edit:
-      - users[0].children_tuition_question
-    button: |
-      <h2 class="h4">Subtotal monthly minor and dependent children expenses: ${ currency(subtotal_monthly_children_expenses) }</h2>
-  - note: |
-      <h2 class="h4">Total Monthly Living Expenses: ${ currency(total_monthly_household_expenses) }</h2>
----
+#---
+#id: income summary review
+#continue button field: income_summary
+#question: |
+#  Monthly income summary
+#subquestion: |
+#  Here's a summary of your monthly income. You can click **Edit** to see details and make changes.
+#  <span style="display: none">
+#  ${ currency(total_monthly_employment_income) }
+#  ${ currency(total_monthly_investment_income) }
+#  ${ currency(total_other_monthly_business_income) }
+#  ${ currency(total_monthly_benefits_income) }
+#  ${ currency(total_monthly_maintenance_support_income) }
+#  ${ currency(total_monthly_gifts_other_income) }
+#  ${ currency(total_gross_monthly_income) }
+#  </span>
+#review:
+#  - Edit: 
+#      - users[0].regular_pay_question
+#    button: |
+#      <h2 class="h4">Monthly employment income: ${ currency(total_monthly_employment_income) }</h2>
+#  - Edit:
+#      - users[0].pension_question
+#    button: |
+#      <h2 class="h4">Monthly investment income: ${ currency(total_monthly_investment_income) }</h2>
+#  - Edit:
+#      - users[0].rental_income_question
+#    button: |
+#      <h2 class="h4">Other monthly business income: ${ currency(total_other_monthly_business_income) }</h2>
+#  - Edit:
+#      - users[0].social_retirement_question
+#    button: |
+#      <h2 class="h4">Monthly benefits income: ${ currency(total_monthly_benefits_income) }</h2>
+#  - Edit:
+#      - users[0].maintenance_current_question
+#    button: |
+#      <h2 class="h4">Monthly maintenance and support: ${ currency(total_monthly_maintenance_support_income) }</h2>
+#  - Edit:
+#      - users[0].gifts_money_question
+#    button: |
+#      <h2 class="h4">Monthly gifts and other income: ${ currency(total_monthly_gifts_other_income) }</h2>
+#  - note: |
+#      <h2 class="h4">Total gross monthly income: ${ currency(total_gross_monthly_income) }</h2>
+#---
+#id: expenses summary review
+#continue button field: expenses_summary
+#question: |
+#  Monthly expenses summary
+#subquestion: |
+#  Here's a summary of your monthly expenses. You can click **Edit** to see details and make changes.
+#  <span style="display: none">
+#  ${ currency(total_monthly_deductions) }
+#  ${ currency(total_maintenance_payments) }
+#  ${ currency(total_child_support_payments) }
+#  ${ currency(subtotal_monthly_household_expenses) }
+#  ${ currency(subtotal_monthly_utility_expenses) }
+#  ${ currency(subtotal_monthly_living_expenses) }
+#  ${ currency(subtotal_monthly_transportation_expenses) }
+#  ${ currency(subtotal_monthly_personal_expenses) }
+#  ${ currency(subtotal_monthly_children_expenses) }
+#  ${ currency(total_monthly_household_expenses) }
+#  </span>
+#review:
+#  - Edit:
+#      - users[0].deductions_federal_question
+#    button: |
+#      <h2 class="h4">Monthly payroll deductions: ${ currency(total_monthly_deductions) }</h2>
+#  - Edit:
+#      - users[0].maintenance_paid_court_question
+#    button: |
+#      <h2 class="h4">Monthly maintenance payments: ${ currency(total_maintenance_payments) }</h2>
+#  - Edit:
+#      - users[0].child_support_1_question
+#    button: |
+#      <h2 class="h4">Monthly child support payments: ${ currency(total_child_support_payments) }</h2>
+#  - Edit:
+#      - users[0].living_house_payment_question
+#    button: |
+#      <h2 class="h4">Subtotal monthly household expenses: ${ currency(subtotal_monthly_household_expenses) }</h2>
+#  - Edit:
+#      - users[0].living_gas_question
+#    button: |
+#      <h2 class="h4">Subtotal monthly utility expenses: ${ currency(subtotal_monthly_utility_expenses) }</h2>
+#  - Edit:
+#      - users[0].living_laundry_question
+#    button: |
+#      <h2 class="h4">Subtotal monthly living expenses: ${ currency(subtotal_monthly_living_expenses) }</h2>
+#  - Edit:
+#      - users[0].transport_payment_question
+#    button: |
+#      <h2 class="h4">Subtotal monthly transportation expenses: ${ currency(subtotal_monthly_transportation_expenses) }</h2>
+#  - Edit:
+#      - users[0].personal_doctor_question
+#    button: |
+#      <h2 class="h4">Subtotal monthly personal expenses: ${ currency(subtotal_monthly_personal_expenses) }</h2>
+#  - Edit:
+#      - users[0].children_tuition_question
+#    button: |
+#      <h2 class="h4">Subtotal monthly minor and dependent children expenses: ${ currency(subtotal_monthly_children_expenses) }</h2>
+#  - note: |
+#      <h2 class="h4">Total Monthly Living Expenses: ${ currency(total_monthly_household_expenses) }</h2>
+#---
 
 
 ################## REVIEW SCREEN ###################
@@ -145,10 +145,10 @@ review:
       Post-judgment
       % endif
 
+################ About you  
   - note: |
       [**-------- About you --------**](${ url_action('section_user') })
-      
-#  - note: | ################ About you     
+#  - note: |      
 #      **About You**
   - Edit: hide_contact
     button: |
@@ -162,7 +162,11 @@ review:
   - Edit: users[0].phone_number
     button: |
       **Your phone number:**
+      % if users[0].phone_number == "":
+      None entered
+      % else:
       ${ phone_number_formatted(users[0].phone_number) }
+      % endif
     show if: hide_contact == False
   - Edit: users[0].birthdate
     button: |
@@ -173,10 +177,10 @@ review:
       **Do you live with another adult that helps pay your expenses?**
       ${ word(yesno(household_expenses))}  
 
+################ Income  
   - note: |
       [**-------- Income --------**](${ url_action('section_income') })
-      
-#  - note: | ################ Income
+#  - note: | 
 #      **Income**
   - Edit: employment.there_are_any
     button: |
@@ -199,17 +203,17 @@ review:
       ${word(yesno(taxes_filed))}
   - Edit: taxes_filed_status
     button: |
-      **Tax return details for the year ${ current_datetime().year-1 }**
+      **Income tax details for the year ${ current_datetime().year-1 }**
 
       **What was your tax filing status last year?**
       % if showifdef('taxes_filed_status') == "joint":
-      - Married (Joint)
+      Married (Joint)
       % elif showifdef('taxes_filed_status') == "separate":
-      - Married (Separate)
+      Married (Separate)
       % elif showifdef('taxes_filed_status') == "single":
-      - Single
+      Single
       % elif showifdef('taxes_filed_status') == "household":
-      - Head of Household
+      Head of Household
       % endif
 
       **How did you claim deductions last year?**
@@ -219,20 +223,25 @@ review:
       itemized deductions
       % endif
 
-      **Gross income from last year**
+      **Gross income from last year:**
       ${ currency(showifdef('gross_income_last_year')) }
 
-      **Credits claimed for this return***
+      **Tax credits claimed last year:**
+      
       % if showifdef('tax_claimed["child_credit"]'):
-      - Child tax credit
-      % elif showifdef('tax_claimed["additional"]'):
-      - Additional child tax credit
-      % elif showifdef('tax_claimed["dependents"]'):
-      - Credit for other dependents
-      % elif showifdef('tax_claimed["eic"]'):
-      - Earned Income Credit
-      % elif showifdef('tax_claimed["care"]'):
-      - Dependent care credit
+      * Child tax credit
+      % endif
+      % if showifdef('tax_claimed["additional"]'):
+      * Additional child tax credit
+      % endif
+      % if showifdef('tax_claimed["dependents"]'):
+      * Credit for other dependents
+      % endif
+      % if showifdef('tax_claimed["eic"]'):
+      * Earned Income Credit
+      % endif
+      % if showifdef('tax_claimed["care"]'):
+      * Dependent care credit
       % endif
     show if: taxes_filed
   - Edit: taxes[0].federal_tax
@@ -241,16 +250,16 @@ review:
 
       Federal: ${ 'Refund' if showifdef('taxes[0].federal_tax') == "refund" else 'Owed' }
       % if showifdef('taxes[0].federal_tax') == "refund":
-      - ${ currency(showifdef('taxes[0].federal_refund')) }
+      of ${ currency(showifdef('taxes[0].federal_refund')) }
       % else:
-      - ${ currency(showifdef('taxes[0].federal_owed')) }
+      ${ currency(showifdef('taxes[0].federal_owed')) }
       % endif
 
       State: ${ 'Refund' if showifdef('taxes[0].state_tax') == "refund" else 'Owed' }
       % if showifdef('taxes[0].state_tax') == "refund":
-      - ${ currency(showifdef('taxes[0].state_refund')) }
+      of ${ currency(showifdef('taxes[0].state_refund')) }
       % else:
-      - ${ currency(showifdef('taxes[0].state_owed')) }
+      ${ currency(showifdef('taxes[0].state_owed')) }
       % endif
     show if: taxes_filed
   - Edit: taxes_filed_two_years
@@ -263,16 +272,16 @@ review:
 
       Federal: ${ 'Refund' if showifdef('taxes[1].federal_tax') == "refund" else 'Owed' }
       % if showifdef('taxes[1].federal_tax') == "refund":
-      - ${ currency(showifdef('taxes[1].federal_refund')) }
+      of ${ currency(showifdef('taxes[1].federal_refund')) }
       % else:
-      - ${ currency(showifdef('taxes[1].federal_owed')) }
+      ${ currency(showifdef('taxes[1].federal_owed')) }
       % endif
 
       State: ${ 'Refund' if showifdef('taxes[1].state_tax') == "refund" else 'Owed' }
       % if showifdef('taxes[1].state_tax') == "refund":
-      - ${ currency(showifdef('taxes[1].state_refund')) }
+      of ${ currency(showifdef('taxes[1].state_refund')) }
       % else:
-      - ${ currency(showifdef('taxes[1].state_owed')) }
+      ${ currency(showifdef('taxes[1].state_owed')) }
       % endif
     show if: taxes_filed_two_years
   - Edit: users[0].regular_pay_question
@@ -355,21 +364,17 @@ review:
 
       * Gifts of money you receive from others: 
       ${ currency(showifdef('users[0].gifts_money')) if showifdef('users[0].gifts_money_question') else '$0.00'}
-      * Do you receive other types of income?: 
+      * Other types of income not already listed: 
       % if showifdef('users[0].other_income_question'):
-      Other income sources: 
-      ${ showifdef('users[0].other_income_description') }
-
-      Total monthly income from other sources: 
-      ${ currency(showifdef('users[0].other_income')) }
+      ${ showifdef('users[0].other_income_description') } - ${ currency(showifdef('users[0].other_income')) }
       % else:
-      $0.00
+      None entered
       % endif
 
+################ Expenses and debts  
   - note: |
       [**-------- Expenses and debts --------**](${ url_action('section_expenses') })
-      
-#  - note: | ################ Expenses and debts
+#  - note: | 
 #      **Expenses and Debts**
   - Edit: users[0].deductions_federal_question
     button: |
@@ -456,7 +461,7 @@ review:
       What are the other monthly household living expenses?: 
       ${ showifdef('users[0].living_other_description') if showifdef('users[0].living_other_question') else '$0.00'}
 
-      Total monthly other expenses?: 
+      Total monthly other expenses: 
       ${ currency(showifdef('users[0].living_other')) if showifdef('users[0].living_other_question') else '$0.00'}
       % else:
       $0.00
@@ -482,7 +487,7 @@ review:
       What are the other monthly transportation expenses?: 
 
       ${ showifdef('users[0].transport_other_description') if showifdef('users[0].transport_other_question') else '$0.00'}
-      Total monthly other transportation expenses?: 
+      Total monthly other transportation expenses: 
       ${ currency(showifdef('users[0].transport_other')) if showifdef('users[0].transport_other_question') else '$0.00'}
       % else:
       $0.00
@@ -543,13 +548,9 @@ review:
       ${ currency(showifdef('users[0].personal_donations')) if showifdef('users[0].personal_donations_question') else '$0.00'}
       * Other personal expenses not already listed: 
       % if showifdef('users[0].personal_other_question'):
-      What are the other monthly personal expenses?: 
-      ${ showifdef('users[0].personal_other_description') }
-
-      Monthly total amount of other personal expenses: 
-      ${ currency(showifdef('users[0].personal_other')) }
+      ${ showifdef('users[0].personal_other_description') } - ${ currency(showifdef('users[0].personal_other')) }
       % else:
-      $0.00
+      None entered
       % endif
   - Edit: users[0].children_expenses_question
     button: |
@@ -625,13 +626,9 @@ review:
       ${ currency(showifdef('users[0].children_party_gifts')) if showifdef('users[0].children_party_gifts_question') else '$0.00' }
       * Other expenses for children not already listed: 
       % if showifdef('users[0].children_other_question'):
-      Describe other monthly expenses: 
-      ${ showifdef('users[0].children_other_description') }
-
-      Total monthly other expenses: 
-      ${ currency(showifdef('users[0].children_other')) }
+      ${ showifdef('users[0].children_other_description') } - ${ currency(showifdef('users[0].children_other')) }
       % else:
-      $0.00
+      None entered
       % endif
     show if: users[0].children_expenses_question
 
@@ -644,7 +641,7 @@ review:
       **Health insurance: (Edit to change details)**
 
       % for policy in insurance:
-        * ${ policy.name.text }, ${ policy.type.true_values() }
+        * ${ policy.name.text } - ${ policy.type.true_values() }
       % endfor
     show if: insurance.there_are_any
   - Edit: has_debts
@@ -659,11 +656,11 @@ review:
         * ${ debt.name.text }, ${ currency(debt.amount) }
       % endfor
     show if: has_debts
-
+    
+################ Assets
   - note: |
       [**-------- Assets --------**](${ url_action('section_assets') })
-  
-#  - note: | ################ Assets
+#  - note: | 
 #      **Assets**
   - Edit: has_cash_assets
     button: |
@@ -834,14 +831,15 @@ review:
       % endfor
     show if: has_lawsuits
 
+################ Final steps  
   - note: |
       [**-------- Final steps --------**](${ url_action('section_final') })
-  
-#  - note: | ################ Final steps
+#  - note: | 
 #      **Final Steps**
+  
   - Edit: users[0].attached_documents
     button: |
-      **Documents attached to your *Financial Affidavit***
+      **Documents attached to your *Financial Affidavit*:**
 
       % if users[0].attached_documents.any_true():
         % if users[0].attached_documents["stubs"]:
@@ -868,7 +866,7 @@ review:
 
   - Edit: e_signature
     button: |
-      **Do you want to add your electronic signature to your forms?**
+      **Do you want to add your electronic signature to your form?**
       ${word(yesno(e_signature))}
 
 ---
@@ -922,10 +920,6 @@ question: |
 subquestion: |
   Edit your answers below.
 review:
-  - Edit: users[0].name.first
-    button: |
-      **Your name:**
-      ${ users[0].name.full(middle="full") }
   - Edit: hide_contact
     button: |
       **Are your address and phone number protected?**
@@ -938,7 +932,11 @@ review:
   - Edit: users[0].phone_number
     button: |
       **Your phone number:**
+      % if users[0].phone_number == "":
+      None entered
+      % else:
       ${ phone_number_formatted(users[0].phone_number) }
+      % endif
     show if: hide_contact == False
   - Edit: users[0].birthdate
     button: |
@@ -962,8 +960,8 @@ review:
   - Edit: employment.there_are_any
     button: |
       **Do you have income from employment?**
-      ${word(yesno(employment.there_are_any))}
-      % if employment.number_gathered() == 0:
+      ${word(yesno(employment.there_are_any))}      
+      % if employment.there_are_any and employment.number_gathered() == 0:
       ${ employment.add_action() }
       % endif
   - Edit: employment.revisit
@@ -974,6 +972,179 @@ review:
         * ${ job.name.text }, ${ job.type }
       % endfor
     show if: employment.there_are_any
+  - Edit: taxes_filed
+    button: |
+      **Did you file taxes for ${ current_datetime().year-1 }**
+      ${word(yesno(taxes_filed))}
+  - Edit: taxes_filed_status
+    button: |
+      **Income tax details for the year ${ current_datetime().year-1 }**
+
+      **What was your tax filing status last year?**
+      % if showifdef('taxes_filed_status') == "joint":
+      Married (Joint)
+      % elif showifdef('taxes_filed_status') == "separate":
+      Married (Separate)
+      % elif showifdef('taxes_filed_status') == "single":
+      Single
+      % elif showifdef('taxes_filed_status') == "household":
+      Head of Household
+      % endif
+
+      **How did you claim deductions last year?**
+      % if showifdef('deduction_type') == "standard":
+      the standardized deduction
+      % else:
+      itemized deductions
+      % endif
+
+      **Gross income from last year:**
+      ${ currency(showifdef('gross_income_last_year')) }
+
+      **Tax credits claimed last year:**
+      
+      % if showifdef('tax_claimed["child_credit"]'):
+      * Child tax credit
+      % endif
+      % if showifdef('tax_claimed["additional"]'):
+      * Additional child tax credit
+      % endif
+      % if showifdef('tax_claimed["dependents"]'):
+      * Credit for other dependents
+      % endif
+      % if showifdef('tax_claimed["eic"]'):
+      * Earned Income Credit
+      % endif
+      % if showifdef('tax_claimed["care"]'):
+      * Dependent care credit
+      % endif
+    show if: taxes_filed
+  - Edit: taxes[0].federal_tax
+    button: |
+      **Tax return details for ${ current_datetime().year-1 }**
+
+      Federal: ${ 'Refund' if showifdef('taxes[0].federal_tax') == "refund" else 'Owed' }
+      % if showifdef('taxes[0].federal_tax') == "refund":
+      of ${ currency(showifdef('taxes[0].federal_refund')) }
+      % else:
+      ${ currency(showifdef('taxes[0].federal_owed')) }
+      % endif
+
+      State: ${ 'Refund' if showifdef('taxes[0].state_tax') == "refund" else 'Owed' }
+      % if showifdef('taxes[0].state_tax') == "refund":
+      of ${ currency(showifdef('taxes[0].state_refund')) }
+      % else:
+      ${ currency(showifdef('taxes[0].state_owed')) }
+      % endif
+    show if: taxes_filed
+  - Edit: taxes_filed_two_years
+    button: |
+      **Did you file taxes for ${ current_datetime().year - 2 }?**
+      ${ word(yesno(taxes_filed_two_years)) }
+  - Edit: taxes[1].federal_tax
+    button: |
+      **Tax return details for ${ current_datetime().year-2 }**
+
+      Federal: ${ 'Refund' if showifdef('taxes[1].federal_tax') == "refund" else 'Owed' }
+      % if showifdef('taxes[1].federal_tax') == "refund":
+      of ${ currency(showifdef('taxes[1].federal_refund')) }
+      % else:
+      ${ currency(showifdef('taxes[1].federal_owed')) }
+      % endif
+
+      State: ${ 'Refund' if showifdef('taxes[1].state_tax') == "refund" else 'Owed' }
+      % if showifdef('taxes[1].state_tax') == "refund":
+      of ${ currency(showifdef('taxes[1].state_refund')) }
+      % else:
+      ${ currency(showifdef('taxes[1].state_owed')) }
+      % endif
+    show if: taxes_filed_two_years
+  - Edit: users[0].regular_pay_question
+    button: |
+      **Monthly employment income**
+
+      * Regular employment:
+      ${ currency(showifdef('users[0].regular_pay')) if showifdef('users[0].regular_pay_question') else '$0.00' }
+      * Overtime:
+      ${ currency(showifdef('users[0].overtime_pay')) if showifdef('users[0].overtime_pay_question') else '$0.00' }
+      * Commission:
+      ${ currency(showifdef('users[0].commission_pay')) if showifdef('users[0].commission_pay_question') else '$0.00'}
+      * Tips and gratuities:
+      ${ currency(showifdef('users[0].tips')) if showifdef('users[0].tips_question') else '$0.00'}
+      * Bonus:
+      ${ currency(showifdef('users[0].bonus')) if showifdef('users[0].bonus_question') else '$0.00'}
+  - Edit: users[0].pension_question
+    button: |
+      **Monthly investment income**
+
+      * Pension: 
+      ${ currency(showifdef('users[0].pension')) if showifdef('users[0].pension_question') else '$0.00' }
+      * Annuity: 
+      ${ currency(showifdef('users[0].annuity'))  if showifdef('users[0].annuity_question') else '$0.00' }
+      * Interest income: 
+      ${ currency(showifdef('users[0].interest'))  if showifdef('users[0].interest_question') else '$0.00' }
+      * Dividend income: 
+      ${ currency(showifdef('users[0].dividend'))  if showifdef('users[0].dividend_question') else '$0.00' }
+      * Trust income: 
+      ${ currency(showifdef('users[0].trust'))  if showifdef('users[0].trust_question') else '$0.00' }
+      * Investment income: 
+      ${ currency(showifdef('users[0].investment'))  if showifdef('users[0].investment_question') else '$0.00' }
+  - Edit: users[0].social_retirement_question
+    button: |
+      **Monthly Benefits Income**
+
+      * Social Security Retirement: 
+      ${ currency(showifdef('users[0].social_retirement')) if showifdef('users[0].social_retirement_question') else '$0.00' }
+      * Social Security Disability: 
+      ${ currency(showifdef('users[0].social_disability')) if showifdef('users[0].social_disability_question') else '$0.00' }
+      * Social Security Income (SSI): 
+      ${ currency(showifdef('users[0].social_income')) if showifdef('users[0].social_income_question') else '$0.00' }
+      * Unemployment: 
+      ${ currency(showifdef('users[0].unemployment_benefits')) if showifdef('users[0].unemployment_benefits_question') else '$0.00' }
+      * Disability payment (*not Social Security*): 
+      ${ currency(showifdef('users[0].disability_benefits')) if showifdef('users[0].disability_benefits_question') else '$0.00' }
+      * Workers' Compensation: 
+      ${ currency(showifdef('users[0].workers_comp_benefits')) if showifdef('users[0].workers_comp_benefits_question') else '$0.00' }
+      * TANF and SNAP: 
+      ${ currency(showifdef('users[0].child_benefits')) if showifdef('users[0].child_benefits_question') else '$0.00' }
+      * Military allowances: 
+      ${ currency(showifdef('users[0].military_allowances')) if showifdef('users[0].military_allowances_question') else '$0.00' }
+  - Edit: users[0].rental_income_question
+    button: |
+      **Other monthly business income**
+
+      * Rental income: 
+      ${ currency(showifdef('users[0].rental_income')) if showifdef('users[0].rental_income_question') else '$0.00'}
+      * Partnership income: 
+      ${ currency(showifdef('users[0].partnership_income')) if showifdef('users[0].partnership_income_question') else '$0.00'}
+      * Distributions and draws: 
+      ${ currency(showifdef('users[0].distributions_draws')) if showifdef('users[0].distributions_draws_question') else '$0.00'}
+      * Royalty income: 
+      ${ currency(showifdef('users[0].royalty_income')) if showifdef('users[0].royalty_income_question') else '$0.00'}
+  - Edit: users[0].maintenance_current_question
+    button: |
+      **Monthly maintenance and support**
+
+      * Maintenance received that you must report as income on your tax return: 
+      ${ currency(showifdef('users[0].maintenance_current')) if showifdef('users[0].maintenance_current_question') else '$0.00'}
+      * Maintenance received that you do not have to report as income on your tax return: 
+      ${ currency(showifdef('users[0].maintenance_alternate')) if showifdef('users[0].maintenance_alternate_question') else '$0.00'}
+      * Child support for children of this relationship: 
+      ${ currency(showifdef('users[0].child_support_current')) if showifdef('users[0].child_support_current_question') else '$0.00'}
+      * Social Security payment made to the children of this relationship: 
+      ${ currency(showifdef('users[0].social_security_current')) if showifdef('users[0].social_security_current_question') else '$0.00'}
+  - Edit: users[0].gifts_money_question
+    button: |
+      **Monthly gifts and other income**
+
+      * Gifts of money you receive from others: 
+      ${ currency(showifdef('users[0].gifts_money')) if showifdef('users[0].gifts_money_question') else '$0.00'}
+      * Other types of income not already listed: 
+      % if showifdef('users[0].other_income_question'):
+      ${ showifdef('users[0].other_income_description') } - ${ currency(showifdef('users[0].other_income')) }
+      % else:
+      None entered
+      % endif
 
 
 
@@ -988,9 +1159,272 @@ subquestion: |
 review:
   - Edit: users[0].deductions_federal_question
     button: |
-      **Do you have federal taxes deducted from your pay?**
-      ${word(yesno(users[0].deductions_federal_question))}
+      **Monthly income deductions**
 
+      * Federal income tax: 
+      ${ currency(showifdef('users[0].deductions_federal')) if showifdef('users[0].deductions_federal_question') else '$0.00'}
+      * State income tax: 
+      ${ currency(showifdef('users[0].deductions_state')) if showifdef('users[0].deductions_state_question') else '$0.00'}
+      * FICA (or Social Security equivalent such as Self-employment tax): 
+      ${ currency(showifdef('users[0].deductions_fica')) if showifdef('users[0].deductions_fica_question') else '$0.00'}
+      * Medicare tax: 
+      ${ currency(showifdef('users[0].deductions_medicare')) if showifdef('users[0].deductions_medicare_question') else '$0.00'}
+      * Mandatory retirement contributions: 
+      ${ currency(showifdef('users[0].deductions_retirement')) if showifdef('users[0].deductions_retirement_question') else '$0.00'}
+  - Edit: users[0].maintenance_paid_court_question
+    button: |
+      **Monthly maintenance payments**
+
+      * Maintenance being paid or payable to the other party by you in this case: 
+      ${ currency(showifdef('users[0].maintenance_paid_court')) if showifdef('users[0].maintenance_paid_court_question') else '$0.00'}
+      * Maintenance being paid to a former spouse, which is tax deductible: 
+      ${ currency(showifdef('users[0].maintenance_paid_no_tax')) if showifdef('users[0].maintenance_paid_no_tax_question') else '$0.00'}
+      * Maintenance being paid to a former spouse, which is not tax deductible: 
+      ${ currency(showifdef('users[0].maintenance_paid_taxed')) if showifdef('users[0].maintenance_paid_taxed_question') else '$0.00'}
+  - Edit: users[0].child_support_1_question
+    button: |
+      **Monthly child support payments**
+
+      * Court-ordered child support being paid for the children of this relationship: 
+      ${ currency(showifdef('users[0].child_support_1')) if showifdef('users[0].child_support_1_question') else '$0.00'}
+      * Child support for other children being paid *under a court order*: 
+      ${ currency(showifdef('users[0].child_support_2')) if showifdef('users[0].child_support_2_question') else '$0.00'}
+      * Child support for other childre being paid, *but there is no court order*: 
+      ${ currency(showifdef('users[0].child_support_3')) if showifdef('users[0].child_support_3_question') else '$0.00'}
+  - Edit: users[0].living_house_payment_question
+    button: |
+      **Monthly household living expenses**
+
+      * Mortgage or rent payment: 
+      ${ currency(showifdef('users[0].living_house_payment')) if showifdef('users[0].living_house_payment_question') else '$0.00'}
+      * Home equity (HELOC) and second mortgage payment: 
+      ${ currency(showifdef('users[0].living_heloc')) if showifdef('users[0].living_heloc_question') else '$0.00'}
+      * Real estate taxes: 
+      ${ currency(showifdef('users[0].living_property_taxes')) if showifdef('users[0].living_property_taxes_question') else '$0.00'}
+      * Homeowners or condo association dues and assessments: 
+      ${ currency(showifdef('users[0].living_hoa')) if showifdef('users[0].living_hoa_question') else '$0.00'}
+      * Homeowners or renters insurance: 
+      ${ currency(showifdef('users[0].living_insurance')) if showifdef('users[0].living_insurance_question') else '$0.00'}
+  - Edit: users[0].living_gas_question
+    button: |
+      **Monthly utility expenses**
+
+      * Gas: 
+      ${ currency(showifdef('users[0].living_gas')) if showifdef('users[0].living_gas_question') else '$0.00'}
+      * Electric: 
+      ${ currency(showifdef('users[0].living_power')) if showifdef('users[0].living_power_question') else '$0.00'}
+      * Telephone: 
+      ${ currency(showifdef('users[0].living_phone')) if showifdef('users[0].living_phone_question') else '$0.00'}
+      * Cable or satellite TV: 
+      ${ currency(showifdef('users[0].living_cable')) if showifdef('users[0].living_cable_question') else '$0.00'}
+      * Internet: 
+      ${ currency(showifdef('users[0].living_internet')) if showifdef('users[0].living_internet_question') else '$0.00'}
+      * Water and sewer: 
+      ${ currency(showifdef('users[0].living_water')) if showifdef('users[0].living_water_question') else '$0.00'}
+      * Garbage removal: 
+      ${ currency(showifdef('users[0].living_trash')) if showifdef('users[0].living_trash_question') else '$0.00'}
+  - Edit: users[0].living_laundry_question
+    button: |
+      **Monthly living expenses**
+
+      * Laundry and dry cleaning: 
+      ${ currency(showifdef('users[0].living_laundry')) if showifdef('users[0].living_laundry_question') else '$0.00'}
+      * House cleaning service: 
+      ${ currency(showifdef('users[0].living_cleaner')) if showifdef('users[0].living_cleaner_question') else '$0.00'}
+      * Necessary repairs and maintenance to my property: 
+      ${ currency(showifdef('users[0].living_repairs')) if showifdef('users[0].living_repairs_question') else '$0.00'}
+      * Pet care: 
+      ${ currency(showifdef('users[0].living_pets')) if showifdef('users[0].living_pets_question') else '$0.00'}
+      * Groceries, household supplies, and toiletries: 
+      ${ currency(showifdef('users[0].living_groceries')) if showifdef('users[0].living_groceries_question') else '$0.00'}
+      * Other monthly household living expenses (not transportation): 
+      % if showifdef('users[0].living_other_question'):
+      What are the other monthly household living expenses?: 
+      ${ showifdef('users[0].living_other_description') if showifdef('users[0].living_other_question') else '$0.00'}
+
+      Total monthly other expenses: 
+      ${ currency(showifdef('users[0].living_other')) if showifdef('users[0].living_other_question') else '$0.00'}
+      % else:
+      $0.00
+      % endif 
+  - Edit: users[0].transport_payment_question
+    button: |
+      **Monthly transportation expenses**
+
+      * Car payment: 
+      ${ currency(showifdef('users[0].transport_payment')) if showifdef('users[0].transport_payment_question') else '$0.00'}
+      * Repairs and maintenance: 
+      ${ currency(showifdef('users[0].transport_maintenance')) if showifdef('users[0].transport_maintenance_question') else '$0.00'}
+      * Insurance, license, registration, and city stickers: 
+      ${ currency(showifdef('users[0].transport_insurance')) if showifdef('users[0].transport_insurance_question') else '$0.00'}
+      * Gasoline: 
+      ${ currency(showifdef('users[0].transport_fuel')) if showifdef('users[0].transport_fuel_question') else '$0.00'}
+      * Taxi, ride-share, bus, and train: 
+      ${ currency(showifdef('users[0].transport_public')) if showifdef('users[0].transport_public_question') else '$0.00'}
+      * Parking: 
+      ${ currency(showifdef('users[0].transport_parking')) if showifdef('users[0].transport_parking_question') else '$0.00'}
+      * Other monthly transportation expenses: 
+      % if showifdef('users[0].transport_other_question'):
+      What are the other monthly transportation expenses?: 
+
+      ${ showifdef('users[0].transport_other_description') if showifdef('users[0].transport_other_question') else '$0.00'}
+      Total monthly other transportation expenses: 
+      ${ currency(showifdef('users[0].transport_other')) if showifdef('users[0].transport_other_question') else '$0.00'}
+      % else:
+      $0.00
+      % endif
+  - Edit: users[0].personal_doctor_question
+    button: |
+      **Monthly medical expenses**
+
+      * Doctor visits: 
+      ${ currency(showifdef('users[0].personal_doctor')) if showifdef('users[0].personal_doctor_question') else '$0.00'}
+      * Therapy and counseling: 
+      ${ currency(showifdef('users[0].personal_therapy')) if showifdef('users[0].personal_therapy_question') else '$0.00'}
+      * Dental and orthodontia: 
+      ${ currency(showifdef('users[0].personal_dental')) if showifdef('users[0].personal_dental_question') else '$0.00'}
+      * Optical: 
+      ${ currency(showifdef('users[0].personal_vision')) if showifdef('users[0].personal_vision_question') else '$0.00'}
+      * Medicine and prescriptions: 
+      ${ currency(showifdef('users[0].personal_medications')) if showifdef('users[0].personal_medications_question') else '$0.00'}
+  - Edit: users[0].personal_associations_question
+    button: |
+      **Monthly professional dues and fees**
+
+      * Union, trade, or professional association dues: 
+      ${ currency(showifdef('users[0].personal_associations')) if showifdef('users[0].personal_associations_question') else '$0.00'}
+      * Professional fees, such as accountants, tax preparers, or lawyers: 
+      ${ currency(showifdef('users[0].peronsal_professional')) if showifdef('users[0].peronsal_professional_question') else '$0.00'}
+  - Edit: users[0].personal_life_term_question
+    button: |
+      **Monthly insurance expenses**
+
+      * Life (term): 
+      ${ currency(showifdef('users[0].personal_life_term')) if showifdef('users[0].personal_life_term_question') else '$0.00'}
+      * Life (whole or annuity): 
+      ${ currency(showifdef('users[0].personal_life_whole')) if showifdef('users[0].personal_life_whole_question') else '$0.00'}
+  - Edit: users[0].personal_clothing_question
+    button: |
+      **Monthly personal, entertainment, and vacation expenses**
+
+      * Clothing: 
+      ${ currency(showifdef('users[0].personal_clothing')) if showifdef('users[0].personal_clothing_question') else '$0.00'}
+      * Grooming, such as hair, nails, or spa: 
+      ${ currency(showifdef('users[0].personal_stylist')) if showifdef('users[0].personal_stylist_question') else '$0.00'}
+      * Gym & Club membership dues: 
+      ${ currency(showifdef('users[0].personal_memberships')) if showifdef('users[0].personal_memberships_question') else '$0.00'}
+      * Entertainment, dining out, and hobbies: 
+      ${ currency(showifdef('users[0].personal_entertainment')) if showifdef('users[0].personal_entertainment_question') else '$0.00'}
+      * Newspapers, magazines, and subscriptions: 
+      ${ currency(showifdef('users[0].personal_subscriptions')) if showifdef('users[0].personal_subscriptions_question') else '$0.00'}
+      * Vacations: 
+      ${ currency(showifdef('users[0].personal_vacations')) if showifdef('users[0].personal_vacations_question') else '$0.00'}
+  - Edit: users[0].personal_gifts_question
+    button: |
+      **Monthly gifts, donations, and other expenses**
+
+      * Gifts you give to others: 
+      ${ currency(showifdef('users[0].personal_gifts')) if showifdef('users[0].personal_gifts_question') else '$0.00'}
+      * Donations, such as political, religious, or charity: 
+      ${ currency(showifdef('users[0].personal_donations')) if showifdef('users[0].personal_donations_question') else '$0.00'}
+      * Other personal expenses not already listed: 
+      % if showifdef('users[0].personal_other_question'):
+      ${ showifdef('users[0].personal_other_description') } - ${ currency(showifdef('users[0].personal_other')) }
+      % else:
+      None entered
+      % endif
+  - Edit: users[0].children_expenses_question
+    button: |
+      **Do you have any expenses for minor or dependent children?**
+      ${ word(yesno(users[0].children_expenses_question)) }
+  - Edit: users[0].children_clothing_question
+    button: |
+      **Monthly personal expenses for children**
+
+      * Clothing: 
+      ${ currency(showifdef('users[0].children_clothing')) if showifdef('users[0].children_clothing_question') else '$0.00' }
+      * Grooming, such as hair, nails, or spa: 
+      ${ currency(showifdef('users[0].children_grooming')) if showifdef('users[0].children_grooming_question') else '$0.00' }
+    show if: users[0].children_expenses_question
+  - Edit: users[0].children_tuition_question
+    button: |
+      **Monthly education expenses for children**
+
+      * Tuition: 
+      ${ currency(showifdef('users[0].children_tuition')) if showifdef('users[0].children_tuition_question') else '$0.00' }
+      * Books, fees, and supplies: 
+      ${ currency(showifdef('users[0].children_books')) if showifdef('users[0].children_books_question') else '$0.00' }
+      * School lunch: 
+      ${ currency(showifdef('users[0].children_school_lunch')) if showifdef('users[0].children_school_lunch_question') else '$0.00' }
+      * Transportation: 
+      ${ currency(showifdef('users[0].children_transportation')) if showifdef('users[0].children_transportation_question') else '$0.00' }
+      * School-sponsored trips and special events: 
+      ${ currency(showifdef('users[0].children_school_events')) if showifdef('users[0].children_school_events_question') else '$0.00' }
+      * Uniforms: 
+      ${ currency(showifdef('users[0].children_school_uniforms')) if showifdef('users[0].children_school_uniforms_question') else '$0.00' }
+      * Before and after-school care: 
+      ${ currency(showifdef('users[0].children_after_school')) if showifdef('users[0].children_after_school_question') else '$0.00' }
+      * Tutoring and summer school: 
+      ${ currency(showifdef('users[0].children_tutor')) if showifdef('users[0].children_tutor_question') else '$0.00' }
+    show if: users[0].children_expenses_question
+  - Edit: users[0].children_doctor_question
+    button: |
+      **Monthly medical for children**
+
+      * Doctor visits: 
+      ${ currency(showifdef('users[0].children_doctor')) if showifdef('users[0].children_doctor_question') else '$0.00' }
+      * Therapy and counseling: 
+      ${ currency(showifdef('users[0].children_therapy')) if showifdef('users[0].children_therapy_question') else '$0.00' }
+      * Dental and orthodontics (braces): 
+      ${ currency(showifdef('users[0].children_dental')) if showifdef('users[0].children_dental_question') else '$0.00' }
+      * Vision: 
+      ${ currency(showifdef('users[0].children_vision')) if showifdef('users[0].children_vision_question') else '$0.00' }
+      * Medicine: 
+      ${ currency(showifdef('users[0].children_medications')) if showifdef('users[0].children_medications_question') else '$0.00' }
+    show if: users[0].children_expenses_question
+  - Edit: users[0].children_allowance_question
+    button: |
+      **Additional monthly expenses for children**
+
+      * Allowance: 
+      ${ currency(showifdef('users[0].children_allowance')) if showifdef('users[0].children_allowance_question') else '$0.00' }
+      * Childcare and sitters: 
+      ${ currency(showifdef('users[0].children_childcare')) if showifdef('users[0].children_childcare_question') else '$0.00' }
+      * Extracurricular activities and sports, such as equipment or uniforms: 
+      ${ currency(showifdef('users[0].children_sports')) if showifdef('users[0].children_sports_question') else '$0.00' }
+      * Summer and school-break camps: 
+      ${ currency(showifdef('users[0].children_camps')) if showifdef('users[0].children_camps_question') else '$0.00' }
+    show if: users[0].children_expenses_question
+  - Edit: users[0].children_vacations_question
+    button: |
+      **Monthly vacation, entertainment, and other expenses for children**
+
+      * Vacations (children only): 
+      ${ currency(showifdef('users[0].children_vacations')) if showifdef('users[0].children_vacations_question') else '$0.00' }
+      * Entertainment, dining out, and hobbies (children only): 
+      ${ currency(showifdef('users[0].children_entertainment')) if showifdef('users[0].children_entertainment_question') else '$0.00' }
+      * Gifts children give to others: 
+      ${ currency(showifdef('users[0].children_party_gifts')) if showifdef('users[0].children_party_gifts_question') else '$0.00' }
+      * Other expenses for children not already listed: 
+      % if showifdef('users[0].children_other_question'):
+      ${ showifdef('users[0].children_other_description') } - ${ currency(showifdef('users[0].children_other')) }
+      % else:
+      None entered
+      % endif
+    show if: users[0].children_expenses_question
+
+  - Edit: insurance.there_are_any
+    button: |
+      **Do you have health insurance?**
+      ${ word(yesno(insurance.there_are_any)) }
+  - Edit: insurance.revisit
+    button: |
+      **Health insurance: (Edit to change details)**
+
+      % for policy in insurance:
+        * ${ policy.name.text } - ${ policy.type.true_values() }
+      % endfor
+    show if: insurance.there_are_any
   - Edit: has_debts
     button: |
       **Do you have any debts?**
@@ -1003,7 +1437,6 @@ review:
         * ${ debt.name.text }, ${ currency(debt.amount) }
       % endfor
     show if: has_debts
-
 
 ---
 id: assets review screen
@@ -1018,6 +1451,170 @@ review:
     button: |
       **Do you have any cash or cash equivalents?**
       ${word(yesno(has_cash_assets))}
+  - Edit: cash.revisit
+    button: |
+      **Cash Assets: (Edit to change details)**
+
+      % for asset in cash:
+        * ${ asset.name.text }, ${ currency(asset.balance) }
+      % endfor
+    show if: has_cash_assets
+  - Edit: has_cert_deposit
+    button: |
+      **Do you have any certificates of deposit?**
+      ${ word(yesno(has_cert_deposit)) }
+  - Edit: cert_deposit.revisit
+    button: |
+      **Certificate of Deposits: (Edit to change details)**
+
+      % for asset in cert_deposit:
+        * ${ asset.name.text }, ${ currency(asset.balance) }
+      % endfor
+    show if: has_cert_deposit
+  - Edit: has_money
+    button: |
+      **Do you have any money on debit cards or in money transfer apps?**
+      ${ word(yesno(has_money)) }
+  - Edit: money.revisit
+    button: |
+      **Debit card and money transfer balances: (Edit to change details)**
+
+      % for asset in money:
+        * ${ asset.name.text }, ${ currency(asset.balance) }
+      % endfor
+    show if: has_money
+  - Edit: has_investments
+    button: |
+      **Do you have any investment accounts or securities?**
+      ${ word(yesno(has_investments)) }
+  - Edit: investments.revisit
+    button: |
+      **Investments: (Edit to change details)**
+
+      % for asset in investments:
+        * ${ asset.name.text }, ${ currency(asset.fmv) }
+      % endfor
+    show if: has_investments
+  - Edit: has_other_investments
+    button: |
+      **Do you have any other investment assets?**
+      ${ word(yesno(has_other_investments)) }
+  - Edit: other_investments.revisit
+    button: |
+      **Other Investments: (Edit to change details)**
+
+      % for asset in other_investments:
+        * ${ asset.name.text }, ${ currency(asset.balance) }
+      % endfor
+    show if: has_other_investments
+  - Edit: has_real_estate
+    button: |
+      **Do you own any real estate?**
+      ${ word(yesno(has_real_estate)) }
+  - Edit: real_estate.revisit
+    button: |
+      **Real Estate: (Edit to change details)**
+
+      % for asset in real_estate:
+        * ${ asset.address.on_one_line() }, ${ currency(asset.balance) }
+      % endfor
+    show if: has_real_estate
+  - Edit: has_motor_vehicle
+    button: |
+      **Do you have any motor vehicles?**
+      ${ word(yesno(has_motor_vehicle)) }
+  - Edit: motor_vehicle.revisit
+    button: |
+      **Motor Vehicle: (Edit to change details)**
+
+      % for asset in motor_vehicle:
+        * ${ asset.year } ${ asset.make } ${ asset.model }, ${ currency(asset.fmv) }
+      % endfor
+    show if: has_motor_vehicle
+  - Edit: has_business_interests
+    button: |
+      **Do you have any business interests?**
+      ${ word(yesno(has_business_interests)) }
+  - Edit: business_interests.revisit
+    button: |
+      **Business interests: (Edit to change details)**
+
+      % for asset in business_interests:
+        * ${ asset.name.text }, ${ currency(asset.fmv) }
+      % endfor
+    show if: has_business_interests
+  - Edit: has_life_insurance
+    button: |
+      **Do you have any life insurance policies?**
+      ${ word(yesno(has_life_insurance)) }
+  - Edit: life_insurance.revisit
+    button: |
+      **Life Insurance: (Edit to change details)**
+
+      % for asset in life_insurance:
+        * ${ asset.name.text }, ${ currency(asset.value) }
+      % endfor
+    show if: has_life_insurance
+  - Edit: has_retirement_plan
+    button: |
+      **Do you have any retirement benefits or deferred compensation?**
+      ${ word(yesno(has_retirement_plan)) }
+  - Edit: retirement_plan.revisit
+    button: |
+      **Retirement: (Edit to change details)**
+
+      % for asset in retirement_plan:
+        * ${ asset.name.text }, ${ currency(asset.balance) }
+      % endfor
+    show if: has_retirement_plan
+  - Edit: has_collection
+    button: |
+      **Do you have any valuable collectibles?**
+      ${ word(yesno(has_collection)) }
+  - Edit: collection.revisit
+    button: |
+      **Collectibles: (Edit to change details)**
+
+      % for asset in collection:
+        * ${ asset.name.text }, ${ currency(asset.fmv) }
+      % endfor
+    show if: has_collection
+  - Edit: has_other_property
+    button: |
+      **Do you have any other personal property valued over $500?**
+      ${ word(yesno(has_other_property)) }
+  - Edit: other_property.revisit
+    button: |
+      **Other Property: (Edit to change details)**
+
+      % for asset in other_property:
+        * ${ asset.name.text }, ${ currency(asset.fmv) }
+      % endfor
+    show if: has_other_property
+  - Edit: has_transfer
+    button: |
+      **Have you transferred or sold any assets or property valued at or over $1,000 within the last two years?**
+      ${ word(yesno(has_transfer)) }
+  - Edit: transfer.revisit
+    button: |
+      **Transfer Assets: (Edit to change details)**
+
+      % for asset in transfer:
+        * ${ asset.name.text }, ${ currency(asset.amount) }
+      % endfor
+    show if: has_transfer
+  - Edit: has_lawsuits
+    button: |
+      **Do you have any lawsuits or claims?**
+      ${ word(yesno(has_lawsuits)) }
+  - Edit: lawsuits.revisit
+    button: |
+      **Lawsuits or Claims: (Edit to change details)**
+
+      % for asset in lawsuits:
+        * ${ asset.case }, ${ currency(asset.amount) if asset.judgement else 'unknown' }
+      % endfor
+    show if: has_lawsuits
 
 
 ---
@@ -1029,9 +1626,36 @@ question: |
 subquestion: |
   Edit your answers below.
 review:
+  - Edit: users[0].attached_documents
+    button: |
+      **Documents attached to your *Financial Affidavit*:**
+
+      % if users[0].attached_documents.any_true():
+        % if users[0].attached_documents["stubs"]:
+        * Pay stubs or other proof of income
+        % endif
+        % if users[0].attached_documents["returns"]:
+        * Income tax returns
+        % endif
+        % if users[0].attached_documents["statements"]:
+        * Bank statements
+        % endif
+        % if users[0].attached_documents["other"]:
+        * Other documents that verify my debts and assets
+
+        **List of documents that verify debts:**
+        ${ showifdef('users[0].attachment_debts') }
+
+        **List of documents that verify assets:**
+        ${ showifdef('users[0].attachment_assets') }
+        % endif
+      % else:
+      No attachments
+      % endif
+
   - Edit: e_signature
     button: |
-      **Do you want to add your electronic signature to your forms?**
+      **Do you want to add your electronic signature to your form?**
       ${word(yesno(e_signature))}
 
 
@@ -1053,7 +1677,7 @@ confirm: True
 id: employment review screen
 continue button field: employment.revisit
 question: |
-  Edit the information about your employment and business income
+  Edit information about your employment and business income
 subquestion: |
   ${ employment.table }
 
@@ -1064,7 +1688,7 @@ continue button field: x.review_employment
 section: Income
 generic object: DAObject
 question: |
-  Edit your response
+  Edit your responses
 review: 
   - Edit: x.name.text
     button: |
@@ -1150,10 +1774,10 @@ columns:
 delete buttons: True
 confirm: True
 ---
-id: insurance review screen
+id: insurance table review screen
 continue button field: insurance.revisit
 question: |
-  Edit the information about your health insurance
+  Edit information about your health insurance
 subquestion: |
   ${ insurance.table }
 
@@ -1164,7 +1788,7 @@ continue button field: x.review_insurance
 section: Expenses and debts
 generic object: DAObject
 question: |
-  Edit your response
+  Edit your responses
 review: 
   - Edit: x.name.text
     button: |
@@ -1210,11 +1834,11 @@ review:
       % endif
   - Edit: x.total_covered
     button: |
-      **Number of people covered: **
+      **Number of people covered:**
       ${ x.total_covered }
   - Edit: x.coverage
     button: |
-      **Who is covered?:**
+      **People covered:**
 
       % if x.coverage["myself"]:
       * Me
@@ -1250,14 +1874,13 @@ review:
       % endif 
   - Edit: x.cost_children
     button: |
-      **What is the monthly cost for this insurance for covering children?:**
+      **Monthly cost for this insurance for covering children:**
       ${ currency(x.cost_children) }
       
-      **What is the monthly cost for this insurance for covering children 
-      of this relationship (if known)?:**
+      **Monthly cost for this insurance for covering children of this relationship:**
       ${ currency(x.cost_children_current) }
 
-      **Individual deductible?:**
+      **Individual deductible:**
       ${ currency(x.individual_deductible) }
 
       **Family deductible:**
@@ -1287,7 +1910,7 @@ confirm: True
 id: debts review screen
 continue button field: debts.revisit
 question: |
-  Edit the information about your debts
+  Edit information about your debts
 subquestion: |
   ${ debts.table }
 
@@ -1311,7 +1934,7 @@ confirm: True
 id: cash assets review screen
 continue button field: cash.revisit
 question: |
-  Edit the information about your cash assets:
+  Edit information about your cash assets
 subquestion: |
   ${ cash.table }
 
@@ -1334,7 +1957,7 @@ confirm: True
 id: cd review screen
 continue button field: cert_deposit.revisit
 question: |
-  Edit the information about your certificate of deposit(s):
+  Edit information about your certificate of deposit(s)
 subquestion: |
   ${ cert_deposit.table }
 
@@ -1357,7 +1980,7 @@ confirm: True
 id: money cash/card review screen
 continue button field: money.revisit
 question: |
-  Edit the information about your debit cards and money transfer app balances:
+  Edit information about your debit cards and money transfer app balances
 subquestion: |
   ${ money.table }
 
@@ -1379,7 +2002,7 @@ confirm: True
 id: investments review screen
 continue button field: investments.revisit
 question: |
-  Edit the information about your investments:
+  Edit information about your investments
 subquestion: |
   ${ investments.table }
 
@@ -1401,7 +2024,7 @@ confirm: True
 id: other investments review screen
 continue button field: other_investments.revisit
 question: |
-  Edit the information about your other investments:
+  Edit information about your other investments
 subquestion: |
   ${ other_investments.table }
 
@@ -1423,7 +2046,7 @@ confirm: True
 id: real estate review screen
 continue button field: real_estate.revisit
 question: |
-  Edit the information about your real estate:
+  Edit information about your real estate
 subquestion: |
   ${ real_estate.table }
 
@@ -1447,7 +2070,7 @@ confirm: True
 id: motor vehicle review screen
 continue button field: motor_vehicle.revisit
 question: |
-  Edit the information about your motor vehicle assets:
+  Edit information about your motor vehicle assets
 subquestion: |
   ${ motor_vehicle.table }
 
@@ -1469,7 +2092,7 @@ confirm: True
 id: business interests review screen
 continue button field: business_interests.revisit
 question: |
-  Edit the information about your business interests:
+  Edit information about your business interests
 subquestion: |
   ${ business_interests.table }
 
@@ -1491,7 +2114,7 @@ confirm: True
 id: life insurance review screen
 continue button field: life_insurance.revisit
 question: |
-  Edit the information about your life insurance:
+  Edit information about your life insurance
 subquestion: |
   ${ life_insurance.table }
 
@@ -1513,7 +2136,7 @@ confirm: True
 id: retirement plan review screen
 continue button field: retirement_plan.revisit
 question: |
-  Edit the information about your retirement plan:
+  Edit information about your retirement plan
 subquestion: |
   ${ retirement_plan.table }
 
@@ -1535,7 +2158,7 @@ confirm: True
 id: collections review screen
 continue button field: collection.revisit
 question: |
-  Edit the information about your collection assets:
+  Edit information about your collection assets
 subquestion: |
   ${ collection.table }
 
@@ -1557,7 +2180,7 @@ confirm: True
 id: other property review screen
 continue button field: other_property.revisit
 question: |
-  Edit the information about your other property:
+  Edit information about your other property
 subquestion: |
   ${ other_property.table }
 
@@ -1580,7 +2203,7 @@ confirm: True
 id: transfer review screen
 continue button field: transfer.revisit
 question: |
-  Edit the information about your transferred assets:
+  Edit information about your transferred assets
 subquestion: |
   ${ transfer.table }
 
@@ -1604,7 +2227,7 @@ confirm: True
 id: lawsuits review screen
 continue button field: lawsuits.revisit
 question: |
-  Edit the information about your lawsuits and claims:
+  Edit information about your lawsuits and claims
 subquestion: |
   ${ lawsuits.table }
 

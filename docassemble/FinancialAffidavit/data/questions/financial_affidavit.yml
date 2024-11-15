@@ -174,6 +174,8 @@ code: |
   if has_lawsuits:
     lawsuits.gather()
 
+  assets_summary
+
   set_progress(90)
   nav.set_section('section_final')
   users[0].attached_documents
@@ -513,7 +515,7 @@ fields:
       - Own a business as a sole proprietorship: own
       - Independent contractor: contractor
       - Member of a partnership: partnership
-      - As a member of a limited liability company (LLC) not treated as a corporation: llc
+      - As a member of a limited liability company (LLC) not treated as a corporation: LLC
       - A closely-held corporation: corp
       - Other flow-through business entity: other_entity
 ---
@@ -954,7 +956,7 @@ fields:
     datatype: currency
     min: 0.01
     show if: users[0].gifts_money_question
-  - Do you receive other types of income?: users[0].other_income_question
+  - Other types of income not already listed: users[0].other_income_question
     datatype: yesnowide
   - "What is the source of the other income? (list all sources)": users[0].other_income_description
     maxlength: 60
@@ -1065,6 +1067,20 @@ code: |
     'users[0].social_security_current',
     'users[0].gifts_money',
     'users[0].other_income')
+---
+id: income summary
+continue button field: income_summary
+question: |
+  Good job
+subquestion: |
+  You answered all the questions about your income.
+
+  Click **Review income** if you want to check your answers now.
+
+  ${ action_button_html(url_action('section_income'), label=':edit: Review income', color='success', size="md") }
+
+  **Note:** You can also review and edit any of your answers at the end of the program.
+ 
 ---
 ########### EXPENSES ###########
 id: expenses intro 
@@ -1671,7 +1687,7 @@ fields:
   - "What are the other monthly expenses for children?": users[0].children_other_description
     maxlength: 60
     show if: users[0].children_other_question
-  - Total monthly other expenses for the children?: users[0].children_other
+  - Total monthly other expenses for the children: users[0].children_other
     datatype: currency
     min: 0.01
     show if: users[0].children_other_question
@@ -2057,6 +2073,20 @@ code: |
   if debts.number_gathered() == 26:
     debts.there_is_another = False
 ---
+id: expenses summary
+continue button field: expenses_summary
+question: |
+  Nice work
+subquestion: |
+  You answered all the questions about your expenses.
+
+  Click **Review expenses** if you want to check your answers now.
+
+  ${ action_button_html(url_action('section_expenses'), label=':edit: Review expenses', color='success', size="md") }
+
+  **Note:** You can also review and edit any of your answers at the end of the program.
+---
+
 ########### FA ASSETS ###########
 id: assets intro
 continue button field: assets_intro
@@ -2856,6 +2886,20 @@ code: |
   if lawsuits.number_gathered() == 25:
     lawsuits.there_is_another = False
 ---
+id: assets summary
+continue button field: assets_summary
+question: |
+  Congratulations
+subquestion: |
+  You answered all the questions about your assets. You're almost done!
+
+  Click **Review assets** if you want to check your answers now.
+
+  ${ action_button_html(url_action('section_assets'), label=':edit: Review assets', color='success', size="md") }
+
+  **Note:** You can also review and edit any of your answers at the end of the program.
+  
+---
 id: attach documents 
 question: |
   Attach documents to your *Financial Affidavit*
@@ -2879,7 +2923,7 @@ fields:
     maxlength: 100
     show if:
       variable: users[0].attached_documents["other"]
-      is: True      
+      is: True
   - List of documents that verify assets: users[0].attachment_assets
     input type: area
     rows: 2
@@ -3101,7 +3145,7 @@ attachment:
           % endif          
       - "business_llc": |
           % if employment.there_are_any:
-          ${ employment[0].type == "llc" }
+          ${ employment[0].type == "LLC" }
           % endif          
       - "business_corporation": |
           % if employment.there_are_any:
@@ -4017,7 +4061,7 @@ attachment:
           % endif
       - "coinsurance": |
           % if insurance.there_are_any:
-          ${ nice_number(insurance[0].coinsurance, use_word=False) }
+          ${ nice_number(insurance[0].coinsurance, use_word=False) }%
           % endif
       - "copayment": |
           % if insurance.there_are_any:
@@ -4936,7 +4980,7 @@ attachment:
       - "business_own": ${ employment[i].type == "own" }
       - "business_contractor": ${ employment[i].type == "contractor" }
       - "business_partnership": ${ employment[i].type == "partnership" }
-      - "business_llc": ${ employment[i].type == "llc" }
+      - "business_llc": ${ employment[i].type == "LLC" }
       - "business_corporation": ${ employment[i].type == "corp" }
       - "business_other_entity": ${ employment[i].type == "other_entity" }
       - "business_name": |
@@ -5048,19 +5092,19 @@ attachment:
           % endif
       - "insurance_type_dental": |
           % if insurance.there_are_any:
-          ${ insurance[i].type["Dental"] }
+          ${ insurance[i].type["dental"] }
           % endif
       - "insurance_type_medical": |
           % if insurance.there_are_any:
-          ${ insurance[i].type["Medical"] }
+          ${ insurance[i].type["medical"] }
           % endif
       - "insurance_type_vision": |
           % if insurance.there_are_any:
-          ${ insurance[i].type["Vision"] }
+          ${ insurance[i].type["vision"] }
           % endif          
       - "insurance_type_orthodontic": |
           % if insurance.there_are_any:
-          ${ insurance[i].type["Orthodontic"] }
+          ${ insurance[i].type["orthodontic"] }
           % endif          
       - "policy_type_ppo": |
           % if insurance.there_are_any:
@@ -5158,7 +5202,7 @@ attachment:
           % endif
       - "coinsurance":  |
           % if insurance.there_are_any:
-          ${ nice_number(insurance[i].coinsurance, use_word=False) }
+          ${ nice_number(insurance[i].coinsurance, use_word=False) }%
           % endif
       - "copayment":  |
           % if insurance.there_are_any:
