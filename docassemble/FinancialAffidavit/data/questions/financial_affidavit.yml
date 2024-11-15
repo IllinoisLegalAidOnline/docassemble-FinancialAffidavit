@@ -2150,7 +2150,7 @@ fields:
   - Bank or institution name: cash[i].name.text
     maxlength: 25
   - Name on account: cash[i].account
-    maxlength: 25
+    maxlength: 30
   - Account type: cash[i].type
     datatype: radio
     choices:
@@ -2204,7 +2204,7 @@ fields:
   - Bank or institution name: cert_deposit[i].name.text
     maxlength: 25
   - Name on account: cert_deposit[i].account
-    maxlength: 25
+    maxlength: 30
   - Balance: cert_deposit[i].balance
     datatype: currency
     min: 0
@@ -2251,9 +2251,13 @@ question: |
   Details for the ${ordinal(i)} debit card or money transfer app 
 fields:
   - Location of cash/card: money[i].name.text
-    maxlength: 25
+    maxlength: 30
+    help: |
+      Explain who has physical possession of the card. If it is a money transfer app, you can mention the app name like Venmo or PayPal.
   - Name of holder of card or account: money[i].holder
-    maxlength: 25
+    maxlength: 30
+    help: |
+      This is the person whose name is on the account.  
   - Balance: money[i].balance
     datatype: currency
     min: 0
@@ -2306,7 +2310,7 @@ subquestion: |
   ${ collapse_template(FMV_help) }
 fields:
   - Company name: investments[i].name.text
-    maxlength: 25
+    maxlength: 30
   - Number of shares: investments[i].shares
     datatype: integer
     min: 1
@@ -2318,7 +2322,7 @@ fields:
       - Options
       - Employee Stock Ownership Plans: ESOP
   - Who is the owner?: investments[i].owner
-    maxlength: 25
+    maxlength: 30
   - Fair market value (FMV): investments[i].fmv
     datatype: currency
     min: 0
@@ -2433,7 +2437,7 @@ fields:
       states_list()
   - ZIP code: real_estate[i].address.zip
   - Name on the title: real_estate[i].name.text
-    maxlength: 25
+    maxlength: 30
   - Fair market value (FMV): real_estate[i].fmv
     datatype: currency
     min: 0
@@ -2496,11 +2500,11 @@ fields:
     help: |
       Car examples: Chevrolet, Honda, and Ford    
   - Vehicle model: motor_vehicle[i].model
-    maxlength: 10
+    maxlength: 15
     help: |
       Car examples: Malibu, Civic, and Mustang
   - Name on title: motor_vehicle[i].name.text
-    maxlength: 25
+    maxlength: 30
   - Fair market value (FMV): motor_vehicle[i].fmv
     datatype: currency
     min: 0
@@ -2661,7 +2665,7 @@ question: |
   Details for the ${ordinal(i)} retirement benefit or deferred compensation 
 fields:
   - Name of plan: retirement_plan[i].name.text
-    maxlength: 25
+    maxlength: 30
   - Type of plan: retirement_plan[i].type
     maxlength: 30
   - Balance: retirement_plan[i].balance
@@ -2814,9 +2818,9 @@ subquestion: |
   ${ collapse_template(FMV_help) }  
 fields:
   - Description of asset or property: transfer[i].name.text
-    maxlength: 25
+    maxlength: 30
   - Who was it transferred or sold to?: transfer[i].sold
-    maxlength: 25
+    maxlength: 30
   - Date of transfer or sale: transfer[i].date
     datatype: ThreePartsDate
     alMax: ${ today().format("MM/dd/yyyy") }
@@ -2976,7 +2980,7 @@ question: |
 subquestion: |
   Your form is ready. View and download your form below. Click **Make changes** to fix any mistakes.
 
-  This program does not deliver your *Financial Affidavit* to other party in your case. You will need to do this yourself.
+  This program does not deliver your *Financial Affidavit* to other party in your case. You will need to do that yourself.
   
   ${ action_button_html(url_action('review_answers'), label=':edit: Make changes', color='success', size="md") }
 
@@ -2986,7 +2990,7 @@ subquestion: |
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
 
-  **Note:** This program does not deliver your *Financial Affidavit* to other party in your case. You will need to do this yourself.
+  **Note:** This program does not deliver your *Financial Affidavit* to other party in your case. You will need to do that yourself.
   
   Thank you for using ILAO Easy Forms!
 under: |

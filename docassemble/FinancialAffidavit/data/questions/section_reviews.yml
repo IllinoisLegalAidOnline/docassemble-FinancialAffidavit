@@ -484,11 +484,7 @@ review:
       ${ currency(showifdef('users[0].transport_parking')) if showifdef('users[0].transport_parking_question') else '$0.00'}
       * Other monthly transportation expenses: 
       % if showifdef('users[0].transport_other_question'):
-      What are the other monthly transportation expenses?: 
-
-      ${ showifdef('users[0].transport_other_description') if showifdef('users[0].transport_other_question') else '$0.00'}
-      Total monthly other transportation expenses: 
-      ${ currency(showifdef('users[0].transport_other')) if showifdef('users[0].transport_other_question') else '$0.00'}
+      ${ showifdef('users[0].transport_other_description')}, ${ currency(showifdef('users[0].transport_other')) }
       % else:
       $0.00
       % endif
@@ -1265,11 +1261,7 @@ review:
       ${ currency(showifdef('users[0].transport_parking')) if showifdef('users[0].transport_parking_question') else '$0.00'}
       * Other monthly transportation expenses: 
       % if showifdef('users[0].transport_other_question'):
-      What are the other monthly transportation expenses?: 
-
-      ${ showifdef('users[0].transport_other_description') if showifdef('users[0].transport_other_question') else '$0.00'}
-      Total monthly other transportation expenses: 
-      ${ currency(showifdef('users[0].transport_other')) if showifdef('users[0].transport_other_question') else '$0.00'}
+      ${ showifdef('users[0].transport_other_description')}, ${ currency(showifdef('users[0].transport_other')) }
       % else:
       $0.00
       % endif
