@@ -966,6 +966,7 @@ fields:
     min: 0.01
     show if: users[0].other_income_question
 ---
+reconsider: True
 depends on:
   - users[0].regular_pay
   - users[0].overtime_pay
@@ -1692,6 +1693,7 @@ fields:
     min: 0.01
     show if: users[0].children_other_question
 ---
+reconsider: True
 depends on:
   - users[0].deductions_federal
   - users[0].deductions_state
@@ -3938,7 +3940,7 @@ attachment:
       - "subtotal_children_expense":  |
           ${ thousands(subtotal_monthly_children_expenses, show_decimals=True)}
       # Part 12 total monthly living expenses
-      - "total_monthly_living _expenses": |
+      - "total_monthly_living_expenses": |
           ${ thousands(total_monthly_household_expenses, show_decimals=True)}
       # 13 Health insurance
       - "health_insurance_yes": ${ insurance.there_are_any }
@@ -4411,7 +4413,7 @@ attachment:
           % endif
       - "real_estate_fmv_1": |
           % if has_real_estate:
-          ${ thousands(real_estate[0].balance, show_decimals=True) }
+          ${ thousands(real_estate[0].fmv, show_decimals=True) }
           % endif
       - "real_estate_balance_1": |
           % if has_real_estate:
@@ -4427,7 +4429,7 @@ attachment:
           % endif
       - "real_estate_fmv_2": |
           % if real_estate.number_gathered() >= 2:
-          ${ thousands(real_estate[1].balance, show_decimals=True) }
+          ${ thousands(real_estate[1].fmv, show_decimals=True) }
           % endif
       - "real_estate_balance_2": |
           % if real_estate.number_gathered() >= 2:
