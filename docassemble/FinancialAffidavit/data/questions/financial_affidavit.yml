@@ -2824,7 +2824,7 @@ table: lawsuits_table
 rows: lawsuits
 columns:
   - Case number: row_item.case
-  - Date lawsuit/claim filed: row_item.date
+  - Date lawsuit/claim filed: row_item.date.format("MM/dd/yyyy")
   - Amount recovered: |
       currency(row_item.amount) if row_item.judgement else 'unknown'
 ---
@@ -2844,7 +2844,7 @@ fields:
       If you did not recover anything or if your case is still pending or has not yet been filed, select **No**.
   - Amount recovered: lawsuits[i].amount
     datatype: currency
-    min: 0
+    min: 0.01
     default: 0.00
     show if: lawsuits[i].judgement
 ---
@@ -2873,7 +2873,6 @@ fields:
       - Income tax returns: returns
       - Bank statements: statements
       - Other documents that verify my debts and assets: other
-    none of the above: False
   - List of documents that verify debts: users[0].attachment_debts
     input type: area
     rows: 2
@@ -4003,26 +4002,18 @@ attachment:
       - "cost_insurance_children": |
           % if insurance.there_are_any:
           ${ thousands(insurance[0].cost_children, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "cost_insurance_children_current": |
           % if insurance.there_are_any:
           ${ thousands(insurance[0].cost_children_current, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "individual_deductible": |
           % if insurance.there_are_any:
           ${ thousands(insurance[0].individual_deductible, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "family_deductible": |
           % if insurance.there_are_any:
           ${ thousands(insurance[0].family_deductible, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "coinsurance": |
           % if insurance.there_are_any:
@@ -4031,8 +4022,6 @@ attachment:
       - "copayment": |
           % if insurance.there_are_any:
           ${ thousands(insurance[0].copayment, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "insurance_addendum_yes": ${ insurance.number_gathered() > 1 }
       # 14 Debts
@@ -4047,14 +4036,10 @@ attachment:
       - "creditor_amount_1": |
           % if has_debts:
           ${ thousands(debts[0].amount, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "creditor_payment_1": |
           % if has_debts:
           ${ thousands(debts[0].payment, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "creditor_name_2": |
           % if debts.number_gathered() >= 2:
@@ -4067,14 +4052,10 @@ attachment:
       - "creditor_amount_2": |
           % if debts.number_gathered() >= 2:
           ${ thousands(debts[1].amount, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "creditor_payment_2": |
           % if debts.number_gathered() >= 2:
           ${ thousands(debts[1].payment, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "creditor_name_3": |
           % if debts.number_gathered() >= 3:
@@ -4087,14 +4068,10 @@ attachment:
       - "creditor_amount_3": |
           % if debts.number_gathered() >= 3:
           ${ thousands(debts[2].amount, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "creditor_payment_3": |
           % if debts.number_gathered() >= 3:
           ${ thousands(debts[2].payment, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "creditor_name_4": |
           % if debts.number_gathered() >= 4:

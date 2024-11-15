@@ -644,7 +644,7 @@ review:
       **Health insurance: (Edit to change details)**
 
       % for policy in insurance:
-        * ${ policy.name.text }, ${ policy.type }
+        * ${ policy.name.text }, ${ policy.type.true_values() }
       % endfor
     show if: insurance.there_are_any
   - Edit: has_debts
@@ -674,7 +674,7 @@ review:
       **Cash Assets: (Edit to change details)**
 
       % for asset in cash:
-        * ${ asset.name.text }, ${ currency(asset.amount) }
+        * ${ asset.name.text }, ${ currency(asset.balance) }
       % endfor
     show if: has_cash_assets
   - Edit: has_cert_deposit
@@ -698,7 +698,7 @@ review:
       **Debit card and money transfer balances: (Edit to change details)**
 
       % for asset in money:
-        * ${ asset.name.text }, ${ currency(asset.amount) }
+        * ${ asset.name.text }, ${ currency(asset.balance) }
       % endfor
     show if: has_money
   - Edit: has_investments
@@ -734,7 +734,7 @@ review:
       **Real Estate: (Edit to change details)**
 
       % for asset in real_estate:
-        * ${ asset.address.on_one_line() }, ${ currency(asset.amount) }
+        * ${ asset.address.on_one_line() }, ${ currency(asset.balance) }
       % endfor
     show if: has_real_estate
   - Edit: has_motor_vehicle
@@ -743,7 +743,7 @@ review:
       ${ word(yesno(has_motor_vehicle)) }
   - Edit: motor_vehicle.revisit
     button: |
-      **Cash Assets: (Edit to change details)**
+      **Motor Vehicle: (Edit to change details)**
 
       % for asset in motor_vehicle:
         * ${ asset.year } ${ asset.make } ${ asset.model }, ${ currency(asset.fmv) }
@@ -789,7 +789,7 @@ review:
     button: |
       **Do you have any valuable collectibles?**
       ${ word(yesno(has_collection)) }
-  - Edit: cash.revisit
+  - Edit: collection.revisit
     button: |
       **Collectibles: (Edit to change details)**
 
@@ -801,7 +801,7 @@ review:
     button: |
       **Do you have any other personal property valued over $500?**
       ${ word(yesno(has_other_property)) }
-  - Edit: cash.revisit
+  - Edit: other_property.revisit
     button: |
       **Other Property: (Edit to change details)**
 
@@ -841,26 +841,29 @@ review:
 #      **Final Steps**
   - Edit: users[0].attached_documents
     button: |
-      **Attach documents to your *Financial Affidavit***
+      **Documents attached to your *Financial Affidavit***
 
-      **I am attaching:**
-      % if users[0].attached_documents["stubs"]:
-      * Pay stubs or other proof of income
-      % endif
-      % if users[0].attached_documents["returns"]:
-      * Income tax returns
-      % endif
-      % if users[0].attached_documents["statements"]:
-      * Bank statements
-      % endif
-      % if users[0].attached_documents["other"]:
-      * Other documents that verify my debts and assets
+      % if users[0].attached_documents.any_true():
+        % if users[0].attached_documents["stubs"]:
+        * Pay stubs or other proof of income
+        % endif
+        % if users[0].attached_documents["returns"]:
+        * Income tax returns
+        % endif
+        % if users[0].attached_documents["statements"]:
+        * Bank statements
+        % endif
+        % if users[0].attached_documents["other"]:
+        * Other documents that verify my debts and assets
 
-      **List of documents that verify debts:**
-      ${ showifdef('users[0].attachment_debts') }
+        **List of documents that verify debts:**
+        ${ showifdef('users[0].attachment_debts') }
 
-      **List of documents that verify assets:**
-      ${ showifdef('users[0].attachment_assets') }
+        **List of documents that verify assets:**
+        ${ showifdef('users[0].attachment_assets') }
+        % endif
+      % else:
+      No attachments
       % endif
 
   - Edit: e_signature
@@ -1141,7 +1144,7 @@ columns:
   - Name of insurance company: |
       row_item.name.text
   - Type: |
-      row_item.type
+      row_item.type.true_values()
   - Edit to change details: |
       action_button_html(url_action(row_item.attr_name("review_insurance")), label="Edit", icon="pencil-alt")
 delete buttons: True
@@ -1292,155 +1295,318 @@ subquestion: |
   ${ debts.add_action() }
   % endif
 ---
+id: cash table
+table: cash.table
+rows: cash
+columns:
+  - Bank or institution name: row_item.name.text
+  - Name on account: row_item.account
+  - Account type: row_item.type
+  - Balance: currency(row_item.balance)
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
+---
 id: cash assets review screen
 continue button field: cash.revisit
 question: |
   Edit the information about your cash assets:
 subquestion: |
-  ${ cash_table.show(editable=True) }
+  ${ cash.table }
 
   % if cash.number_gathered() < 25:
   ${ cash.add_action() }
   % endif
+---
+id: cd table
+table: cert_deposit.table
+rows: cert_deposit
+columns:
+  - Bank or institution name: row_item.name.text
+  - Name on account: row_item.account
+  - Balance: currency(row_item.balance)
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
 ---
 id: cd review screen
 continue button field: cert_deposit.revisit
 question: |
   Edit the information about your certificate of deposit(s):
 subquestion: |
-  ${ cert_deposit_table.show(editable=True) }
+  ${ cert_deposit.table }
 
   % if cert_deposit.number_gathered() < 25:
   ${ cert_deposit.add_action() }
   % endif
+---
+id: money cash/card table
+table: money.table
+rows: money
+columns:
+  - Location of cash/card: row_item.name.text
+  - Held by: row_item.holder
+  - Balance: currency(row_item.balance)
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
 ---
 id: money cash/card review screen
 continue button field: money.revisit
 question: |
   Edit the information about your debit cards and money transfer app balances:
 subquestion: |
-  ${ money_table.show(editable=True) }
+  ${ money.table }
 
   % if money.number_gathered() < 25:
   ${ money.add_action() }
   % endif
+---
+id: investments table
+table: investments.table
+rows: investments
+columns:
+  - Company name: row_item.name.text
+  - FMV: currency(row_item.fmv)
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
 ---
 id: investments review screen
 continue button field: investments.revisit
 question: |
   Edit the information about your investments:
 subquestion: |
-  ${ investments_table.show(editable=True) }
+  ${ investments.table }
 
   % if investments.number_gathered() < 25:
   ${ investments.add_action() }
   % endif
+---
+id: other investments table
+table: other_investments.table
+rows: other_investments
+columns:
+  - Description: row_item.name.text
+  - Balance: currency(row_item.balance)
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
 ---
 id: other investments review screen
 continue button field: other_investments.revisit
 question: |
   Edit the information about your other investments:
 subquestion: |
-  ${ other_investments_table.show(editable=True) }
+  ${ other_investments.table }
 
   % if other_investments.number_gathered() < 25:
   ${ other_investments.add_action() }
   % endif
+---
+id: real estate table
+table: real_estate.table
+rows: real_estate
+columns:
+  - Address: row_item.address.on_one_line()
+  - FMV: currency(row_item.fmv)
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
 ---
 id: real estate review screen
 continue button field: real_estate.revisit
 question: |
   Edit the information about your real estate:
 subquestion: |
-  ${ real_estate_table.show(editable=True) }
+  ${ real_estate.table }
 
   % if real_estate.number_gathered() < 25:
   ${ real_estate.add_action() }
   % endif
+---
+id: motor vehicle table
+table: motor_vehicle.table
+rows: motor_vehicle
+columns:
+  - Vehicle year: row_item.year 
+  - Vehicle make: row_item.make 
+  - Vehicle model: row_item.model
+  - FMV: currency(row_item.fmv)
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("year")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
 ---
 id: motor vehicle review screen
 continue button field: motor_vehicle.revisit
 question: |
   Edit the information about your motor vehicle assets:
 subquestion: |
-  ${ motor_vehicle_table.show(editable=True) }
+  ${ motor_vehicle.table }
 
   % if motor_vehicle.number_gathered() < 25:
   ${ motor_vehicle.add_action() }
   % endif
+---
+id: business interests table
+table: business_interests.table
+rows: business_interests
+columns:
+  - Name of business: row_item.name.text
+  - FMV: currency(row_item.fmv)
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
 ---
 id: business interests review screen
 continue button field: business_interests.revisit
 question: |
   Edit the information about your business interests:
 subquestion: |
-  ${ business_interests_table.show(editable=True) }
+  ${ business_interests.table }
 
   % if business_interests.number_gathered() < 25:
   ${ business_interests.add_action() }
   % endif
+---
+id: life insurance table
+table: life_insurance.table
+rows: life_insurance
+columns:
+  - Name of insurance company: row_item.name.text
+  - Cash value: currency(row_item.value)
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
 ---
 id: life insurance review screen
 continue button field: life_insurance.revisit
 question: |
   Edit the information about your life insurance:
 subquestion: |
-  ${ life_insurance_table.show(editable=True) }
+  ${ life_insurance.table }
 
   % if life_insurance.number_gathered() < 25:
   ${ life_insurance.add_action() }
   % endif
+---
+id: retirement plan table
+table: retirement_plan.table
+rows: retirement_plan
+columns:
+  - Name of plan: row_item.name.text
+  - Balance: currency(row_item.balance)
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
 ---
 id: retirement plan review screen
 continue button field: retirement_plan.revisit
 question: |
   Edit the information about your retirement plan:
 subquestion: |
-  ${ retirement_plan_table.show(editable=True) }
+  ${ retirement_plan.table }
 
   % if retirement_plan.number_gathered() < 25:
   ${ retirement_plan.add_action() }
   % endif
+---
+id: collections table
+table: collection.table
+rows: collection
+columns:
+  - Description: row_item.name.text
+  - FMV: currency(row_item.fmv)
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
 ---
 id: collections review screen
 continue button field: collection.revisit
 question: |
   Edit the information about your collection assets:
 subquestion: |
-  ${ collection_table.show(editable=True) }
+  ${ collection.table }
 
   % if collection.number_gathered() < 25:
   ${ collection.add_action() }
   % endif
+---
+id: other property table
+table: other_property.table
+rows: other_property
+columns:
+  - Description: row_item.name.text
+  - FMV: currency(row_item.fmv)
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
 ---
 id: other property review screen
 continue button field: other_property.revisit
 question: |
   Edit the information about your other property:
 subquestion: |
-  ${ other_property_table.show(editable=True) }
+  ${ other_property.table }
 
   % if other_property.number_gathered() < 25:
   ${ other_property.add_action() }
   % endif
+---
+id: transfer table
+table: transfer.table
+rows: transfer
+columns:
+  - Description: row_item.name.text
+  - Date: row_item.date.format("MM/dd/yyyy")
+  - Amount: currency(row_item.amount)
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
 ---
 id: transfer review screen
 continue button field: transfer.revisit
 question: |
   Edit the information about your transferred assets:
 subquestion: |
-  ${ transfer_table.show(editable=True) }
+  ${ transfer.table }
 
   % if transfer.number_gathered() < 25:
   ${ transfer.add_action() }
   % endif
+---
+id: lawsuits table
+table: lawsuits.table
+rows: lawsuits
+columns:
+  - Case number: row_item.case
+  - Date lawsuit/claim filed: row_item.date.format("MM/dd/yyyy")
+  - Amount recovered: |
+      currency(row_item.amount) if row_item.judgement else 'unknown'
+  - Edit to change details: |
+      action_button_html(url_action(row_item.attr_name("case")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
 ---
 id: lawsuits review screen
 continue button field: lawsuits.revisit
 question: |
   Edit the information about your lawsuits and claims:
 subquestion: |
-  ${ lawsuits_table.show(editable=True) }
+  ${ lawsuits.table }
 
   % if lawsuits.number_gathered() < 25:
   ${ lawsuits.add_action() }
