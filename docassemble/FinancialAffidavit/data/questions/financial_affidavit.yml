@@ -535,6 +535,8 @@ fields:
     show if: 
       code: |
         employment[i].type != 'employed'
+    help: |
+      If you are an independent contractor or sole proprietor, and you do not have a business name, you can enter your own name.
   - Street address: employment[i].address.address
     address autocomplete: True
   - Address line 2: employment[i].address.unit
