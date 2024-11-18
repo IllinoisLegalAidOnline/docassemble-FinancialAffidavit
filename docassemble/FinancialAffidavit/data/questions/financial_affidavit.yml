@@ -37,6 +37,7 @@ objects:
   - transfer: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
   - lawsuits: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
   - court_list: ALCourtLoader.using(file_name='docassemble.ILAO:data/sources/il_courts.xlsx')
+  - preview: DAStaticFile.using(filename="financial_affidavit_preview.pdf")
 ---
 code: |
   al_form_type = 'existing_case'
@@ -257,7 +258,7 @@ continue button field: about_the_financial_affidavit
 question: |
   About the *Financial Affidavit*
 subquestion: |
-  The *Financial Affidavit* is a very long form. This program will help you fill it out and avoid mistakes.
+  The *Financial Affidavit* is a very long form. This program will help you fill it out and avoid mistakes. You may want to [**preview the Financial Affidavit**](${ preview.url_for() }) before you get started. Just be sure to come back to this screen to continue.
   
   After you complete this Easy Form, you must send a copy of the completed *Financial Affidavit* and supporting documents to the other party in the case. If a party has a lawyer, send it to the lawyer.
 
