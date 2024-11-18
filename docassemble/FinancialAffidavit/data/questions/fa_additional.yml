@@ -4786,7 +4786,11 @@ attachment:
         % endif
     - "lawsuit_amount_4": |
         % if lawsuits.number_gathered() >= 4:
-        ${ thousands(lawsuits[3].amount, show_decimals=True) }
+            % if lawsuits[3].judgement:
+            ${ thousands(lawsuits[3].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_5": |
         % if lawsuits.number_gathered() >= 5:
@@ -4798,7 +4802,11 @@ attachment:
         % endif
     - "lawsuit_amount_5": |
         % if lawsuits.number_gathered() >= 5:
-        ${ thousands(lawsuits[4].amount, show_decimals=True) }
+            % if lawsuits[4].judgement:
+            ${ thousands(lawsuits[4].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_6": |
         % if lawsuits.number_gathered() >= 6:
@@ -4810,7 +4818,11 @@ attachment:
         % endif
     - "lawsuit_amount_6": |
         % if lawsuits.number_gathered() >= 6:
-        ${ thousands(lawsuits[5].amount, show_decimals=True) }
+            % if lawsuits[5].judgement:
+            ${ thousands(lawsuits[5].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_7": |
         % if lawsuits.number_gathered() >= 7:
@@ -4822,7 +4834,11 @@ attachment:
         % endif
     - "lawsuit_amount_7": |
         % if lawsuits.number_gathered() >= 7:
-        ${ thousands(lawsuits[6].amount, show_decimals=True) }
+            % if lawsuits[6].judgement:
+            ${ thousands(lawsuits[6].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_8": |
         % if lawsuits.number_gathered() >= 8:
@@ -4834,7 +4850,11 @@ attachment:
         % endif
     - "lawsuit_amount_8": |
         % if lawsuits.number_gathered() >= 8:
-        ${ thousands(lawsuits[7].amount, show_decimals=True) }
+            % if lawsuits[7].judgement:
+            ${ thousands(lawsuits[7].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_9": |
         % if lawsuits.number_gathered() >= 9:
@@ -4846,7 +4866,11 @@ attachment:
         % endif
     - "lawsuit_amount_9": |
         % if lawsuits.number_gathered() >= 9:
-        ${ thousands(lawsuits[8].amount, show_decimals=True) }
+            % if lawsuits[8].judgement:
+            ${ thousands(lawsuits[8].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_10": |
         % if lawsuits.number_gathered() >= 10:
@@ -4858,7 +4882,11 @@ attachment:
         % endif
     - "lawsuit_amount_10": |
         % if lawsuits.number_gathered() >= 10:
-        ${ thousands(lawsuits[9].amount, show_decimals=True) }
+            % if lawsuits[9].judgement:
+            ${ thousands(lawsuits[9].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_11": |
         % if lawsuits.number_gathered() >= 11:
@@ -4870,7 +4898,11 @@ attachment:
         % endif
     - "lawsuit_amount_11": |
         % if lawsuits.number_gathered() >= 11:
-        ${ thousands(lawsuits[10].amount, show_decimals=True) }
+            % if lawsuits[10].judgement:
+            ${ thousands(lawsuits[10].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_12": |
         % if lawsuits.number_gathered() >= 12:
@@ -4882,7 +4914,11 @@ attachment:
         % endif
     - "lawsuit_amount_12": |
         % if lawsuits.number_gathered() >= 12:
-        ${ thousands(lawsuits[11].amount, show_decimals=True) }
+            % if lawsuits[11].judgement:
+            ${ thousands(lawsuits[11].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_13": |
         % if lawsuits.number_gathered() >= 13:
@@ -4894,7 +4930,11 @@ attachment:
         % endif
     - "lawsuit_amount_13": |
         % if lawsuits.number_gathered() >= 13:
-        ${ thousands(lawsuits[12].amount, show_decimals=True) }
+            % if lawsuits[12].judgement:
+            ${ thousands(lawsuits[12].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_14": |
         % if lawsuits.number_gathered() >= 14:
@@ -4906,7 +4946,11 @@ attachment:
         % endif
     - "lawsuit_amount_14": |
         % if lawsuits.number_gathered() >= 14:
-        ${ thousands(lawsuits[13].amount, show_decimals=True) }
+            % if lawsuits[13].judgement:
+            ${ thousands(lawsuits[13].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_15": |
         % if lawsuits.number_gathered() >= 15:
@@ -4918,7 +4962,11 @@ attachment:
         % endif
     - "lawsuit_amount_15": |
         % if lawsuits.number_gathered() >= 15:
-        ${ thousands(lawsuits[14].amount, show_decimals=True) }
+            % if lawsuits[14].judgement:
+            ${ thousands(lawsuits[14].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_16": |
         % if lawsuits.number_gathered() >= 16:
@@ -4930,7 +4978,11 @@ attachment:
         % endif
     - "lawsuit_amount_16": |
         % if lawsuits.number_gathered() >= 16:
-        ${ thousands(lawsuits[15].amount, show_decimals=True) }
+            % if lawsuits[15].judgement:
+            ${ thousands(lawsuits[15].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_17": |
         % if lawsuits.number_gathered() >= 17:
@@ -4942,7 +4994,11 @@ attachment:
         % endif
     - "lawsuit_amount_17": |
         % if lawsuits.number_gathered() >= 17:
-        ${ thousands(lawsuits[16].amount, show_decimals=True) }
+            % if lawsuits[16].judgement:
+            ${ thousands(lawsuits[16].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_18": |
         % if lawsuits.number_gathered() >= 18:
@@ -4954,7 +5010,11 @@ attachment:
         % endif
     - "lawsuit_amount_18": |
         % if lawsuits.number_gathered() >= 18:
-        ${ thousands(lawsuits[17].amount, show_decimals=True) }
+            % if lawsuits[17].judgement:
+            ${ thousands(lawsuits[17].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_19": |
         % if lawsuits.number_gathered() >= 19:
@@ -4966,7 +5026,11 @@ attachment:
         % endif
     - "lawsuit_amount_19": |
         % if lawsuits.number_gathered() >= 19:
-        ${ thousands(lawsuits[18].amount, show_decimals=True) }
+            % if lawsuits[18].judgement:
+            ${ thousands(lawsuits[18].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_20": |
         % if lawsuits.number_gathered() >= 20:
@@ -4978,7 +5042,11 @@ attachment:
         % endif
     - "lawsuit_amount_20": |
         % if lawsuits.number_gathered() >= 20:
-        ${ thousands(lawsuits[19].amount, show_decimals=True) }
+            % if lawsuits[19].judgement:
+            ${ thousands(lawsuits[19].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_21": |
         % if lawsuits.number_gathered() >= 21:
@@ -4990,7 +5058,11 @@ attachment:
         % endif
     - "lawsuit_amount_21": |
         % if lawsuits.number_gathered() >= 21:
-        ${ thousands(lawsuits[20].amount, show_decimals=True) }
+            % if lawsuits[20].judgement:
+            ${ thousands(lawsuits[20].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_22": |
         % if lawsuits.number_gathered() >= 22:
@@ -5002,7 +5074,11 @@ attachment:
         % endif
     - "lawsuit_amount_22": |
         % if lawsuits.number_gathered() >= 22:
-        ${ thousands(lawsuits[21].amount, show_decimals=True) }
+            % if lawsuits[21].judgement:
+            ${ thousands(lawsuits[21].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_23": |
         % if lawsuits.number_gathered() >= 23:
@@ -5014,7 +5090,11 @@ attachment:
         % endif
     - "lawsuit_amount_23": |
         % if lawsuits.number_gathered() >= 23:
-        ${ thousands(lawsuits[22].amount, show_decimals=True) }
+            % if lawsuits[22].judgement:
+            ${ thousands(lawsuits[22].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_24": |
         % if lawsuits.number_gathered() >= 24:
@@ -5026,7 +5106,11 @@ attachment:
         % endif
     - "lawsuit_amount_24": |
         % if lawsuits.number_gathered() >= 24:
-        ${ thousands(lawsuits[23].amount, show_decimals=True) }
+            % if lawsuits[23].judgement:
+            ${ thousands(lawsuits[23].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
     - "lawsuit_number_25": |
         % if lawsuits.number_gathered() >= 25:
@@ -5038,6 +5122,10 @@ attachment:
         % endif
     - "lawsuit_amount_25": |
         % if lawsuits.number_gathered() >= 25:
-        ${ thousands(lawsuits[24].amount, show_decimals=True) }
+            % if lawsuits[24].judgement:
+            ${ thousands(lawsuits[24].amount, show_decimals=True) }
+            % else:
+            unknown
+            % endif
         % endif
 ---
