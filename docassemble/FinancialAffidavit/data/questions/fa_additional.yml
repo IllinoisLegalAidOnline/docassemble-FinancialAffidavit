@@ -4350,7 +4350,7 @@ objects:
   - additional_transfer: ALDocument.using(title="FA Additional Transfer Sold Property", filename="FA_additional_transfer.pdf", has_addendum=False)
 ---
 code: |
-  additional_transfer.enabled = additional_transfer.number_gathered() >= 4
+  additional_transfer.enabled = transfer.number_gathered() >= 4
 ---
 attachment:
   name: additional_transfer
