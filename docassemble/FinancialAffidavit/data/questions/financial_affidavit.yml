@@ -2005,7 +2005,7 @@ fields:
       The deductible is the amount of money you must pay out of your own pocket for expenses before your insurance plan starts to pay. The deductible may not apply to some types of claims or services. Some types of payments, such as co-pays, may not count towards meeting the deductible.
 
       The family deductible may be calculated in terms of the amount all the family members in the plan must pay before the plan starts to pay. Check with the plan administrator for details.
-  - Coinsurance (up to 100%): insurance[i].coinsurance
+  - Coinsurance (0-100%): insurance[i].coinsurance
     datatype: integer
     min: 0
     max: 100
@@ -2111,7 +2111,7 @@ subquestion: |
   * Retirement benefits and deferred compensation
   * Valuable collectibles 
   * Other personal property valued over $500
-  * Transfer or sale of assets or property valued over $1,000 within the last 2 years
+  * Transfer or sale of assets or property valued at or over $1,000 within the last 2 years
 ---
 ########### FA ASSETS - 15a Cash/Cash Equivalents ###########
 id: cash equivalent intro 
@@ -2400,7 +2400,7 @@ id: real estate intro
 question: |
   Do you own any real estate?
 subquestion: |
-  This can be a house, a condominium unit, or a parcel of land (sometimes called a "lot").
+  This can be a house, a condominium unit, or a parcel of land, which is sometimes called a "lot."
 fields:
   - no label: has_real_estate
     datatype: yesnoradio
@@ -2742,7 +2742,7 @@ code: |
 ########### FA ASSETS - 15i Other Personal Property ###########
 id: other property intro 
 question: |
-  Do you have any other personal property valued over $500?
+  Do you have any other personal property valued at over $500?
 subquestion: |
   ${ collapse_template(FMV_help) }  
 fields:
@@ -2751,7 +2751,7 @@ fields:
 ---
 id: additional other_property 
 question: |
-  Do you have other personal property valued over $500?
+  Do you have other personal property valued at over $500?
 subquestion: |
   So far you have told us about:
   ${ other_property_table }
@@ -2767,7 +2767,7 @@ columns:
 ---
 id: other property information
 question: |
-  Details for the ${ordinal(i)} property: 
+  Details for the ${ordinal(i)} property valued at over $500 
 subquestion: |
   ${ collapse_template(FMV_help) }  
 fields:
@@ -2797,7 +2797,7 @@ fields:
 ---
 id: additional transfer
 question: |
-  Did you have other asset or property transfers or sales within the last two years?
+  Did you transfer or sell other assets or property valued at or over $1,000 within the last two years?
 subquestion: |
   So far you have told us about:
   ${ transfer_table }
@@ -2809,7 +2809,7 @@ table: transfer_table
 rows: transfer
 columns:
   - Description: row_item.name.text
-  - Transfer/sold to: row_item.sold
+  - Transferred or sold to: row_item.sold
   - Date: row_item.date.format("MM/dd/yyyy")
   - Amount: currency(row_item.amount)
 ---
@@ -2862,7 +2862,7 @@ table: lawsuits_table
 rows: lawsuits
 columns:
   - Case number: row_item.case
-  - Date lawsuit/claim filed: row_item.date.format("MM/dd/yyyy")
+  - Date lawsuit or claim filed: row_item.date.format("MM/dd/yyyy")
   - Amount recovered: |
       currency(row_item.amount) if row_item.judgement else 'unknown'
 ---
@@ -4411,7 +4411,7 @@ attachment:
       # 15 Assets - Real Estate
       - "real_estate_address_1": |
           % if has_real_estate:
-          ${ real_estate[0].address.on_one_line() }
+          ${ real_estate[0].address.on_one_line(bare=True) }
           % endif
       - "real_estate_title_1": |
           % if has_real_estate:
@@ -4427,7 +4427,7 @@ attachment:
           % endif
       - "real_estate_address_2": |
           % if real_estate.number_gathered() >= 2:
-          ${ real_estate[1].address.on_one_line() }
+          ${ real_estate[1].address.on_one_line(bare=True) }
           % endif
       - "real_estate_title_2": |
           % if real_estate.number_gathered() >= 2:
@@ -4443,7 +4443,7 @@ attachment:
           % endif
       - "real_estate_address_3": |
           % if real_estate.number_gathered() >= 3:
-          ${ real_estate[2].address.on_one_line() }
+          ${ real_estate[2].address.on_one_line(bare=True) }
           % endif
       - "real_estate_title_3": |
           % if real_estate.number_gathered() >= 3:
@@ -4531,11 +4531,11 @@ attachment:
           % endif
       - "business_interests_type_1": |
           % if has_business_interests:
-          ${ business_interests[0].name.text }
+          ${ business_interests[0].type }
           % endif
       - "business_interests_ownership_1": |
           % if has_business_interests:
-          ${ nice_number(business_interests[0].ownership, use_word=False) }
+          ${ nice_number(business_interests[0].ownership, use_word=False) }%
           % endif
       - "business_interests_fmv_1": |
           % if has_business_interests:
@@ -4551,7 +4551,7 @@ attachment:
           % endif
       - "business_interests_ownership_2": |
           % if business_interests.number_gathered() >= 2:
-          ${ nice_number(business_interests[1].ownership, use_word=False) }
+          ${ nice_number(business_interests[1].ownership, use_word=False) }%
           % endif
       - "business_interests_fmv_2": |
           % if business_interests.number_gathered() >= 2:
@@ -4567,7 +4567,7 @@ attachment:
           % endif
       - "business_interests_ownership_3": |
           % if business_interests.number_gathered() >= 3:
-          ${ nice_number(business_interests[2].ownership, use_word=False) }
+          ${ nice_number(business_interests[2].ownership, use_word=False) }%
           % endif
       - "business_interests_fmv_3": |
           % if business_interests.number_gathered() >= 3:

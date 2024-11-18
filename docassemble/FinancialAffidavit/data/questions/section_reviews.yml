@@ -199,7 +199,7 @@ review:
     show if: employment.there_are_any
   - Edit: taxes_filed
     button: |
-      **Did you file taxes for ${ current_datetime().year-1 }**
+      **Did you file taxes for ${ current_datetime().year-1 }?**
       ${word(yesno(taxes_filed))}
   - Edit: taxes_filed_status
     button: |
@@ -664,7 +664,7 @@ review:
       ${word(yesno(has_cash_assets))}
   - Edit: cash.revisit
     button: |
-      **Cash Assets: (Edit to change details)**
+      **Cash assets: (Edit to change details)**
 
       % for asset in cash:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -676,7 +676,7 @@ review:
       ${ word(yesno(has_cert_deposit)) }
   - Edit: cert_deposit.revisit
     button: |
-      **Certificate of Deposits: (Edit to change details)**
+      **Certificate of deposits: (Edit to change details)**
 
       % for asset in cert_deposit:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -712,7 +712,7 @@ review:
       ${ word(yesno(has_other_investments)) }
   - Edit: other_investments.revisit
     button: |
-      **Other Investments: (Edit to change details)**
+      **Other investments: (Edit to change details)**
 
       % for asset in other_investments:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -724,10 +724,10 @@ review:
       ${ word(yesno(has_real_estate)) }
   - Edit: real_estate.revisit
     button: |
-      **Real Estate: (Edit to change details)**
+      **Real estate: (Edit to change details)**
 
       % for asset in real_estate:
-        * ${ asset.address.on_one_line() }, ${ currency(asset.balance) }
+        * ${ asset.address.on_one_line(bare=True) }, ${ currency(asset.balance) }
       % endfor
     show if: has_real_estate
   - Edit: has_motor_vehicle
@@ -736,7 +736,7 @@ review:
       ${ word(yesno(has_motor_vehicle)) }
   - Edit: motor_vehicle.revisit
     button: |
-      **Motor Vehicle: (Edit to change details)**
+      **Motor vehicles: (Edit to change details)**
 
       % for asset in motor_vehicle:
         * ${ asset.year } ${ asset.make } ${ asset.model }, ${ currency(asset.fmv) }
@@ -760,7 +760,7 @@ review:
       ${ word(yesno(has_life_insurance)) }
   - Edit: life_insurance.revisit
     button: |
-      **Life Insurance: (Edit to change details)**
+      **Life insurance: (Edit to change details)**
 
       % for asset in life_insurance:
         * ${ asset.name.text }, ${ currency(asset.value) }
@@ -772,7 +772,7 @@ review:
       ${ word(yesno(has_retirement_plan)) }
   - Edit: retirement_plan.revisit
     button: |
-      **Retirement: (Edit to change details)**
+      **Retirement benefits: (Edit to change details)**
 
       % for asset in retirement_plan:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -792,11 +792,11 @@ review:
     show if: has_collection
   - Edit: has_other_property
     button: |
-      **Do you have any other personal property valued over $500?**
+      **Do you have any other personal property valued at over $500?**
       ${ word(yesno(has_other_property)) }
   - Edit: other_property.revisit
     button: |
-      **Other Property: (Edit to change details)**
+      **Other property valued at over $500: (Edit to change details)**
 
       % for asset in other_property:
         * ${ asset.name.text }, ${ currency(asset.fmv) }
@@ -808,7 +808,7 @@ review:
       ${ word(yesno(has_transfer)) }
   - Edit: transfer.revisit
     button: |
-      **Transfer Assets: (Edit to change details)**
+      **Assets or property that you transferred or sold: (Edit to change details)**
 
       % for asset in transfer:
         * ${ asset.name.text }, ${ currency(asset.amount) }
@@ -820,7 +820,7 @@ review:
       ${ word(yesno(has_lawsuits)) }
   - Edit: lawsuits.revisit
     button: |
-      **Lawsuits or Claims: (Edit to change details)**
+      **Lawsuits or claims: (Edit to change details)**
 
       % for asset in lawsuits:
         * ${ asset.case }, ${ currency(asset.amount) if asset.judgement else 'unknown' }
@@ -970,7 +970,7 @@ review:
     show if: employment.there_are_any
   - Edit: taxes_filed
     button: |
-      **Did you file taxes for ${ current_datetime().year-1 }**
+      **Did you file taxes for ${ current_datetime().year-1 }?**
       ${word(yesno(taxes_filed))}
   - Edit: taxes_filed_status
     button: |
@@ -1445,7 +1445,7 @@ review:
       ${word(yesno(has_cash_assets))}
   - Edit: cash.revisit
     button: |
-      **Cash Assets: (Edit to change details)**
+      **Cash assets: (Edit to change details)**
 
       % for asset in cash:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -1457,7 +1457,7 @@ review:
       ${ word(yesno(has_cert_deposit)) }
   - Edit: cert_deposit.revisit
     button: |
-      **Certificate of Deposits: (Edit to change details)**
+      **Certificate of deposits: (Edit to change details)**
 
       % for asset in cert_deposit:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -1493,7 +1493,7 @@ review:
       ${ word(yesno(has_other_investments)) }
   - Edit: other_investments.revisit
     button: |
-      **Other Investments: (Edit to change details)**
+      **Other investments: (Edit to change details)**
 
       % for asset in other_investments:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -1505,10 +1505,10 @@ review:
       ${ word(yesno(has_real_estate)) }
   - Edit: real_estate.revisit
     button: |
-      **Real Estate: (Edit to change details)**
+      **Real estate: (Edit to change details)**
 
       % for asset in real_estate:
-        * ${ asset.address.on_one_line() }, ${ currency(asset.balance) }
+        * ${ asset.address.on_one_line(bare=True) }, ${ currency(asset.balance) }
       % endfor
     show if: has_real_estate
   - Edit: has_motor_vehicle
@@ -1517,7 +1517,7 @@ review:
       ${ word(yesno(has_motor_vehicle)) }
   - Edit: motor_vehicle.revisit
     button: |
-      **Motor Vehicle: (Edit to change details)**
+      **Motor vehicles: (Edit to change details)**
 
       % for asset in motor_vehicle:
         * ${ asset.year } ${ asset.make } ${ asset.model }, ${ currency(asset.fmv) }
@@ -1541,7 +1541,7 @@ review:
       ${ word(yesno(has_life_insurance)) }
   - Edit: life_insurance.revisit
     button: |
-      **Life Insurance: (Edit to change details)**
+      **Life insurance: (Edit to change details)**
 
       % for asset in life_insurance:
         * ${ asset.name.text }, ${ currency(asset.value) }
@@ -1553,7 +1553,7 @@ review:
       ${ word(yesno(has_retirement_plan)) }
   - Edit: retirement_plan.revisit
     button: |
-      **Retirement: (Edit to change details)**
+      **Retirement benefits: (Edit to change details)**
 
       % for asset in retirement_plan:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -1573,11 +1573,11 @@ review:
     show if: has_collection
   - Edit: has_other_property
     button: |
-      **Do you have any other personal property valued over $500?**
+      **Do you have any other personal property valued at over $500?**
       ${ word(yesno(has_other_property)) }
   - Edit: other_property.revisit
     button: |
-      **Other Property: (Edit to change details)**
+      **Other property valued at over $500: (Edit to change details)**
 
       % for asset in other_property:
         * ${ asset.name.text }, ${ currency(asset.fmv) }
@@ -1589,7 +1589,7 @@ review:
       ${ word(yesno(has_transfer)) }
   - Edit: transfer.revisit
     button: |
-      **Transfer Assets: (Edit to change details)**
+      **Assets or property that you transferred or sold: (Edit to change details)**
 
       % for asset in transfer:
         * ${ asset.name.text }, ${ currency(asset.amount) }
@@ -1601,7 +1601,7 @@ review:
       ${ word(yesno(has_lawsuits)) }
   - Edit: lawsuits.revisit
     button: |
-      **Lawsuits or Claims: (Edit to change details)**
+      **Lawsuits or claims: (Edit to change details)**
 
       % for asset in lawsuits:
         * ${ asset.case }, ${ currency(asset.amount) if asset.judgement else 'unknown' }
@@ -1689,7 +1689,7 @@ review:
   - Edit: x.address.address
     button: |
       **Address:**
-      ${ x.address.on_one_line() }
+      ${ x.address.on_one_line(bare=True) }
   - Edit: x.type
     button: |
       **Business type:**
@@ -1746,7 +1746,7 @@ review:
       * Company car
       % endif
       % if showifdef('x.perks["housing"]'):
-      * Free housing/allowance
+      * Free housing or housing allowance
       % endif
       % if showifdef('x.perks["other"]'):
       * Other: ${ showifdef('x.other_perks') }
@@ -1961,7 +1961,7 @@ id: money cash/card table
 table: money.table
 rows: money
 columns:
-  - Location of cash/card: row_item.name.text
+  - Location of cash or card: row_item.name.text
   - Held by: row_item.holder
   - Balance: currency(row_item.balance)
   - Edit to change details: |
@@ -2028,7 +2028,7 @@ id: real estate table
 table: real_estate.table
 rows: real_estate
 columns:
-  - Address: row_item.address.on_one_line()
+  - Address: row_item.address.on_one_line(bare=True)
   - FMV: currency(row_item.fmv)
   - Edit to change details: |
       action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
@@ -2208,7 +2208,7 @@ table: lawsuits.table
 rows: lawsuits
 columns:
   - Case number: row_item.case
-  - Date lawsuit/claim filed: row_item.date.format("MM/dd/yyyy")
+  - Date lawsuit or claim filed: row_item.date.format("MM/dd/yyyy")
   - Amount recovered: |
       currency(row_item.amount) if row_item.judgement else 'unknown'
   - Edit to change details: |
