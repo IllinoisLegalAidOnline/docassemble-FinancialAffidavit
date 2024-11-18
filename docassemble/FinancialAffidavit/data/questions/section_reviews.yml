@@ -804,7 +804,7 @@ review:
     show if: has_other_property
   - Edit: has_transfer
     button: |
-      **Have you transferred or sold any assets or property valued at or over $1,000 within the last two years?**
+      **In the last two years, have you transferred or sold any assets or property worth at least $1,000?**
       ${ word(yesno(has_transfer)) }
   - Edit: transfer.revisit
     button: |
@@ -1585,7 +1585,7 @@ review:
     show if: has_other_property
   - Edit: has_transfer
     button: |
-      **Have you transferred or sold any assets or property valued at or over $1,000 within the last two years?**
+      **In the last two years, have you transferred or sold any assets or property worth at least $1,000?**
       ${ word(yesno(has_transfer)) }
   - Edit: transfer.revisit
     button: |

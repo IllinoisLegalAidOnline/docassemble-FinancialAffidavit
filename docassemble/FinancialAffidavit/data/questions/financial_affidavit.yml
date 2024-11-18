@@ -252,7 +252,7 @@ subject: |
 content: |  
   This is an example of help. Click again to hide.
 ---
-id: whats next
+id: about the financial affidavit
 continue button field: about_the_financial_affidavit
 question: |
   About the *Financial Affidavit*
@@ -2111,7 +2111,7 @@ subquestion: |
   * Retirement benefits and deferred compensation
   * Valuable collectibles 
   * Other personal property valued over $500
-  * Transfer or sale of assets or property valued at or over $1,000 within the last 2 years
+  * Transfer or sale of assets or property worth at least $1,000 within the last 2 years
 ---
 ########### FA ASSETS - 15a Cash/Cash Equivalents ###########
 id: cash equivalent intro 
@@ -2788,7 +2788,7 @@ code: |
 ########### FA ASSETS - 15j Transfer or Sale of Assets #######
 id: transfer sale intro
 question: |
-  Have you transferred or sold any assets or property valued at or over $1,000 within the last two years?
+  In the last two years, have you transferred or sold any assets or property worth at least $1,000?
 subquestion: |
   ${ collapse_template(FMV_help) }  
 fields:
@@ -2797,7 +2797,7 @@ fields:
 ---
 id: additional transfer
 question: |
-  Did you transfer or sell other assets or property valued at or over $1,000 within the last two years?
+  In the last two years, did you transfer or sell other assets or property worth at least $1,000?
 subquestion: |
   So far you have told us about:
   ${ transfer_table }

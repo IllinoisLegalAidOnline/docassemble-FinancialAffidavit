@@ -2518,6 +2518,8 @@ attachment:
         % else:
         ${ users[0].name.full(middle='full') }
         % endif
+    - "motor_vehicle_info_4": |
+        See Financial Affidavit 15d4
     - "motor_vehicle_info_5": |
         % if motor_vehicle.number_gathered() >= 5:
         ${ motor_vehicle[4].year } ${ motor_vehicle[4].make } ${ motor_vehicle[4].model }
