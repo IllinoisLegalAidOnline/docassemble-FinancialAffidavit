@@ -2492,7 +2492,7 @@ objects:
   - additional_motor_vehicle: ALDocument.using(title="FA Additional Motor Vehicles", filename="FA_additional_motor_vehicles.pdf", has_addendum=False)
 ---
 code: |
-  additional_motor_vehicle.enabled = cash.number_gathered() >= 4
+  additional_motor_vehicle.enabled = motor_vehicle.number_gathered() >= 5
 ---
 attachment:
   name: additional_motor_vehicle
@@ -2517,22 +2517,6 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
-        % endif
-    - "motor_vehicle_info_4": |
-        % if motor_vehicle.number_gathered() >= 4:
-        ${ motor_vehicle[3].year } ${ motor_vehicle[3].make } ${ motor_vehicle[3].model }
-        % endif
-    - "motor_vehicle_title_4": |
-        % if motor_vehicle.number_gathered() >= 4:
-        ${ motor_vehicle[3].name.text }
-        % endif
-    - "motor_vehicle_fmv_4": |
-        % if motor_vehicle.number_gathered() >= 4:
-        ${ thousands(motor_vehicle[3].fmv, show_decimals=True) }
-        % endif
-    - "motor_vehicle_balance_4": |
-        % if motor_vehicle.number_gathered() >= 4:
-        ${ thousands(motor_vehicle[3].balance, show_decimals=True) }
         % endif
     - "motor_vehicle_info_5": |
         % if motor_vehicle.number_gathered() >= 5:
@@ -4157,7 +4141,7 @@ objects:
   - additional_other_property: ALDocument.using(title="FA Additional Other Property", filename="FA_additional_other_property.pdf", has_addendum=False)
 ---
 code: |
-  additional_other_property.enabled = collection.number_gathered() >= 4
+  additional_other_property.enabled = other_property.number_gathered() >= 4
 ---
 attachment:
   name: additional_other_property
@@ -4366,7 +4350,7 @@ objects:
   - additional_transfer: ALDocument.using(title="FA Additional Transfer Sold Property", filename="FA_additional_transfer.pdf", has_addendum=False)
 ---
 code: |
-  additional_transfer.enabled = collection.number_gathered() >= 4
+  additional_transfer.enabled = additional_transfer.number_gathered() >= 4
 ---
 attachment:
   name: additional_transfer
