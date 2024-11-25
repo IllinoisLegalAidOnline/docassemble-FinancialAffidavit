@@ -25,7 +25,7 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent' or opposing_label == 'defendant':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
@@ -382,7 +382,7 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent' or opposing_label == 'defendant':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
@@ -766,7 +766,7 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent' or opposing_label == 'defendant':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
@@ -1064,7 +1064,7 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent' or opposing_label == 'defendant':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
@@ -1360,7 +1360,7 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent' or opposing_label == 'defendant':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
@@ -1833,7 +1833,7 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent' or opposing_label == 'defendant':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
@@ -2129,7 +2129,7 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent' or opposing_label == 'defendant':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
@@ -2513,7 +2513,7 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent' or opposing_label == 'defendant':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
@@ -2884,7 +2884,7 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent' or opposing_label == 'defendant':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
@@ -3270,7 +3270,7 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent' or opposing_label == 'defendant':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
@@ -3656,7 +3656,7 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent' or opposing_label == 'defendant':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
@@ -3667,7 +3667,7 @@ attachment:
         % endif
     - "retirement_type_4": |
         % if retirement_plan.number_gathered() >= 4:
-        ${ retirement_plan[3].name.text }
+        ${ retirement_plan[3].type }
         % endif
     - "retirement_balance_4": |
         % if retirement_plan.number_gathered() >= 4:
@@ -3679,7 +3679,7 @@ attachment:
         % endif
     - "retirement_type_5": |
         % if retirement_plan.number_gathered() >= 5:
-        ${ retirement_plan[4].name.text }
+        ${ retirement_plan[4].type }
         % endif
     - "retirement_balance_5": |
         % if retirement_plan.number_gathered() >= 5:
@@ -3691,7 +3691,7 @@ attachment:
         % endif
     - "retirement_type_6": |
         % if retirement_plan.number_gathered() >= 6:
-        ${ retirement_plan[5].name.text }
+        ${ retirement_plan[5].type }
         % endif
     - "retirement_balance_6": |
         % if retirement_plan.number_gathered() >= 6:
@@ -3703,7 +3703,7 @@ attachment:
         % endif
     - "retirement_type_7": |
         % if retirement_plan.number_gathered() >= 7:
-        ${ retirement_plan[6].name.text }
+        ${ retirement_plan[6].type }
         % endif
     - "retirement_balance_7": |
         % if retirement_plan.number_gathered() >= 7:
@@ -3715,7 +3715,7 @@ attachment:
         % endif
     - "retirement_type_8": |
         % if retirement_plan.number_gathered() >= 8:
-        ${ retirement_plan[7].name.text }
+        ${ retirement_plan[7].type }
         % endif
     - "retirement_balance_8": |
         % if retirement_plan.number_gathered() >= 8:
@@ -3727,7 +3727,7 @@ attachment:
         % endif
     - "retirement_type_9": |
         % if retirement_plan.number_gathered() >= 9:
-        ${ retirement_plan[8].name.text }
+        ${ retirement_plan[8].type }
         % endif
     - "retirement_balance_9": |
         % if retirement_plan.number_gathered() >= 9:
@@ -3739,7 +3739,7 @@ attachment:
         % endif
     - "retirement_type_10": |
         % if retirement_plan.number_gathered() >= 10:
-        ${ retirement_plan[9].name.text }
+        ${ retirement_plan[9].type }
         % endif
     - "retirement_balance_10": |
         % if retirement_plan.number_gathered() >= 10:
@@ -3751,7 +3751,7 @@ attachment:
         % endif
     - "retirement_type_11": |
         % if retirement_plan.number_gathered() >= 11:
-        ${ retirement_plan[10].name.text }
+        ${ retirement_plan[10].type }
         % endif
     - "retirement_balance_11": |
         % if retirement_plan.number_gathered() >= 11:
@@ -3763,7 +3763,7 @@ attachment:
         % endif
     - "retirement_type_12": |
         % if retirement_plan.number_gathered() >= 12:
-        ${ retirement_plan[11].name.text }
+        ${ retirement_plan[11].type }
         % endif
     - "retirement_balance_12": |
         % if retirement_plan.number_gathered() >= 12:
@@ -3775,7 +3775,7 @@ attachment:
         % endif
     - "retirement_type_13": |
         % if retirement_plan.number_gathered() >= 13:
-        ${ retirement_plan[12].name.text }
+        ${ retirement_plan[12].type }
         % endif
     - "retirement_balance_13": |
         % if retirement_plan.number_gathered() >= 13:
@@ -3787,7 +3787,7 @@ attachment:
         % endif
     - "retirement_type_14": |
         % if retirement_plan.number_gathered() >= 14:
-        ${ retirement_plan[13].name.text }
+        ${ retirement_plan[13].type }
         % endif
     - "retirement_balance_14": |
         % if retirement_plan.number_gathered() >= 14:
@@ -3799,7 +3799,7 @@ attachment:
         % endif
     - "retirement_type_15": |
         % if retirement_plan.number_gathered() >= 15:
-        ${ retirement_plan[14].name.text }
+        ${ retirement_plan[14].type }
         % endif
     - "retirement_balance_15": |
         % if retirement_plan.number_gathered() >= 15:
@@ -3811,7 +3811,7 @@ attachment:
         % endif
     - "retirement_type_16": |
         % if retirement_plan.number_gathered() >= 16:
-        ${ retirement_plan[15].name.text }
+        ${ retirement_plan[15].type }
         % endif
     - "retirement_balance_16": |
         % if retirement_plan.number_gathered() >= 16:
@@ -3823,7 +3823,7 @@ attachment:
         % endif
     - "retirement_type_17": |
         % if retirement_plan.number_gathered() >= 17:
-        ${ retirement_plan[16].name.text }
+        ${ retirement_plan[16].type }
         % endif
     - "retirement_balance_17": |
         % if retirement_plan.number_gathered() >= 17:
@@ -3835,7 +3835,7 @@ attachment:
         % endif
     - "retirement_type_18": |
         % if retirement_plan.number_gathered() >= 18:
-        ${ retirement_plan[17].name.text }
+        ${ retirement_plan[17].type }
         % endif
     - "retirement_balance_18": |
         % if retirement_plan.number_gathered() >= 18:
@@ -3847,7 +3847,7 @@ attachment:
         % endif
     - "retirement_type_19": |
         % if retirement_plan.number_gathered() >= 19:
-        ${ retirement_plan[18].name.text }
+        ${ retirement_plan[18].type }
         % endif
     - "retirement_balance_19": |
         % if retirement_plan.number_gathered() >= 19:
@@ -3859,7 +3859,7 @@ attachment:
         % endif
     - "retirement_type_20": |
         % if retirement_plan.number_gathered() >= 20:
-        ${ retirement_plan[19].name.text }
+        ${ retirement_plan[19].type }
         % endif
     - "retirement_balance_20": |
         % if retirement_plan.number_gathered() >= 20:
@@ -3871,7 +3871,7 @@ attachment:
         % endif
     - "retirement_type_21": |
         % if retirement_plan.number_gathered() >= 21:
-        ${ retirement_plan[20].name.text }
+        ${ retirement_plan[20].type }
         % endif
     - "retirement_balance_21": |
         % if retirement_plan.number_gathered() >= 21:
@@ -3883,7 +3883,7 @@ attachment:
         % endif
     - "retirement_type_22": |
         % if retirement_plan.number_gathered() >= 22:
-        ${ retirement_plan[21].name.text }
+        ${ retirement_plan[21].type }
         % endif
     - "retirement_balance_22": |
         % if retirement_plan.number_gathered() >= 22:
@@ -3895,7 +3895,7 @@ attachment:
         % endif
     - "retirement_type_23": |
         % if retirement_plan.number_gathered() >= 23:
-        ${ retirement_plan[22].name.text }
+        ${ retirement_plan[22].type }
         % endif
     - "retirement_balance_23": |
         % if retirement_plan.number_gathered() >= 23:
@@ -3907,7 +3907,7 @@ attachment:
         % endif
     - "retirement_type_24": |
         % if retirement_plan.number_gathered() >= 24:
-        ${ retirement_plan[23].name.text }
+        ${ retirement_plan[23].type }
         % endif
     - "retirement_balance_24": |
         % if retirement_plan.number_gathered() >= 24:
@@ -3919,7 +3919,7 @@ attachment:
         % endif
     - "retirement_type_25": |
         % if retirement_plan.number_gathered() >= 25:
-        ${ retirement_plan[24].name.text }
+        ${ retirement_plan[24].type }
         % endif
     - "retirement_balance_25": |
         % if retirement_plan.number_gathered() >= 25:
@@ -3954,7 +3954,7 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent' or opposing_label == 'defendant':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
@@ -4164,7 +4164,7 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent' or opposing_label == 'defendant':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
@@ -4373,7 +4373,7 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent' or opposing_label == 'defendant':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }
@@ -4757,7 +4757,7 @@ attachment:
         ${ other_parties[0].name.full(middle='full') }
         % endif
     - "respondent_name": |
-        % if opposing_label == 'respondent' or opposing_label == 'defendant':
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ other_parties[0].name.full(middle='full') }
         % else:
         ${ users[0].name.full(middle='full') }

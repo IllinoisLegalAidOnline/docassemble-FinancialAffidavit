@@ -91,12 +91,6 @@ code: |
   if employment.there_are_any == True:
     employment.gather()
 
-  if taxes_filed == True:
-    taxes_filed_status
-    taxes[0].federal_tax
-  if taxes_filed_two_years == True:
-    taxes[1].federal_tax
-
   monthly_income_intro
   users[0].regular_pay_question
   users[0].pension_question
@@ -104,6 +98,13 @@ code: |
   users[0].social_retirement_question
   users[0].maintenance_current_question
   users[0].gifts_money_question
+
+  if taxes_filed == True:
+    taxes_filed_status
+    taxes[0].federal_tax
+  if taxes_filed_two_years == True:
+    taxes[1].federal_tax
+
   income_summary
 
   set_progress(50)
@@ -225,7 +226,7 @@ subquestion: |
 
   This program helps you make forms that provide financial information and documents to the other party in family law cases.
   
-    If you are in a court case for divorce, child support, or temporary maintenance, you and the other person will probably have to share infomration about your income, property, and expenses. 
+    If you are in a court case for divorce, child support, or temporary maintenance, you and the other person will probably have to share information about your income, property, and expenses. 
 
 ---
 id: how to use
@@ -241,7 +242,7 @@ subquestion: |
   * Your debts and liabilities
   * Your assets, such as bank accounts, real estate, vehicles, and retirement benefits
 
-  It could take 30 minutes to 60 minutes to finish this program. You can log in and save your work to return to later. 
+  It could take 30 to 60 minutes to finish this program. You can log in and save your work to continue later. 
  
   ${ collapse_template(help_example) }  
 
@@ -395,9 +396,9 @@ fields:
 ############### ABOUT YOU ###############
 id: hide contact 
 question: |
-  Are your address and phone number protected by court order because of domestic violence or abuse?
+  Do you want to keep your address and phone number hidden?
 subquestion: |
-  If your contact information does not appear on other court papers because you have a protective order, you do not have to list them on your *Financial Affidavit*. 
+  If your contact information does not appear on other court papers because you are concerned for your safety or have a protective order, you do not have to list them on your *Financial Affidavit*. 
 
   Click **No** to list your address and phone number on your *Financial Affidavit*.
 fields:
@@ -748,6 +749,8 @@ subquestion: |
   * Benefits income
   * Maintenance and support
   * Gifts and other income
+
+  After asking about monthly income from all sources, there will be questions about income taxes for the last two years.
   
 ---
 id: monthly employment income 
@@ -2280,7 +2283,7 @@ question: |
 subquestion: |
   These include stocks, bonds, options, and Employee Stock Ownership Plans (ESOP).
 
-  **Note:** These do not include investement/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency.
+  **Note:** Investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency can be entered on another screen.
 fields:
   - no label: has_investments
     datatype: yesnoradio
@@ -2292,7 +2295,7 @@ subquestion: |
   So far you have told us about:
   ${ investments_table }
 
-  Reminder: These do not include investement/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency.
+  Reminder: Investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency can be entered on another screen.
 fields:
   - Add another?: investments.there_is_another
     datatype: yesnoradio
@@ -2983,7 +2986,7 @@ question: |
 subquestion: |
   Your form is ready. View and download your form below. Click **Make changes** to fix any mistakes.
 
-  This program does not deliver your *Financial Affidavit* to other party in your case. You will need to do that yourself.
+  This program does not deliver your *Financial Affidavit* to the other party in your case. You will need to do that yourself.
   
   ${ action_button_html(url_action('review_answers'), label=':edit: Make changes', color='success', size="md") }
 
@@ -2993,7 +2996,7 @@ subquestion: |
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
 
-  **Note:** This program does not deliver your *Financial Affidavit* to other party in your case. You will need to do that yourself.
+  **Note:** This program does not deliver your *Financial Affidavit* to the other party in your case. You will need to do that yourself.
   
   Thank you for using ILAO Easy Forms!
 under: |
@@ -3057,7 +3060,7 @@ attachment:
           ${ other_parties[0].name.full(middle='full') }
           % endif
       - "respondent_name": |
-          % if opposing_label == 'respondent' or opposing_label == 'defendant':
+          % if party_label == 'petitioner' or party_label == 'plaintiff':
           ${ other_parties[0].name.full(middle='full') }
           % else:
           ${ users[0].name.full(middle='full') }
@@ -3214,7 +3217,7 @@ attachment:
             ${ employment[0].other_perks }
             % endif
           % endif
-      - "employment_addendum_yes": ${ employment.number_gathered() > 1 }
+      - "employment_addendum_yes": ${ True if employment.there_are_any and employment.number_gathered() > 1 else False }
 
       ## Page 3:  Gross income/taxes from last year, monthly gross income sources
       - "married_joint_yes": |
@@ -3633,7 +3636,7 @@ attachment:
           ${ users[0].living_other_description }
           % endif
       - "subtotal_living": |
-          ${ thousands(subtotal_monthly_household_expenses, show_decimals=True)}
+          ${ thousands((subtotal_monthly_household_expenses + subtotal_monthly_utility_expenses + subtotal_monthly_living_expenses), show_decimals=True)}
       - "transport_payment": |
           % if users[0].transport_payment_question:
           ${ thousands(users[0].transport_payment, show_decimals=True)}
@@ -4632,7 +4635,7 @@ attachment:
           % endif
       - "retirement_type_1": |
           % if has_retirement_plan:
-          ${ retirement_plan[0].name.text }
+          ${ retirement_plan[0].type }
           % endif
       - "retirement_balance_1": |
           % if has_retirement_plan:
@@ -4644,7 +4647,7 @@ attachment:
           % endif
       - "retirement_type_2": |
           % if retirement_plan.number_gathered() >= 2:
-          ${ retirement_plan[1].name.text }
+          ${ retirement_plan[1].type }
           % endif
       - "retirement_balance_2": |
           % if retirement_plan.number_gathered() >= 2:
@@ -4656,7 +4659,7 @@ attachment:
           % endif
       - "retirement_type_3": |
           % if retirement_plan.number_gathered() >= 3:
-          ${ retirement_plan[2].name.text }
+          ${ retirement_plan[2].type }
           % endif
       - "retirement_balance_3": |
           % if retirement_plan.number_gathered() >= 3:
@@ -4938,7 +4941,7 @@ attachment:
           ${ other_parties[0].name.full(middle='full') }
           % endif
       - "respondent_name": |
-          % if opposing_label == 'respondent' or opposing_label == 'defendant':
+          % if party_label == 'petitioner' or party_label == 'plaintiff':
           ${ other_parties[0].name.full(middle='full') }
           % else:
           ${ users[0].name.full(middle='full') }
@@ -5087,7 +5090,7 @@ attachment:
           ${ other_parties[0].name.full(middle='full') }
           % endif
       - "respondent_name": |
-          % if opposing_label == 'respondent' or opposing_label == 'defendant':
+          % if party_label == 'petitioner' or party_label == 'plaintiff':
           ${ other_parties[0].name.full(middle='full') }
           % else:
           ${ users[0].name.full(middle='full') }
