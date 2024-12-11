@@ -3041,6 +3041,10 @@ attachment:
     variable name: instructions[i]
     filename: instructions
     pdf template file: instructions.pdf
+    skip undefined: True
+    editable: False
+    fields:
+      - "fake": ${ "" }
 ---
 attachment:
   - name: fa_primary
