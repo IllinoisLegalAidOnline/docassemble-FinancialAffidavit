@@ -4086,703 +4086,711 @@ attachment:
       - "insurance_addendum_yes": ${ insurance.number_gathered() > 1 }
       # 14 Debts
       - "creditor_name_1": |
-          % if has_debts:
+          % if has_debts and debts.number_gathered() > 0:
           ${ debts[0].name.text }
           % endif
       - "creditor_description_1": |
-          % if has_debts:
+          % if has_debts and debts.number_gathered() > 0:
           ${ debts[0].description }
           % endif
       - "creditor_amount_1": |
-          % if has_debts:
+          % if has_debts and debts.number_gathered() > 0:
           ${ thousands(debts[0].amount, show_decimals=True)}
           % endif
       - "creditor_payment_1": |
-          % if has_debts:
+          % if has_debts and debts.number_gathered() > 0:
           ${ thousands(debts[0].payment, show_decimals=True)}
           % endif
       - "creditor_name_2": |
-          % if debts.number_gathered() >= 2:
+          % if has_debts and debts.number_gathered() >= 2:
           ${ debts[1].name.text }
           % endif
       - "creditor_description_2": |
-          % if debts.number_gathered() >= 2:
+          % if has_debts and debts.number_gathered() >= 2:
           ${ debts[1].description }
           % endif
       - "creditor_amount_2": |
-          % if debts.number_gathered() >= 2:
+          % if has_debts and debts.number_gathered() >= 2:
           ${ thousands(debts[1].amount, show_decimals=True)}
           % endif
       - "creditor_payment_2": |
-          % if debts.number_gathered() >= 2:
+          % if has_debts and debts.number_gathered() >= 2:
           ${ thousands(debts[1].payment, show_decimals=True)}
           % endif
       - "creditor_name_3": |
-          % if debts.number_gathered() >= 3:
+          % if has_debts and debts.number_gathered() >= 3:
           ${ debts[2].name.text }
           % endif
       - "creditor_description_3": |
-          % if debts.number_gathered() >= 3:
+          % if has_debts and debts.number_gathered() >= 3:
           ${ debts[2].description }
           % endif
       - "creditor_amount_3": |
-          % if debts.number_gathered() >= 3:
+          % if has_debts and debts.number_gathered() >= 3:
           ${ thousands(debts[2].amount, show_decimals=True)}
           % endif
       - "creditor_payment_3": |
-          % if debts.number_gathered() >= 3:
+          % if has_debts and debts.number_gathered() >= 3:
           ${ thousands(debts[2].payment, show_decimals=True)}
           % endif
       - "creditor_name_4": |
-          % if debts.number_gathered() >= 4:
+          % if has_debts and debts.number_gathered() >= 4:
           ${ debts[3].name.text }
           % endif
       - "creditor_description_4": |
-          % if debts.number_gathered() >= 4:
+          % if has_debts and debts.number_gathered() >= 4:
           ${ debts[3].description }
           % endif
       - "creditor_amount_4": |
-          % if debts.number_gathered() >= 4:
+          % if has_debts and debts.number_gathered() >= 4:
           ${ thousands(debts[3].amount, show_decimals=True) }
           % endif
       - "creditor_payment_4": |
-          % if debts.number_gathered() >= 4:
+          % if has_debts and debts.number_gathered() >= 4:
           ${ thousands(debts[3].payment, show_decimals=True) }
           % endif
       - "creditor_name_5": |
-          % if debts.number_gathered() >= 5:
+          % if has_debts and debts.number_gathered() >= 5:
           ${ debts[4].name.text }
           % endif
       - "creditor_description_5": |
-          % if debts.number_gathered() >= 5:
+          % if has_debts and debts.number_gathered() >= 5:
           ${ debts[4].description }
           % endif
       - "creditor_amount_5": |
-          % if debts.number_gathered() >= 5:
+          % if has_debts and debts.number_gathered() >= 5:
           ${ thousands(debts[4].amount, show_decimals=True) }
           % endif
       - "creditor_payment_5": |
-          % if debts.number_gathered() >= 5:
+          % if has_debts and debts.number_gathered() >= 5:
           ${ thousands(debts[4].payment, show_decimals=True) }
           % endif
       - "creditor_name_6": |
-          % if debts.number_gathered() >= 6:
+          % if has_debts and debts.number_gathered() >= 6:
           ${ debts[5].name.text }
           % endif
       - "creditor_description_6": |
-          % if debts.number_gathered() >= 6:
+          % if has_debts and debts.number_gathered() >= 6:
           ${ debts[5].description }
           % endif
       - "creditor_amount_6": |
-          % if debts.number_gathered() >= 6:
+          % if has_debts and debts.number_gathered() >= 6:
           ${ thousands(debts[5].amount, show_decimals=True) }
           % endif
       - "creditor_payment_6": |
-          % if debts.number_gathered() >= 6:
+          % if has_debts and debts.number_gathered() >= 6:
           ${ thousands(debts[5].payment, show_decimals=True) }
           % endif
-      - "creditor_addendum_yes": ${ debts.number_gathered() > 6 }
+      - "creditor_addendum_yes": ${ has_debts and debts.number_gathered() > 6 }
       - "total_aditional_debts": |
           % if has_debts and debts.number_gathered() >= 7:
           ${ thousands(sum(y.payment for y in debts[6:]), show_decimals=True) }
           % endif
       - "total_debt_payments": |
-          % if has_debts:
+          % if has_debts and debts.number_gathered() > 0:
           ${ thousands(sum(y.payment for y in debts), show_decimals=True) }
           % endif
       # 15 Assets - Cash/bank accounts
       - "cash_bank_name_1": |
           % if has_cash_assets:
+          % if cash.number_gathered() > 0:
           ${ cash[0].name.text }
+          % endif
           % endif
       - "cash_account_name_1": |
           % if has_cash_assets:
+          % if cash.number_gathered() > 0:
           ${ cash[0].account }
+          % endif
           % endif
       - "cash_account_type_1": |
           % if has_cash_assets:
+          % if cash.number_gathered() > 0:
           ${ cash[0].type }
+          % endif
           % endif
       - "cash_balance_1": |
           % if has_cash_assets:
+          % if cash.number_gathered() > 0:
           ${ thousands(cash[0].balance, show_decimals=True) }
           % endif
+          % endif
       - "cash_bank_name_2": |
-          % if cash.number_gathered() >= 2:
+          % if has_cash_assets and cash.number_gathered() >= 2:
           ${ cash[1].name.text }
           % endif
       - "cash_account_name_2": |
-          % if cash.number_gathered() >= 2:
+          % if has_cash_assets and cash.number_gathered() >= 2:
           ${ cash[1].account }
           % endif
       - "cash_account_type_2": |
-          % if cash.number_gathered() >= 2:
+          % if has_cash_assets and cash.number_gathered() >= 2:
           ${ cash[1].type }
           % endif
       - "cash_balance_2": |
-          % if cash.number_gathered() >= 2:
+          % if has_cash_assets and cash.number_gathered() >= 2:
           ${ thousands(cash[1].balance, show_decimals=True) }
           % endif
       - "cash_bank_name_3": |
-          % if cash.number_gathered() >= 3:
+          % if has_cash_assets and cash.number_gathered() >= 3:
           ${ cash[2].name.text }
           % endif
       - "cash_account_name_3": |
-          % if cash.number_gathered() >= 3:
+          % if has_cash_assets and cash.number_gathered() >= 3:
           ${ cash[2].account }
           % endif
       - "cash_account_type_3": |
-          % if cash.number_gathered() >= 3:
+          % if has_cash_assets and cash.number_gathered() >= 3:
           ${ cash[2].type }
           % endif
       - "cash_balance_3": |
-          % if cash.number_gathered() >= 3:
+          % if has_cash_assets and cash.number_gathered() >= 3:
           ${ thousands(cash[2].balance, show_decimals=True) }
           % endif
-      - "cash_addendum_yes": ${ cash.number_gathered() > 3 }
+      - "cash_addendum_yes": ${ has_cash_assets and cash.number_gathered() > 3 }
       # 15 Assets - Certificate of Deposit
       - "cd_bank_name_1": |
-          % if has_cert_deposit:
+          % if has_cert_deposit and cert_deposit.number_gathered() > 0:
           ${ cert_deposit[0].name.text }
           % endif
       - "cd_account_name_1": |
-          % if has_cert_deposit:
+          % if has_cert_deposit and cert_deposit.number_gathered() > 0:
           ${ cert_deposit[0].account }
           % endif
       - "cd_balance_1": |
-          % if has_cert_deposit:
+          % if has_cert_deposit and cert_deposit.number_gathered() > 0:
           ${ thousands(cert_deposit[0].balance, show_decimals=True) }
           % endif
       - "cd_bank_name_2": |
-          % if cert_deposit.number_gathered() >= 2:
+          % if has_cert_deposit and cert_deposit.number_gathered() >= 2:
           ${ cert_deposit[1].name.text }
           % endif
       - "cd_account_name_2": |
-          % if cert_deposit.number_gathered() >= 2:
+          % if has_cert_deposit and cert_deposit.number_gathered() >= 2:
           ${ cert_deposit[1].account }
           % endif
       - "cd_balance_2": |
-          % if cert_deposit.number_gathered() >= 2:
+          % if has_cert_deposit and cert_deposit.number_gathered() >= 2:
           ${ thousands(cert_deposit[1].balance, show_decimals=True) }
           % endif
       - "cd_bank_name_3": |
-          % if cert_deposit.number_gathered() >= 3:
+          % if has_cert_deposit and cert_deposit.number_gathered() >= 3:
           ${ cert_deposit[2].name.text }
           % endif
       - "cd_account_name_3": |
-          % if cert_deposit.number_gathered() >= 3:
+          % if has_cert_deposit and cert_deposit.number_gathered() >= 3:
           ${ cert_deposit[2].account }
           % endif
       - "cd_balance_3": |
-          % if cert_deposit.number_gathered() >= 3:
+          % if has_cert_deposit and cert_deposit.number_gathered() >= 3:
           ${ thousands(cert_deposit[2].balance, show_decimals=True) }
           % endif
-      - "cd_addendum_yes": ${ cert_deposit.number_gathered() > 3 }
+      - "cd_addendum_yes": ${ has_cert_deposit and cert_deposit.number_gathered() > 3 }
       # 15 Assets - Money cash/card/apps
       - "money_card_1": |
-          % if has_money:
+          % if has_money and money.number_gathered() > 0:
           ${ money[0].name.text }
           % endif
       - "money_holder_1": |
-          % if has_money:
+          % if has_money and money.number_gathered() > 0:
           ${ money[0].holder }
           % endif
       - "money_balance_1": |
-          % if has_money:
+          % if has_money and money.number_gathered() > 0:
           ${ thousands(money[0].balance, show_decimals=True) }
           % endif
       - "money_card_2": |
-          % if money.number_gathered() >= 2:
+          % if has_money and money.number_gathered() >= 2:
           ${ money[1].name.text }
           % endif
       - "money_holder_2": |
-          % if money.number_gathered() >= 2:
+          % if has_money and money.number_gathered() >= 2:
           ${ money[1].holder }
           % endif
       - "money_balance_2": |
-          % if money.number_gathered() >= 2:
+          % if has_money and money.number_gathered() >= 2:
           ${ thousands(money[1].balance, show_decimals=True) }
           % endif
       - "money_card_3": |
-          % if money.number_gathered() >= 3:
+          % if has_money and money.number_gathered() >= 3:
           ${ money[2].name.text }
           % endif
       - "money_holder_3": |
-          % if money.number_gathered() >= 3:
+          % if has_money and money.number_gathered() >= 3:
           ${ money[2].holder }
           % endif
       - "money_balance_3": |
-          % if money.number_gathered() >= 3:
+          % if has_money and money.number_gathered() >= 3:
           ${ thousands(money[2].balance, show_decimals=True) }
           % endif
-      - "money_addendum_yes": ${ money.number_gathered() > 3 }
+      - "money_addendum_yes": ${ has_money and money.number_gathered() > 3 }
       # 15 Assets - Investments
       - "investment_name_1": |
-          % if has_investments:
+          % if has_investments and investments.number_gathered() > 0:
           ${ investments[0].name.text }
           % endif
       - "investment_shares_1": |
-          % if has_investments:
+          % if has_investments and investments.number_gathered() > 0:
           ${ investments[0].shares }
           % endif
       - "investment_type_1": |
-          % if has_investments:
+          % if has_investments and investments.number_gathered() > 0:
           ${ investments[0].type }
           % endif
       - "investment_owner_1": |
-          % if has_investments:
+          % if has_investments and investments.number_gathered() > 0:
           ${ investments[0].owner }
           % endif
       - "investment_fmv_1": |
-          % if has_investments:
+          % if has_investments and investments.number_gathered() > 0:
           ${ thousands(investments[0].fmv, show_decimals=True) }
           % endif
       - "investment_name_2": |
-          % if investments.number_gathered() >= 2:
+          % if has_investments and investments.number_gathered() >= 2:
           ${ investments[1].name.text }
           % endif
       - "investment_shares_2": |
-          % if investments.number_gathered() >= 2:
+          % if has_investments and investments.number_gathered() >= 2:
           ${ investments[1].shares }
           % endif
       - "investment_type_2": |
-          % if investments.number_gathered() >= 2:
+          % if has_investments and investments.number_gathered() >= 2:
           ${ investments[1].type }
           % endif
       - "investment_owner_2": |
-          % if investments.number_gathered() >= 2:
+          % if has_investments and investments.number_gathered() >= 2:
           ${ investments[1].owner }
           % endif
       - "investment_fmv_2": |
-          % if investments.number_gathered() >= 2:
+          % if has_investments and investments.number_gathered() >= 2:
           ${ thousands(investments[1].fmv, show_decimals=True) }
           % endif
       - "investment_name_3": |
-          % if investments.number_gathered() >= 2:
+          % if has_investments and investments.number_gathered() >= 2:
           ${ investments[2].name.text }
           % endif
       - "investment_shares_3": |
-          % if investments.number_gathered() >= 2:
+          % if has_investments and investments.number_gathered() >= 2:
           ${ investments[2].shares }
           % endif
       - "investment_type_3": |
-          % if investments.number_gathered() >= 2:
+          % if has_investments and investments.number_gathered() >= 2:
           ${ investments[2].type }
           % endif
       - "investment_owner_3": |
-          % if investments.number_gathered() >= 2:
+          % if has_investments and investments.number_gathered() >= 2:
           ${ investments[2].owner }
           % endif
       - "investment_fmv_3": |
-          % if investments.number_gathered() >= 3:
+          % if has_investments and investments.number_gathered() >= 3:
           ${ thousands(investments[2].fmv, show_decimals=True) }
           % endif
-      - "investment_addendum_yes": ${ investments.number_gathered() > 3 }
+      - "investment_addendum_yes": ${ has_investments and investments.number_gathered() > 3 }
       # 15 Assets - Other Investments
       - "other_investments_description_1": |
-          % if has_other_investments:
+          % if has_other_investments and other_investments.number_gathered() > 0:
           ${ other_investments[0].name.text }
           % endif
       - "other_investments_owner_1": |
-          % if has_other_investments:
+          % if has_other_investments and other_investments.number_gathered() > 0:
           ${ other_investments[0].owner }
           % endif
       - "other_investments_balance_1": |
-          % if has_other_investments:
+          % if has_other_investments and other_investments.number_gathered() > 0:
           ${ thousands(other_investments[0].balance, show_decimals=True) }
           % endif
       - "other_investments_description_2": |
-          % if other_investments.number_gathered() >= 2:
+          % if has_other_investments and other_investments.number_gathered() >= 2:
           ${ other_investments[1].name.text }
           % endif
       - "other_investments_owner_2": |
-          % if other_investments.number_gathered() >= 2:
+          % if has_other_investments and other_investments.number_gathered() >= 2:
           ${ other_investments[1].owner }
           % endif
       - "other_investments_balance_2": |
-          % if other_investments.number_gathered() >= 2:
+          % if has_other_investments and other_investments.number_gathered() >= 2:
           ${ thousands(other_investments[1].balance, show_decimals=True) }
           % endif
       - "other_investments_description_3": |
-          % if other_investments.number_gathered() >= 3:
+          % if has_other_investments and other_investments.number_gathered() >= 3:
           ${ other_investments[2].name.text }
           % endif
       - "other_investments_owner_3": |
-          % if other_investments.number_gathered() >= 3:
+          % if has_other_investments and other_investments.number_gathered() >= 3:
           ${ other_investments[2].owner }
           % endif
       - "other_investments_balance_3": |
-          % if other_investments.number_gathered() >= 3:
+          % if has_other_investments and other_investments.number_gathered() >= 3:
           ${ thousands(other_investments[2].balance, show_decimals=True) }
           % endif
-      - "other_investments_addendum_yes": ${ other_investments.number_gathered() > 3 }
+      - "other_investments_addendum_yes": ${ has_other_investments and other_investments.number_gathered() > 3 }
       # 15 Assets - Real Estate
       - "real_estate_address_1": |
-          % if has_real_estate:
+          % if has_real_estate and real_estate.number_gathered() > 0:
           ${ real_estate[0].address.on_one_line(bare=True) }
           % endif
       - "real_estate_title_1": |
-          % if has_real_estate:
+          % if has_real_estate and real_estate.number_gathered() > 0:
           ${ real_estate[0].name.text }
           % endif
       - "real_estate_fmv_1": |
-          % if has_real_estate:
+          % if has_real_estate and real_estate.number_gathered() > 0:
           ${ thousands(real_estate[0].fmv, show_decimals=True) }
           % endif
       - "real_estate_balance_1": |
-          % if has_real_estate:
+          % if has_real_estate and real_estate.number_gathered() > 0:
           ${ thousands(real_estate[0].balance, show_decimals=True) }
           % endif
       - "real_estate_address_2": |
-          % if real_estate.number_gathered() >= 2:
+          % if has_real_estate and real_estate.number_gathered() >= 2:
           ${ real_estate[1].address.on_one_line(bare=True) }
           % endif
       - "real_estate_title_2": |
-          % if real_estate.number_gathered() >= 2:
+          % if has_real_estate and real_estate.number_gathered() >= 2:
           ${ real_estate[1].name.text }
           % endif
       - "real_estate_fmv_2": |
-          % if real_estate.number_gathered() >= 2:
+          % if has_real_estate and real_estate.number_gathered() >= 2:
           ${ thousands(real_estate[1].fmv, show_decimals=True) }
           % endif
       - "real_estate_balance_2": |
-          % if real_estate.number_gathered() >= 2:
+          % if has_real_estate and real_estate.number_gathered() >= 2:
           ${ thousands(real_estate[1].balance, show_decimals=True) }
           % endif
       - "real_estate_address_3": |
-          % if real_estate.number_gathered() >= 3:
+          % if has_real_estate and real_estate.number_gathered() >= 3:
           ${ real_estate[2].address.on_one_line(bare=True) }
           % endif
       - "real_estate_title_3": |
-          % if real_estate.number_gathered() >= 3:
+          % if has_real_estate and real_estate.number_gathered() >= 3:
           ${ real_estate[2].name.text }
           % endif
       - "real_estate_fmv_3": |
-          % if real_estate.number_gathered() >= 3:
+          % if has_real_estate and real_estate.number_gathered() >= 3:
           ${ thousands(real_estate[2].fmv, show_decimals=True) }
           % endif
       - "real_estate_balance_3": |
-          % if real_estate.number_gathered() >= 3:
+          % if has_real_estate and real_estate.number_gathered() >= 3:
           ${ thousands(real_estate[2].balance, show_decimals=True) }
           % endif
-      - "real_estate_addendum_yes": ${ real_estate.number_gathered() > 3 }
+      - "real_estate_addendum_yes": ${ has_real_estate and real_estate.number_gathered() > 3 }
       # 15 Assets - Motor Vehicles
       - "motor_vehicle_info_1": |
-          % if has_motor_vehicle:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() > 0:
           ${ motor_vehicle[0].year } ${ motor_vehicle[0].make } ${ motor_vehicle[0].model }
           % endif
       - "motor_vehicle_title_1": |
-          % if has_motor_vehicle:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() > 0:
           ${ motor_vehicle[0].name.text }
           % endif
       - "motor_vehicle_fmv_1": |
-          % if has_motor_vehicle:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() > 0:
           ${ thousands(motor_vehicle[0].fmv, show_decimals=True) }
           % endif
       - "motor_vehicle_balance_1": |
-          % if has_motor_vehicle:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() > 0:
           ${ thousands(motor_vehicle[0].balance, show_decimals=True) }
           % endif
       - "motor_vehicle_info_2": |
-          % if motor_vehicle.number_gathered() >= 2:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 2:
           ${ motor_vehicle[1].year } ${ motor_vehicle[1].make } ${ motor_vehicle[1].model }
           % endif
       - "motor_vehicle_title_2": |
-          % if motor_vehicle.number_gathered() >= 2:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 2:
           ${ motor_vehicle[1].name.text }
           % endif
       - "motor_vehicle_fmv_2": |
-          % if motor_vehicle.number_gathered() >= 2:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 2:
           ${ thousands(motor_vehicle[1].fmv, show_decimals=True) }
           % endif
       - "motor_vehicle_balance_2": |
-          % if motor_vehicle.number_gathered() >= 2:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 2:
           ${ thousands(motor_vehicle[1].balance, show_decimals=True) }
           % endif
       - "motor_vehicle_info_3": |
-          % if motor_vehicle.number_gathered() >= 3:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 3:
           ${ motor_vehicle[2].year } ${ motor_vehicle[2].make } ${ motor_vehicle[2].model }
           % endif
       - "motor_vehicle_title_3": |
-          % if motor_vehicle.number_gathered() >= 3:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 3:
           ${ motor_vehicle[2].name.text }
           % endif
       - "motor_vehicle_fmv_3": |
-          % if motor_vehicle.number_gathered() >= 3:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 3:
           ${ thousands(motor_vehicle[2].fmv, show_decimals=True) }
           % endif
       - "motor_vehicle_balance_3": |
-          % if motor_vehicle.number_gathered() >= 3:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 3:
           ${ thousands(motor_vehicle[2].balance, show_decimals=True) }
           % endif
       - "motor_vehicle_info_4": |
-          % if motor_vehicle.number_gathered() >= 4:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
           ${ motor_vehicle[3].year } ${ motor_vehicle[3].make } ${ motor_vehicle[3].model }
           % endif
       - "motor_vehicle_title_4": |
-          % if motor_vehicle.number_gathered() >= 4:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
           ${ motor_vehicle[3].name.text }
           % endif
       - "motor_vehicle_fmv_4": |
-          % if motor_vehicle.number_gathered() >= 4:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
           ${ thousands(motor_vehicle[3].fmv, show_decimals=True) }
           % endif
       - "motor_vehicle_balance_4": |
-          % if motor_vehicle.number_gathered() >= 4:
+          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
           ${ thousands(motor_vehicle[3].balance, show_decimals=True) }
           % endif
-      - "motor_vehicle_addendum_yes": ${ motor_vehicle.number_gathered() > 4 }
+      - "motor_vehicle_addendum_yes": ${ has_motor_vehicle and motor_vehicle.number_gathered() > 4 }
       # 15 Assets - Business interests
       - "business_interests_name_1": |
-          % if has_business_interests:
+          % if has_business_interests and business_interests.number_gathered() > 0:
           ${ business_interests[0].name.text }
           % endif
       - "business_interests_type_1": |
-          % if has_business_interests:
+          % if has_business_interests and business_interests.number_gathered() > 0:
           ${ business_interests[0].type }
           % endif
       - "business_interests_ownership_1": |
-          % if has_business_interests:
+          % if has_business_interests and business_interests.number_gathered() > 0:
           ${ nice_number(business_interests[0].ownership, use_word=False) }%
           % endif
       - "business_interests_fmv_1": |
-          % if has_business_interests:
+          % if has_business_interests and business_interests.number_gathered() > 0:
           ${ thousands(business_interests[0].fmv, show_decimals=True) }
           % endif
       - "business_interests_name_2": |
-          % if business_interests.number_gathered() >= 2:
+          % if has_business_interests and business_interests.number_gathered() >= 2:
           ${ business_interests[1].name.text }
           % endif
       - "business_interests_type_2": |
-          % if business_interests.number_gathered() >= 2:
+          % if has_business_interests and business_interests.number_gathered() >= 2:
           ${ business_interests[1].type }
           % endif
       - "business_interests_ownership_2": |
-          % if business_interests.number_gathered() >= 2:
+          % if has_business_interests and business_interests.number_gathered() >= 2:
           ${ nice_number(business_interests[1].ownership, use_word=False) }%
           % endif
       - "business_interests_fmv_2": |
-          % if business_interests.number_gathered() >= 2:
+          % if has_business_interests and business_interests.number_gathered() >= 2:
           ${ thousands(business_interests[1].fmv, show_decimals=True) }
           % endif
       - "business_interests_name_3": |
-          % if business_interests.number_gathered() >= 3:
+          % if has_business_interests and business_interests.number_gathered() >= 3:
           ${ business_interests[2].name.text }
           % endif
       - "business_interests_type_3": |
-          % if business_interests.number_gathered() >= 3:
+          % if has_business_interests and business_interests.number_gathered() >= 3:
           ${ business_interests[2].type }
           % endif
       - "business_interests_ownership_3": |
-          % if business_interests.number_gathered() >= 3:
+          % if has_business_interests and business_interests.number_gathered() >= 3:
           ${ nice_number(business_interests[2].ownership, use_word=False) }%
           % endif
       - "business_interests_fmv_3": |
-          % if business_interests.number_gathered() >= 3:
+          % if has_business_interests and business_interests.number_gathered() >= 3:
           ${ thousands(business_interests[2].fmv, show_decimals=True) }
           % endif
-      - "business_interests_addendum_yes": ${ business_interests.number_gathered() > 3 }
+      - "business_interests_addendum_yes": ${ has_business_interests and business_interests.number_gathered() > 3 }
       # 15 Assets - Life insurance
       - "life_insurance_company_1": |
-          % if has_life_insurance:
+          % if has_life_insurance and life_insurance.number_gathered() > 0:
           ${ life_insurance[0].name.text }
           % endif
       - "life_insurance_type_1": |
-          % if has_life_insurance:
+          % if has_life_insurance and life_insurance.number_gathered() > 0:
           ${ life_insurance[0].type }
           % endif
       - "life_insurance_benefit_1": |
-          % if has_life_insurance:
+          % if has_life_insurance and life_insurance.number_gathered() > 0:
           ${ thousands(life_insurance[0].benefit, show_decimals=True) }
           % endif
       - "life_insurance_value_1": |
-          % if has_life_insurance:
+          % if has_life_insurance and life_insurance.number_gathered() > 0:
           ${ thousands(life_insurance[0].value, show_decimals=True) }
           % endif
       - "life_insurance_company_2": |
-          % if life_insurance.number_gathered() >= 2:
+          % if has_life_insurance and life_insurance.number_gathered() >= 2:
           ${ life_insurance[1].name.text }
           % endif
       - "life_insurance_type_2": |
-          % if life_insurance.number_gathered() >= 2:
+          % if has_life_insurance and life_insurance.number_gathered() >= 2:
           ${ life_insurance[1].type }
           % endif
       - "life_insurance_benefit_2": |
-          % if life_insurance.number_gathered() >= 2:
+          % if has_life_insurance and life_insurance.number_gathered() >= 2:
           ${ thousands(life_insurance[1].benefit, show_decimals=True) }
           % endif
       - "life_insurance_value_2": |
-          % if life_insurance.number_gathered() >= 2:
+          % if has_life_insurance and life_insurance.number_gathered() >= 2:
           ${ thousands(life_insurance[1].value, show_decimals=True) }
           % endif
       - "life_insurance_company_3": |
-          % if life_insurance.number_gathered() >= 3:
+          % if has_life_insurance and life_insurance.number_gathered() >= 3:
           ${ life_insurance[2].name.text }
           % endif
       - "life_insurance_type_3": |
-          % if life_insurance.number_gathered() >= 3:
+          % if has_life_insurance and life_insurance.number_gathered() >= 3:
           ${ life_insurance[2].type }
           % endif
       - "life_insurance_benefit_3": |
-          % if life_insurance.number_gathered() >= 3:
+          % if has_life_insurance and life_insurance.number_gathered() >= 3:
           ${ thousands(life_insurance[2].benefit, show_decimals=True) }
           % endif
       - "life_insurance_value_3": |
-          % if life_insurance.number_gathered() >= 3:
+          % if has_life_insurance and life_insurance.number_gathered() >= 3:
           ${ thousands(life_insurance[2].value, show_decimals=True) }
           % endif
-      - "life_insurance_addendum_yes": ${ life_insurance.number_gathered() > 3 }
+      - "life_insurance_addendum_yes": ${ has_life_insurance and life_insurance.number_gathered() > 3 }
       # 15 Assets - retirement benefits
       - "retirement_plan_1": |
-          % if has_retirement_plan:
+          % if has_retirement_plan and retirement_plan.number_gathered() > 0:
           ${ retirement_plan[0].name.text }
           % endif
       - "retirement_type_1": |
-          % if has_retirement_plan:
+          % if has_retirement_plan and retirement_plan.number_gathered() > 0:
           ${ retirement_plan[0].type }
           % endif
       - "retirement_balance_1": |
-          % if has_retirement_plan:
+          % if has_retirement_plan and retirement_plan.number_gathered() > 0:
           ${ thousands(retirement_plan[0].balance, show_decimals=True) }
           % endif
       - "retirement_plan_2": |
-          % if retirement_plan.number_gathered() >= 2:
+          % if has_retirement_plan and retirement_plan.number_gathered() >= 2:
           ${ retirement_plan[1].name.text }
           % endif
       - "retirement_type_2": |
-          % if retirement_plan.number_gathered() >= 2:
+          % if has_retirement_plan and retirement_plan.number_gathered() >= 2:
           ${ retirement_plan[1].type }
           % endif
       - "retirement_balance_2": |
-          % if retirement_plan.number_gathered() >= 2:
+          % if has_retirement_plan and retirement_plan.number_gathered() >= 2:
           ${ thousands(retirement_plan[1].balance, show_decimals=True) }
           % endif
       - "retirement_plan_3": |
-          % if retirement_plan.number_gathered() >= 3:
+          % if has_retirement_plan and retirement_plan.number_gathered() >= 3:
           ${ retirement_plan[2].name.text }
           % endif
       - "retirement_type_3": |
-          % if retirement_plan.number_gathered() >= 3:
+          % if has_retirement_plan and retirement_plan.number_gathered() >= 3:
           ${ retirement_plan[2].type }
           % endif
       - "retirement_balance_3": |
-          % if retirement_plan.number_gathered() >= 3:
+          % if has_retirement_plan and retirement_plan.number_gathered() >= 3:
           ${ thousands(retirement_plan[2].balance, show_decimals=True) }
           % endif
-      - "retirement_addendum_yes": ${ retirement_plan.number_gathered() > 3 }
+      - "retirement_addendum_yes": ${ has_retirement_plan and retirement_plan.number_gathered() > 3 }
       # 15 Assets - valuable collectibles
       - "collection_description_1": |
-          % if has_collection:
+          % if has_collection and collection.number_gathered() > 0:
           ${ collection[0].name.text }
           % endif
       - "collection_fmv_1": |
-          % if has_collection:
+          % if has_collection and collection.number_gathered() > 0:
           ${ thousands(collection[0].fmv, show_decimals=True) }
           % endif
       - "collection_description_2": |
-          % if collection.number_gathered() >= 2:
+          % if has_collection and collection.number_gathered() >= 2:
           ${ collection[1].name.text }
           % endif
       - "collection_fmv_2": |
-          % if collection.number_gathered() >= 2:
+          % if has_collection and collection.number_gathered() >= 2:
           ${ thousands(collection[1].fmv, show_decimals=True) }
           % endif
       - "collection_description_3": |
-          % if collection.number_gathered() >= 3:
+          % if has_collection and collection.number_gathered() >= 3:
           ${ collection[2].name.text }
           % endif
       - "collection_fmv_3": |
-          % if collection.number_gathered() >= 3:
+          % if has_collection and collection.number_gathered() >= 3:
           ${ thousands(collection[2].fmv, show_decimals=True) }
           % endif
-      - "collection_addendum_yes": ${ collection.number_gathered() > 3 }
+      - "collection_addendum_yes": ${ has_collection and collection.number_gathered() > 3 }
       # 15 Assets - other personal property
       - "other_property_description_1": |
-          % if has_other_property:
+          % if has_other_property and other_property.number_gathered() > 0:
           ${ other_property[0].name.text }
           % endif
       - "other_property_fmv_1": |
-          % if has_other_property:
+          % if has_other_property and other_property.number_gathered() > 0:
           ${ thousands(other_property[0].fmv, show_decimals=True) }
           % endif
       - "other_property_description_2": |
-          % if other_property.number_gathered() >= 2:
+          % if has_other_property and other_property.number_gathered() >= 2:
           ${ other_property[1].name.text }
           % endif
       - "other_property_fmv_2": |
-          % if other_property.number_gathered() >= 2:
+          % if has_other_property and other_property.number_gathered() >= 2:
           ${ thousands(other_property[1].fmv, show_decimals=True) }
           % endif
       - "other_property_description_3": |
-          % if other_property.number_gathered() >= 3:
+          % if has_other_property and other_property.number_gathered() >= 3:
           ${ other_property[2].name.text }
           % endif
       - "other_property_fmv_3": |
           % if other_property.number_gathered() >= 3:
           ${ thousands(other_property[2].fmv, show_decimals=True) }
           % endif
-      - "other_property_addendum_yes": ${ other_property.number_gathered() > 3 }
+      - "other_property_addendum_yes": ${ has_other_property and other_property.number_gathered() > 3 }
       # 15 Assets - transfer/sale property
       - "transfer_description_1": |
-          % if has_transfer:
+          % if has_transfer and transfer.number_gathered() > 0:
           ${ transfer[0].name.text }
           % endif
       - "transfer_sold_1": |
-          % if has_transfer:
+          % if has_transfer and transfer.number_gathered() > 0:
           ${ transfer[0].sold }
           % endif
       - "transfer_date_1": |
-          % if has_transfer:
+          % if has_transfer and transfer.number_gathered() > 0:
           ${ transfer[0].date.format('MM/dd/yyyy') }
           % endif
       - "transfer_amount_1": |
-          % if has_transfer:
+          % if has_transfer and transfer.number_gathered() > 0:
           ${ thousands(transfer[0].amount, show_decimals=True) }
           % endif
       - "transfer_description_2": |
-          % if transfer.number_gathered() >= 2:
+          % if has_transfer and transfer.number_gathered() >= 2:
           ${ transfer[1].name.text }
           % endif
       - "transfer_sold_2": |
-          % if transfer.number_gathered() >= 2:
+          % if has_transfer and transfer.number_gathered() >= 2:
           ${ transfer[1].sold }
           % endif
       - "transfer_date_2": |
-          % if transfer.number_gathered() >= 2:
+          % if has_transfer and transfer.number_gathered() >= 2:
           ${ transfer[1].date.format('MM/dd/yyyy') }
           % endif
       - "transfer_amount_2": |
-          % if transfer.number_gathered() >= 2:
+          % if has_transfer and transfer.number_gathered() >= 2:
           ${ thousands(transfer[1].amount, show_decimals=True) }
           % endif
       - "transfer_description_3": |
-          % if transfer.number_gathered() >= 3:
+          % if has_transfer and transfer.number_gathered() >= 3:
           ${ transfer[2].name.text }
           % endif
       - "transfer_sold_3": |
-          % if transfer.number_gathered() >= 3:
+          % if has_transfer and transfer.number_gathered() >= 3:
           ${ transfer[2].sold }
           % endif
       - "transfer_date_3": |
-          % if transfer.number_gathered() >= 3:
+          % if has_transfer and transfer.number_gathered() >= 3:
           ${ transfer[2].date.format('MM/dd/yyyy') }
           % endif
       - "transfer_amount_3": |
-          % if transfer.number_gathered() >= 3:
+          % if has_transfer and transfer.number_gathered() >= 3:
           ${ thousands(transfer[2].amount, show_decimals=True) }
           % endif
-      - "transfer_addendum_yes": ${ transfer.number_gathered() > 3 }
+      - "transfer_addendum_yes": ${ has_transfer and transfer.number_gathered() > 3 }
       # 16 Lawsuits and Claims
       - "lawsuit_number_1": |
-          % if has_lawsuits:
+          % if has_lawsuits and lawsuits.number_gathered() > 0:
           ${ lawsuits[0].case }
           % endif
       - "lawsuit_date_1":  |
-          % if has_lawsuits:
+          % if has_lawsuits and lawsuits.number_gathered() > 0:
           ${ lawsuits[0].date.format('MM/dd/yyyy') }
           % endif
       - "lawsuit_amount_1": |
-          % if has_lawsuits:
+          % if has_lawsuits and lawsuits.number_gathered() > 0:
             % if lawsuits[0].judgement:
             ${ thousands(lawsuits[0].amount, show_decimals=True) }
             % else:
@@ -4790,15 +4798,15 @@ attachment:
             % endif
           % endif
       - "lawsuit_number_2": |
-          % if lawsuits.number_gathered() >= 2:
+          % if has_lawsuits and lawsuits.number_gathered() >= 2:
           ${ lawsuits[1].case }
           % endif
       - "lawsuit_date_2":  |
-          % if lawsuits.number_gathered() >= 2:
+          % if has_lawsuits and lawsuits.number_gathered() >= 2:
           ${ lawsuits[1].date.format('MM/dd/yyyy') }
           % endif
       - "lawsuit_amount_2": |
-          % if lawsuits.number_gathered() >= 2:
+          % if has_lawsuits and lawsuits.number_gathered() >= 2:
             % if lawsuits[1].judgement:
             ${ thousands(lawsuits[1].amount, show_decimals=True) }
             % else:
@@ -4806,22 +4814,22 @@ attachment:
             % endif
           % endif
       - "lawsuit_number_3": |
-          % if lawsuits.number_gathered() >= 3:
+          % if has_lawsuits and lawsuits.number_gathered() >= 3:
           ${ lawsuits[2].case }
           % endif
       - "lawsuit_date_3":  |
-          % if lawsuits.number_gathered() >= 3:
+          % if has_lawsuits and lawsuits.number_gathered() >= 3:
           ${ lawsuits[2].date.format('MM/dd/yyyy') }
           % endif
       - "lawsuit_amount_3": |
-          % if lawsuits.number_gathered() >= 3:
+          % if has_lawsuits and lawsuits.number_gathered() >= 3:
             % if lawsuits[2].judgement:
             ${ thousands(lawsuits[2].amount, show_decimals=True) }
             % else:
             unknown
             % endif
           % endif
-      - "lawsuit_addendum_yes":  ${ lawsuits.number_gathered() > 3 }
+      - "lawsuit_addendum_yes":  ${ has_lawsuits and lawsuits.number_gathered() > 3 }
       # 17 Income Tax Refund/Owed Amounts
       - "taxes_year1": |
           % if taxes_filed:

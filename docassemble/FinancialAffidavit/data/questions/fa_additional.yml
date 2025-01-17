@@ -4,7 +4,7 @@ objects:
   - additional_debts: ALDocument.using(title="FA Additional Debts", filename="FA_additional_debts.pdf", has_addendum=False)
 ---
 code: |
-  additional_debts.enabled = debts.number_gathered() >= 7
+  additional_debts.enabled = has_debts and debts.number_gathered() >= 7
 ---
 attachment:
   name: additional_debts
@@ -361,7 +361,7 @@ objects:
   - additional_cash: ALDocument.using(title="FA Additional Cash", filename="FA_additional_cash.pdf", has_addendum=False)
 ---
 code: |
-  additional_cash.enabled = cash.number_gathered() >= 4
+  additional_cash.enabled = has_cash_assets and cash.number_gathered() >= 4
 ---
 attachment:
   name: additional_cash
@@ -745,7 +745,7 @@ objects:
   - additional_cd: ALDocument.using(title="FA Additional CD", filename="FA_additional_cd.pdf", has_addendum=False)
 ---
 code: |
-  additional_cd.enabled = cert_deposit.number_gathered() >= 4
+  additional_cd.enabled = has_cert_deposit and cert_deposit.number_gathered() >= 4
 ---
 attachment:
   name: additional_cd
@@ -1043,7 +1043,7 @@ objects:
   - additional_money: ALDocument.using(title="FA Additional Money Cash Card", filename="FA_additional_money.pdf", has_addendum=False)
 ---
 code: |
-  additional_money.enabled = money.number_gathered() >= 4
+  additional_money.enabled = has_money and money.number_gathered() >= 4
 ---
 attachment:
   name: additional_money
@@ -1339,7 +1339,7 @@ objects:
   - additional_investments: ALDocument.using(title="FA Additional Investments", filename="FA_additional_investments.pdf", has_addendum=False)
 ---
 code: |
-  additional_investments.enabled = investments.number_gathered() >= 4
+  additional_investments.enabled = has_investments and investments.number_gathered() >= 4
 ---
 attachment:
   name: additional_investments
@@ -1811,7 +1811,7 @@ objects:
   - additional_other_investments: ALDocument.using(title="FA Additional Other Investments", filename="FA_additional_other_investments.pdf", has_addendum=False)
 ---
 code: |
-  additional_other_investments.enabled = other_investments.number_gathered() >= 4
+  additional_other_investments.enabled = has_other_investments and other_investments.number_gathered() >= 4
 ---
 attachment:
   name: additional_other_investments
@@ -2108,7 +2108,7 @@ objects:
   - additional_real_estate: ALDocument.using(title="FA Additional Real Estate", filename="FA_additional_real_estate.pdf", has_addendum=False)
 ---
 code: |
-  additional_real_estate.enabled = real_estate.number_gathered() >= 4
+  additional_real_estate.enabled = has_real_estate and real_estate.number_gathered() >= 4
 ---
 attachment:
   name: additional_real_estate
@@ -2492,7 +2492,7 @@ objects:
   - additional_motor_vehicle: ALDocument.using(title="FA Additional Motor Vehicles", filename="FA_additional_motor_vehicles.pdf", has_addendum=False)
 ---
 code: |
-  additional_motor_vehicle.enabled = motor_vehicle.number_gathered() >= 5
+  additional_motor_vehicle.enabled = has_motor_vehicle and motor_vehicle.number_gathered() >= 5
 ---
 attachment:
   name: additional_motor_vehicle
@@ -2863,7 +2863,7 @@ objects:
   - additional_business_interests: ALDocument.using(title="FA Additional Business Interests", filename="FA_additional_business_interests.pdf", has_addendum=False)
 ---
 code: |
-  additional_business_interests.enabled = business_interests.number_gathered() >= 4
+  additional_business_interests.enabled = has_business_interests and business_interests.number_gathered() >= 4
 ---
 attachment:
   name: additional_business_interests
@@ -3249,7 +3249,7 @@ objects:
   - additional_life_insurance: ALDocument.using(title="FA Additional Life Insurance", filename="FA_additional_life_insurance.pdf", has_addendum=False)
 ---
 code: |
-  additional_life_insurance.enabled = life_insurance.number_gathered() >= 4
+  additional_life_insurance.enabled = has_life_insurance and life_insurance.number_gathered() >= 4
 ---
 attachment:
   name: additional_life_insurance
@@ -3635,7 +3635,7 @@ objects:
   - additional_retirement: ALDocument.using(title="FA Additional Retirement", filename="FA_additional_retirement.pdf", has_addendum=False)
 ---
 code: |
-  additional_retirement.enabled = retirement_plan.number_gathered() >= 4
+  additional_retirement.enabled = has_retirement_plan and retirement_plan.number_gathered() >= 4
 ---
 attachment:
   name: additional_retirement
@@ -3933,7 +3933,7 @@ objects:
   - additional_collectibles: ALDocument.using(title="FA Additional Collectibles ", filename="FA_additional_collectibles.pdf", has_addendum=False)
 ---
 code: |
-  additional_collectibles.enabled = collection.number_gathered() >= 4
+  additional_collectibles.enabled = has_collection and collection.number_gathered() >= 4
 ---
 attachment:
   name: additional_collectibles
@@ -4143,7 +4143,7 @@ objects:
   - additional_other_property: ALDocument.using(title="FA Additional Other Property", filename="FA_additional_other_property.pdf", has_addendum=False)
 ---
 code: |
-  additional_other_property.enabled = other_property.number_gathered() >= 4
+  additional_other_property.enabled = has_other_property and other_property.number_gathered() >= 4
 ---
 attachment:
   name: additional_other_property
@@ -4352,7 +4352,7 @@ objects:
   - additional_transfer: ALDocument.using(title="FA Additional Transfer Sold Property", filename="FA_additional_transfer.pdf", has_addendum=False)
 ---
 code: |
-  additional_transfer.enabled = transfer.number_gathered() >= 4
+  additional_transfer.enabled = has_transfer and transfer.number_gathered() >= 4
 ---
 attachment:
   name: additional_transfer
@@ -4736,7 +4736,7 @@ objects:
   - additional_lawsuits: ALDocument.using(title="FA Additional Transfer Sold Property", filename="FA_additional_lawsuits.pdf", has_addendum=False)
 ---
 code: |
-  additional_lawsuits.enabled = lawsuits.number_gathered() >= 4
+  additional_lawsuits.enabled = has_lawsuits and lawsuits.number_gathered() >= 4
 ---
 attachment:
   name: additional_lawsuits
