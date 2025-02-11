@@ -3006,11 +3006,22 @@ under: |
 
   ${ action_button_html(interview_url(i="docassemble.ILAO:feedback.yml", easy_form_interview=ilao_easy_form_url, easy_form_title=ilao_easy_form_title, easy_form_page=user_info().question_id, easy_form_variable=user_info().variable, local=False,reset=1), label=':comment: Was this program helpful?', color="#181c36", size="md", new_window=True) }
 ---
+generic object: ALDocumentBundle
+template: x.send_email_template
+subject: |
+  Financial affidavit forms
+content: |
+  Your forms are attached.
+  
+  Thanks for using ILAO Easy Forms!
+  
+  [Illinois Legal Aid Online](https://www.illinoislegalaid.org)
+---
 objects:
   - al_user_bundle: ALDocumentBundle.using(elements=[instructions, financial_affidavit_bundle], filename="completed_financial_affidavit.pdf", title="All forms", enabled=True)
 ---
 objects:
-  - financial_affidavit_bundle: ALDocumentBundle.using(title="Financial Affidavit", filename="fa_primary.pdf", enabled=True, elements=[
+  - financial_affidavit_bundle: ALDocumentBundle.using(title="Financial Affidavit", filename="financial_affidavit.pdf", enabled=True, elements=[
         fa_primary, 
         additional_employment_bundle,
         additional_health_insurance_bundle,
@@ -3033,7 +3044,7 @@ objects:
 ---
 objects:
   - instructions: ALDocument.using(title="Instructions", filename="instructions.pdf", enabled=True, has_addendum=False)
-  - fa_primary: ALDocument.using(title="Financial Affidavit", filename="fa_primary.pdf", enabled=True, has_addendum=False)
+  - fa_primary: ALDocument.using(title="Financial Affidavit", filename="financial_affidavit.pdf", enabled=True, has_addendum=False)
 ---
 ############ FA PRIMARY DOCUMENT #############
 attachment:
@@ -4366,19 +4377,19 @@ attachment:
           ${ thousands(investments[1].fmv, show_decimals=True) }
           % endif
       - "investment_name_3": |
-          % if has_investments and investments.number_gathered() >= 2:
+          % if has_investments and investments.number_gathered() >= 3:
           ${ investments[2].name.text }
           % endif
       - "investment_shares_3": |
-          % if has_investments and investments.number_gathered() >= 2:
+          % if has_investments and investments.number_gathered() >= 3:
           ${ investments[2].shares }
           % endif
       - "investment_type_3": |
-          % if has_investments and investments.number_gathered() >= 2:
+          % if has_investments and investments.number_gathered() >= 3:
           ${ investments[2].type }
           % endif
       - "investment_owner_3": |
-          % if has_investments and investments.number_gathered() >= 2:
+          % if has_investments and investments.number_gathered() >= 3:
           ${ investments[2].owner }
           % endif
       - "investment_fmv_3": |
