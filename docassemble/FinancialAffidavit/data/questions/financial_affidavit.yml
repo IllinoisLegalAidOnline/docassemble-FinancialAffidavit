@@ -1246,6 +1246,11 @@ fields:
 id: monthly utility expenses
 question: |
   Monthly utility expenses
+subquestion: |
+  **Notes:**
+  
+  * If any of these utilities are bundled together, you can combine them in one category and leave the other one blank.
+  * If you pay on a schedule different than each month (like annually), enter the average monthly amount. 
 fields:
   - Gas: users[0].living_gas_question
     datatype: yesnowide
@@ -1293,6 +1298,11 @@ fields:
 id: monthly living expenses
 question: |
   Monthly living expenses
+subquestion: |
+  **Notes:**
+  
+  * If any of these living expenses are bundled together, you can combine them in one category and leave the other one blank.
+  * If you pay on a schedule different than each month (like annually), enter the average monthly amount.   
 fields:
   - Laundry and dry cleaning: users[0].living_laundry_question
     datatype: yesnowide
@@ -1337,6 +1347,11 @@ fields:
 id: monthly transport expenses
 question: |
   Monthly transportation expenses
+subquestion: |
+  **Notes:**
+  
+  * If any of these transportation expenses are bundled together, you can combine them in one category and leave the other one blank.
+  * If you pay on a schedule different than each month (like annually), enter the average monthly amount.   
 fields:
   - Car payment: users[0].transport_payment_question
     datatype: yesnowide

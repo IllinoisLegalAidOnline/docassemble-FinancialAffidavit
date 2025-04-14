@@ -107,7 +107,6 @@
 id: review screen
 event: review_answers
 section: Final steps
-skip undefined: False
 question: |
   Review screen
 subquestion: |
@@ -115,7 +114,7 @@ subquestion: |
 review: 
 ################ Case info
   - note: |
-      [**-------- Case info --------**](${ url_action('section_case') })
+      <h4>Case info</h4>
   - Edit: users[0].name.first
     button: |
       **Your name:**
@@ -147,9 +146,7 @@ review:
 
 ################ About you  
   - note: |
-      [**-------- About you --------**](${ url_action('section_user') })
-#  - note: |      
-#      **About You**
+      <h4>About you</h4>
   - Edit: hide_contact
     button: |
       **Are your address and phone number protected?**
@@ -179,9 +176,7 @@ review:
 
 ################ Income  
   - note: |
-      [**-------- Income --------**](${ url_action('section_income') })
-#  - note: | 
-#      **Income**
+      <h4>Income</h4>
   - Edit: employment.there_are_any
     button: |
       **Do you have income from employment?**
@@ -229,7 +224,7 @@ review:
       ${ currency(showifdef('users[0].investment'))  if showifdef('users[0].investment_question') else '$0.00' }
   - Edit: users[0].social_retirement_question
     button: |
-      **Monthly Benefits Income**
+      **Monthly benefits income**
 
       * Social Security Retirement: 
       ${ currency(showifdef('users[0].social_retirement')) if showifdef('users[0].social_retirement_question') else '$0.00' }
@@ -374,9 +369,7 @@ review:
   
 ################ Expenses and debts  
   - note: |
-      [**-------- Expenses and debts --------**](${ url_action('section_expenses') })
-#  - note: | 
-#      **Expenses and Debts**
+      <h4>Expenses and debts</h4>
   - Edit: users[0].deductions_federal_question
     button: |
       **Monthly income deductions**
@@ -413,7 +406,7 @@ review:
       ${ currency(showifdef('users[0].child_support_3')) if showifdef('users[0].child_support_3_question') else '$0.00'}
   - Edit: users[0].living_house_payment_question
     button: |
-      **Monthly household living expenses**
+      **Monthly housing expenses**
 
       * Mortgage or rent payment: 
       ${ currency(showifdef('users[0].living_house_payment')) if showifdef('users[0].living_house_payment_question') else '$0.00'}
@@ -656,9 +649,7 @@ review:
     
 ################ Assets
   - note: |
-      [**-------- Assets --------**](${ url_action('section_assets') })
-#  - note: | 
-#      **Assets**
+      <h4>Assets</h4>
   - Edit: has_cash_assets
     button: |
       **Do you have any cash or cash equivalents?**
@@ -830,9 +821,7 @@ review:
 
 ################ Final steps  
   - note: |
-      [**-------- Final steps --------**](${ url_action('section_final') })
-#  - note: | 
-#      **Final Steps**
+      <h4>Final steps</h4>
   
   - Edit: users[0].attached_documents
     button: |
@@ -873,7 +862,7 @@ id: case info review screen
 section: Case info
 event: section_case
 question: |
-  Case info
+  Case information
 subquestion: |
   Edit your answers below.
 review: 
@@ -1001,7 +990,7 @@ review:
       ${ currency(showifdef('users[0].investment'))  if showifdef('users[0].investment_question') else '$0.00' }
   - Edit: users[0].social_retirement_question
     button: |
-      **Monthly Benefits Income**
+      **Monthly benefits income**
 
       * Social Security Retirement: 
       ${ currency(showifdef('users[0].social_retirement')) if showifdef('users[0].social_retirement_question') else '$0.00' }
@@ -1190,7 +1179,7 @@ review:
       ${ currency(showifdef('users[0].child_support_3')) if showifdef('users[0].child_support_3_question') else '$0.00'}
   - Edit: users[0].living_house_payment_question
     button: |
-      **Monthly household living expenses**
+      **Monthly housing expenses**
 
       * Mortgage or rent payment: 
       ${ currency(showifdef('users[0].living_house_payment')) if showifdef('users[0].living_house_payment_question') else '$0.00'}
