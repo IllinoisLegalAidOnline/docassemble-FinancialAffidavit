@@ -20,15 +20,15 @@ attachment:
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % else:
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % endif
     - "respondent_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % else:
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % endif
     - "creditor_name_7": |
         % if debts.number_gathered() >= 7:
@@ -377,15 +377,15 @@ attachment:
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % else:
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % endif
     - "respondent_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % else:
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % endif
     - "cash_bank_name_4": |
         % if cash.number_gathered() >= 4:
@@ -761,15 +761,15 @@ attachment:
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % else:
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % endif
     - "respondent_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % else:
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % endif
     - "cd_bank_name_4": |
         % if cert_deposit.number_gathered() >= 4:
@@ -1059,15 +1059,15 @@ attachment:
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % else:
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % endif
     - "respondent_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % else:
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % endif
     - "money_card_4": |
         % if money.number_gathered() >= 4:
@@ -1355,15 +1355,15 @@ attachment:
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % else:
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % endif
     - "respondent_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % else:
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % endif
     - "investment_name_4": |
         % if investments.number_gathered() >= 4:
@@ -1828,15 +1828,15 @@ attachment:
     - "petitioner_name": |
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % else:
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % endif
     - "respondent_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % else:
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % endif
     - "other_investments_description_4": |
         % if other_investments.number_gathered() >= 4:
@@ -2124,15 +2124,15 @@ attachment:
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % else:
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % endif
     - "respondent_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % else:
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % endif
     - "real_estate_address_4": |
         % if real_estate.number_gathered() >= 4:
@@ -2508,15 +2508,15 @@ attachment:
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % else:
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % endif
     - "respondent_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % else:
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % endif
     - "motor_vehicle_info_4": |
         See Financial Affidavit 15d4
@@ -2879,15 +2879,15 @@ attachment:
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % else:
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % endif
     - "respondent_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % else:
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % endif
     - "business_interests_name_4": |
         % if business_interests.number_gathered() >= 4:
@@ -3265,15 +3265,15 @@ attachment:
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % else:
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % endif
     - "respondent_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % else:
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % endif
     - "life_insurance_company_4": |
         % if life_insurance.number_gathered() >= 4:
@@ -3651,15 +3651,15 @@ attachment:
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % else:
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % endif
     - "respondent_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % else:
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % endif
     - "retirement_plan_4": |
         % if retirement_plan.number_gathered() >= 4:
@@ -3949,15 +3949,15 @@ attachment:
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % else:
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % endif
     - "respondent_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % else:
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % endif
     - "collection_description_4": |
         % if collection.number_gathered() >= 4:
@@ -4159,15 +4159,15 @@ attachment:
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % else:
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % endif
     - "respondent_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % else:
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % endif
     - "other_property_description_4": |
         % if other_property.number_gathered() >= 4:
@@ -4368,15 +4368,15 @@ attachment:
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % else:
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % endif
     - "respondent_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % else:
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % endif
     - "transfer_description_4": |
         % if transfer.number_gathered() >= 4:
@@ -4752,15 +4752,15 @@ attachment:
     - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % else:
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % endif
     - "respondent_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
-        ${ other_parties[0].name.full(middle='full') }
+        ${ other_parties[0].name_full() }
         % else:
-        ${ users[0].name.full(middle='full') }
+        ${ users[0].name_full() }
         % endif
     - "lawsuit_number_4": |
         % if lawsuits.number_gathered() >= 4:

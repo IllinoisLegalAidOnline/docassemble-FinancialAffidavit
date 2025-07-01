@@ -2963,7 +2963,7 @@ id: e-signature
 question: |
   Do you want to add your e-signature to your ${ form_name }?
 subquestion: |
-  This program can put "**/s/ ${users[0].name.full(middle='full')}**" where you would sign your name. The court will accept this as your signature.
+  This program can put "**/s/ ${users[0].name_full()}**" where you would sign your name. The court will accept this as your signature.
 
   If you do not add your **{e-signature}**, you must sign your paper form before you send it to the other party in your case or their lawyer.
 
@@ -3085,15 +3085,15 @@ attachment:
       - "post-judgment": ${ filing_status == "post_judgment" }
       - "petitioner_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % else:
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % endif
       - "respondent_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % else:
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % endif
       - "petitioner_yes": ${ party_label == 'petitioner' or party_label == 'plaintiff' }
       - "respondent_yes": ${ party_label == 'respondent' or party_label == 'defendant' }
@@ -3110,7 +3110,7 @@ attachment:
           % if users[0].attached_documents["other"]:
           ${ comma_and_list(users[0].attachment_assets) }
           % endif
-      - "users_name": ${ users[0].name.full(middle='full') }
+      - "users_name": ${ users[0].name_full() }
       - "users_phone_number": |
           % if not hide_contact:
           ${ phone_number_formatted(users[0].phone_number) }
@@ -4931,7 +4931,7 @@ attachment:
           % endif
 
       - "users_signature": |
-          ${ "/s/ " + users[0].name.full(middle="full") if e_signature else ''  }
+          ${ "/s/ " + users[0].name_full() if e_signature else ''  }
       - "users_signed_date": ${ today().format("MM/dd/yyyy") if e_signature else '' }
 
 ---
@@ -4974,15 +4974,15 @@ attachment:
       - "post-judgment": ${ filing_status == "post_judgment" }
       - "petitioner_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % else:
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % endif
       - "respondent_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % else:
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % endif
 
       - "employed_yes": ${ employment[i].type == 'employed' }
@@ -5123,15 +5123,15 @@ attachment:
       - "post-judgment": ${ filing_status == "post_judgment" }
       - "petitioner_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % else:
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % endif
       - "respondent_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % else:
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % endif
 
       - "health_insurance_yes": ${ insurance.there_are_any }
