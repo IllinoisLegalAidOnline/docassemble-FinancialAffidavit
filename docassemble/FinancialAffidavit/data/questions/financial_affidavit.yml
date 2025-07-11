@@ -38,6 +38,9 @@ objects:
   - lawsuits: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
   - court_list: ALCourtLoader.using(file_name='docassemble.ILAO:data/sources/il_courts.xlsx')
   - preview: DAStaticFile.using(filename="financial_affidavit_preview.pdf")
+  - other_cs_cases: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - other_cs_parents: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - other_cs_kids_in_home: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
 ---
 code: |
   al_form_type = 'existing_case'
@@ -80,11 +83,12 @@ code: |
   filing_status
   set_progress(20)
   nav.set_section('section_user')
-  if hide_contact == False:
-    users[0].address.address
-    users[0].phone_number
+
+  hide_address
+  users[0].address.address
+  users[0].phone_number  
   users[0].birthdate
-  household_expenses
+  #household_expenses
   users_acknowledge
   set_progress(30)
   nav.set_section('section_income')
@@ -113,6 +117,13 @@ code: |
   users[0].deductions_federal_question
   users[0].maintenance_paid_court_question
   users[0].child_support_1_question
+
+  if users[0].child_support_other_cases:
+    other_cs_cases.gather()
+  if users[0].child_support_no_court_order:
+    other_cs_parents.gather()
+  if users[0].child_support_in_home:
+    other_cs_kids_in_home.gather()
   
   users[0].living_house_payment_question
   users[0].living_gas_question
@@ -405,6 +416,15 @@ fields:
   - no label: hide_contact
     datatype: yesnoradio
 ---
+id: hide address
+question: |
+  Do you want to keep your address hidden?
+subquestion: |
+  You do not need to list where you are staying on your court papers if you are worried that sharing your address would put you or your household at risk. You can use a mailing address where you can receive court notices instead.
+fields:
+  - no label: hide_address
+    datatype: yesnoradio
+---
 id: users address
 sets:
   - users[0].address.address
@@ -412,9 +432,17 @@ sets:
   - users[0].address.state
   - users[0].address.zip
 question: |
-  What is your address?
+  % if hide_address:
+  What is your mailing address?
+  % else:
+  What is your home address?
+  % endif
 subquestion: |
-  **This address will appear on your form.** If you do not want this, click **Back** to keep your address hidden.
+  % if hide_address:
+  **This address will appear on your court papers.** You may receive court notices and documents about your case at this address.
+  % else:
+  **This address will appear on your court papers.** If you do not want this, click **Back** to keep your address hidden.
+  % endif
 fields:
   - Street address: users[0].address.address
     address autocomplete: True
@@ -427,15 +455,51 @@ fields:
     default: IL      
   - ZIP code: users[0].address.zip
 ---
-id: user phone
+id: your contact information
 question: |
-  What is your phone number?
+  What is your contact information?
 subquestion: |
-  **This number will appear on your form.** If you do not want this, leave it blank.
-fields:
-  - Phone Number: users[0].phone_number
+  The court or other parties might need to contact you about this case.
+
+  **This information will appear on your court forms.**
+  
+  If you do not want to list a phone number on your forms, leave it blank.
+
+  If you have an email address, you must list it. Be sure to check your email daily, otherwise you may miss important court documents or information about your case.
+
+  ${ collapse_template(contact_info_help) }  
+fields:  
+  - Phone number: users[0].phone_number
     datatype: al_international_phone
     required: False
+  - label: |
+      Do you have an email address?
+    field: users[0].has_email_address      
+    datatype: yesnoradio
+  - note: |
+      This email address will appear on your court forms. Be sure to check 
+      this email daily, otherwise you may miss important information about 
+      your case.
+    show if:
+      variable: users[0].has_email_address
+      is: True
+  - Email address: users[0].email    
+    datatype: email
+    show if: 
+      variable: users[0].has_email_address
+      is: True
+---
+template: contact_info_help
+subject: |
+  **What if I don't want to list my email address?**
+content: |  
+  If you do not want to enter your personal email address, you can create a new email account to get email about your case.
+  
+  To make a new email account try one of these email services:
+  
+  * [**Gmail**](https://accounts.google.com/SignUp)
+  * [**Outlook**](https://outlook.live.com/owa/?nlp=1&signup=1)
+  * [**Yahoo**](https://login.yahoo.com/account/create?.lang=en-US&.intl=us)
 ---
 id: user birthdate
 question: |
@@ -1164,35 +1228,61 @@ id: monthly maintenance expenses
 question: |
   Monthly maintenance payments
 fields:
-  - "Maintenance being paid or payable to the other party by you under a court order in this case": users[0].maintenance_paid_court_question
+  - "Maintenance being paid by you under a court order **in this case**": users[0].maintenance_paid_court_question
     datatype: yesnowide
   - Monthly amount: users[0].maintenance_paid_court
     datatype: currency
     min: 0.01
     show if: users[0].maintenance_paid_court_question
-  - "Maintenance being paid under a court order to a former spouse by you, which is tax deductible to you": users[0].maintenance_paid_no_tax_question
+  - This payment is: users[0].maintenance_paid_court_deductible
+    datatype: radio
+    choices:
+      - "Tax deductible to me.": Yes
+      - "**Not** tax deductible to me.": No
+      - "I don't know if this is tax deductible.": idk
+    show if: users[0].maintenance_paid_court_question
+  - "Maintenance being paid by you under a court order **in a different case**": users[0].maintenance_paid_other_case_question
     datatype: yesnowide
-  - Monthly amount: users[0].maintenance_paid_no_tax
+  - Monthly amount: users[0].maintenance_paid_other_case
     datatype: currency
     min: 0.01
-    show if: users[0].maintenance_paid_no_tax_question
-  - "Maintenance being paid under a court order to a former spouse by you, which is not tax deductible to you": users[0].maintenance_paid_taxed_question
-    datatype: yesnowide
-  - Monthly amount: users[0].maintenance_paid_taxed
-    datatype: currency
-    min: 0.01
-    show if: users[0].maintenance_paid_taxed_question
+    show if: users[0].maintenance_paid_other_case_question
+  - This payment is: users[0].maintenance_paid_other_case_deductible
+    datatype: radio
+    choices:
+      - "Tax deductible to me.": Yes
+      - "**Not** tax deductible to me.": No
+      - "I don't know if this is tax deductible.": idk
+    show if: users[0].maintenance_paid_other_case_question
+
 ---
 id: monthly child support expenses
 question: |
   Monthly child support payments
 fields:
-  - Court-ordered child support being paid for the children of this relationship: users[0].child_support_1_question
-    datatype: yesnowide
+  - Are you paying monthly child support for children under a court order **in this case**?: users[0].child_support_1_question
+    datatype: yesnoradio
   - Monthly amount: users[0].child_support_1
     datatype: currency
     min: 0.01
     show if: users[0].child_support_1_question
+  - Are you paying monthly child support for children under a court order **in other cases**?: users[0].child_support_other_cases
+    datatype: radio
+    choices:
+      - Yes (enter details on another screen): True
+      - No: False
+  - Are you paying monthly child support to another parent **where there is no court order**?: users[0].child_support_no_court_order
+    datatype: radio
+    choices:
+      - Yes (enter details on another screen): True
+      - No: False
+  - Are you supporting any **other children that live in your home**?: users[0].child_support_in_home
+    datatype: radio
+    choices:
+      - Yes (enter details on another screen): True
+      - No: False
+    help: |
+      These can be your biological or adopted children.
   - Child support being paid **under a court order** for children not shared with the other party and who are not part of this case: users[0].child_support_2_question
     datatype: yesnowide
   - Monthly amount: users[0].child_support_2
@@ -1205,6 +1295,67 @@ fields:
     datatype: currency
     min: 0.01
     show if: users[0].child_support_3_question
+---
+id: child support other court order information
+question: |
+  % if i == 0:
+  Details about child support payments from another case
+  % else:
+  Details about child support payments from a ${ordinal(i)} case
+  % endif  
+fields:
+  - Case number: other_cs_cases[i].name.text
+    maxlength: 20
+  - Number of children included in support order: other_cs_cases[i].num_kids
+    datatype: number
+    min: 1
+    max: 20
+  - Monthly child support amount: other_cs_cases[i].amount
+    datatype: currency
+    min: 0.01
+  - State where order entered: other_cs_cases[i].state
+    code: |
+      states_list() 
+  - County where order entered: other_cs_cases[i].county
+    code: |
+      court_list._load_courts()["address_county"].unique()      
+    js show if: |
+      val('other_cs_cases[i].state') === "IL"
+  - County where order entered: other_cs_cases[i].county
+    maxlength: 25
+    js show if: |
+      val('other_cs_cases[i].state') != "IL"
+---
+id: additional other child support court orders 
+question: |
+  Are you paying monthly child support from other court cases?
+subquestion: |
+  So far you have told us about:
+  ${ cs_other_cases_table }
+fields:
+  - Add another?: other_cs_cases.there_is_another
+    datatype: yesnoradio
+---
+table: cs_other_cases_table
+rows: other_cs_cases
+columns:
+  - Case number: row_item.name.text
+  - Number of children: int(row_item.num_kids)
+  - Monthly amount: currency(row_item.amount)
+  - State: row_item.state
+  - County: row_item.county
+---
+code: |
+  other_cs_cases[i].name.text
+  other_cs_cases[i].num_kids
+  other_cs_cases[i].amount
+  other_cs_cases[i].county
+  other_cs_cases[i].state  
+  other_cs_cases[i].complete = True 
+---
+code: |
+  if other_cs_cases.number_gathered() == 12:
+    other_cs_cases.there_is_another = False    
 ---
 id: monthly housing expenses
 question: |
@@ -1722,8 +1873,7 @@ depends on:
   - users[0].deductions_medicare
   - users[0].deductions_retirement
   - users[0].maintenance_paid_court
-  - users[0].maintenance_paid_no_tax
-  - users[0].maintenance_paid_taxed
+  - users[0].maintenance_paid_other_case
   - users[0].child_support_1
   - users[0].child_support_2
   - users[0].child_support_3
@@ -1804,8 +1954,7 @@ code: |
 
   total_maintenance_payments = sum_if_defined(
     'users[0].maintenance_paid_court',
-    'users[0].maintenance_paid_no_tax',
-    'users[0].maintenance_paid_taxed')
+    'users[0].maintenance_paid_other_case')
 
   total_child_support_payments = sum_if_defined(
     'users[0].child_support_1',
@@ -3112,19 +3261,12 @@ attachment:
           % endif
       - "users_name": ${ users[0].name.full(middle='full') }
       - "users_phone_number": |
-          % if not hide_contact:
+          % if users[0].phone_number != "":
           ${ phone_number_formatted(users[0].phone_number) }
           % endif
-      - "users_address": |
-          % if not hide_contact:
-          ${ users[0].address.line_one(bare=True) }
-          % endif
-      - "users_address2": |
-          % if not hide_contact:
-          ${ users[0].address.line_two() }
-          % endif
+      - "users_address": ${ users[0].address.on_one_line(bare=True) }
       - "users_birthdate": ${ users[0].birthdate.format('MM/dd/yyyy') }
-      - "household_expenses": ${ household_expenses }
+      #- "household_expenses": ${ household_expenses }
       # Page 2: 6. My Employment/Business
       - "unemployed_yes": ${ employment.there_are_any == False }  
       # employed
@@ -3138,11 +3280,7 @@ attachment:
           % endif
       - "employer_address": |
           % if employment.there_are_any and employment[0].type == "employed":
-          ${ employment[0].address.line_one(bare=True) }
-          % endif
-      - "employer_address2": |
-          % if employment.there_are_any and employment[0].type == "employed":
-          ${ employment[0].address.line_two() }
+          ${ employment[0].address.on_one_line(bare=True) }
           % endif
       - "paychecks_monthly": |
           % if employment.there_are_any and employment[0].type == "employed":
@@ -3203,11 +3341,7 @@ attachment:
           % endif
       - "business_address": |
           % if employment.there_are_any and employment[0].type != "employed":
-          ${ employment[0].address.line_one(bare=True) }
-          % endif
-      - "business_address2": |
-          % if employment.there_are_any and employment[0].type != "employed":
-          ${ employment[0].address.line_two() }
+          ${ employment[0].address.on_one_line(bare=True) }
           % endif
       - "business_gross_last_year": |
           % if employment.there_are_any and employment[0].type != "employed":
@@ -3275,7 +3409,7 @@ attachment:
           % if taxes_filed:
           ${ deduction_type == "itemized" }
           % endif
-      - "Gross income (before taxes and deductions) last year": |
+      - "gross_income_last_year": |
           % if taxes_filed:
           ${ thousands(gross_income_last_year, show_decimals=True)}
           % endif
@@ -3519,18 +3653,16 @@ attachment:
           % else:
           0.00
           % endif
-      - "maintenance_paid_no_tax": |
-          % if users[0].maintenance_paid_no_tax_question:
-          ${ thousands(users[0].maintenance_paid_no_tax, show_decimals=True)}
+      - "maint_this_case_tax_deduct_yes": $ { True if users[0].maintenance_paid_court_question and users[0].maintenance_paid_court_deductible == "Yes" else '' }
+      - "maint_this_case_tax_deduct_no": $ { True if users[0].maintenance_paid_court_question and users[0].maintenance_paid_court_deductible == "No" else '' }
+      - "maintenance_paid_other_case": |
+          % if users[0].maintenance_paid_other_case_question:
+          ${ thousands(users[0].maintenance_paid_other_case, show_decimals=True)}
           % else:
           0.00
           % endif
-      - "maintenance_paid_taxed": |
-          % if users[0].maintenance_paid_taxed_question:
-          ${ thousands(users[0].maintenance_paid_taxed, show_decimals=True)}
-          % else:
-          0.00
-          % endif
+      - "maint_other_case_tax_deduct_yes": $ { True if users[0].maintenance_paid_other_case_question and users[0].maintenance_paid_other_case_deductible == "Yes" else '' }
+      - "maint_other_case_tax_deduct_no": $ { True if users[0].maintenance_paid_other_case_question and users[0].maintenance_paid_other_case_deductible == "No" else '' }
       - "total_maintenance": |
           ${ thousands(total_maintenance_payments, show_decimals=True)}
       - "child_support_1": |
@@ -4931,8 +5063,12 @@ attachment:
           % endif
 
       - "users_signature": |
-          ${ "/s/ " + users[0].name.full(middle="full") if e_signature else ''  }
-      - "users_signed_date": ${ today().format("MM/dd/yyyy") if e_signature else '' }
+          ${ users[0].name.full(middle="full") if e_signature else ''  }
+      - "users_name": ${ users[0].name.full(middle="full") }
+      - "users_address_2": ${ users[0].address.on_one_line(bare=True) }
+      - "user_hide_address_cb": ${ True if hide_address else '' }
+      - "user_phone": ${ phone_number_formatted(users[0].phone_number) }
+      - "users_email": ${ users[0].email if users[0].has_email_address else "" }        
 
 ---
 ############ FA EMPLOYMENT/BUSINESS INCOME ADDENDUM #############

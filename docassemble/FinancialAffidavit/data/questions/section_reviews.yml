@@ -147,15 +147,18 @@ review:
 ################ About you  
   - note: |
       <h4>About you</h4>
-  - Edit: hide_contact
+  - Edit: hide_address
     button: |
-      **Are your address and phone number protected?**
-      ${ word(yesno(hide_contact))}  
+      **Do you want to keep your address hidden?**
+      ${ word(yesno(hide_address)) }
   - Edit: users[0].address.address
     button: |
-      **Your address:**
+      % if hide_address:
+      **Your mailing address (will appear on your court papers):**
+      % else:
+      **Your home address:**
+      % endif    
       ${ users[0].address.on_one_line(bare=True) }
-    show if: hide_contact == False
   - Edit: users[0].phone_number
     button: |
       **Your phone number:**
@@ -163,8 +166,16 @@ review:
       None entered
       % else:
       ${ phone_number_formatted(users[0].phone_number) }
-      % endif
-    show if: hide_contact == False
+      % endif      
+  - Edit: users[0].has_email_address
+    button: |
+      **Do you have an email address?**
+      ${ word(yesno(users[0].has_email_address)) }
+  - Edit: users[0].email
+    button: |
+      **Your email:**
+      ${ users[0].email }
+    show if: users[0].has_email_address
   - Edit: users[0].birthdate
     button: |
       **Your birthdate:**
@@ -386,14 +397,12 @@ review:
       ${ currency(showifdef('users[0].deductions_retirement')) if showifdef('users[0].deductions_retirement_question') else '$0.00'}
   - Edit: users[0].maintenance_paid_court_question
     button: |
-      **Monthly maintenance payments**
+      **Monthly maintenance payments (Edit to review tax deduction details)**
 
-      * Maintenance being paid or payable to the other party by you in this case: 
+      * Maintenance being paid by you **in this case**: 
       ${ currency(showifdef('users[0].maintenance_paid_court')) if showifdef('users[0].maintenance_paid_court_question') else '$0.00'}
-      * Maintenance being paid to a former spouse, which is tax deductible: 
-      ${ currency(showifdef('users[0].maintenance_paid_no_tax')) if showifdef('users[0].maintenance_paid_no_tax_question') else '$0.00'}
-      * Maintenance being paid to a former spouse, which is not tax deductible: 
-      ${ currency(showifdef('users[0].maintenance_paid_taxed')) if showifdef('users[0].maintenance_paid_taxed_question') else '$0.00'}
+      * Maintenance being paid by you under a court order **in a different case**: 
+      ${ currency(showifdef('users[0].maintenance_paid_other_case')) if showifdef('users[0].maintenance_paid_other_case_question') else '$0.00'}
   - Edit: users[0].child_support_1_question
     button: |
       **Monthly child support payments**
@@ -906,15 +915,18 @@ question: |
 subquestion: |
   Edit your answers below.
 review:
-  - Edit: hide_contact
+  - Edit: hide_address
     button: |
-      **Are your address and phone number protected?**
-      ${ word(yesno(hide_contact))}  
+      **Do you want to keep your address hidden?**
+      ${ word(yesno(hide_address)) }
   - Edit: users[0].address.address
     button: |
-      **Your address:**
+      % if hide_address:
+      **Your mailing address (will appear on your court papers):**
+      % else:
+      **Your home address:**
+      % endif    
       ${ users[0].address.on_one_line(bare=True) }
-    show if: hide_contact == False
   - Edit: users[0].phone_number
     button: |
       **Your phone number:**
@@ -922,8 +934,16 @@ review:
       None entered
       % else:
       ${ phone_number_formatted(users[0].phone_number) }
-      % endif
-    show if: hide_contact == False
+      % endif      
+  - Edit: users[0].has_email_address
+    button: |
+      **Do you have an email address?**
+      ${ word(yesno(users[0].has_email_address)) }
+  - Edit: users[0].email
+    button: |
+      **Your email:**
+      ${ users[0].email }
+    show if: users[0].has_email_address
   - Edit: users[0].birthdate
     button: |
       **Your birthdate:**
@@ -1159,14 +1179,12 @@ review:
       ${ currency(showifdef('users[0].deductions_retirement')) if showifdef('users[0].deductions_retirement_question') else '$0.00'}
   - Edit: users[0].maintenance_paid_court_question
     button: |
-      **Monthly maintenance payments**
+      **Monthly maintenance payments (Edit to review tax deduction details)**
 
-      * Maintenance being paid or payable to the other party by you in this case: 
+      * Maintenance being paid by you **in this case**: 
       ${ currency(showifdef('users[0].maintenance_paid_court')) if showifdef('users[0].maintenance_paid_court_question') else '$0.00'}
-      * Maintenance being paid to a former spouse, which is tax deductible: 
-      ${ currency(showifdef('users[0].maintenance_paid_no_tax')) if showifdef('users[0].maintenance_paid_no_tax_question') else '$0.00'}
-      * Maintenance being paid to a former spouse, which is not tax deductible: 
-      ${ currency(showifdef('users[0].maintenance_paid_taxed')) if showifdef('users[0].maintenance_paid_taxed_question') else '$0.00'}
+      * Maintenance being paid by you under a court order **in a different case**: 
+      ${ currency(showifdef('users[0].maintenance_paid_other_case')) if showifdef('users[0].maintenance_paid_other_case_question') else '$0.00'}
   - Edit: users[0].child_support_1_question
     button: |
       **Monthly child support payments**
