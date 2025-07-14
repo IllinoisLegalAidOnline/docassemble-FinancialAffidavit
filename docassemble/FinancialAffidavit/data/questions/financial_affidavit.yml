@@ -1425,7 +1425,7 @@ subquestion: |
 fields:
   - Name of child: other_cs_kids_in_home[i].name.text
     maxlength: 40
-  - Age: other_cs_kids_in_home[i].num_kids
+  - Age: other_cs_kids_in_home[i].age
     datatype: number
     min: 1
     max: 99
@@ -1466,13 +1466,13 @@ table: other_cs_kids_in_home_table
 rows: other_cs_kids_in_home
 columns:
   - Child name: row_item.name.text
-  - Child age: int(row_item.num_kids)
+  - Age: int(row_item.age)
   - Paternity determined by: row_item.paternity
 
 ---
 code: |
   other_cs_kids_in_home[i].name.text
-  other_cs_kids_in_home[i].num_kids
+  other_cs_kids_in_home[i].age
   other_cs_kids_in_home[i].paternity
   other_cs_kids_in_home[i].complete = True 
 ---
@@ -3800,8 +3800,8 @@ attachment:
           % else:
           0.00
           % endif
-      - "maint_this_case_tax_deduct_yes": $ { True if users[0].maintenance_paid_court_question and users[0].maintenance_paid_court_deductible == "Yes" else '' }
-      - "maint_this_case_tax_deduct_no": $ { True if users[0].maintenance_paid_court_question and users[0].maintenance_paid_court_deductible == "No" else '' }
+      - "maint_this_case_tax_deduct_yes": ${ True if users[0].maintenance_paid_court_question and users[0].maintenance_paid_court_deductible == "Yes" else '' }
+      - "maint_this_case_tax_deduct_no": ${ True if users[0].maintenance_paid_court_question and users[0].maintenance_paid_court_deductible == "No" else '' }
       - "maintenance_paid_other_case": |
           % if users[0].maintenance_paid_other_case_question:
           ${ thousands(users[0].maintenance_paid_other_case, show_decimals=True)}
@@ -3812,25 +3812,282 @@ attachment:
       - "maint_other_case_tax_deduct_no": $ { True if users[0].maintenance_paid_other_case_question and users[0].maintenance_paid_other_case_deductible == "No" else '' }
       - "total_maintenance": |
           ${ thousands(total_maintenance_payments, show_decimals=True)}
-      - "child_support_1": |
+      - "child_support_this_case": |
           % if users[0].child_support_1_question:
           ${ thousands(users[0].child_support_1, show_decimals=True)}
           % else:
           0.00
           % endif
-      - "child_support_2": |
-          % if users[0].child_support_2_question:
-          ${ thousands(users[0].child_support_2, show_decimals=True)}
+
+      - "cs_other_case_loc_1": |
+          % if users[0].child_support_other_cases:
+          ${ other_cs_cases[0].county + ", " + state_name(other_cs_cases[0].state)}
+          % else:
+          ""
+          % endif          
+      - "cs_other_case_kids_1": |
+          % if users[0].child_support_other_cases:
+          ${ int(other_cs_cases[0].num_kids) }
+          % else:
+          ""
+          % endif
+      - "cs_other_case_num_1": |
+          % if users[0].child_support_other_cases:
+          ${ other_cs_cases[0].name.text }
+          % else:
+          ""
+          % endif
+      - "cs_other_case_amount_1": |
+          % if users[0].child_support_other_cases:
+          ${ thousands(other_cs_cases[0].amount, show_decimals=True)}
           % else:
           0.00
           % endif
-      - "child_support_3": |
-          % if users[0].child_support_3_question:
-          ${ thousands(users[0].child_support_3, show_decimals=True)}
+      - "cs_other_case_loc_2": |
+          % if users[0].child_support_other_cases:
+          ${ other_cs_cases[1].county + ", " + state_name(other_cs_cases[1].state)}
+          % else:
+          ""
+          % endif          
+      - "cs_other_case_kids_2": |
+          % if users[0].child_support_other_cases:
+          ${ int(other_cs_cases[1].num_kids) }
+          % else:
+          ""
+          % endif
+      - "cs_other_case_num_2": |
+          % if users[0].child_support_other_cases:
+          ${ other_cs_cases[1].name.text }
+          % else:
+          ""
+          % endif
+      - "cs_other_case_amount_2": |
+          % if users[0].child_support_other_cases:
+          ${ thousands(other_cs_cases[1].amount, show_decimals=True)}
           % else:
           0.00
           % endif
-      - "total_child_support": |
+      - "cs_other_case_loc_3": |
+          % if users[0].child_support_other_cases:
+          ${ other_cs_cases[2].county + ", " + state_name(other_cs_cases[2].state)}
+          % else:
+          ""
+          % endif          
+      - "cs_other_case_kids_3": |
+          % if users[0].child_support_other_cases:
+          ${ int(other_cs_cases[2].num_kids) }
+          % else:
+          ""
+          % endif
+      - "cs_other_case_num_3": |
+          % if users[0].child_support_other_cases:
+          ${ other_cs_cases[2].name.text }
+          % else:
+          ""
+          % endif
+      - "cs_other_case_amount_3": |
+          % if users[0].child_support_other_cases:
+          ${ thousands(other_cs_cases[2].amount, show_decimals=True)}
+          % else:
+          0.00
+          % endif
+      - "cs_other_case_loc_4": |
+          % if users[0].child_support_other_cases:
+          ${ other_cs_cases[3].county + ", " + state_name(other_cs_cases[3].state)}
+          % else:
+          ""
+          % endif          
+      - "cs_other_case_kids_4": |
+          % if users[0].child_support_other_cases:
+          ${ int(other_cs_cases[3].num_kids) }
+          % else:
+          ""
+          % endif
+      - "cs_other_case_num_4": |
+          % if users[0].child_support_other_cases:
+          ${ other_cs_cases[3].name.text }
+          % else:
+          ""
+          % endif
+      - "cs_other_case_amount_4": |
+          % if users[0].child_support_other_cases:
+          ${ thousands(other_cs_cases[3].amount, show_decimals=True)}
+          % else:
+          0.00
+          % endif
+      - "cs_no_case_parent_1": |
+          % if users[0].child_support_no_court_order:
+          ${ other_cs_parents[0].name.text }
+          % else:
+          ""
+          % endif
+      - "cs_no_case_kids_1": |
+          % if users[0].child_support_no_court_order:
+          ${ int(other_cs_parents[0].num_kids) }
+          % else:
+          ""
+          % endif
+      - "cs_no_case_amount_1": |
+          % if users[0].child_support_no_court_order:
+          ${ thousands(other_cs_parents[0].amount, show_decimals=True)}
+          % else:
+          0.00
+          % endif
+      - "cs_no_case_parent_2": |
+          % if users[0].child_support_no_court_order:
+          ${ other_cs_parents[1].name.text }
+          % else:
+          ""
+          % endif
+      - "cs_no_case_kids_2": |
+          % if users[0].child_support_no_court_order:
+          ${ int(other_cs_parents[1].num_kids) }
+          % else:
+          ""
+          % endif
+      - "cs_no_case_amount_2": |
+          % if users[0].child_support_no_court_order:
+          ${ thousands(other_cs_parents[1].amount, show_decimals=True)}
+          % else:
+          0.00
+          % endif
+      - "cs_no_case_parent_3": |
+          % if users[0].child_support_no_court_order:
+          ${ other_cs_parents[2].name.text }
+          % else:
+          ""
+          % endif
+      - "cs_no_case_kids_3": |
+          % if users[0].child_support_no_court_order:
+          ${ int(other_cs_parents[2].num_kids) }
+          % else:
+          ""
+          % endif
+      - "cs_no_case_amount_3": |
+          % if users[0].child_support_no_court_order:
+          ${ thousands(other_cs_parents[2].amount, show_decimals=True)}
+          % else:
+          0.00
+          % endif
+      - "cs_no_case_parent_4": |
+          % if users[0].child_support_no_court_order:
+          ${ other_cs_parents[3].name.text }
+          % else:
+          ""
+          % endif
+      - "cs_no_case_kids_4": |
+          % if users[0].child_support_no_court_order:
+          ${ int(other_cs_parents[3].num_kids) }
+          % else:
+          ""
+          % endif
+      - "cs_no_case_amount_4": |
+          % if users[0].child_support_no_court_order:
+          ${ thousands(other_cs_parents[3].amount, show_decimals=True)}
+          % else:
+          0.00
+          % endif
+      - "cs_support_name_1": |
+          % if users[0].child_support_in_home:
+          ${ other_cs_kids_in_home[0].name.text }
+          % else:
+          ""
+          % endif
+      - "cs_support_age_1": |
+          % if users[0].child_support_in_home:
+          ${ int(other_cs_kids_in_home[0].age) }
+          % else:
+          ""
+          % endif
+      - "cs_support_pat_born_1": |
+          % if users[0].child_support_in_home:
+          ${ True if other_cs_kids_in_home[0].paternity == "Born during marriage or union" else "" }
+          % endif
+      - "cs_support_pat_vap_1": |
+          % if users[0].child_support_in_home:
+          ${ True if other_cs_kids_in_home[0].paternity == "VAP" else "" }
+          % endif
+      - "cs_support_pat_order_1": |
+          % if users[0].child_support_in_home:
+          ${ True if other_cs_kids_in_home[0].paternity == "Court order" else "" }
+          % endif
+      - "cs_support_name_2": |
+          % if users[0].child_support_in_home:
+          ${ other_cs_kids_in_home[1].name.text }
+          % else:
+          ""
+          % endif
+      - "cs_support_age_2": |
+          % if users[0].child_support_in_home:
+          ${ int(other_cs_kids_in_home[1].age) }
+          % else:
+          ""
+          % endif
+      - "cs_support_pat_born_2": |
+          % if users[0].child_support_in_home:
+          ${ True if other_cs_kids_in_home[1].paternity == "Born during marriage or union" else "" }
+          % endif
+      - "cs_support_pat_vap_2": |
+          % if users[0].child_support_in_home:
+          ${ True if other_cs_kids_in_home[1].paternity == "VAP" else "" }
+          % endif
+      - "cs_support_pat_order_2": |
+          % if users[0].child_support_in_home:
+          ${ True if other_cs_kids_in_home[1].paternity == "Court order" else "" }
+          % endif
+      - "cs_support_name_3": |
+          % if users[0].child_support_in_home:
+          ${ other_cs_kids_in_home[2].name.text }
+          % else:
+          ""
+          % endif
+      - "cs_support_age_3": |
+          % if users[0].child_support_in_home:
+          ${ int(other_cs_kids_in_home[2].age) }
+          % else:
+          ""
+          % endif
+      - "cs_support_pat_born_3": |
+          % if users[0].child_support_in_home:
+          ${ True if other_cs_kids_in_home[2].paternity == "Born during marriage or union" else "" }
+          % endif
+      - "cs_support_pat_vap_3": |
+          % if users[0].child_support_in_home:
+          ${ True if other_cs_kids_in_home[2].paternity == "VAP" else "" }
+          % endif
+      - "cs_support_pat_order_3": |
+          % if users[0].child_support_in_home:
+          ${ True if other_cs_kids_in_home[2].paternity == "Court order" else "" }
+          % endif
+      - "cs_support_name_4": |
+          % if users[0].child_support_in_home:
+          ${ other_cs_kids_in_home[3].name.text }
+          % else:
+          ""
+          % endif
+      - "cs_support_age_4": |
+          % if users[0].child_support_in_home:
+          ${ int(other_cs_kids_in_home[3].age) }
+          % else:
+          ""
+          % endif
+      - "cs_support_pat_born_4": |
+          % if users[0].child_support_in_home:
+          ${ True if other_cs_kids_in_home[3].paternity == "Born during marriage or union" else "" }
+          % endif
+      - "cs_support_pat_vap_4": |
+          % if users[0].child_support_in_home:
+          ${ True if other_cs_kids_in_home[3].paternity == "VAP" else "" }
+          % endif
+      - "cs_support_pat_order_4": |
+          % if users[0].child_support_in_home:
+          ${ True if other_cs_kids_in_home[3].paternity == "Court order" else "" }
+          % endif
+      - "cs_addendum_cb": |
+          ${ True if ( (users[0].child_support_other_cases and other_cs_cases.number_gathered() > 3) or (users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 3) or (users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3) ) else '' }
+      - "cs_total_from_addendum": |
+          ${ thousands(total_child_support_payments_addendum, show_decimals=True)}          
+      - "cs_total": |
           ${ thousands(total_child_support_payments, show_decimals=True)}
       - "living_house_payment": |
           % if users[0].living_house_payment_question:

@@ -1,106 +1,3 @@
-#---
-#id: income summary review
-#continue button field: income_summary
-#question: |
-#  Monthly income summary
-#subquestion: |
-#  Here's a summary of your monthly income. You can click **Edit** to see details and make changes.
-#  <span style="display: none">
-#  ${ currency(total_monthly_employment_income) }
-#  ${ currency(total_monthly_investment_income) }
-#  ${ currency(total_other_monthly_business_income) }
-#  ${ currency(total_monthly_benefits_income) }
-#  ${ currency(total_monthly_maintenance_support_income) }
-#  ${ currency(total_monthly_gifts_other_income) }
-#  ${ currency(total_gross_monthly_income) }
-#  </span>
-#review:
-#  - Edit: 
-#      - users[0].regular_pay_question
-#    button: |
-#      <h2 class="h4">Monthly employment income: ${ currency(total_monthly_employment_income) }</h2>
-#  - Edit:
-#      - users[0].pension_question
-#    button: |
-#      <h2 class="h4">Monthly investment income: ${ currency(total_monthly_investment_income) }</h2>
-#  - Edit:
-#      - users[0].rental_income_question
-#    button: |
-#      <h2 class="h4">Other monthly business income: ${ currency(total_other_monthly_business_income) }</h2>
-#  - Edit:
-#      - users[0].social_retirement_question
-#    button: |
-#      <h2 class="h4">Monthly benefits income: ${ currency(total_monthly_benefits_income) }</h2>
-#  - Edit:
-#      - users[0].maintenance_current_question
-#    button: |
-#      <h2 class="h4">Monthly maintenance and support: ${ currency(total_monthly_maintenance_support_income) }</h2>
-#  - Edit:
-#      - users[0].gifts_money_question
-#    button: |
-#      <h2 class="h4">Monthly gifts and other income: ${ currency(total_monthly_gifts_other_income) }</h2>
-#  - note: |
-#      <h2 class="h4">Total gross monthly income: ${ currency(total_gross_monthly_income) }</h2>
-#---
-#id: expenses summary review
-#continue button field: expenses_summary
-#question: |
-#  Monthly expenses summary
-#subquestion: |
-#  Here's a summary of your monthly expenses. You can click **Edit** to see details and make changes.
-#  <span style="display: none">
-#  ${ currency(total_monthly_deductions) }
-#  ${ currency(total_maintenance_payments) }
-#  ${ currency(total_child_support_payments) }
-#  ${ currency(subtotal_monthly_household_expenses) }
-#  ${ currency(subtotal_monthly_utility_expenses) }
-#  ${ currency(subtotal_monthly_living_expenses) }
-#  ${ currency(subtotal_monthly_transportation_expenses) }
-#  ${ currency(subtotal_monthly_personal_expenses) }
-#  ${ currency(subtotal_monthly_children_expenses) }
-#  ${ currency(total_monthly_household_expenses) }
-#  </span>
-#review:
-#  - Edit:
-#      - users[0].deductions_federal_question
-#    button: |
-#      <h2 class="h4">Monthly payroll deductions: ${ currency(total_monthly_deductions) }</h2>
-#  - Edit:
-#      - users[0].maintenance_paid_court_question
-#    button: |
-#      <h2 class="h4">Monthly maintenance payments: ${ currency(total_maintenance_payments) }</h2>
-#  - Edit:
-#      - users[0].child_support_1_question
-#    button: |
-#      <h2 class="h4">Monthly child support payments: ${ currency(total_child_support_payments) }</h2>
-#  - Edit:
-#      - users[0].living_house_payment_question
-#    button: |
-#      <h2 class="h4">Subtotal monthly household expenses: ${ currency(subtotal_monthly_household_expenses) }</h2>
-#  - Edit:
-#      - users[0].living_gas_question
-#    button: |
-#      <h2 class="h4">Subtotal monthly utility expenses: ${ currency(subtotal_monthly_utility_expenses) }</h2>
-#  - Edit:
-#      - users[0].living_laundry_question
-#    button: |
-#      <h2 class="h4">Subtotal monthly living expenses: ${ currency(subtotal_monthly_living_expenses) }</h2>
-#  - Edit:
-#      - users[0].transport_payment_question
-#    button: |
-#      <h2 class="h4">Subtotal monthly transportation expenses: ${ currency(subtotal_monthly_transportation_expenses) }</h2>
-#  - Edit:
-#      - users[0].personal_doctor_question
-#    button: |
-#      <h2 class="h4">Subtotal monthly personal expenses: ${ currency(subtotal_monthly_personal_expenses) }</h2>
-#  - Edit:
-#      - users[0].children_tuition_question
-#    button: |
-#      <h2 class="h4">Subtotal monthly minor and dependent children expenses: ${ currency(subtotal_monthly_children_expenses) }</h2>
-#  - note: |
-#      <h2 class="h4">Total Monthly Living Expenses: ${ currency(total_monthly_household_expenses) }</h2>
-#---
-
 
 ################## REVIEW SCREEN ###################
 ---
@@ -405,14 +302,45 @@ review:
       ${ currency(showifdef('users[0].maintenance_paid_other_case')) if showifdef('users[0].maintenance_paid_other_case_question') else '$0.00'}
   - Edit: users[0].child_support_1_question
     button: |
-      **Monthly child support payments**
-
-      * Court-ordered child support being paid for the children of this relationship: 
+      **Monthly child support payments in this case:** 
       ${ currency(showifdef('users[0].child_support_1')) if showifdef('users[0].child_support_1_question') else '$0.00'}
-      * Child support for other children being paid *under a court order*: 
-      ${ currency(showifdef('users[0].child_support_2')) if showifdef('users[0].child_support_2_question') else '$0.00'}
-      * Child support for other childre being paid, *but there is no court order*: 
-      ${ currency(showifdef('users[0].child_support_3')) if showifdef('users[0].child_support_3_question') else '$0.00'}
+  - Edit: users[0].child_support_other_cases
+    button: |
+      **Are you paying monthly child support for children under a court order in other cases?**
+      ${word(yesno(users[0].child_support_other_cases))}
+  - Edit: other_cs_cases.revisit
+    button: |
+      **Monthly child support payments in other cases (Edit to change details)**
+
+      % for case in other_cs_cases:
+        * Case number: ${ case.name.text }, Amount: ${ currency(case.amount) }
+      % endfor
+    show if: users[0].child_support_other_cases
+  - Edit: users[0].child_support_no_court_order
+    button: |
+      **Are you paying monthly child support for children where there is no court order?**
+      ${word(yesno(users[0].child_support_no_court_order))}
+  - Edit: other_cs_parents.revisit
+    button: |
+      **Monthly child support payments where no court order exists (Edit to change details)**
+
+      % for parent in other_cs_parents:
+        * Parent receiving support: ${ parent.name.text }, Amount: ${ currency(parent.amount) }
+      % endfor
+    show if: users[0].child_support_no_court_order
+  - Edit: users[0].child_support_in_home
+    button: |
+      **Do you have any other biological or adopted children that live in your home that you support?**
+      ${word(yesno(users[0].child_support_in_home))}
+  - Edit: other_cs_kids_in_home.revisit
+    button: |
+      **Other children that live in your home that you support (Edit to change details)**
+
+      % for child in other_cs_kids_in_home:
+        * Name: ${ child.name.text }, Age: ${ int(child.age) }
+      % endfor
+    show if: users[0].child_support_in_home
+  
   - Edit: users[0].living_house_payment_question
     button: |
       **Monthly housing expenses**
@@ -1187,14 +1115,45 @@ review:
       ${ currency(showifdef('users[0].maintenance_paid_other_case')) if showifdef('users[0].maintenance_paid_other_case_question') else '$0.00'}
   - Edit: users[0].child_support_1_question
     button: |
-      **Monthly child support payments**
-
-      * Court-ordered child support being paid for the children of this relationship: 
+      **Monthly child support payments in this case:** 
       ${ currency(showifdef('users[0].child_support_1')) if showifdef('users[0].child_support_1_question') else '$0.00'}
-      * Child support for other children being paid *under a court order*: 
-      ${ currency(showifdef('users[0].child_support_2')) if showifdef('users[0].child_support_2_question') else '$0.00'}
-      * Child support for other childre being paid, *but there is no court order*: 
-      ${ currency(showifdef('users[0].child_support_3')) if showifdef('users[0].child_support_3_question') else '$0.00'}
+  - Edit: users[0].child_support_other_cases
+    button: |
+      **Are you paying monthly child support for children under a court order in other cases?**
+      ${word(yesno(users[0].child_support_other_cases))}
+  - Edit: other_cs_cases.revisit
+    button: |
+      **Monthly child support payments in other cases (Edit to change details)**
+
+      % for case in other_cs_cases:
+        * Case number: ${ case.name.text }, Amount: ${ currency(case.amount) }
+      % endfor
+    show if: users[0].child_support_other_cases
+  - Edit: users[0].child_support_no_court_order
+    button: |
+      **Are you paying monthly child support for children where there is no court order?**
+      ${word(yesno(users[0].child_support_no_court_order))}
+  - Edit: other_cs_parents.revisit
+    button: |
+      **Monthly child support payments where no court order exists (Edit to change details)**
+
+      % for parent in other_cs_parents:
+        * Parent receiving support: ${ parent.name.text }, Amount: ${ currency(parent.amount) }
+      % endfor
+    show if: users[0].child_support_no_court_order
+  - Edit: users[0].child_support_in_home
+    button: |
+      **Do you have any other biological or adopted children that live in your home that you support?**
+      ${word(yesno(users[0].child_support_in_home))}
+  - Edit: other_cs_kids_in_home.revisit
+    button: |
+      **Other children that live in your home that you support (Edit to change details)**
+
+      % for child in other_cs_kids_in_home:
+        * Name: ${ child.name.text }, Age: ${ int(child.age) }
+      % endfor
+    show if: users[0].child_support_in_home
+  
   - Edit: users[0].living_house_payment_question
     button: |
       **Monthly housing expenses**
@@ -2235,3 +2194,84 @@ subquestion: |
   ${ lawsuits.add_action() }
   % endif
 ---
+id: child support other cases review screen
+continue button field: other_cs_cases.revisit
+question: |
+  Edit information about monthly child support payments in other cases
+subquestion: |
+  ${ other_cs_cases.table }
+
+  % if other_cs_cases.number_gathered() < 12:
+  ${ other_cs_cases.add_action() }
+  % endif
+---
+id: child support other cases table
+table: other_cs_cases.table
+rows: other_cs_cases
+columns:
+  - Case number: |
+      row_item.name.text
+  - Number of children supported: |
+      int(row_item.num_kids)
+  - County: |
+      row_item.county if defined("row_item.county") else ""
+  - State: |
+      row_item.state if defined("row_item.state") else ""
+  - Amount: |
+      currency(row_item.amount)
+  - Edit: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
+---
+id: child support not by court order review screen
+continue button field: other_cs_parents.revisit
+question: |
+  Edit information about monthly child support payments where there is no court order
+subquestion: |
+  ${ other_cs_parents.table }
+
+  % if other_cs_parents.number_gathered() < 12:
+  ${ other_cs_parents.add_action() }
+  % endif
+---
+id: child support other cases table
+table: other_cs_parents.table
+rows: other_cs_parents
+columns:
+  - Parent receiving support: |
+      row_item.name.text
+  - Number of children supported: |
+      int(row_item.num_kids)
+  - Amount: |
+      currency(row_item.amount)
+  - Edit: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
+---
+id: other supported children in home review screen
+continue button field: other_cs_kids_in_home.revisit
+question: |
+  Edit information about your other children in your home you support
+subquestion: |
+  ${ other_cs_kids_in_home.table }
+
+  % if other_cs_kids_in_home.number_gathered() < 12:
+  ${ other_cs_kids_in_home.add_action() }
+  % endif
+---
+id: other supported children in home table
+table: other_cs_kids_in_home.table
+rows: other_cs_kids_in_home
+columns:
+  - Child name: |
+      row_item.name.text
+  - Age: |
+      int(row_item.age)
+  - Paternity determined by: |
+      row_item.paternity
+  - Edit: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
