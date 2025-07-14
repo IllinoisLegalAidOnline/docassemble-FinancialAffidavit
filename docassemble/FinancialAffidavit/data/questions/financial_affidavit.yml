@@ -1276,33 +1276,21 @@ fields:
     choices:
       - Yes (enter details on another screen): True
       - No: False
-  - Are you supporting any **other children that live in your home**?: users[0].child_support_in_home
+  - Do you have any other biological or adopted children that live in your home that you support?: users[0].child_support_in_home
     datatype: radio
     choices:
       - Yes (enter details on another screen): True
       - No: False
-    help: |
-      These can be your biological or adopted children.
-  - Child support being paid **under a court order** for children not shared with the other party and who are not part of this case: users[0].child_support_2_question
-    datatype: yesnowide
-  - Monthly amount: users[0].child_support_2
-    datatype: currency
-    min: 0.01
-    show if: users[0].child_support_2_question
-  - Child support being paid, **but there is no court order**, for children not shared with the other party and who are not part of this case. These are children[NEWLINE](1) that are presumed to be yours,[NEWLINE](2) for whom there is a Voluntary Acknowledgment of Paternity (VAP) signed by you and the other parent, or[NEWLINE](3) for whom there is a court order naming you as a parent, but there is no support order: users[0].child_support_3_question
-    datatype: yesnowide
-  - Monthly amount: users[0].child_support_3
-    datatype: currency
-    min: 0.01
-    show if: users[0].child_support_3_question
 ---
 id: child support other court order information
 question: |
   % if i == 0:
-  Details about child support payments from another case
+  Details about child support payments in another case
   % else:
-  Details about child support payments from a ${ordinal(i)} case
-  % endif  
+  Details about child support payments in a ${ordinal(i)} case
+  % endif
+subquestion: |
+  You can enter up to 12 other cases.
 fields:
   - Case number: other_cs_cases[i].name.text
     maxlength: 20
@@ -1328,7 +1316,7 @@ fields:
 ---
 id: additional other child support court orders 
 question: |
-  Are you paying monthly child support from other court cases?
+  Are you paying monthly child support in other court cases?
 subquestion: |
   So far you have told us about:
   ${ cs_other_cases_table }
@@ -1356,6 +1344,142 @@ code: |
 code: |
   if other_cs_cases.number_gathered() == 12:
     other_cs_cases.there_is_another = False    
+
+---
+id: child support other parent no case information
+question: |
+  % if i == 0:
+  Details about child support payment where there is no court order
+  % else:
+  Details about ${ordinal(i)} child support payment where there is no court order
+  % endif
+subquestion: |
+  You can enter up to 12 other support payments.
+  
+  ${ collapse_template(other_child_support_help) }  
+fields:
+  - Name of parent receiving support payments: other_cs_parents[i].name.text
+    maxlength: 40
+  - Number of children included in support: other_cs_parents[i].num_kids
+    datatype: number
+    min: 1
+    max: 20
+  - Monthly child support amount: other_cs_parents[i].amount
+    datatype: currency
+    min: 0.01
+---
+template: other_child_support_help
+subject: |
+  **What child support should I entere here?**
+content: |  
+  You do not need to include child support payments for children that are covered by a court order. These should have already been entered.
+  
+  On this screen, include children for whom there is no court order for support and:
+  
+  1. That are presumed to be yours because the child was born during a marriage or union,
+  2. For whom there is a Voluntary Acknowledgment of Paternity (VAP) signed by you and the other parent, or
+  3. For whom there is a court order naming you as a parent, such as an adoption.
+  
+  If there is a VAP or court order naming you as a parent, be sure to attach it to your *Financial Affidavit*.
+
+---
+id: additional other child support court orders 
+question: |
+  Are you paying additional monthly child support for kids where there is no court order?
+subquestion: |
+  So far you have told us about:
+  ${ other_cs_parents_table }
+fields:
+  - Add another?: other_cs_parents.there_is_another
+    datatype: yesnoradio
+---
+table: other_cs_parents_table
+rows: other_cs_parents
+columns:
+  - Parent receiving payments: row_item.name.text
+  - Number of children: int(row_item.num_kids)
+  - Monthly amount: currency(row_item.amount)
+
+---
+code: |
+  other_cs_parents[i].name.text
+  other_cs_parents[i].num_kids
+  other_cs_parents[i].amount
+  other_cs_parents[i].complete = True 
+---
+code: |
+  if other_cs_parents.number_gathered() == 12:
+    other_cs_parents.there_is_another = False
+---
+id: child support other parent no case information
+question: |
+  % if i == 0:
+  Details about the child that lives with you that you support
+  % else:
+  Details about the ${ordinal(i)} child that lives with you that you support
+  % endif
+subquestion: |
+  You an enter up to 12 children that live with you.
+  
+  ${ collapse_template(other_child_support_kids_in_home_help) }  
+fields:
+  - Name of child: other_cs_kids_in_home[i].name.text
+    maxlength: 40
+  - Age: other_cs_kids_in_home[i].num_kids
+    datatype: number
+    min: 1
+    max: 99
+  - How was paternity established?: other_cs_kids_in_home[i].paternity
+    datatype: radio
+  	choices:
+	    - Child was born during marriage or civil union: "Born during marriage or union"
+	    - Voluntary Acknowledgment of Paternity (VAP): "VAP"
+	    - Court order: "Court order"
+	    - I don't know.: "Not sure"
+---
+template: other_child_support_kids_in_home_help
+subject: |
+  **Which children should I include on this screen?**
+content: |  
+  You do not need to include children whose support you already entered.
+  
+  On this screen, include children that live in your home for whom there is no court order for support and:
+  
+  1. That are presumed to be yours because the child was born during a marriage or union,
+  2. For whom there is a Voluntary Acknowledgment of Paternity (VAP) signed by you and the other parent, or
+  3. For whom there is a court order naming you as a parent, such as an adoption.
+  
+  If there is a VAP or court order naming you as a parent, be sure to attach it to your *Financial Affidavit*.
+
+---
+id: additional other child support court orders 
+question: |
+  Do you have other biological or adopted children that live with you that you support?
+subquestion: |
+  So far you have told us about:
+  ${ other_cs_kids_in_home_table }
+fields:
+  - Add another?: other_cs_kids_in_home.there_is_another
+    datatype: yesnoradio
+---
+table: other_cs_kids_in_home_table
+rows: other_cs_kids_in_home
+columns:
+  - Child name: row_item.name.text
+  - Child age: int(row_item.num_kids)
+  - Paternity determined by: row_item.paternity
+
+---
+code: |
+  other_cs_kids_in_home[i].name.text
+  other_cs_kids_in_home[i].num_kids
+  other_cs_kids_in_home[i].paternity
+  other_cs_kids_in_home[i].complete = True 
+---
+code: |
+  if other_cs_kids_in_home.number_gathered() == 12:
+    other_cs_kids_in_home.there_is_another = False
+
 ---
 id: monthly housing expenses
 question: |
@@ -1467,7 +1591,7 @@ fields:
     datatype: currency
     min: 0.01
     show if: users[0].living_cleaner_question
-  - Necessary repairs and maintenance to my property: users[0].living_repairs_question
+  - Necessary repairs and maintenance to my home: users[0].living_repairs_question
     datatype: yesnowide
   - Monthly amount: users[0].living_repairs
     datatype: currency
@@ -1522,7 +1646,7 @@ fields:
     datatype: currency
     min: 0.01
     show if: users[0].transport_insurance_question
-  - Gasoline: users[0].transport_fuel_question
+  - Fuel (gasoline or alternative fules): users[0].transport_fuel_question
     datatype: yesnowide
   - Monthly amount: users[0].transport_fuel
     datatype: currency
@@ -1875,8 +1999,6 @@ depends on:
   - users[0].maintenance_paid_court
   - users[0].maintenance_paid_other_case
   - users[0].child_support_1
-  - users[0].child_support_2
-  - users[0].child_support_3
   # Section 12 a-d
   - users[0].living_house_payment
   - users[0].living_heloc
@@ -1956,10 +2078,35 @@ code: |
     'users[0].maintenance_paid_court',
     'users[0].maintenance_paid_other_case')
 
+  total_child_support_payments_addendum = sum_if_defined(
+    'users[0].other_cs_cases[4].amount',
+    'users[0].other_cs_cases[5].amount',
+    'users[0].other_cs_cases[6].amount',
+    'users[0].other_cs_cases[7].amount',
+    'users[0].other_cs_cases[8].amount',
+    'users[0].other_cs_cases[9].amount',
+    'users[0].other_cs_cases[10].amount',
+    'users[0].other_cs_cases[11].amount',
+    'users[0].other_cs_parents[4].amount',
+    'users[0].other_cs_parents[5].amount',
+    'users[0].other_cs_parents[6].amount',
+    'users[0].other_cs_parents[7].amount',
+    'users[0].other_cs_parents[8].amount',
+    'users[0].other_cs_parents[9].amount',
+    'users[0].other_cs_parents[10].amount',
+    'users[0].other_cs_parents[11].amount')
+  
   total_child_support_payments = sum_if_defined(
     'users[0].child_support_1',
-    'users[0].child_support_2',
-    'users[0].child_support_3')
+    'users[0].other_cs_cases[0].amount',
+    'users[0].other_cs_cases[1].amount',
+    'users[0].other_cs_cases[2].amount',
+    'users[0].other_cs_cases[3].amount',
+    'users[0].other_cs_parents[0].amount',
+    'users[0].other_cs_parents[1].amount',
+    'users[0].other_cs_parents[2].amount',
+    'users[0].other_cs_parents[3].amount',
+    'total_child_support_payments_addendum')
 
   subtotal_monthly_household_expenses = sum_if_defined(
     'users[0].living_house_payment',

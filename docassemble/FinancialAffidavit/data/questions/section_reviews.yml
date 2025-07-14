@@ -453,7 +453,7 @@ review:
       ${ currency(showifdef('users[0].living_laundry')) if showifdef('users[0].living_laundry_question') else '$0.00'}
       * House cleaning service: 
       ${ currency(showifdef('users[0].living_cleaner')) if showifdef('users[0].living_cleaner_question') else '$0.00'}
-      * Necessary repairs and maintenance to my property: 
+      * Necessary repairs and maintenance to my home: 
       ${ currency(showifdef('users[0].living_repairs')) if showifdef('users[0].living_repairs_question') else '$0.00'}
       * Pet care: 
       ${ currency(showifdef('users[0].living_pets')) if showifdef('users[0].living_pets_question') else '$0.00'}
@@ -479,7 +479,7 @@ review:
       ${ currency(showifdef('users[0].transport_maintenance')) if showifdef('users[0].transport_maintenance_question') else '$0.00'}
       * Insurance, license, registration, and city stickers: 
       ${ currency(showifdef('users[0].transport_insurance')) if showifdef('users[0].transport_insurance_question') else '$0.00'}
-      * Gasoline: 
+      * Fuel (gasoline or alternative fuels): 
       ${ currency(showifdef('users[0].transport_fuel')) if showifdef('users[0].transport_fuel_question') else '$0.00'}
       * Taxi, ride-share, bus, and train: 
       ${ currency(showifdef('users[0].transport_public')) if showifdef('users[0].transport_public_question') else '$0.00'}
@@ -1235,7 +1235,7 @@ review:
       ${ currency(showifdef('users[0].living_laundry')) if showifdef('users[0].living_laundry_question') else '$0.00'}
       * House cleaning service: 
       ${ currency(showifdef('users[0].living_cleaner')) if showifdef('users[0].living_cleaner_question') else '$0.00'}
-      * Necessary repairs and maintenance to my property: 
+      * Necessary repairs and maintenance to my home: 
       ${ currency(showifdef('users[0].living_repairs')) if showifdef('users[0].living_repairs_question') else '$0.00'}
       * Pet care: 
       ${ currency(showifdef('users[0].living_pets')) if showifdef('users[0].living_pets_question') else '$0.00'}
@@ -1261,7 +1261,7 @@ review:
       ${ currency(showifdef('users[0].transport_maintenance')) if showifdef('users[0].transport_maintenance_question') else '$0.00'}
       * Insurance, license, registration, and city stickers: 
       ${ currency(showifdef('users[0].transport_insurance')) if showifdef('users[0].transport_insurance_question') else '$0.00'}
-      * Gasoline: 
+      * Fuel (gasoline or alternative fuels): 
       ${ currency(showifdef('users[0].transport_fuel')) if showifdef('users[0].transport_fuel_question') else '$0.00'}
       * Taxi, ride-share, bus, and train: 
       ${ currency(showifdef('users[0].transport_public')) if showifdef('users[0].transport_public_question') else '$0.00'}
