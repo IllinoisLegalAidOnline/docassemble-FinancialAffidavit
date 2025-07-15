@@ -14,7 +14,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_debts.pdf
   fields:
-    - "county_name": ${ case_county.upper() }
+    - "county_name": ${ case_county }
     - "case_number": ${ case_number }
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
@@ -371,7 +371,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_cash.pdf
   fields:
-    - "county_name": ${ case_county.upper() }
+    - "county_name": ${ case_county }
     - "case_number": ${ case_number }
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
@@ -755,7 +755,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_cd.pdf
   fields:
-    - "county_name": ${ case_county.upper() }
+    - "county_name": ${ case_county }
     - "case_number": ${ case_number }
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
@@ -1053,7 +1053,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_money.pdf
   fields:
-    - "county_name": ${ case_county.upper() }
+    - "county_name": ${ case_county }
     - "case_number": ${ case_number }
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
@@ -1349,7 +1349,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_investments.pdf
   fields:
-    - "county_name": ${ case_county.upper() }
+    - "county_name": ${ case_county }
     - "case_number": ${ case_number }
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
@@ -1821,7 +1821,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_other_investments.pdf
   fields:
-    - "county_name": ${ case_county.upper() }
+    - "county_name": ${ case_county }
     - "case_number": ${ case_number }
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
@@ -2118,7 +2118,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_real_estate.pdf
   fields:
-    - "county_name": ${ case_county.upper() }
+    - "county_name": ${ case_county }
     - "case_number": ${ case_number }
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
@@ -2502,7 +2502,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_motor_vehicles.pdf
   fields:
-    - "county_name": ${ case_county.upper() }
+    - "county_name": ${ case_county }
     - "case_number": ${ case_number }
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
@@ -2519,7 +2519,21 @@ attachment:
         ${ users[0].name.full(middle='full') }
         % endif
     - "motor_vehicle_info_4": |
-        See Financial Affidavit 15d4
+        % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
+        ${ motor_vehicle[3].year } ${ motor_vehicle[3].make } ${ motor_vehicle[3].model }
+        % endif
+    - "motor_vehicle_title_4": |
+        % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
+        ${ motor_vehicle[3].name.text }
+        % endif
+    - "motor_vehicle_fmv_4": |
+        % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
+        ${ thousands(motor_vehicle[3].fmv, show_decimals=True) }
+        % endif
+    - "motor_vehicle_balance_4": |
+        % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
+        ${ thousands(motor_vehicle[3].balance, show_decimals=True) }
+        % endif
     - "motor_vehicle_info_5": |
         % if motor_vehicle.number_gathered() >= 5:
         ${ motor_vehicle[4].year } ${ motor_vehicle[4].make } ${ motor_vehicle[4].model }
@@ -2873,7 +2887,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_business_interests.pdf
   fields:
-    - "county_name": ${ case_county.upper() }
+    - "county_name": ${ case_county }
     - "case_number": ${ case_number }
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
@@ -3259,7 +3273,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_life_insurance.pdf
   fields:
-    - "county_name": ${ case_county.upper() }
+    - "county_name": ${ case_county }
     - "case_number": ${ case_number }
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
@@ -3645,7 +3659,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_retirement.pdf
   fields:
-    - "county_name": ${ case_county.upper() }
+    - "county_name": ${ case_county }
     - "case_number": ${ case_number }
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
@@ -3943,7 +3957,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_collectibles.pdf
   fields:
-    - "county_name": ${ case_county.upper() }
+    - "county_name": ${ case_county }
     - "case_number": ${ case_number }
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
@@ -4153,7 +4167,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_other_property.pdf
   fields:
-    - "county_name": ${ case_county.upper() }
+    - "county_name": ${ case_county }
     - "case_number": ${ case_number }
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
@@ -4362,7 +4376,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_transfer.pdf
   fields:
-    - "county_name": ${ case_county.upper() }
+    - "county_name": ${ case_county }
     - "case_number": ${ case_number }
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }
@@ -4746,7 +4760,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_lawsuits.pdf
   fields:
-    - "county_name": ${ case_county.upper() }
+    - "county_name": ${ case_county }
     - "case_number": ${ case_number }
     - "pre-judgment": ${ filing_status == "pre_judgment" }
     - "post-judgment": ${ filing_status == "post_judgment" }

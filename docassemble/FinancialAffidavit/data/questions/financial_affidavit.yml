@@ -137,6 +137,9 @@ code: |
   users[0].personal_clothing_question
   users[0].personal_gifts_question
 
+  if insurance.there_are_any:
+    insurance.gather()
+  
   if users[0].children_expenses_question:
     users[0].children_clothing_question
     users[0].children_tuition_question
@@ -146,9 +149,6 @@ code: |
     users[0].children_other_question
 
   expenses_summary
-
-  if insurance.there_are_any:
-    insurance.gather()
 
   set_progress(60)
   if has_debts:
@@ -1173,6 +1173,7 @@ subquestion: |
   * Insurance
   * Personal, entertainment, and vacation expenses
   * Gifts, donations, and other expenses
+  * Health insurance
 
   If you have expenses for children or other dependents, they are grouped as follows:
   
@@ -1182,7 +1183,7 @@ subquestion: |
   * Additional expenses like allowance and childcare
   * Vacation, entertainment, and other expenses
 
-  After asking about monthly expenses, you can enter information about health insurance and any debts you have.
+  After asking about monthly expenses, you can enter information about any debts you have.
 
 ---
 id: monthly deduction expenses
@@ -2078,34 +2079,35 @@ code: |
     'users[0].maintenance_paid_court',
     'users[0].maintenance_paid_other_case')
 
+  total_child_support_payments_addendum = 0.0
   total_child_support_payments_addendum = sum_if_defined(
-    'users[0].other_cs_cases[4].amount',
-    'users[0].other_cs_cases[5].amount',
-    'users[0].other_cs_cases[6].amount',
-    'users[0].other_cs_cases[7].amount',
-    'users[0].other_cs_cases[8].amount',
-    'users[0].other_cs_cases[9].amount',
-    'users[0].other_cs_cases[10].amount',
-    'users[0].other_cs_cases[11].amount',
-    'users[0].other_cs_parents[4].amount',
-    'users[0].other_cs_parents[5].amount',
-    'users[0].other_cs_parents[6].amount',
-    'users[0].other_cs_parents[7].amount',
-    'users[0].other_cs_parents[8].amount',
-    'users[0].other_cs_parents[9].amount',
-    'users[0].other_cs_parents[10].amount',
-    'users[0].other_cs_parents[11].amount')
+    'other_cs_cases[4].amount',
+    'other_cs_cases[5].amount',
+    'other_cs_cases[6].amount',
+    'other_cs_cases[7].amount',
+    'other_cs_cases[8].amount',
+    'other_cs_cases[9].amount',
+    'other_cs_cases[10].amount',
+    'other_cs_cases[11].amount',
+    'other_cs_parents[4].amount',
+    'other_cs_parents[5].amount',
+    'other_cs_parents[6].amount',
+    'other_cs_parents[7].amount',
+    'other_cs_parents[8].amount',
+    'other_cs_parents[9].amount',
+    'other_cs_parents[10].amount',
+    'other_cs_parents[11].amount')
   
   total_child_support_payments = sum_if_defined(
     'users[0].child_support_1',
-    'users[0].other_cs_cases[0].amount',
-    'users[0].other_cs_cases[1].amount',
-    'users[0].other_cs_cases[2].amount',
-    'users[0].other_cs_cases[3].amount',
-    'users[0].other_cs_parents[0].amount',
-    'users[0].other_cs_parents[1].amount',
-    'users[0].other_cs_parents[2].amount',
-    'users[0].other_cs_parents[3].amount',
+    'other_cs_cases[0].amount',
+    'other_cs_cases[1].amount',
+    'other_cs_cases[2].amount',
+    'other_cs_cases[3].amount',
+    'other_cs_parents[0].amount',
+    'other_cs_parents[1].amount',
+    'other_cs_parents[2].amount',
+    'other_cs_parents[3].amount',
     'total_child_support_payments_addendum')
 
   subtotal_monthly_household_expenses = sum_if_defined(
@@ -2186,13 +2188,26 @@ code: |
     'users[0].children_party_gifts',
     'users[0].children_other')
 
+  additional_monthly_insurance_expenses_addendum = 0.0
+  if insurance.there_are_any:
+    if insurance.number_gathered() > 1:
+      for policy in insurance[1:]:
+  	    if policy.paid == "myself":
+  	      additional_monthly_insurance_expenses_addendum += policy.monthly_cost
+    subtotal_monthly_insurance_expenses = insurance[0].monthly_cost + additional_monthly_insurance_expenses_addendum
+  else:
+    subtotal_monthly_insurance_expenses = 0
+  
   total_monthly_household_expenses = sum_if_defined(
     'subtotal_monthly_household_expenses',
     'subtotal_monthly_utility_expenses',
     'subtotal_monthly_living_expenses',
     'subtotal_monthly_transportation_expenses',
     'subtotal_monthly_personal_expenses',
-    'subtotal_monthly_children_expenses')
+    'subtotal_monthly_children_expenses',
+    'total_child_support_payments',
+    'subtotal_monthly_insurance_expenses',
+    'total_maintenance_payments')
 ---
 ################### FA HEALTH INSURANCE ##################
 id: health insurance intro 
@@ -2326,11 +2341,6 @@ fields:
     max: 100
     help: |
        Coninsurance is the percentage of costs you pay.
-  - Copayment amount: insurance[i].copayment
-    datatype: currency
-    min: 0
-    help: |
-      A copayment amount is a flat amount you pay per service, such as an office visit or an x-ray.
 ---
 ########### FA DEBTS ###########
 id: debt intro 
@@ -2414,9 +2424,9 @@ question: |
 subquestion: |
   On the *Financial Affidavit*, you are required to list all of your belongings, also known as your assets. The form puts assets in the following groups:
 
-  * Cash and cash equivalents 
+  * Money in bank or credit union accounts 
   * Certificates of deposit
-  * Money on cash cards, prepaid debit cards, and money transfer apps 
+  * Cash, money on prepaid debit cards, and money transfer apps 
   * Investment accounts and securities
   * Investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency
   * Real estate 
@@ -2429,11 +2439,11 @@ subquestion: |
   * Transfer or sale of assets or property worth at least $1,000 within the last 2 years
 ---
 ########### FA ASSETS - 15a Cash/Cash Equivalents ###########
-id: cash equivalent intro 
+id: money in accounts intro 
 question: |
-  Do you have any cash or cash equivalents?
+  Do you have any money in bank or credit union accounts?
 subquestion: |
-  These include checking, savings, money market, and other bank or credit union accounts.
+  This includes checking, savings, money market, and other bank or credit union accounts.
   
   **Do not list account numbers on your forms.** 
 fields:
@@ -2442,7 +2452,7 @@ fields:
 ---
 id: additional cash
 question: |
-  Do you have other cash or cash equivalent accounts?
+  Do you have other money in bank or credit union accounts?
 subquestion: |
   So far you have told us about:
   ${ cash_table }
@@ -2460,9 +2470,9 @@ columns:
 ---
 id: cash information
 question: |
-  Details for the ${ordinal(i)} cash or cash equivalent account
+  Details for the ${ordinal(i)} account
 subquestion: |
-  **Do not list account numbers on your forms.** 
+  **Do not list account numbers on your forms.**
 fields:
   - Bank or institution name: cash[i].name.text
     maxlength: 25
@@ -2537,9 +2547,9 @@ code: |
 ########### FA ASSETS - 15a money cash/card ###########
 id: money cash/card intro 
 question: |
-  Do you have any money on debit cards or in money transfer apps?
+  Do you have any money in cash, on debit cards, or in money transfer apps?
 subquestion: |
-  These include any money you have on cash cards, prepaid debit cards, and money transfer mobile apps like Venmo, PayPal, or Apple Pay.
+  This includes cash on hand, money you have on prepaid debit cards, and money transfer mobile apps like Venmo, PayPal, or Apple Pay.
 
   A prepaid debit card can be used to make purchases like you would use cash. The amount of money on the card must be "loaded" onto the card before the purchase. Many prepaid cards carry the brand, like MasterCard, Visa, or American Express, and can be used anywhere that type of card is accepted.
 fields:
@@ -2548,7 +2558,7 @@ fields:
 ---
 id: additional money cash/card
 question: |
-  Do you have other debit cards or money transfer app balances?
+  Do you have other cash, debit cards, or money transfer app balances?
 subquestion: |
   So far you have told us about:
   ${ money_table }
@@ -2559,22 +2569,31 @@ fields:
 table: money_table
 rows: money
 columns:
-  - Location of cash/card: row_item.name.text
-  - Held by: row_item.holder
+  - Bank or institution name: row_item.name.text
+  - Name on account: row_item.holder
+  - Account type: row_item.type
   - Balance: currency(row_item.balance)
 ---
 id: money cash/card information
 question: |
-  Details for the ${ordinal(i)} debit card or money transfer app 
+  Details for the ${ordinal(i)} cash, debit card, or money transfer app
+subquestion: |
+  If you have cash, you can enter "cash on hand" in **Bank or institution name** and put your name in **Name on account**.
 fields:
-  - Location of cash/card: money[i].name.text
+  - Bank or institution name: money[i].name.text
     maxlength: 30
     help: |
-      Explain who has physical possession of the card. If it is a money transfer app, you can mention the app name like Venmo or PayPal.
-  - Name of holder of card or account: money[i].holder
+      If you have cash, enter "cash on hand".
+  - Name on account: money[i].holder
     maxlength: 30
     help: |
-      This is the person whose name is on the account.  
+      This is the person whose name is on the account. If you have cash, enter your name.
+  - Account type: money[i].type
+    datatype: radio
+    choices:
+      - Cash
+      - Prepaid debit card 
+      - Money transfer app
   - Balance: money[i].balance
     datatype: currency
     min: 0
@@ -3261,14 +3280,14 @@ question: |
 subquestion: |
   This program can put "**/s/ ${users[0].name.full(middle='full')}**" where you would sign your name. The court will accept this as your signature.
 
-  If you do not add your **{e-signature}**, you must sign your paper form before you send it to the other party in your case or their lawyer.
+  If you do not add your **{e-signature}**, you must sign your paper form before you send it to the other parent or their lawyer.
 
   <div class="alert alert-info ilao-info" role="alert">
     <h6 class="alert-heading">What it means to sign your form</h6>
     <p>By signing your <i>Financial Affidavit</i>, you are certifying that:</p>
     <p><ul>
-      <li>Everything on the forms is true and correct, and</li>
-      <li>You understand that making a false statement on the form is perjury, which can result in criminal penalties.</li>
+      <li>Everything on the form is true and correct, or you have been informed or you believe it is true and correct, and</li>
+      <li>You understand that making a false statement on the form is perjury and has penalties provided by law.</li>
     </ul></p>
   <p>See the <a href="https://www.ilga.gov/legislation/ilcs/documents/073500050k1-109.htm"><b>Code of Civil Procedure, 735 ILCS 5/1-109</b></a> for more information.</p>
   </div>
@@ -3295,9 +3314,9 @@ event: get_docs_screen
 question: |
   Download
 subquestion: |
-  Your form is ready. View and download your form below. Click **Make changes** to fix any mistakes.
+  Your form is ready. View and download your form below. Click **:edit: Make changes** to fix any mistakes.
 
-  This program does not deliver your *Financial Affidavit* to the other party in your case. You will need to do that yourself.
+  This program **does not deliver** your *Financial Affidavit* to the other parent or their lawyer. You will need to do that yourself.
   
   ${ action_button_html(url_action('review_answers'), label=':edit: Make changes', color='success', size="md") }
 
@@ -3307,7 +3326,7 @@ subquestion: |
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
 
-  **Note:** This program does not deliver your *Financial Affidavit* to the other party in your case. You will need to do that yourself.
+  **Note:** This program **does not deliver** your *Financial Affidavit* to the other parent or their lawyer. You will need to do that yourself.
   
   Thank you for using ILAO Easy Forms!
 under: |
@@ -3375,7 +3394,7 @@ attachment:
     pdf template file: fa_primary.pdf
     editable: False
     fields:
-      - "county_name": ${ case_county.upper() }
+      - "county_name": ${ case_county }
       - "case_number": ${ case_number }
       - "pre-judgment": ${ filing_status == "pre_judgment" }
       - "post-judgment": ${ filing_status == "post_judgment" }
@@ -3794,7 +3813,7 @@ attachment:
           % endif
       - "total_deductions": |
           ${ thousands(total_monthly_deductions, show_decimals=True)}
-      - "maintenance_paid_court": |
+      - "maintenance_paid_this_case": |
           % if users[0].maintenance_paid_court_question:
           ${ thousands(users[0].maintenance_paid_court, show_decimals=True)}
           % else:
@@ -3822,20 +3841,14 @@ attachment:
       - "cs_other_case_loc_1": |
           % if users[0].child_support_other_cases:
           ${ other_cs_cases[0].county + ", " + state_name(other_cs_cases[0].state)}
-          % else:
-          ""
           % endif          
       - "cs_other_case_kids_1": |
           % if users[0].child_support_other_cases:
           ${ int(other_cs_cases[0].num_kids) }
-          % else:
-          ""
           % endif
       - "cs_other_case_num_1": |
           % if users[0].child_support_other_cases:
           ${ other_cs_cases[0].name.text }
-          % else:
-          ""
           % endif
       - "cs_other_case_amount_1": |
           % if users[0].child_support_other_cases:
@@ -3844,73 +3857,55 @@ attachment:
           0.00
           % endif
       - "cs_other_case_loc_2": |
-          % if users[0].child_support_other_cases:
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 1:
           ${ other_cs_cases[1].county + ", " + state_name(other_cs_cases[1].state)}
-          % else:
-          ""
           % endif          
       - "cs_other_case_kids_2": |
-          % if users[0].child_support_other_cases:
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 1:
           ${ int(other_cs_cases[1].num_kids) }
-          % else:
-          ""
           % endif
       - "cs_other_case_num_2": |
-          % if users[0].child_support_other_cases:
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 1:
           ${ other_cs_cases[1].name.text }
-          % else:
-          ""
           % endif
       - "cs_other_case_amount_2": |
-          % if users[0].child_support_other_cases:
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 1:
           ${ thousands(other_cs_cases[1].amount, show_decimals=True)}
           % else:
           0.00
           % endif
       - "cs_other_case_loc_3": |
-          % if users[0].child_support_other_cases:
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 2:
           ${ other_cs_cases[2].county + ", " + state_name(other_cs_cases[2].state)}
-          % else:
-          ""
           % endif          
       - "cs_other_case_kids_3": |
-          % if users[0].child_support_other_cases:
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 2:
           ${ int(other_cs_cases[2].num_kids) }
-          % else:
-          ""
           % endif
       - "cs_other_case_num_3": |
-          % if users[0].child_support_other_cases:
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 2:
           ${ other_cs_cases[2].name.text }
-          % else:
-          ""
           % endif
       - "cs_other_case_amount_3": |
-          % if users[0].child_support_other_cases:
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 2:
           ${ thousands(other_cs_cases[2].amount, show_decimals=True)}
           % else:
           0.00
           % endif
       - "cs_other_case_loc_4": |
-          % if users[0].child_support_other_cases:
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 3:
           ${ other_cs_cases[3].county + ", " + state_name(other_cs_cases[3].state)}
-          % else:
-          ""
           % endif          
       - "cs_other_case_kids_4": |
-          % if users[0].child_support_other_cases:
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 3:
           ${ int(other_cs_cases[3].num_kids) }
-          % else:
-          ""
           % endif
       - "cs_other_case_num_4": |
-          % if users[0].child_support_other_cases:
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 3:
           ${ other_cs_cases[3].name.text }
-          % else:
-          ""
           % endif
       - "cs_other_case_amount_4": |
-          % if users[0].child_support_other_cases:
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 3:
           ${ thousands(other_cs_cases[3].amount, show_decimals=True)}
           % else:
           0.00
@@ -3918,14 +3913,10 @@ attachment:
       - "cs_no_case_parent_1": |
           % if users[0].child_support_no_court_order:
           ${ other_cs_parents[0].name.text }
-          % else:
-          ""
           % endif
       - "cs_no_case_kids_1": |
           % if users[0].child_support_no_court_order:
           ${ int(other_cs_parents[0].num_kids) }
-          % else:
-          ""
           % endif
       - "cs_no_case_amount_1": |
           % if users[0].child_support_no_court_order:
@@ -3934,55 +3925,43 @@ attachment:
           0.00
           % endif
       - "cs_no_case_parent_2": |
-          % if users[0].child_support_no_court_order:
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 1:
           ${ other_cs_parents[1].name.text }
-          % else:
-          ""
           % endif
       - "cs_no_case_kids_2": |
-          % if users[0].child_support_no_court_order:
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 1:
           ${ int(other_cs_parents[1].num_kids) }
-          % else:
-          ""
           % endif
       - "cs_no_case_amount_2": |
-          % if users[0].child_support_no_court_order:
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 1:
           ${ thousands(other_cs_parents[1].amount, show_decimals=True)}
           % else:
           0.00
           % endif
       - "cs_no_case_parent_3": |
-          % if users[0].child_support_no_court_order:
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 2:
           ${ other_cs_parents[2].name.text }
-          % else:
-          ""
           % endif
       - "cs_no_case_kids_3": |
-          % if users[0].child_support_no_court_order:
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 2:
           ${ int(other_cs_parents[2].num_kids) }
-          % else:
-          ""
           % endif
       - "cs_no_case_amount_3": |
-          % if users[0].child_support_no_court_order:
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 2:
           ${ thousands(other_cs_parents[2].amount, show_decimals=True)}
           % else:
           0.00
           % endif
       - "cs_no_case_parent_4": |
-          % if users[0].child_support_no_court_order:
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 3:
           ${ other_cs_parents[3].name.text }
-          % else:
-          ""
           % endif
       - "cs_no_case_kids_4": |
-          % if users[0].child_support_no_court_order:
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 3:
           ${ int(other_cs_parents[3].num_kids) }
-          % else:
-          ""
           % endif
       - "cs_no_case_amount_4": |
-          % if users[0].child_support_no_court_order:
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 3:
           ${ thousands(other_cs_parents[3].amount, show_decimals=True)}
           % else:
           0.00
@@ -3990,14 +3969,10 @@ attachment:
       - "cs_support_name_1": |
           % if users[0].child_support_in_home:
           ${ other_cs_kids_in_home[0].name.text }
-          % else:
-          ""
           % endif
       - "cs_support_age_1": |
           % if users[0].child_support_in_home:
           ${ int(other_cs_kids_in_home[0].age) }
-          % else:
-          ""
           % endif
       - "cs_support_pat_born_1": |
           % if users[0].child_support_in_home:
@@ -4012,75 +3987,63 @@ attachment:
           ${ True if other_cs_kids_in_home[0].paternity == "Court order" else "" }
           % endif
       - "cs_support_name_2": |
-          % if users[0].child_support_in_home:
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 1:
           ${ other_cs_kids_in_home[1].name.text }
-          % else:
-          ""
           % endif
       - "cs_support_age_2": |
-          % if users[0].child_support_in_home:
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 1:
           ${ int(other_cs_kids_in_home[1].age) }
-          % else:
-          ""
           % endif
       - "cs_support_pat_born_2": |
-          % if users[0].child_support_in_home:
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 1:
           ${ True if other_cs_kids_in_home[1].paternity == "Born during marriage or union" else "" }
           % endif
       - "cs_support_pat_vap_2": |
-          % if users[0].child_support_in_home:
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 1:
           ${ True if other_cs_kids_in_home[1].paternity == "VAP" else "" }
           % endif
       - "cs_support_pat_order_2": |
-          % if users[0].child_support_in_home:
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 1:
           ${ True if other_cs_kids_in_home[1].paternity == "Court order" else "" }
           % endif
       - "cs_support_name_3": |
-          % if users[0].child_support_in_home:
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 2:
           ${ other_cs_kids_in_home[2].name.text }
-          % else:
-          ""
           % endif
       - "cs_support_age_3": |
-          % if users[0].child_support_in_home:
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 2:
           ${ int(other_cs_kids_in_home[2].age) }
-          % else:
-          ""
           % endif
       - "cs_support_pat_born_3": |
-          % if users[0].child_support_in_home:
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 2:
           ${ True if other_cs_kids_in_home[2].paternity == "Born during marriage or union" else "" }
           % endif
       - "cs_support_pat_vap_3": |
-          % if users[0].child_support_in_home:
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 2:
           ${ True if other_cs_kids_in_home[2].paternity == "VAP" else "" }
           % endif
       - "cs_support_pat_order_3": |
-          % if users[0].child_support_in_home:
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 2:
           ${ True if other_cs_kids_in_home[2].paternity == "Court order" else "" }
           % endif
       - "cs_support_name_4": |
-          % if users[0].child_support_in_home:
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3:
           ${ other_cs_kids_in_home[3].name.text }
-          % else:
-          ""
           % endif
       - "cs_support_age_4": |
-          % if users[0].child_support_in_home:
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3:
           ${ int(other_cs_kids_in_home[3].age) }
-          % else:
-          ""
           % endif
       - "cs_support_pat_born_4": |
-          % if users[0].child_support_in_home:
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3:
           ${ True if other_cs_kids_in_home[3].paternity == "Born during marriage or union" else "" }
           % endif
       - "cs_support_pat_vap_4": |
-          % if users[0].child_support_in_home:
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3:
           ${ True if other_cs_kids_in_home[3].paternity == "VAP" else "" }
           % endif
       - "cs_support_pat_order_4": |
-          % if users[0].child_support_in_home:
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3:
           ${ True if other_cs_kids_in_home[3].paternity == "Court order" else "" }
           % endif
       - "cs_addendum_cb": |
@@ -4641,11 +4604,17 @@ attachment:
           % if insurance.there_are_any:
           ${ nice_number(insurance[0].coinsurance, use_word=False) }%
           % endif
-      - "copayment": |
-          % if insurance.there_are_any:
-          ${ thousands(insurance[0].copayment, show_decimals=True)}
-          % endif
       - "insurance_addendum_yes": ${ insurance.number_gathered() > 1 }
+      - "health_insurance_total_from_addendum": |
+          % if insurance.there_are_any:
+          % if insurance.number_gathered() > 1:
+          ${ thousands(additional_monthly_insurance_expenses_addendum, show_decimals=True)}
+          % endif
+          % endif
+      - "subtotal_health_insurance": |
+          % if insurance.there_are_any:
+          ${ thousands((subtotal_monthly_insurance_expenses + additional_monthly_insurance_expenses_addendum), show_decimals=True)}
+          % endif
       # 14 Debts
       - "creditor_name_1": |
           % if has_debts and debts.number_gathered() > 0:
@@ -4809,7 +4778,6 @@ attachment:
           % if has_cash_assets and cash.number_gathered() >= 3:
           ${ thousands(cash[2].balance, show_decimals=True) }
           % endif
-      - "cash_addendum_yes": ${ has_cash_assets and cash.number_gathered() > 3 }
       # 15 Assets - Certificate of Deposit
       - "cd_bank_name_1": |
           % if has_cert_deposit and cert_deposit.number_gathered() > 0:
@@ -4847,9 +4815,8 @@ attachment:
           % if has_cert_deposit and cert_deposit.number_gathered() >= 3:
           ${ thousands(cert_deposit[2].balance, show_decimals=True) }
           % endif
-      - "cd_addendum_yes": ${ has_cert_deposit and cert_deposit.number_gathered() > 3 }
       # 15 Assets - Money cash/card/apps
-      - "money_card_1": |
+      - "money_bank_1": |
           % if has_money and money.number_gathered() > 0:
           ${ money[0].name.text }
           % endif
@@ -4857,11 +4824,15 @@ attachment:
           % if has_money and money.number_gathered() > 0:
           ${ money[0].holder }
           % endif
+      - "money_type_1": |
+          % if has_money and money.number_gathered() > 0:
+          ${ money[0].type }
+          % endif
       - "money_balance_1": |
           % if has_money and money.number_gathered() > 0:
           ${ thousands(money[0].balance, show_decimals=True) }
           % endif
-      - "money_card_2": |
+      - "money_bank_2": |
           % if has_money and money.number_gathered() >= 2:
           ${ money[1].name.text }
           % endif
@@ -4869,11 +4840,15 @@ attachment:
           % if has_money and money.number_gathered() >= 2:
           ${ money[1].holder }
           % endif
+      - "money_type_2": |
+          % if has_money and money.number_gathered() >= 2:
+          ${ money[1].type }
+          % endif
       - "money_balance_2": |
           % if has_money and money.number_gathered() >= 2:
           ${ thousands(money[1].balance, show_decimals=True) }
           % endif
-      - "money_card_3": |
+      - "money_bank_3": |
           % if has_money and money.number_gathered() >= 3:
           ${ money[2].name.text }
           % endif
@@ -4881,12 +4856,16 @@ attachment:
           % if has_money and money.number_gathered() >= 3:
           ${ money[2].holder }
           % endif
+      - "money_type_3": |
+          % if has_money and money.number_gathered() >= 3:
+          ${ money[2].type }
+          % endif
       - "money_balance_3": |
           % if has_money and money.number_gathered() >= 3:
           ${ thousands(money[2].balance, show_decimals=True) }
           % endif
-      - "money_addendum_yes": ${ has_money and money.number_gathered() > 3 }
-      # 15 Assets - Investments
+      - "cash_addendum_yes": ${ True if (has_cash_assets and cash.number_gathered() > 3 ) or (has_cert_deposit and cert_deposit.number_gathered() > 3) or (has_money and money.number_gathered() > 3) else '' }
+        # 15 Assets - Investments
       - "investment_name_1": |
           % if has_investments and investments.number_gathered() > 0:
           ${ investments[0].name.text }
@@ -4947,7 +4926,6 @@ attachment:
           % if has_investments and investments.number_gathered() >= 3:
           ${ thousands(investments[2].fmv, show_decimals=True) }
           % endif
-      - "investment_addendum_yes": ${ has_investments and investments.number_gathered() > 3 }
       # 15 Assets - Other Investments
       - "other_investments_description_1": |
           % if has_other_investments and other_investments.number_gathered() > 0:
@@ -4985,7 +4963,7 @@ attachment:
           % if has_other_investments and other_investments.number_gathered() >= 3:
           ${ thousands(other_investments[2].balance, show_decimals=True) }
           % endif
-      - "other_investments_addendum_yes": ${ has_other_investments and other_investments.number_gathered() > 3 }
+      - "investment_addendum_yes": ${ True if (has_investments and investments.number_gathered() > 3) or (has_other_investments and other_investments.number_gathered() > 3) else '' }
       # 15 Assets - Real Estate
       - "real_estate_address_1": |
           % if has_real_estate and real_estate.number_gathered() > 0:
@@ -5035,7 +5013,6 @@ attachment:
           % if has_real_estate and real_estate.number_gathered() >= 3:
           ${ thousands(real_estate[2].balance, show_decimals=True) }
           % endif
-      - "real_estate_addendum_yes": ${ has_real_estate and real_estate.number_gathered() > 3 }
       # 15 Assets - Motor Vehicles
       - "motor_vehicle_info_1": |
           % if has_motor_vehicle and motor_vehicle.number_gathered() > 0:
@@ -5085,23 +5062,6 @@ attachment:
           % if has_motor_vehicle and motor_vehicle.number_gathered() >= 3:
           ${ thousands(motor_vehicle[2].balance, show_decimals=True) }
           % endif
-      - "motor_vehicle_info_4": |
-          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
-          ${ motor_vehicle[3].year } ${ motor_vehicle[3].make } ${ motor_vehicle[3].model }
-          % endif
-      - "motor_vehicle_title_4": |
-          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
-          ${ motor_vehicle[3].name.text }
-          % endif
-      - "motor_vehicle_fmv_4": |
-          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
-          ${ thousands(motor_vehicle[3].fmv, show_decimals=True) }
-          % endif
-      - "motor_vehicle_balance_4": |
-          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
-          ${ thousands(motor_vehicle[3].balance, show_decimals=True) }
-          % endif
-      - "motor_vehicle_addendum_yes": ${ has_motor_vehicle and motor_vehicle.number_gathered() > 4 }
       # 15 Assets - Business interests
       - "business_interests_name_1": |
           % if has_business_interests and business_interests.number_gathered() > 0:
@@ -5151,7 +5111,6 @@ attachment:
           % if has_business_interests and business_interests.number_gathered() >= 3:
           ${ thousands(business_interests[2].fmv, show_decimals=True) }
           % endif
-      - "business_interests_addendum_yes": ${ has_business_interests and business_interests.number_gathered() > 3 }
       # 15 Assets - Life insurance
       - "life_insurance_company_1": |
           % if has_life_insurance and life_insurance.number_gathered() > 0:
@@ -5201,7 +5160,6 @@ attachment:
           % if has_life_insurance and life_insurance.number_gathered() >= 3:
           ${ thousands(life_insurance[2].value, show_decimals=True) }
           % endif
-      - "life_insurance_addendum_yes": ${ has_life_insurance and life_insurance.number_gathered() > 3 }
       # 15 Assets - retirement benefits
       - "retirement_plan_1": |
           % if has_retirement_plan and retirement_plan.number_gathered() > 0:
@@ -5239,7 +5197,7 @@ attachment:
           % if has_retirement_plan and retirement_plan.number_gathered() >= 3:
           ${ thousands(retirement_plan[2].balance, show_decimals=True) }
           % endif
-      - "retirement_addendum_yes": ${ has_retirement_plan and retirement_plan.number_gathered() > 3 }
+      - "insurance_retirement_addendum_yes": ${ True if (has_life_insurance and life_insurance.number_gathered() > 3) or (has_retirement_plan and retirement_plan.number_gathered() > 3) else '' }
       # 15 Assets - valuable collectibles
       - "collection_description_1": |
           % if has_collection and collection.number_gathered() > 0:
@@ -5265,7 +5223,6 @@ attachment:
           % if has_collection and collection.number_gathered() >= 3:
           ${ thousands(collection[2].fmv, show_decimals=True) }
           % endif
-      - "collection_addendum_yes": ${ has_collection and collection.number_gathered() > 3 }
       # 15 Assets - other personal property
       - "other_property_description_1": |
           % if has_other_property and other_property.number_gathered() > 0:
@@ -5291,7 +5248,7 @@ attachment:
           % if other_property.number_gathered() >= 3:
           ${ thousands(other_property[2].fmv, show_decimals=True) }
           % endif
-      - "other_property_addendum_yes": ${ has_other_property and other_property.number_gathered() > 3 }
+      - "other_property_addendum_yes": ${ True if (has_collection and collection.number_gathered() > 3) or (has_motor_vehicle and motor_vehicle.number_gathered() > 3) or (has_other_property and other_property.number_gathered() > 3) else '' }
       # 15 Assets - transfer/sale property
       - "transfer_description_1": |
           % if has_transfer and transfer.number_gathered() > 0:
@@ -5341,7 +5298,7 @@ attachment:
           % if has_transfer and transfer.number_gathered() >= 3:
           ${ thousands(transfer[2].amount, show_decimals=True) }
           % endif
-      - "transfer_addendum_yes": ${ has_transfer and transfer.number_gathered() > 3 }
+      - "property_business_addendum_yes": ${ True if (has_business_interests and business_interests.number_gathered() > 3) or (has_real_estate and real_estate.number_gathered() > 3) or (has_transfer and transfer.number_gathered() > 3) else '' }
       # 16 Lawsuits and Claims
       - "lawsuit_number_1": |
           % if has_lawsuits and lawsuits.number_gathered() > 0:
@@ -5471,7 +5428,7 @@ attachment:
       - "users_name": ${ users[0].name.full(middle="full") }
       - "users_address_2": ${ users[0].address.on_one_line(bare=True) }
       - "user_hide_address_cb": ${ True if hide_address else '' }
-      - "user_phone": ${ phone_number_formatted(users[0].phone_number) }
+      - "users_phone": ${ phone_number_formatted(users[0].phone_number) }
       - "users_email": ${ users[0].email if users[0].has_email_address else "" }        
 
 ---
@@ -5508,7 +5465,7 @@ attachment:
   editable: False
   pdf template file: fa_additional_employment_business.pdf
   fields:
-      - "county_name": ${ case_county.upper() }
+      - "county_name": ${ case_county }
       - "case_number": ${ case_number }
       - "pre-judgment": ${ filing_status == "pre_judgment" }
       - "post-judgment": ${ filing_status == "post_judgment" }
@@ -5657,7 +5614,7 @@ attachment:
   editable: False
   pdf template file: FA_additional_health_insurance.pdf
   fields:
-      - "county_name": ${ case_county.upper() }
+      - "county_name": ${ case_county }
       - "case_number": ${ case_number }
       - "pre-judgment": ${ filing_status == "pre_judgment" }
       - "post-judgment": ${ filing_status == "post_judgment" }
@@ -5793,10 +5750,6 @@ attachment:
       - "coinsurance":  |
           % if insurance.there_are_any:
           ${ nice_number(insurance[i].coinsurance, use_word=False) }%
-          % endif
-      - "copayment":  |
-          % if insurance.there_are_any:
-          ${ thousands(insurance[i].copayment, show_decimals=True) }
           % endif
       - "insurance_additional_yes": ${ insurance.number_gathered() > 2 }
       - "additional_count": |

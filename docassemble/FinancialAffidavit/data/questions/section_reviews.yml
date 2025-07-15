@@ -479,6 +479,20 @@ review:
       % else:
       None entered
       % endif
+
+  - Edit: insurance.there_are_any
+    button: |
+      **Do you have health insurance?**
+      ${ word(yesno(insurance.there_are_any)) }
+  - Edit: insurance.revisit
+    button: |
+      **Health insurance**
+
+      % for policy in insurance:
+        * ${ policy.name.text } - ${ policy.type.true_values() }
+      % endfor
+    show if: insurance.there_are_any
+      
   - Edit: users[0].children_expenses_question
     button: |
       **Do you have any expenses for minor or dependent children?**
@@ -559,18 +573,6 @@ review:
       % endif
     show if: users[0].children_expenses_question
 
-  - Edit: insurance.there_are_any
-    button: |
-      **Do you have health insurance?**
-      ${ word(yesno(insurance.there_are_any)) }
-  - Edit: insurance.revisit
-    button: |
-      **Health insurance**
-
-      % for policy in insurance:
-        * ${ policy.name.text } - ${ policy.type.true_values() }
-      % endfor
-    show if: insurance.there_are_any
   - Edit: has_debts
     button: |
       **Do you have any debts?**
@@ -589,11 +591,11 @@ review:
       <h4>Assets</h4>
   - Edit: has_cash_assets
     button: |
-      **Do you have any cash or cash equivalents?**
+      **Do you have any money in bank or credit union accounts?**
       ${word(yesno(has_cash_assets))}
   - Edit: cash.revisit
     button: |
-      **Cash assets**
+      **Bank and credit union accounts**
 
       % for asset in cash:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -613,11 +615,11 @@ review:
     show if: has_cert_deposit
   - Edit: has_money
     button: |
-      **Do you have any money on debit cards or in money transfer apps?**
+      **Do you have any money in cash, on debit cards, or in money transfer apps?**
       ${ word(yesno(has_money)) }
   - Edit: money.revisit
     button: |
-      **Debit card and money transfer balances**
+      **Cash, debit cards, and money transfer app balances**
 
       % for asset in money:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -1292,6 +1294,20 @@ review:
       % else:
       None entered
       % endif
+
+  - Edit: insurance.there_are_any
+    button: |
+      **Do you have health insurance?**
+      ${ word(yesno(insurance.there_are_any)) }
+  - Edit: insurance.revisit
+    button: |
+      **Health insurance**
+
+      % for policy in insurance:
+        * ${ policy.name.text } - ${ policy.type.true_values() }
+      % endfor
+    show if: insurance.there_are_any
+      
   - Edit: users[0].children_expenses_question
     button: |
       **Do you have any expenses for minor or dependent children?**
@@ -1372,18 +1388,6 @@ review:
       % endif
     show if: users[0].children_expenses_question
 
-  - Edit: insurance.there_are_any
-    button: |
-      **Do you have health insurance?**
-      ${ word(yesno(insurance.there_are_any)) }
-  - Edit: insurance.revisit
-    button: |
-      **Health insurance**
-
-      % for policy in insurance:
-        * ${ policy.name.text } - ${ policy.type.true_values() }
-      % endfor
-    show if: insurance.there_are_any
   - Edit: has_debts
     button: |
       **Do you have any debts?**
@@ -1408,11 +1412,11 @@ subquestion: |
 review:
   - Edit: has_cash_assets
     button: |
-      **Do you have any cash or cash equivalents?**
+      **Do you have any money in bank or credit union accounts?**
       ${word(yesno(has_cash_assets))}
   - Edit: cash.revisit
     button: |
-      **Cash assets**
+      **Bank and credit union accounts**
 
       % for asset in cash:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -1432,11 +1436,11 @@ review:
     show if: has_cert_deposit
   - Edit: has_money
     button: |
-      **Do you have any money on debit cards or in money transfer apps?**
+      **Do you have any money in cash, on debit cards, or in money transfer apps?**
       ${ word(yesno(has_money)) }
   - Edit: money.revisit
     button: |
-      **Debit card and money transfer balances**
+      **Cash, debit cards, and money transfer app balances**
 
       % for asset in money:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -1847,9 +1851,6 @@ review:
       
       **Coinsurance:**
       ${ x.coinsurance }%
-
-      **Copayment amount:**
-      ${ currency(x.copayment) }
 ---
 id: debts table
 table: debts.table
@@ -1877,7 +1878,7 @@ subquestion: |
   ${ debts.add_action() }
   % endif
 ---
-id: cash table
+id: bank accounts table
 table: cash.table
 rows: cash
 columns:
@@ -1890,10 +1891,10 @@ columns:
 delete buttons: True
 confirm: True
 ---
-id: cash assets review screen
+id: bank accounts review screen
 continue button field: cash.revisit
 question: |
-  Edit information about your cash assets
+  Edit information about your bank or credit union accounts
 subquestion: |
   ${ cash.table }
 
@@ -1928,8 +1929,9 @@ id: money cash/card table
 table: money.table
 rows: money
 columns:
-  - Location of cash or card: row_item.name.text
-  - Held by: row_item.holder
+  - Bank or institution name: row_item.name.text
+  - Name on account: row_item.holder
+  - Account type: row_item.type
   - Balance: currency(row_item.balance)
   - Edit to change details: |
       action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
@@ -1939,7 +1941,7 @@ confirm: True
 id: money cash/card review screen
 continue button field: money.revisit
 question: |
-  Edit information about your debit cards and money transfer app balances
+  Edit information about your cash, debit cards, and money transfer app balances
 subquestion: |
   ${ money.table }
 
