@@ -3280,7 +3280,7 @@ question: |
 subquestion: |
   This program can put "**/s/ ${users[0].name.full(middle='full')}**" where you would sign your name. The court will accept this as your signature.
 
-  If you do not add your **{e-signature}**, you must sign your paper form before you send it to the other parent or their lawyer.
+  If you do not add your **{e-signature}**, you must sign your paper form before you send it to the other party or their lawyer.
 
   <div class="alert alert-info ilao-info" role="alert">
     <h6 class="alert-heading">What it means to sign your form</h6>
@@ -3316,7 +3316,7 @@ question: |
 subquestion: |
   Your form is ready. View and download your form below. Click **:edit: Make changes** to fix any mistakes.
 
-  This program **does not deliver** your *Financial Affidavit* to the other parent or their lawyer. You will need to do that yourself.
+  This program **does not deliver** your *Financial Affidavit* to the other party or their lawyer. You will need to do that yourself.
   
   ${ action_button_html(url_action('review_answers'), label=':edit: Make changes', color='success', size="md") }
 
@@ -3326,7 +3326,7 @@ subquestion: |
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
 
-  **Note:** This program **does not deliver** your *Financial Affidavit* to the other parent or their lawyer. You will need to do that yourself.
+  **Note:** This program **does not deliver** your *Financial Affidavit* to the other party or their lawyer. You will need to do that yourself.
   
   Thank you for using ILAO Easy Forms!
 under: |
@@ -3354,6 +3354,7 @@ objects:
   - financial_affidavit_bundle: ALDocumentBundle.using(title="Financial Affidavit", filename="financial_affidavit.pdf", enabled=True, elements=[
         fa_primary, 
         additional_employment_bundle,
+        additional_child_support,
         additional_health_insurance_bundle,
         additional_debts,
         additional_cash,
@@ -3477,6 +3478,12 @@ attachment:
           ${ employment[0].gross_date.format('MM/dd/yyyy') }
           % endif
       # business
+      - "employment_cb": |
+         % if employment.there_are_any:
+         % if employment[0].type == "own" or employment[0].type == "contractor" or employment[0].type == "partnership" or employment[0].type == "LLC" or employment[0].type == "corp" or employment[0].type == "other_entity":
+         ${ True}
+         % endif
+         % endif
       - "business_own": |
           % if employment.there_are_any:
           ${ employment[0].type == "own" }
@@ -3853,8 +3860,6 @@ attachment:
       - "cs_other_case_amount_1": |
           % if users[0].child_support_other_cases:
           ${ thousands(other_cs_cases[0].amount, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "cs_other_case_loc_2": |
           % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 1:
@@ -3871,8 +3876,6 @@ attachment:
       - "cs_other_case_amount_2": |
           % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 1:
           ${ thousands(other_cs_cases[1].amount, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "cs_other_case_loc_3": |
           % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 2:
@@ -3889,8 +3892,6 @@ attachment:
       - "cs_other_case_amount_3": |
           % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 2:
           ${ thousands(other_cs_cases[2].amount, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "cs_other_case_loc_4": |
           % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 3:
@@ -3907,8 +3908,6 @@ attachment:
       - "cs_other_case_amount_4": |
           % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 3:
           ${ thousands(other_cs_cases[3].amount, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "cs_no_case_parent_1": |
           % if users[0].child_support_no_court_order:
@@ -3921,8 +3920,6 @@ attachment:
       - "cs_no_case_amount_1": |
           % if users[0].child_support_no_court_order:
           ${ thousands(other_cs_parents[0].amount, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "cs_no_case_parent_2": |
           % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 1:
@@ -3935,8 +3932,6 @@ attachment:
       - "cs_no_case_amount_2": |
           % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 1:
           ${ thousands(other_cs_parents[1].amount, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "cs_no_case_parent_3": |
           % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 2:
@@ -3949,8 +3944,6 @@ attachment:
       - "cs_no_case_amount_3": |
           % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 2:
           ${ thousands(other_cs_parents[2].amount, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "cs_no_case_parent_4": |
           % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 3:
@@ -3963,8 +3956,6 @@ attachment:
       - "cs_no_case_amount_4": |
           % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 3:
           ${ thousands(other_cs_parents[3].amount, show_decimals=True)}
-          % else:
-          0.00
           % endif
       - "cs_support_name_1": |
           % if users[0].child_support_in_home:
@@ -5467,8 +5458,6 @@ attachment:
   fields:
       - "county_name": ${ case_county }
       - "case_number": ${ case_number }
-      - "pre-judgment": ${ filing_status == "pre_judgment" }
-      - "post-judgment": ${ filing_status == "post_judgment" }
       - "petitioner_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
           ${ users[0].name.full(middle='full') }
@@ -5489,11 +5478,7 @@ attachment:
           % endif
       - "employer_address": |
           % if employment[i].type == "employed":
-          ${ employment[i].address.line_one(bare=True) }
-          % endif
-      - "employer_address2": |
-          % if employment[i].type == "employed":
-          ${ employment[i].address.line_two() }
+          ${ employment[i].address.on_one_line(bare=True) }
           % endif
       - "paychecks_monthly": |
           % if employment[i].type == "employed":
@@ -5524,6 +5509,10 @@ attachment:
           ${ employment[i].gross_date.format('MM/dd/yyyy') }
           % endif
       # business
+      - "employment_cb": |
+         % if employment[i].type == "own" or employment[i].type == "contractor" or employment[i].type == "partnership" or employment[i].type == "LLC" or employment[i].type == "corp" or employment[i].type == "other_entity":
+         ${ True}
+         % endif      
       - "business_own": ${ employment[i].type == "own" }
       - "business_contractor": ${ employment[i].type == "contractor" }
       - "business_partnership": ${ employment[i].type == "partnership" }
@@ -5536,11 +5525,7 @@ attachment:
           % endif
       - "business_address": |
           % if employment[i].type != "employed":
-          ${ employment[i].address.line_one(bare=True) }
-          % endif
-      - "business_address2": |
-          % if employment[i].type != "employed":
-          ${ employment[i].address.line_two() }
+          ${ employment[i].address.on_one_line(bare=True) }
           % endif
       - "business_gross_last_year": |
           % if employment[i].type != "employed":
@@ -5580,6 +5565,11 @@ attachment:
             ${ employment[i].other_perks }
             % endif
           % endif
+      - "another_employment_addendum_yes": |
+          % if employment.number_gathered() > 2:
+          ${ employment.number_gathered() - 1 }
+          % endif 
+        
 ---
 ############ FA ADDITIONAL HEALTH INSURANCE #############
 objects:

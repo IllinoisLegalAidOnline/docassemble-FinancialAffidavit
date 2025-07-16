@@ -77,10 +77,6 @@ review:
     button: |
       **Your birthdate:**
       ${ users[0].birthdate }
-  - Edit: household_expenses
-    button: |
-      **Do you live with another adult that helps pay your expenses?**
-      ${ word(yesno(household_expenses))}  
 
 ################ Income  
   - note: |
@@ -878,10 +874,6 @@ review:
     button: |
       **Your birthdate:**
       ${ users[0].birthdate }
-  - Edit: household_expenses
-    button: |
-      **Do you live with another adult that helps pay your expenses?**
-      ${ word(yesno(household_expenses))}  
 
 
 ---

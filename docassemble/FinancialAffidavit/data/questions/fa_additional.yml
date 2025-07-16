@@ -1,4 +1,442 @@
 ---
+############ FA ADDITIONAL CHILD SUPPORT #############
+objects:
+  - additional_child_support: ALDocument.using(title="FA Additional Child Support", filename="FA_additional_child_support.pdf", has_addendum=False)
+---
+code: |
+  additional_child_support.enabled = (users[0].child_support_other_cases and other_cs_cases.number_gathered() > 3) or (users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 3) or (users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3)
+---
+attachment:
+  name: additional_child_support
+  variable name: additional_child_support[i]
+  filename: additional_child_support
+  skip undefined: True
+  editable: False
+  pdf template file: FA_additional_child_support.pdf
+  fields:
+    - "county_name": ${ case_county }
+    - "case_number": ${ case_number }
+    - "petitioner_name": |
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
+        ${ users[0].name.full(middle='full') }
+        % else:
+        ${ other_parties[0].name.full(middle='full') }
+        % endif
+    - "respondent_name": |
+        % if party_label == 'petitioner' or party_label == 'plaintiff':
+        ${ other_parties[0].name.full(middle='full') }
+        % else:
+        ${ users[0].name.full(middle='full') }
+        % endif
+
+    - "cs_other_case_loc_5": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 4:
+        ${ other_cs_cases[4].county + ", " + state_name(other_cs_cases[4].state)}
+        % endif          
+    - "cs_other_case_kids_5": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 4:
+        ${ int(other_cs_cases[4].num_kids) }
+        % endif
+    - "cs_other_case_num_5": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 4:
+        ${ other_cs_cases[4].name.text }
+        % endif
+    - "cs_other_case_amount_5": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 4:
+        ${ thousands(other_cs_cases[4].amount, show_decimals=True)}
+        % endif
+    
+    - "cs_other_case_loc_6": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 5:
+        ${ other_cs_cases[5].county + ", " + state_name(other_cs_cases[5].state)}
+        % endif          
+    - "cs_other_case_kids_6": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 5:
+        ${ int(other_cs_cases[5].num_kids) }
+        % endif
+    - "cs_other_case_num_6": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 5:
+        ${ other_cs_cases[5].name.text }
+        % endif
+    - "cs_other_case_amount_6": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 5:
+        ${ thousands(other_cs_cases[5].amount, show_decimals=True)}
+        % endif
+    
+    - "cs_other_case_loc_7": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 6:
+        ${ other_cs_cases[6].county + ", " + state_name(other_cs_cases[6].state)}
+        % endif          
+    - "cs_other_case_kids_7": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 6:
+        ${ int(other_cs_cases[6].num_kids) }
+        % endif
+    - "cs_other_case_num_7": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 6:
+        ${ other_cs_cases[6].name.text }
+        % endif
+    - "cs_other_case_amount_7": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 6:
+        ${ thousands(other_cs_cases[6].amount, show_decimals=True)}
+        % endif
+    
+    - "cs_other_case_loc_8": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 7:
+        ${ other_cs_cases[7].county + ", " + state_name(other_cs_cases[7].state)}
+        % endif          
+    - "cs_other_case_kids_8": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 7:
+        ${ int(other_cs_cases[7].num_kids) }
+        % endif
+    - "cs_other_case_num_8": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 7:
+        ${ other_cs_cases[7].name.text }
+        % endif
+    - "cs_other_case_amount_8": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 7:
+        ${ thousands(other_cs_cases[7].amount, show_decimals=True)}
+        % endif
+    
+    - "cs_other_case_loc_9": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 8:
+        ${ other_cs_cases[8].county + ", " + state_name(other_cs_cases[8].state)}
+        % endif          
+    - "cs_other_case_kids_9": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 8:
+        ${ int(other_cs_cases[8].num_kids) }
+        % endif
+    - "cs_other_case_num_9": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 8:
+        ${ other_cs_cases[8].name.text }
+        % endif
+    - "cs_other_case_amount_9": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 8:
+        ${ thousands(other_cs_cases[8].amount, show_decimals=True)}
+        % endif
+    
+    - "cs_other_case_loc_10": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 9:
+        ${ other_cs_cases[9].county + ", " + state_name(other_cs_cases[9].state)}
+        % endif          
+    - "cs_other_case_kids_10": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 9:
+        ${ int(other_cs_cases[9].num_kids) }
+        % endif
+    - "cs_other_case_num_10": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 9:
+        ${ other_cs_cases[9].name.text }
+        % endif
+    - "cs_other_case_amount_10": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 9:
+        ${ thousands(other_cs_cases[9].amount, show_decimals=True)}
+        % endif
+    
+    - "cs_other_case_loc_11": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 10:
+        ${ other_cs_cases[10].county + ", " + state_name(other_cs_cases[10].state)}
+        % endif          
+    - "cs_other_case_kids_11": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 10:
+        ${ int(other_cs_cases[10].num_kids) }
+        % endif
+    - "cs_other_case_num_11": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 10:
+        ${ other_cs_cases[10].name.text }
+        % endif
+    - "cs_other_case_amount_11": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 10:
+        ${ thousands(other_cs_cases[10].amount, show_decimals=True)}
+        % endif
+    
+    - "cs_other_case_loc_12": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 11:
+        ${ other_cs_cases[11].county + ", " + state_name(other_cs_cases[11].state)}
+        % endif          
+    - "cs_other_case_kids_12": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 11:
+        ${ int(other_cs_cases[11].num_kids) }
+        % endif
+    - "cs_other_case_num_12": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 11:
+        ${ other_cs_cases[11].name.text }
+        % endif
+    - "cs_other_case_amount_12": |
+        % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 11:
+        ${ thousands(other_cs_cases[11].amount, show_decimals=True)}
+        % endif
+
+    - "cs_no_case_parent_5": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 4:
+        ${ other_cs_parents[4].name.text }
+        % endif
+    - "cs_no_case_kids_5": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 4:
+        ${ int(other_cs_parents[4].num_kids) }
+        % endif
+    - "cs_no_case_amount_5": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 4:
+        ${ thousands(other_cs_parents[4].amount, show_decimals=True)}
+        % endif
+    
+    - "cs_no_case_parent_6": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 5:
+        ${ other_cs_parents[5].name.text }
+        % endif
+    - "cs_no_case_kids_6": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 5:
+        ${ int(other_cs_parents[5].num_kids) }
+        % endif
+    - "cs_no_case_amount_6": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 5:
+        ${ thousands(other_cs_parents[5].amount, show_decimals=True)}
+        % endif
+    
+    - "cs_no_case_parent_7": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 6:
+        ${ other_cs_parents[6].name.text }
+        % endif
+    - "cs_no_case_kids_7": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 6:
+        ${ int(other_cs_parents[6].num_kids) }
+        % endif
+    - "cs_no_case_amount_7": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 6:
+        ${ thousands(other_cs_parents[6].amount, show_decimals=True)}
+        % endif
+    
+    - "cs_no_case_parent_8": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 7:
+        ${ other_cs_parents[7].name.text }
+        % endif
+    - "cs_no_case_kids_8": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 7:
+        ${ int(other_cs_parents[7].num_kids) }
+        % endif
+    - "cs_no_case_amount_8": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 7:
+        ${ thousands(other_cs_parents[7].amount, show_decimals=True)}
+        % endif
+    
+    - "cs_no_case_parent_9": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 8:
+        ${ other_cs_parents[8].name.text }
+        % endif
+    - "cs_no_case_kids_9": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 8:
+        ${ int(other_cs_parents[8].num_kids) }
+        % endif
+    - "cs_no_case_amount_9": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 8:
+        ${ thousands(other_cs_parents[8].amount, show_decimals=True)}
+        % endif
+    
+    - "cs_no_case_parent_10": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 9:
+        ${ other_cs_parents[9].name.text }
+        % endif
+    - "cs_no_case_kids_10": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 9:
+        ${ int(other_cs_parents[9].num_kids) }
+        % endif
+    - "cs_no_case_amount_10": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 9:
+        ${ thousands(other_cs_parents[9].amount, show_decimals=True)}
+        % endif
+    
+    - "cs_no_case_parent_11": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 10:
+        ${ other_cs_parents[10].name.text }
+        % endif
+    - "cs_no_case_kids_11": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 10:
+        ${ int(other_cs_parents[10].num_kids) }
+        % endif
+    - "cs_no_case_amount_11": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 10:
+        ${ thousands(other_cs_parents[10].amount, show_decimals=True)}
+        % endif
+    
+    - "cs_no_case_parent_12": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 11:
+        ${ other_cs_parents[11].name.text }
+        % endif
+    - "cs_no_case_kids_12": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 11:
+        ${ int(other_cs_parents[11].num_kids) }
+        % endif
+    - "cs_no_case_amount_12": |
+        % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 11:
+        ${ thousands(other_cs_parents[11].amount, show_decimals=True)}
+        % endif    
+
+    - "cs_support_name_5": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 4:
+        ${ other_cs_kids_in_home[4].name.text }
+        % endif
+    - "cs_support_age_5": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 4:
+        ${ int(other_cs_kids_in_home[4].age) }
+        % endif
+    - "cs_support_pat_born_5": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 4:
+        ${ True if other_cs_kids_in_home[4].paternity == "Born during marriage or union" else "" }
+        % endif
+    - "cs_support_pat_vap_5": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 4:
+        ${ True if other_cs_kids_in_home[4].paternity == "VAP" else "" }
+        % endif
+    - "cs_support_pat_order_5": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 4:
+        ${ True if other_cs_kids_in_home[4].paternity == "Court order" else "" }
+        % endif
+    
+    - "cs_support_name_6": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 5:
+        ${ other_cs_kids_in_home[5].name.text }
+        % endif
+    - "cs_support_age_6": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 5:
+        ${ int(other_cs_kids_in_home[5].age) }
+        % endif
+    - "cs_support_pat_born_6": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 5:
+        ${ True if other_cs_kids_in_home[5].paternity == "Born during marriage or union" else "" }
+        % endif
+    - "cs_support_pat_vap_6": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 5:
+        ${ True if other_cs_kids_in_home[5].paternity == "VAP" else "" }
+        % endif
+    - "cs_support_pat_order_6": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 5:
+        ${ True if other_cs_kids_in_home[5].paternity == "Court order" else "" }
+        % endif
+    
+    - "cs_support_name_7": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 6:
+        ${ other_cs_kids_in_home[6].name.text }
+        % endif
+    - "cs_support_age_7": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 6:
+        ${ int(other_cs_kids_in_home[6].age) }
+        % endif
+    - "cs_support_pat_born_7": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 6:
+        ${ True if other_cs_kids_in_home[6].paternity == "Born during marriage or union" else "" }
+        % endif
+    - "cs_support_pat_vap_7": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 6:
+        ${ True if other_cs_kids_in_home[6].paternity == "VAP" else "" }
+        % endif
+    - "cs_support_pat_order_7": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 6:
+        ${ True if other_cs_kids_in_home[6].paternity == "Court order" else "" }
+        % endif
+    
+    - "cs_support_name_8": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 7:
+        ${ other_cs_kids_in_home[7].name.text }
+        % endif
+    - "cs_support_age_8": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 7:
+        ${ int(other_cs_kids_in_home[7].age) }
+        % endif
+    - "cs_support_pat_born_8": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 7:
+        ${ True if other_cs_kids_in_home[7].paternity == "Born during marriage or union" else "" }
+        % endif
+    - "cs_support_pat_vap_8": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 7:
+        ${ True if other_cs_kids_in_home[7].paternity == "VAP" else "" }
+        % endif
+    - "cs_support_pat_order_8": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 7:
+        ${ True if other_cs_kids_in_home[7].paternity == "Court order" else "" }
+        % endif
+    
+    - "cs_support_name_9": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 8:
+        ${ other_cs_kids_in_home[8].name.text }
+        % endif
+    - "cs_support_age_9": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 8:
+        ${ int(other_cs_kids_in_home[8].age) }
+        % endif
+    - "cs_support_pat_born_9": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 8:
+        ${ True if other_cs_kids_in_home[8].paternity == "Born during marriage or union" else "" }
+        % endif
+    - "cs_support_pat_vap_9": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 8:
+        ${ True if other_cs_kids_in_home[8].paternity == "VAP" else "" }
+        % endif
+    - "cs_support_pat_order_9": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 8:
+        ${ True if other_cs_kids_in_home[8].paternity == "Court order" else "" }
+        % endif
+    
+    - "cs_support_name_10": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 9:
+        ${ other_cs_kids_in_home[9].name.text }
+        % endif
+    - "cs_support_age_10": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 9:
+        ${ int(other_cs_kids_in_home[9].age) }
+        % endif
+    - "cs_support_pat_born_10": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 9:
+        ${ True if other_cs_kids_in_home[9].paternity == "Born during marriage or union" else "" }
+        % endif
+    - "cs_support_pat_vap_10": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 9:
+        ${ True if other_cs_kids_in_home[9].paternity == "VAP" else "" }
+        % endif
+    - "cs_support_pat_order_10": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 9:
+        ${ True if other_cs_kids_in_home[9].paternity == "Court order" else "" }
+        % endif
+
+    - "cs_support_name_11": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 10:
+        ${ other_cs_kids_in_home[10].name.text }
+        % endif
+    - "cs_support_age_11": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 10:
+        ${ int(other_cs_kids_in_home[10].age) }
+        % endif
+    - "cs_support_pat_born_11": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 10:
+        ${ True if other_cs_kids_in_home[10].paternity == "Born during marriage or union" else "" }
+        % endif
+    - "cs_support_pat_vap_11": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 10:
+        ${ True if other_cs_kids_in_home[10].paternity == "VAP" else "" }
+        % endif
+    - "cs_support_pat_order_11": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 10:
+        ${ True if other_cs_kids_in_home[10].paternity == "Court order" else "" }
+        % endif
+    
+    - "cs_support_name_12": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 11:
+        ${ other_cs_kids_in_home[11].name.text }
+        % endif
+    - "cs_support_age_12": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 11:
+        ${ int(other_cs_kids_in_home[11].age) }
+        % endif
+    - "cs_support_pat_born_12": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 11:
+        ${ True if other_cs_kids_in_home[11].paternity == "Born during marriage or union" else "" }
+        % endif
+    - "cs_support_pat_vap_12": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 11:
+        ${ True if other_cs_kids_in_home[11].paternity == "VAP" else "" }
+        % endif
+    - "cs_support_pat_order_12": |
+        % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 11:
+        ${ True if other_cs_kids_in_home[11].paternity == "Court order" else "" }
+        % endif
+
 ############ FA ADDITIONAL DEBTS #############
 objects:
   - additional_debts: ALDocument.using(title="FA Additional Debts", filename="FA_additional_debts.pdf", has_addendum=False)
@@ -16,8 +454,6 @@ attachment:
   fields:
     - "county_name": ${ case_county }
     - "case_number": ${ case_number }
-    - "pre-judgment": ${ filing_status == "pre_judgment" }
-    - "post-judgment": ${ filing_status == "post_judgment" }
     - "petitioner_name": |
         % if party_label == 'petitioner' or party_label == 'plaintiff':
         ${ users[0].name.full(middle='full') }
