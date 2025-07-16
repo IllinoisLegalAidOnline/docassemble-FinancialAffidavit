@@ -15,7 +15,7 @@ review:
   - Edit: users[0].name.first
     button: |
       **Your name:**
-      ${users[0].name.full(middle="full")}
+      ${users[0].name_full()}
   - Edit: party_label
     button: |
       **Your party label:**
@@ -23,7 +23,7 @@ review:
   - Edit: other_parties[0].name.first
     button: |
       **The other party's name:**
-      ${other_parties[0].name.full(middle="full")}
+      ${other_parties[0].name_full()}
   - Edit: case_county
     button: |
       **County where this case is filed:**
@@ -804,7 +804,7 @@ review:
   - Edit: users[0].name.first
     button: |
       **Your name:**
-      ${users[0].name.full(middle="full")}
+      ${users[0].name_full()}
   - Edit: party_label
     button: |
       **Your party label:**
@@ -812,7 +812,7 @@ review:
   - Edit: other_parties[0].name.first
     button: |
       **The other party's name:**
-      ${other_parties[0].name.full(middle="full")}
+      ${other_parties[0].name_full()}
   - Edit: case_county
     button: |
       **County where this case is filed:**

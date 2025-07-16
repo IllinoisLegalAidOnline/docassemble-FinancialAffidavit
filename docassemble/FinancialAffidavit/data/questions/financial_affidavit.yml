@@ -2205,9 +2205,7 @@ code: |
     'subtotal_monthly_transportation_expenses',
     'subtotal_monthly_personal_expenses',
     'subtotal_monthly_children_expenses',
-    'total_child_support_payments',
-    'subtotal_monthly_insurance_expenses',
-    'total_maintenance_payments')
+    'subtotal_monthly_insurance_expenses')
 ---
 ################### FA HEALTH INSURANCE ##################
 id: health insurance intro 
@@ -2494,7 +2492,7 @@ code: |
   cash[i].complete = True 
 ---
 code: |
-  if cash.number_gathered() == 25:
+  if cash.number_gathered() == 12:
     cash.there_is_another = False
 ---
 ########### FA ASSETS - 15a Certificate of Deposit ###########
@@ -2541,7 +2539,7 @@ code: |
   cert_deposit[i].complete = True 
 ---
 code: |
-  if cert_deposit.number_gathered() == 25:
+  if cert_deposit.number_gathered() == 12:
     cert_deposit.there_is_another = False
 ---
 ########### FA ASSETS - 15a money cash/card ###########
@@ -2603,7 +2601,7 @@ code: |
   money[i].complete = True 
 ---
 code: |
-  if money.number_gathered() == 25:
+  if money.number_gathered() == 12:
     money.there_is_another = False
 ---
 ########### FA ASSETS - 15b Investment Accounts ###########
@@ -2676,7 +2674,7 @@ code: |
   investments[i].complete = True 
 ---
 code: |
-  if investments.number_gathered() == 25:
+  if investments.number_gathered() == 12:
     investments.there_is_another = False
 ---
 ########### FA ASSETS - 15b Other investments ###########
@@ -2726,7 +2724,7 @@ code: |
   other_investments[i].complete = True 
 ---
 code: |
-  if other_investments.number_gathered() == 25:
+  if other_investments.number_gathered() == 12:
     other_investments.there_is_another = False
 ---
 ########### FA ASSETS - 15c REAL ESTATE ###########
@@ -2786,7 +2784,7 @@ code: |
   real_estate[i].complete = True 
 ---
 code: |
-  if real_estate.number_gathered() == 25:
+  if real_estate.number_gathered() == 12:
     real_estate.there_is_another = False
 ---
 ########### FA ASSETS - 15d Motor Vehicle ###########
@@ -2853,7 +2851,7 @@ code: |
   motor_vehicle[i].complete = True 
 ---
 code: |
-  if motor_vehicle.number_gathered() == 25:
+  if motor_vehicle.number_gathered() == 12:
     motor_vehicle.there_is_another = False
 ---
 ########### FA ASSETS - 15e Business Interests ###########
@@ -2907,7 +2905,7 @@ code: |
   business_interests[i].complete = True 
 ---
 code: |
-  if business_interests.number_gathered() == 25:
+  if business_interests.number_gathered() == 12:
     business_interests.there_is_another = False
 ---
 ########### FA ASSETS - 15f Life Insurance ###########
@@ -2963,7 +2961,7 @@ code: |
   life_insurance[i].complete = True 
 ---
 code: |
-  if life_insurance.number_gathered() == 25:
+  if life_insurance.number_gathered() == 12:
     life_insurance.there_is_another = False
 ---
 ########### FA ASSETS - 15g Retirement Benefits #######
@@ -3013,7 +3011,7 @@ code: |
   retirement_plan[i].complete = True 
 ---
 code: |
-  if retirement_plan.number_gathered() == 25:
+  if retirement_plan.number_gathered() == 12:
     retirement_plan.there_is_another = False
 ---
 ########### FA ASSETS - 15h Valuable collectibles ###########
@@ -3070,7 +3068,7 @@ code: |
   collection[i].complete = True 
 ---
 code: |
-  if collection.number_gathered() == 25:
+  if collection.number_gathered() == 12:
     collection.there_is_another = False
 ---
 ########### FA ASSETS - 15i Other Personal Property ###########
@@ -3116,7 +3114,7 @@ code: |
   other_property[i].complete = True 
 ---
 code: |
-  if other_property.number_gathered() == 25:
+  if other_property.number_gathered() == 12:
     other_property.there_is_another = False
 ---
 ########### FA ASSETS - 15j Transfer or Sale of Assets #######
@@ -3169,7 +3167,7 @@ code: |
   transfer[i].complete = True 
 ---
 code: |
-  if transfer.number_gathered() == 25:
+  if transfer.number_gathered() == 12:
     transfer.there_is_another = False
 ---
 ########### FA LAWSUITS AND CLAIMS #######
@@ -3278,7 +3276,7 @@ id: e-signature
 question: |
   Do you want to add your e-signature to your ${ form_name }?
 subquestion: |
-  This program can put "**/s/ ${users[0].name.full(middle='full')}**" where you would sign your name. The court will accept this as your signature.
+  This program can put "**/s/ ${users[0].name_full()}**" where you would sign your name. The court will accept this as your signature.
 
   If you do not add your **{e-signature}**, you must sign your paper form before you send it to the other party or their lawyer.
 
@@ -3358,18 +3356,10 @@ objects:
         additional_health_insurance_bundle,
         additional_debts,
         additional_cash,
-        additional_cd,
-        additional_money,
         additional_investments,
-        additional_other_investments,
-        additional_real_estate,
         additional_motor_vehicle,
         additional_business_interests,
         additional_life_insurance,
-        additional_retirement,
-        additional_collectibles,
-        additional_other_property,
-        additional_transfer,
         additional_lawsuits,
       ])
 ---
@@ -3401,15 +3391,15 @@ attachment:
       - "post-judgment": ${ filing_status == "post_judgment" }
       - "petitioner_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % else:
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % endif
       - "respondent_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % else:
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % endif
       - "petitioner_yes": ${ party_label == 'petitioner' or party_label == 'plaintiff' }
       - "respondent_yes": ${ party_label == 'respondent' or party_label == 'defendant' }
@@ -3426,7 +3416,7 @@ attachment:
           % if users[0].attached_documents["other"]:
           ${ comma_and_list(users[0].attachment_assets) }
           % endif
-      - "users_name": ${ users[0].name.full(middle='full') }
+      - "users_name": ${ users[0].name_full() }
       - "users_phone_number": |
           % if users[0].phone_number != "":
           ${ phone_number_formatted(users[0].phone_number) }
@@ -5415,8 +5405,8 @@ attachment:
           % endif
 
       - "users_signature": |
-          ${ users[0].name.full(middle="full") if e_signature else ''  }
-      - "users_name": ${ users[0].name.full(middle="full") }
+          ${ users[0].name_full() if e_signature else ''  }
+      - "users_name": ${ users[0].name_full() }
       - "users_address_2": ${ users[0].address.on_one_line(bare=True) }
       - "user_hide_address_cb": ${ True if hide_address else '' }
       - "users_phone": ${ phone_number_formatted(users[0].phone_number) }
@@ -5460,15 +5450,15 @@ attachment:
       - "case_number": ${ case_number }
       - "petitioner_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % else:
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % endif
       - "respondent_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % else:
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % endif
 
       - "employed_yes": ${ employment[i].type == 'employed' }
@@ -5606,23 +5596,19 @@ attachment:
   fields:
       - "county_name": ${ case_county }
       - "case_number": ${ case_number }
-      - "pre-judgment": ${ filing_status == "pre_judgment" }
-      - "post-judgment": ${ filing_status == "post_judgment" }
       - "petitioner_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % else:
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % endif
       - "respondent_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % else:
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % endif
 
-      - "health_insurance_yes": ${ insurance.there_are_any }
-      - "health_insurance_no": ${ insurance.number_gathered() == 0 }
       - "health_insurance_company": |
           % if insurance.there_are_any:
           ${ insurance[i].name.text }
