@@ -2397,7 +2397,7 @@ code: |
   debts[i].complete = True 
 ---
 code: |
-  if debts.number_gathered() == 26:
+  if debts.number_gathered() == 25:
     debts.there_is_another = False
 ---
 id: expenses summary
