@@ -2777,355 +2777,657 @@ attachment:
         ${ users[0].name_full() }
         % endif
     - "lawsuit_number_4": |
-        % if lawsuits.number_gathered() >= 4:
+        % if has_lawsuits and lawsuits.number_gathered() > 3:
+        % if lawsuits[3].already_filed:
         ${ lawsuits[3].case }
         % endif
-    - "lawsuit_date_4":  |
-        % if lawsuits.number_gathered() >= 4:
+        % endif
+    - "lawsuit_date_4": |
+        % if has_lawsuits and lawsuits.number_gathered() > 3:
+        % if lawsuits[3].already_filed:
         ${ lawsuits[3].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
+        % endif
         % endif
     - "lawsuit_amount_4": |
-        % if lawsuits.number_gathered() >= 4:
-            % if lawsuits[3].judgement:
-            ${ thousands(lawsuits[3].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 3:
+        % if lawsuits[3].already_filed:
+        % if lawsuits[3].case_over:
+        ${ thousands(lawsuits[3].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif        
     - "lawsuit_number_5": |
-        % if lawsuits.number_gathered() >= 5:
+        % if has_lawsuits and lawsuits.number_gathered() > 4:
+        % if lawsuits[4].already_filed:
         ${ lawsuits[4].case }
         % endif
-    - "lawsuit_date_5":  |
-        % if lawsuits.number_gathered() >= 5:
+        % endif
+    
+    - "lawsuit_date_5": |
+        % if has_lawsuits and lawsuits.number_gathered() > 4:
+        % if lawsuits[4].already_filed:
         ${ lawsuits[4].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_5": |
-        % if lawsuits.number_gathered() >= 5:
-            % if lawsuits[4].judgement:
-            ${ thousands(lawsuits[4].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 4:
+        % if lawsuits[4].already_filed:
+        % if lawsuits[4].case_over:
+        ${ thousands(lawsuits[4].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_6": |
-        % if lawsuits.number_gathered() >= 6:
+        % if has_lawsuits and lawsuits.number_gathered() > 5:
+        % if lawsuits[5].already_filed:
         ${ lawsuits[5].case }
         % endif
-    - "lawsuit_date_6":  |
-        % if lawsuits.number_gathered() >= 6:
+        % endif
+    
+    - "lawsuit_date_6": |
+        % if has_lawsuits and lawsuits.number_gathered() > 5:
+        % if lawsuits[5].already_filed:
         ${ lawsuits[5].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_6": |
-        % if lawsuits.number_gathered() >= 6:
-            % if lawsuits[5].judgement:
-            ${ thousands(lawsuits[5].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 5:
+        % if lawsuits[5].already_filed:
+        % if lawsuits[5].case_over:
+        ${ thousands(lawsuits[5].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_7": |
-        % if lawsuits.number_gathered() >= 7:
+        % if has_lawsuits and lawsuits.number_gathered() > 6:
+        % if lawsuits[6].already_filed:
         ${ lawsuits[6].case }
         % endif
-    - "lawsuit_date_7":  |
-        % if lawsuits.number_gathered() >= 7:
+        % endif
+    
+    - "lawsuit_date_7": |
+        % if has_lawsuits and lawsuits.number_gathered() > 6:
+        % if lawsuits[6].already_filed:
         ${ lawsuits[6].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_7": |
-        % if lawsuits.number_gathered() >= 7:
-            % if lawsuits[6].judgement:
-            ${ thousands(lawsuits[6].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 6:
+        % if lawsuits[6].already_filed:
+        % if lawsuits[6].case_over:
+        ${ thousands(lawsuits[6].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_8": |
-        % if lawsuits.number_gathered() >= 8:
+        % if has_lawsuits and lawsuits.number_gathered() > 7:
+        % if lawsuits[7].already_filed:
         ${ lawsuits[7].case }
         % endif
-    - "lawsuit_date_8":  |
-        % if lawsuits.number_gathered() >= 8:
+        % endif
+    
+    - "lawsuit_date_8": |
+        % if has_lawsuits and lawsuits.number_gathered() > 7:
+        % if lawsuits[7].already_filed:
         ${ lawsuits[7].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_8": |
-        % if lawsuits.number_gathered() >= 8:
-            % if lawsuits[7].judgement:
-            ${ thousands(lawsuits[7].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 7:
+        % if lawsuits[7].already_filed:
+        % if lawsuits[7].case_over:
+        ${ thousands(lawsuits[7].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_9": |
-        % if lawsuits.number_gathered() >= 9:
+        % if has_lawsuits and lawsuits.number_gathered() > 8:
+        % if lawsuits[8].already_filed:
         ${ lawsuits[8].case }
         % endif
-    - "lawsuit_date_9":  |
-        % if lawsuits.number_gathered() >= 9:
+        % endif
+    
+    - "lawsuit_date_9": |
+        % if has_lawsuits and lawsuits.number_gathered() > 8:
+        % if lawsuits[8].already_filed:
         ${ lawsuits[8].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_9": |
-        % if lawsuits.number_gathered() >= 9:
-            % if lawsuits[8].judgement:
-            ${ thousands(lawsuits[8].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 8:
+        % if lawsuits[8].already_filed:
+        % if lawsuits[8].case_over:
+        ${ thousands(lawsuits[8].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_10": |
-        % if lawsuits.number_gathered() >= 10:
+        % if has_lawsuits and lawsuits.number_gathered() > 9:
+        % if lawsuits[9].already_filed:
         ${ lawsuits[9].case }
         % endif
-    - "lawsuit_date_10":  |
-        % if lawsuits.number_gathered() >= 10:
+        % endif
+    
+    - "lawsuit_date_10": |
+        % if has_lawsuits and lawsuits.number_gathered() > 9:
+        % if lawsuits[9].already_filed:
         ${ lawsuits[9].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_10": |
-        % if lawsuits.number_gathered() >= 10:
-            % if lawsuits[9].judgement:
-            ${ thousands(lawsuits[9].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 9:
+        % if lawsuits[9].already_filed:
+        % if lawsuits[9].case_over:
+        ${ thousands(lawsuits[9].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_11": |
-        % if lawsuits.number_gathered() >= 11:
+        % if has_lawsuits and lawsuits.number_gathered() > 10:
+        % if lawsuits[10].already_filed:
         ${ lawsuits[10].case }
         % endif
-    - "lawsuit_date_11":  |
-        % if lawsuits.number_gathered() >= 11:
+        % endif
+    
+    - "lawsuit_date_11": |
+        % if has_lawsuits and lawsuits.number_gathered() > 10:
+        % if lawsuits[10].already_filed:
         ${ lawsuits[10].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_11": |
-        % if lawsuits.number_gathered() >= 11:
-            % if lawsuits[10].judgement:
-            ${ thousands(lawsuits[10].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 10:
+        % if lawsuits[10].already_filed:
+        % if lawsuits[10].case_over:
+        ${ thousands(lawsuits[10].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_12": |
-        % if lawsuits.number_gathered() >= 12:
+        % if has_lawsuits and lawsuits.number_gathered() > 11:
+        % if lawsuits[11].already_filed:
         ${ lawsuits[11].case }
         % endif
-    - "lawsuit_date_12":  |
-        % if lawsuits.number_gathered() >= 12:
+        % endif
+    
+    - "lawsuit_date_12": |
+        % if has_lawsuits and lawsuits.number_gathered() > 11:
+        % if lawsuits[11].already_filed:
         ${ lawsuits[11].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_12": |
-        % if lawsuits.number_gathered() >= 12:
-            % if lawsuits[11].judgement:
-            ${ thousands(lawsuits[11].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 11:
+        % if lawsuits[11].already_filed:
+        % if lawsuits[11].case_over:
+        ${ thousands(lawsuits[11].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_13": |
-        % if lawsuits.number_gathered() >= 13:
+        % if has_lawsuits and lawsuits.number_gathered() > 12:
+        % if lawsuits[12].already_filed:
         ${ lawsuits[12].case }
         % endif
-    - "lawsuit_date_13":  |
-        % if lawsuits.number_gathered() >= 13:
+        % endif
+    
+    - "lawsuit_date_13": |
+        % if has_lawsuits and lawsuits.number_gathered() > 12:
+        % if lawsuits[12].already_filed:
         ${ lawsuits[12].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_13": |
-        % if lawsuits.number_gathered() >= 13:
-            % if lawsuits[12].judgement:
-            ${ thousands(lawsuits[12].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 12:
+        % if lawsuits[12].already_filed:
+        % if lawsuits[12].case_over:
+        ${ thousands(lawsuits[12].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_14": |
-        % if lawsuits.number_gathered() >= 14:
+        % if has_lawsuits and lawsuits.number_gathered() > 13:
+        % if lawsuits[13].already_filed:
         ${ lawsuits[13].case }
         % endif
-    - "lawsuit_date_14":  |
-        % if lawsuits.number_gathered() >= 14:
+        % endif
+    
+    - "lawsuit_date_14": |
+        % if has_lawsuits and lawsuits.number_gathered() > 13:
+        % if lawsuits[13].already_filed:
         ${ lawsuits[13].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_14": |
-        % if lawsuits.number_gathered() >= 14:
-            % if lawsuits[13].judgement:
-            ${ thousands(lawsuits[13].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 13:
+        % if lawsuits[13].already_filed:
+        % if lawsuits[13].case_over:
+        ${ thousands(lawsuits[13].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_15": |
-        % if lawsuits.number_gathered() >= 15:
+        % if has_lawsuits and lawsuits.number_gathered() > 14:
+        % if lawsuits[14].already_filed:
         ${ lawsuits[14].case }
         % endif
-    - "lawsuit_date_15":  |
-        % if lawsuits.number_gathered() >= 15:
+        % endif
+    
+    - "lawsuit_date_15": |
+        % if has_lawsuits and lawsuits.number_gathered() > 14:
+        % if lawsuits[14].already_filed:
         ${ lawsuits[14].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_15": |
-        % if lawsuits.number_gathered() >= 15:
-            % if lawsuits[14].judgement:
-            ${ thousands(lawsuits[14].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 14:
+        % if lawsuits[14].already_filed:
+        % if lawsuits[14].case_over:
+        ${ thousands(lawsuits[14].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_16": |
-        % if lawsuits.number_gathered() >= 16:
+        % if has_lawsuits and lawsuits.number_gathered() > 15:
+        % if lawsuits[15].already_filed:
         ${ lawsuits[15].case }
         % endif
-    - "lawsuit_date_16":  |
-        % if lawsuits.number_gathered() >= 16:
+        % endif
+    
+    - "lawsuit_date_16": |
+        % if has_lawsuits and lawsuits.number_gathered() > 15:
+        % if lawsuits[15].already_filed:
         ${ lawsuits[15].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_16": |
-        % if lawsuits.number_gathered() >= 16:
-            % if lawsuits[15].judgement:
-            ${ thousands(lawsuits[15].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 15:
+        % if lawsuits[15].already_filed:
+        % if lawsuits[15].case_over:
+        ${ thousands(lawsuits[15].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_17": |
-        % if lawsuits.number_gathered() >= 17:
+        % if has_lawsuits and lawsuits.number_gathered() > 16:
+        % if lawsuits[16].already_filed:
         ${ lawsuits[16].case }
         % endif
-    - "lawsuit_date_17":  |
-        % if lawsuits.number_gathered() >= 17:
+        % endif
+    
+    - "lawsuit_date_17": |
+        % if has_lawsuits and lawsuits.number_gathered() > 16:
+        % if lawsuits[16].already_filed:
         ${ lawsuits[16].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_17": |
-        % if lawsuits.number_gathered() >= 17:
-            % if lawsuits[16].judgement:
-            ${ thousands(lawsuits[16].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 16:
+        % if lawsuits[16].already_filed:
+        % if lawsuits[16].case_over:
+        ${ thousands(lawsuits[16].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_18": |
-        % if lawsuits.number_gathered() >= 18:
+        % if has_lawsuits and lawsuits.number_gathered() > 17:
+        % if lawsuits[17].already_filed:
         ${ lawsuits[17].case }
         % endif
-    - "lawsuit_date_18":  |
-        % if lawsuits.number_gathered() >= 18:
+        % endif
+    
+    - "lawsuit_date_18": |
+        % if has_lawsuits and lawsuits.number_gathered() > 17:
+        % if lawsuits[17].already_filed:
         ${ lawsuits[17].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_18": |
-        % if lawsuits.number_gathered() >= 18:
-            % if lawsuits[17].judgement:
-            ${ thousands(lawsuits[17].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 17:
+        % if lawsuits[17].already_filed:
+        % if lawsuits[17].case_over:
+        ${ thousands(lawsuits[17].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_19": |
-        % if lawsuits.number_gathered() >= 19:
+        % if has_lawsuits and lawsuits.number_gathered() > 18:
+        % if lawsuits[18].already_filed:
         ${ lawsuits[18].case }
         % endif
-    - "lawsuit_date_19":  |
-        % if lawsuits.number_gathered() >= 19:
+        % endif
+    
+    - "lawsuit_date_19": |
+        % if has_lawsuits and lawsuits.number_gathered() > 18:
+        % if lawsuits[18].already_filed:
         ${ lawsuits[18].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_19": |
-        % if lawsuits.number_gathered() >= 19:
-            % if lawsuits[18].judgement:
-            ${ thousands(lawsuits[18].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 18:
+        % if lawsuits[18].already_filed:
+        % if lawsuits[18].case_over:
+        ${ thousands(lawsuits[18].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_20": |
-        % if lawsuits.number_gathered() >= 20:
+        % if has_lawsuits and lawsuits.number_gathered() > 19:
+        % if lawsuits[19].already_filed:
         ${ lawsuits[19].case }
         % endif
-    - "lawsuit_date_20":  |
-        % if lawsuits.number_gathered() >= 20:
+        % endif
+    
+    - "lawsuit_date_20": |
+        % if has_lawsuits and lawsuits.number_gathered() > 19:
+        % if lawsuits[19].already_filed:
         ${ lawsuits[19].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_20": |
-        % if lawsuits.number_gathered() >= 20:
-            % if lawsuits[19].judgement:
-            ${ thousands(lawsuits[19].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 19:
+        % if lawsuits[19].already_filed:
+        % if lawsuits[19].case_over:
+        ${ thousands(lawsuits[19].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_21": |
-        % if lawsuits.number_gathered() >= 21:
+        % if has_lawsuits and lawsuits.number_gathered() > 20:
+        % if lawsuits[20].already_filed:
         ${ lawsuits[20].case }
         % endif
-    - "lawsuit_date_21":  |
-        % if lawsuits.number_gathered() >= 21:
+        % endif
+    
+    - "lawsuit_date_21": |
+        % if has_lawsuits and lawsuits.number_gathered() > 20:
+        % if lawsuits[20].already_filed:
         ${ lawsuits[20].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_21": |
-        % if lawsuits.number_gathered() >= 21:
-            % if lawsuits[20].judgement:
-            ${ thousands(lawsuits[20].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 20:
+        % if lawsuits[20].already_filed:
+        % if lawsuits[20].case_over:
+        ${ thousands(lawsuits[20].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_22": |
-        % if lawsuits.number_gathered() >= 22:
+        % if has_lawsuits and lawsuits.number_gathered() > 21:
+        % if lawsuits[21].already_filed:
         ${ lawsuits[21].case }
         % endif
-    - "lawsuit_date_22":  |
-        % if lawsuits.number_gathered() >= 22:
+        % endif
+    
+    - "lawsuit_date_22": |
+        % if has_lawsuits and lawsuits.number_gathered() > 21:
+        % if lawsuits[21].already_filed:
         ${ lawsuits[21].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_22": |
-        % if lawsuits.number_gathered() >= 22:
-            % if lawsuits[21].judgement:
-            ${ thousands(lawsuits[21].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 21:
+        % if lawsuits[21].already_filed:
+        % if lawsuits[21].case_over:
+        ${ thousands(lawsuits[21].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_23": |
-        % if lawsuits.number_gathered() >= 23:
+        % if has_lawsuits and lawsuits.number_gathered() > 22:
+        % if lawsuits[22].already_filed:
         ${ lawsuits[22].case }
         % endif
-    - "lawsuit_date_23":  |
-        % if lawsuits.number_gathered() >= 23:
+        % endif
+    
+    - "lawsuit_date_23": |
+        % if has_lawsuits and lawsuits.number_gathered() > 22:
+        % if lawsuits[22].already_filed:
         ${ lawsuits[22].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_23": |
-        % if lawsuits.number_gathered() >= 23:
-            % if lawsuits[22].judgement:
-            ${ thousands(lawsuits[22].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 22:
+        % if lawsuits[22].already_filed:
+        % if lawsuits[22].case_over:
+        ${ thousands(lawsuits[22].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
+    
     - "lawsuit_number_24": |
-        % if lawsuits.number_gathered() >= 24:
+        % if has_lawsuits and lawsuits.number_gathered() > 23:
+        % if lawsuits[23].already_filed:
         ${ lawsuits[23].case }
         % endif
-    - "lawsuit_date_24":  |
-        % if lawsuits.number_gathered() >= 24:
+        % endif
+    
+    - "lawsuit_date_24": |
+        % if has_lawsuits and lawsuits.number_gathered() > 23:
+        % if lawsuits[23].already_filed:
         ${ lawsuits[23].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_24": |
-        % if lawsuits.number_gathered() >= 24:
-            % if lawsuits[23].judgement:
-            ${ thousands(lawsuits[23].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 23:
+        % if lawsuits[23].already_filed:
+        % if lawsuits[23].case_over:
+        ${ thousands(lawsuits[23].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+    
     - "lawsuit_number_25": |
-        % if lawsuits.number_gathered() >= 25:
+        % if has_lawsuits and lawsuits.number_gathered() > 24:
+        % if lawsuits[24].already_filed:
         ${ lawsuits[24].case }
         % endif
-    - "lawsuit_date_25":  |
-        % if lawsuits.number_gathered() >= 25:
+        % endif
+    
+    - "lawsuit_date_25": |
+        % if has_lawsuits and lawsuits.number_gathered() > 24:
+        % if lawsuits[24].already_filed:
         ${ lawsuits[24].date.format('MM/dd/yyyy') }
+        % else:
+        not filed
         % endif
+        % endif
+    
     - "lawsuit_amount_25": |
-        % if lawsuits.number_gathered() >= 25:
-            % if lawsuits[24].judgement:
-            ${ thousands(lawsuits[24].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+        % if has_lawsuits and lawsuits.number_gathered() > 24:
+        % if lawsuits[24].already_filed:
+        % if lawsuits[24].case_over:
+        ${ thousands(lawsuits[24].amount, show_decimals=True) }
+        % else:
+        unknown
         % endif
+        % else:
+        unknown
+        % endif
+        % endif
+
 ---

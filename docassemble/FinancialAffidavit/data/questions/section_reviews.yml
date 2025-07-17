@@ -757,7 +757,7 @@ review:
       **Lawsuits or claims**
 
       % for asset in lawsuits:
-        * ${ asset.case }, ${ currency(asset.amount) if asset.judgement else 'unknown' }
+        * ${ asset.case if asset.already_filed else 'not filed'}, Amount recovered: ${ currency(asset.amount) if (asset.already_filed and asset.case_over) else 'unknown' }
       % endfor
     show if: has_lawsuits
 
@@ -1578,7 +1578,7 @@ review:
       **Lawsuits or claims**
 
       % for asset in lawsuits:
-        * ${ asset.case }, ${ currency(asset.amount) if asset.judgement else 'unknown' }
+        * ${ asset.case if asset.already_filed else 'not filed'}, Amount recovered: ${ currency(asset.amount) if (asset.already_filed and asset.case_over) else 'unknown' }
       % endfor
     show if: has_lawsuits
 
@@ -2178,10 +2178,12 @@ id: lawsuits table
 table: lawsuits.table
 rows: lawsuits
 columns:
-  - Case number: row_item.case
-  - Date lawsuit or claim filed: row_item.date.format("MM/dd/yyyy")
+  - Case number: |
+      row_item.case if row_item.already_filed else 'not filed'
+  - Date lawsuit or claim filed: |
+      row_item.date.format("MM/dd/yyyy") if row_item.already_filed else 'not filed'
   - Amount recovered: |
-      currency(row_item.amount) if row_item.judgement else 'unknown'
+      currency(row_item.amount) if (row_item.already_filed and row_item.case_over) else 'unknown'
   - Edit to change details: |
       action_button_html(url_action(row_item.attr_name("case")), label="Edit", icon="pencil-alt")
 delete buttons: True

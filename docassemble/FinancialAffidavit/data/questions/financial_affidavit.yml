@@ -2188,18 +2188,7 @@ code: |
     'users[0].children_party_gifts',
     'users[0].children_other')
 
-  if insurance.there_are_any:
-    subtotal_monthly_insurance_expenses = 0
-    for policy in insurance:
-      if policy.paid == "myself":
-        subtotal_monthly_insurance_expenses += policy.monthly_cost
-    additional_monthly_insurance_expenses_addendum = 0
-    if insurance.number_gathered() > 1:
-      if insurance[0].paid == "myself":
-        additional_monthly_insurance_expenses_addendum = subtotal_monthly_insurance_expenses - insurance[0].monthly_cost
-  else:
-    additional_monthly_insurance_expenses_addendum = 0
-    subtotal_monthly_insurance_expenses = 0
+  subtotal_monthly_insurance_expenses = insurance_primary_total() + insurance_addenda_total()
   
   total_monthly_household_expenses = sum_if_defined(
     'subtotal_monthly_household_expenses',
@@ -2209,6 +2198,24 @@ code: |
     'subtotal_monthly_personal_expenses',
     'subtotal_monthly_children_expenses',
     'subtotal_monthly_insurance_expenses')
+---
+code: |
+  def insurance_primary_total():
+    if insurance.there_are_any:
+        if insurance[0].paid["myself"]:
+          return insurance[0].monthly_cost
+    return 0
+---
+code: |
+  def insurance_addenda_total():
+    insurance_total = 0  
+    if insurance.there_are_any:
+      if insurance.number_gathered() > 1:
+        for policy in insurance:
+          if policy.paid["myself"] :
+            insurance_total += policy.monthly_cost
+  	  insurance_total = insurance_total - insurance_primary_total()
+    return insurance_total
 ---
 ################### FA HEALTH INSURANCE ##################
 id: health insurance intro 
@@ -3199,10 +3206,12 @@ fields:
 table: lawsuits_table
 rows: lawsuits
 columns:
-  - Case number: row_item.case
-  - Date lawsuit or claim filed: row_item.date.format("MM/dd/yyyy")
+  - Case number: |
+      row_item.case if row_item.already_filed else 'not filed'
+  - Date lawsuit or claim filed: |
+      row_item.date.format("MM/dd/yyyy") if row_item.already_filed else 'not filed'
   - Amount recovered: |
-      currency(row_item.amount) if row_item.judgement else 'unknown'
+      currency(row_item.amount) if (row_item.already_filed and row_item.case_over) else 'unknown'
 ---
 id: lawsuits information
 question: |
@@ -3210,19 +3219,30 @@ question: |
 subquestion: |
  
 fields:
+  - Has the case or claim been filed yet?: lawsuits[i].already_filed
+    datatype: yesnoradio
+  - note: |
+      **Note:** If the case or claim has not been filed, there will be an entry on your *Financial Affidavit* that the case has not been filed yet.
   - Case number: lawsuits[i].case
+    show if: lawsuits[i].already_filed
   - Date lawsuit or claim filed: lawsuits[i].date
     datatype: ThreePartsDate
     alMax: ${ today().format("yyyy-MM-dd") }
-  - Was any money recovered?: lawsuits[i].judgement
+    show if: lawsuits[i].already_filed
+  - Is the case over?: lawsuits[i].case_over
     datatype: yesnoradio
-    help: |
-      If you did not recover anything or if your case is still pending or has not yet been filed, select **No**.
-  - Amount recovered: lawsuits[i].amount
+    show if: lawsuits[i].already_filed
+  - note: |
+      **Note:** If the case is not over, there will be an entry on your *Financial Affidavit* that the amount recovered is "unknown."
+    show if: lawsuits[i].already_filed
+  - "Amount recovered, if any": lawsuits[i].amount
     datatype: currency
     min: 0.01
     default: 0.00
-    show if: lawsuits[i].judgement
+    help: |
+      Enter 0 if you did not recover anything.
+    js show if: |
+      val('lawsuits[i].already_filed') == true && val('lawsuits[i].case_over') == true
 ---
 code: |
   lawsuits[i].case
@@ -3363,9 +3383,9 @@ objects:
         additional_debts,
         additional_cash,
         additional_investments,
-        additional_motor_vehicle,
         additional_business_interests,
         additional_life_insurance,
+        additional_motor_vehicle,
         additional_lawsuits,
       ])
 ---
@@ -4594,13 +4614,11 @@ attachment:
       - "insurance_addendum_yes": ${ insurance.number_gathered() > 1 }
       - "health_insurance_total_from_addendum": |
           % if insurance.there_are_any:
-          % if insurance.number_gathered() > 1:
-          ${ thousands(additional_monthly_insurance_expenses_addendum, show_decimals=True)}
-          % endif
+          ${ thousands(insurance_addenda_total(), show_decimals=True)}
           % endif
       - "subtotal_health_insurance": |
           % if insurance.there_are_any:
-          ${ thousands((subtotal_monthly_insurance_expenses + additional_monthly_insurance_expenses_addendum), show_decimals=True)}
+          ${ thousands((insurance_primary_total() + insurance_addenda_total() ), show_decimals=True)}
           % endif
       # 14 Debts
       - "creditor_name_1": |
@@ -5289,51 +5307,81 @@ attachment:
       # 16 Lawsuits and Claims
       - "lawsuit_number_1": |
           % if has_lawsuits and lawsuits.number_gathered() > 0:
+          % if lawsuits[0].already_filed:
           ${ lawsuits[0].case }
           % endif
-      - "lawsuit_date_1":  |
+          % endif
+      - "lawsuit_date_1": |
           % if has_lawsuits and lawsuits.number_gathered() > 0:
+          % if lawsuits[0].already_filed:
           ${ lawsuits[0].date.format('MM/dd/yyyy') }
+          % else:
+          not filed
+          % endif
           % endif
       - "lawsuit_amount_1": |
           % if has_lawsuits and lawsuits.number_gathered() > 0:
-            % if lawsuits[0].judgement:
-            ${ thousands(lawsuits[0].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+          % if lawsuits[0].already_filed:
+          % if lawsuits[0].case_over:
+          ${ thousands(lawsuits[0].amount, show_decimals=True) }
+          % else:
+          unknown
+          % endif
+          % else:
+          unknown
+          % endif
           % endif
       - "lawsuit_number_2": |
-          % if has_lawsuits and lawsuits.number_gathered() >= 2:
+          % if has_lawsuits and lawsuits.number_gathered() > 1:
+          % if lawsuits[1].already_filed:
           ${ lawsuits[1].case }
           % endif
-      - "lawsuit_date_2":  |
-          % if has_lawsuits and lawsuits.number_gathered() >= 2:
+          % endif
+      - "lawsuit_date_2": |
+          % if has_lawsuits and lawsuits.number_gathered() > 1:
+          % if lawsuits[1].already_filed:
           ${ lawsuits[1].date.format('MM/dd/yyyy') }
+          % else:
+          not filed
+          % endif
           % endif
       - "lawsuit_amount_2": |
-          % if has_lawsuits and lawsuits.number_gathered() >= 2:
-            % if lawsuits[1].judgement:
-            ${ thousands(lawsuits[1].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+          % if has_lawsuits and lawsuits.number_gathered() > 1:
+          % if lawsuits[1].already_filed:
+          % if lawsuits[1].case_over:
+          ${ thousands(lawsuits[1].amount, show_decimals=True) }
+          % else:
+          unknown
+          % endif
+          % else:
+          unknown
+          % endif
           % endif
       - "lawsuit_number_3": |
-          % if has_lawsuits and lawsuits.number_gathered() >= 3:
+          % if has_lawsuits and lawsuits.number_gathered() > 2:
+          % if lawsuits[2].already_filed:
           ${ lawsuits[2].case }
           % endif
-      - "lawsuit_date_3":  |
-          % if has_lawsuits and lawsuits.number_gathered() >= 3:
+          % endif
+      - "lawsuit_date_3": |
+          % if has_lawsuits and lawsuits.number_gathered() > 2:
+          % if lawsuits[2].already_filed:
           ${ lawsuits[2].date.format('MM/dd/yyyy') }
+          % else:
+          not filed
+          % endif
           % endif
       - "lawsuit_amount_3": |
-          % if has_lawsuits and lawsuits.number_gathered() >= 3:
-            % if lawsuits[2].judgement:
-            ${ thousands(lawsuits[2].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+          % if has_lawsuits and lawsuits.number_gathered() > 2:
+          % if lawsuits[2].already_filed:
+          % if lawsuits[2].case_over:
+          ${ thousands(lawsuits[2].amount, show_decimals=True) }
+          % else:
+          unknown
+          % endif
+          % else:
+          unknown
+          % endif
           % endif
       - "lawsuit_addendum_yes":  ${ has_lawsuits and lawsuits.number_gathered() > 3 }
       # 17 Income Tax Refund/Owed Amounts
