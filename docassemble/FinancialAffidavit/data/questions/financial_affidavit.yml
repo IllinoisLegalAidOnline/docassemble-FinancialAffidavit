@@ -1167,10 +1167,10 @@ subquestion: |
   * Living expenses
   * Transportation
   * Medical expenses
-  * Professional dues and fees
   * Insurance
   * Personal, entertainment, and vacation expenses
   * Gifts, donations, and other expenses
+  * Professional dues and fees
   * Health insurance
 
   If you have expenses for children or other dependents, they are grouped as follows:
@@ -1994,7 +1994,7 @@ reconsider: True
 depends on:
   - users[0].deductions_federal
   - users[0].deductions_state
-  - users[0].deductions_FICA
+  - users[0].deductions_fica
   - users[0].deductions_medicare
   - users[0].deductions_retirement
   - users[0].maintenance_paid_court
@@ -2071,7 +2071,7 @@ code: |
   total_monthly_deductions = sum_if_defined(
     'users[0].deductions_federal',
     'users[0].deductions_state',
-    'users[0].deductions_FICA',
+    'users[0].deductions_fica',
     'users[0].deductions_medicare',
     'users[0].deductions_retirement')
 
@@ -2188,14 +2188,17 @@ code: |
     'users[0].children_party_gifts',
     'users[0].children_other')
 
-  additional_monthly_insurance_expenses_addendum = 0.0
   if insurance.there_are_any:
+    subtotal_monthly_insurance_expenses = 0
+    for policy in insurance:
+      if policy.paid == "myself":
+        subtotal_monthly_insurance_expenses += policy.monthly_cost
+    additional_monthly_insurance_expenses_addendum = 0
     if insurance.number_gathered() > 1:
-      for policy in insurance[1:]:
-  	    if policy.paid == "myself":
-  	      additional_monthly_insurance_expenses_addendum += policy.monthly_cost
-    subtotal_monthly_insurance_expenses = insurance[0].monthly_cost + additional_monthly_insurance_expenses_addendum
+      if insurance[0].paid == "myself":
+        additional_monthly_insurance_expenses_addendum = subtotal_monthly_insurance_expenses - insurance[0].monthly_cost
   else:
+    additional_monthly_insurance_expenses_addendum = 0
     subtotal_monthly_insurance_expenses = 0
   
   total_monthly_household_expenses = sum_if_defined(

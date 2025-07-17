@@ -778,7 +778,7 @@ attachment:
         % if debts.number_gathered() == 26:
         ${ debts[25].name.text }
         % endif
-    - "total_aditional_debts": |
+    - "total_additional_debts": |
         % if debts.number_gathered() >= 7:
         ${ thousands(sum(y.payment for y in debts[6:]), show_decimals=True) }
         % endif
