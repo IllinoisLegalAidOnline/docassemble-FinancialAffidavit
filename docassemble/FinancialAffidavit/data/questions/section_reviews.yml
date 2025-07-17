@@ -429,14 +429,6 @@ review:
       ${ currency(showifdef('users[0].personal_vision')) if showifdef('users[0].personal_vision_question') else '$0.00'}
       * Medicine and prescriptions: 
       ${ currency(showifdef('users[0].personal_medications')) if showifdef('users[0].personal_medications_question') else '$0.00'}
-  - Edit: users[0].personal_associations_question
-    button: |
-      **Monthly professional dues and fees**
-
-      * Union, trade, or professional association dues: 
-      ${ currency(showifdef('users[0].personal_associations')) if showifdef('users[0].personal_associations_question') else '$0.00'}
-      * Professional fees, such as accountants, tax preparers, or lawyers: 
-      ${ currency(showifdef('users[0].peronsal_professional')) if showifdef('users[0].peronsal_professional_question') else '$0.00'}
   - Edit: users[0].personal_life_term_question
     button: |
       **Monthly insurance expenses**
@@ -461,6 +453,14 @@ review:
       ${ currency(showifdef('users[0].personal_subscriptions')) if showifdef('users[0].personal_subscriptions_question') else '$0.00'}
       * Vacations: 
       ${ currency(showifdef('users[0].personal_vacations')) if showifdef('users[0].personal_vacations_question') else '$0.00'}
+  - Edit: users[0].personal_associations_question
+    button: |
+      **Monthly professional dues and fees**
+
+      * Union, trade, or professional association dues: 
+      ${ currency(showifdef('users[0].personal_associations')) if showifdef('users[0].personal_associations_question') else '$0.00'}
+      * Professional fees, such as accountants, tax preparers, or lawyers: 
+      ${ currency(showifdef('users[0].peronsal_professional')) if showifdef('users[0].peronsal_professional_question') else '$0.00'}
   - Edit: users[0].personal_gifts_question
     button: |
       **Monthly gifts, donations, and other expenses**
@@ -475,20 +475,7 @@ review:
       % else:
       None entered
       % endif
-
-  - Edit: insurance.there_are_any
-    button: |
-      **Do you have health insurance?**
-      ${ word(yesno(insurance.there_are_any)) }
-  - Edit: insurance.revisit
-    button: |
-      **Health insurance**
-
-      % for policy in insurance:
-        * ${ policy.name.text } - ${ policy.type.true_values() }
-      % endfor
-    show if: insurance.there_are_any
-      
+     
   - Edit: users[0].children_expenses_question
     button: |
       **Do you have any expenses for minor or dependent children?**
@@ -569,6 +556,20 @@ review:
       % endif
     show if: users[0].children_expenses_question
 
+  - Edit: insurance.there_are_any
+    button: |
+      **Do you have health insurance?**
+      ${ word(yesno(insurance.there_are_any)) }
+  - Edit: insurance.revisit
+    button: |
+      **Health insurance**
+
+      % for policy in insurance:
+        * ${ policy.name.text } - ${ policy.type.true_values() }
+      % endfor
+    show if: insurance.there_are_any
+
+  
   - Edit: has_debts
     button: |
       **Do you have any debts?**
@@ -645,30 +646,7 @@ review:
         * ${ asset.name.text }, ${ currency(asset.balance) }
       % endfor
     show if: has_other_investments
-  - Edit: has_real_estate
-    button: |
-      **Do you own any real estate?**
-      ${ word(yesno(has_real_estate)) }
-  - Edit: real_estate.revisit
-    button: |
-      **Real estate**
-
-      % for asset in real_estate:
-        * ${ asset.address.on_one_line(bare=True) }, ${ currency(asset.balance) }
-      % endfor
-    show if: has_real_estate
-  - Edit: has_motor_vehicle
-    button: |
-      **Do you have any motor vehicles?**
-      ${ word(yesno(has_motor_vehicle)) }
-  - Edit: motor_vehicle.revisit
-    button: |
-      **Motor vehicles**
-
-      % for asset in motor_vehicle:
-        * ${ asset.year } ${ asset.make } ${ asset.model }, ${ currency(asset.fmv) }
-      % endfor
-    show if: has_motor_vehicle
+    
   - Edit: has_business_interests
     button: |
       **Do you have any business interests?**
@@ -681,6 +659,32 @@ review:
         * ${ asset.name.text }, ${ currency(asset.fmv) }
       % endfor
     show if: has_business_interests
+  - Edit: has_transfer
+    button: |
+      **In the last two years, have you transferred or sold any assets or property worth at least $1,000?**
+      ${ word(yesno(has_transfer)) }
+  - Edit: transfer.revisit
+    button: |
+      **Assets or property that you transferred or sold**
+
+      % for asset in transfer:
+        * ${ asset.name.text }, ${ currency(asset.amount) }
+      % endfor
+    show if: has_transfer
+
+  - Edit: has_real_estate
+    button: |
+      **Do you own any real estate?**
+      ${ word(yesno(has_real_estate)) }
+  - Edit: real_estate.revisit
+    button: |
+      **Real estate**
+
+      % for asset in real_estate:
+        * ${ asset.address.on_one_line(bare=True) }, ${ currency(asset.balance) }
+      % endfor
+    show if: has_real_estate
+    
   - Edit: has_life_insurance
     button: |
       **Do you have any life insurance policies?**
@@ -709,6 +713,20 @@ review:
     button: |
       **Do you have any valuable collectibles?**
       ${ word(yesno(has_collection)) }
+
+  - Edit: has_motor_vehicle
+    button: |
+      **Do you have any motor vehicles?**
+      ${ word(yesno(has_motor_vehicle)) }
+  - Edit: motor_vehicle.revisit
+    button: |
+      **Motor vehicles**
+
+      % for asset in motor_vehicle:
+        * ${ asset.year } ${ asset.make } ${ asset.model }, ${ currency(asset.fmv) }
+      % endfor
+    show if: has_motor_vehicle
+      
   - Edit: collection.revisit
     button: |
       **Collectibles**
@@ -729,18 +747,7 @@ review:
         * ${ asset.name.text }, ${ currency(asset.fmv) }
       % endfor
     show if: has_other_property
-  - Edit: has_transfer
-    button: |
-      **In the last two years, have you transferred or sold any assets or property worth at least $1,000?**
-      ${ word(yesno(has_transfer)) }
-  - Edit: transfer.revisit
-    button: |
-      **Assets or property that you transferred or sold**
-
-      % for asset in transfer:
-        * ${ asset.name.text }, ${ currency(asset.amount) }
-      % endfor
-    show if: has_transfer
+    
   - Edit: has_lawsuits
     button: |
       **Do you have any lawsuits or claims?**
@@ -1240,14 +1247,6 @@ review:
       ${ currency(showifdef('users[0].personal_vision')) if showifdef('users[0].personal_vision_question') else '$0.00'}
       * Medicine and prescriptions: 
       ${ currency(showifdef('users[0].personal_medications')) if showifdef('users[0].personal_medications_question') else '$0.00'}
-  - Edit: users[0].personal_associations_question
-    button: |
-      **Monthly professional dues and fees**
-
-      * Union, trade, or professional association dues: 
-      ${ currency(showifdef('users[0].personal_associations')) if showifdef('users[0].personal_associations_question') else '$0.00'}
-      * Professional fees, such as accountants, tax preparers, or lawyers: 
-      ${ currency(showifdef('users[0].peronsal_professional')) if showifdef('users[0].peronsal_professional_question') else '$0.00'}
   - Edit: users[0].personal_life_term_question
     button: |
       **Monthly insurance expenses**
@@ -1272,6 +1271,14 @@ review:
       ${ currency(showifdef('users[0].personal_subscriptions')) if showifdef('users[0].personal_subscriptions_question') else '$0.00'}
       * Vacations: 
       ${ currency(showifdef('users[0].personal_vacations')) if showifdef('users[0].personal_vacations_question') else '$0.00'}
+  - Edit: users[0].personal_associations_question
+    button: |
+      **Monthly professional dues and fees**
+
+      * Union, trade, or professional association dues: 
+      ${ currency(showifdef('users[0].personal_associations')) if showifdef('users[0].personal_associations_question') else '$0.00'}
+      * Professional fees, such as accountants, tax preparers, or lawyers: 
+      ${ currency(showifdef('users[0].peronsal_professional')) if showifdef('users[0].peronsal_professional_question') else '$0.00'}
   - Edit: users[0].personal_gifts_question
     button: |
       **Monthly gifts, donations, and other expenses**
@@ -1286,19 +1293,6 @@ review:
       % else:
       None entered
       % endif
-
-  - Edit: insurance.there_are_any
-    button: |
-      **Do you have health insurance?**
-      ${ word(yesno(insurance.there_are_any)) }
-  - Edit: insurance.revisit
-    button: |
-      **Health insurance**
-
-      % for policy in insurance:
-        * ${ policy.name.text } - ${ policy.type.true_values() }
-      % endfor
-    show if: insurance.there_are_any
       
   - Edit: users[0].children_expenses_question
     button: |
@@ -1379,6 +1373,18 @@ review:
       None entered
       % endif
     show if: users[0].children_expenses_question
+  - Edit: insurance.there_are_any
+    button: |
+      **Do you have health insurance?**
+      ${ word(yesno(insurance.there_are_any)) }
+  - Edit: insurance.revisit
+    button: |
+      **Health insurance**
+
+      % for policy in insurance:
+        * ${ policy.name.text } - ${ policy.type.true_values() }
+      % endfor
+    show if: insurance.there_are_any
 
   - Edit: has_debts
     button: |
@@ -1462,30 +1468,7 @@ review:
         * ${ asset.name.text }, ${ currency(asset.balance) }
       % endfor
     show if: has_other_investments
-  - Edit: has_real_estate
-    button: |
-      **Do you own any real estate?**
-      ${ word(yesno(has_real_estate)) }
-  - Edit: real_estate.revisit
-    button: |
-      **Real estate**
 
-      % for asset in real_estate:
-        * ${ asset.address.on_one_line(bare=True) }, ${ currency(asset.balance) }
-      % endfor
-    show if: has_real_estate
-  - Edit: has_motor_vehicle
-    button: |
-      **Do you have any motor vehicles?**
-      ${ word(yesno(has_motor_vehicle)) }
-  - Edit: motor_vehicle.revisit
-    button: |
-      **Motor vehicles**
-
-      % for asset in motor_vehicle:
-        * ${ asset.year } ${ asset.make } ${ asset.model }, ${ currency(asset.fmv) }
-      % endfor
-    show if: has_motor_vehicle
   - Edit: has_business_interests
     button: |
       **Do you have any business interests?**
@@ -1498,6 +1481,32 @@ review:
         * ${ asset.name.text }, ${ currency(asset.fmv) }
       % endfor
     show if: has_business_interests
+  - Edit: has_transfer
+    button: |
+      **In the last two years, have you transferred or sold any assets or property worth at least $1,000?**
+      ${ word(yesno(has_transfer)) }
+  - Edit: transfer.revisit
+    button: |
+      **Assets or property that you transferred or sold**
+
+      % for asset in transfer:
+        * ${ asset.name.text }, ${ currency(asset.amount) }
+      % endfor
+    show if: has_transfer
+  
+  - Edit: has_real_estate
+    button: |
+      **Do you own any real estate?**
+      ${ word(yesno(has_real_estate)) }
+  - Edit: real_estate.revisit
+    button: |
+      **Real estate**
+
+      % for asset in real_estate:
+        * ${ asset.address.on_one_line(bare=True) }, ${ currency(asset.balance) }
+      % endfor
+    show if: has_real_estate
+    
   - Edit: has_life_insurance
     button: |
       **Do you have any life insurance policies?**
@@ -1522,6 +1531,19 @@ review:
         * ${ asset.name.text }, ${ currency(asset.balance) }
       % endfor
     show if: has_retirement_plan
+
+  - Edit: has_motor_vehicle
+    button: |
+      **Do you have any motor vehicles?**
+      ${ word(yesno(has_motor_vehicle)) }
+  - Edit: motor_vehicle.revisit
+    button: |
+      **Motor vehicles**
+
+      % for asset in motor_vehicle:
+        * ${ asset.year } ${ asset.make } ${ asset.model }, ${ currency(asset.fmv) }
+      % endfor
+    show if: has_motor_vehicle  
   - Edit: has_collection
     button: |
       **Do you have any valuable collectibles?**
@@ -1546,18 +1568,7 @@ review:
         * ${ asset.name.text }, ${ currency(asset.fmv) }
       % endfor
     show if: has_other_property
-  - Edit: has_transfer
-    button: |
-      **In the last two years, have you transferred or sold any assets or property worth at least $1,000?**
-      ${ word(yesno(has_transfer)) }
-  - Edit: transfer.revisit
-    button: |
-      **Assets or property that you transferred or sold**
-
-      % for asset in transfer:
-        * ${ asset.name.text }, ${ currency(asset.amount) }
-      % endfor
-    show if: has_transfer
+    
   - Edit: has_lawsuits
     button: |
       **Do you have any lawsuits or claims?**
@@ -1570,7 +1581,6 @@ review:
         * ${ asset.case }, ${ currency(asset.amount) if asset.judgement else 'unknown' }
       % endfor
     show if: has_lawsuits
-
 
 ---
 id: Final steps review screen
@@ -1866,7 +1876,7 @@ question: |
 subquestion: |
   ${ debts.table }
 
-  % if debts.number_gathered() < 26:
+  % if debts.number_gathered() < 25:
   ${ debts.add_action() }
   % endif
 ---
@@ -1890,7 +1900,7 @@ question: |
 subquestion: |
   ${ cash.table }
 
-  % if cash.number_gathered() < 25:
+  % if cash.number_gathered() < 12:
   ${ cash.add_action() }
   % endif
 ---
@@ -1913,7 +1923,7 @@ question: |
 subquestion: |
   ${ cert_deposit.table }
 
-  % if cert_deposit.number_gathered() < 25:
+  % if cert_deposit.number_gathered() < 12:
   ${ cert_deposit.add_action() }
   % endif
 ---
@@ -1937,7 +1947,7 @@ question: |
 subquestion: |
   ${ money.table }
 
-  % if money.number_gathered() < 25:
+  % if money.number_gathered() < 12:
   ${ money.add_action() }
   % endif
 ---
@@ -1959,7 +1969,7 @@ question: |
 subquestion: |
   ${ investments.table }
 
-  % if investments.number_gathered() < 25:
+  % if investments.number_gathered() < 12:
   ${ investments.add_action() }
   % endif
 ---
@@ -1981,7 +1991,7 @@ question: |
 subquestion: |
   ${ other_investments.table }
 
-  % if other_investments.number_gathered() < 25:
+  % if other_investments.number_gathered() < 12:
   ${ other_investments.add_action() }
   % endif
 ---
@@ -2003,7 +2013,7 @@ question: |
 subquestion: |
   ${ real_estate.table }
 
-  % if real_estate.number_gathered() < 25:
+  % if real_estate.number_gathered() < 12:
   ${ real_estate.add_action() }
   % endif
 ---
@@ -2027,7 +2037,7 @@ question: |
 subquestion: |
   ${ motor_vehicle.table }
 
-  % if motor_vehicle.number_gathered() < 25:
+  % if motor_vehicle.number_gathered() < 12:
   ${ motor_vehicle.add_action() }
   % endif
 ---
@@ -2049,7 +2059,7 @@ question: |
 subquestion: |
   ${ business_interests.table }
 
-  % if business_interests.number_gathered() < 25:
+  % if business_interests.number_gathered() < 12:
   ${ business_interests.add_action() }
   % endif
 ---
@@ -2071,7 +2081,7 @@ question: |
 subquestion: |
   ${ life_insurance.table }
 
-  % if life_insurance.number_gathered() < 25:
+  % if life_insurance.number_gathered() < 12:
   ${ life_insurance.add_action() }
   % endif
 ---
@@ -2093,7 +2103,7 @@ question: |
 subquestion: |
   ${ retirement_plan.table }
 
-  % if retirement_plan.number_gathered() < 25:
+  % if retirement_plan.number_gathered() < 12:
   ${ retirement_plan.add_action() }
   % endif
 ---
@@ -2115,7 +2125,7 @@ question: |
 subquestion: |
   ${ collection.table }
 
-  % if collection.number_gathered() < 25:
+  % if collection.number_gathered() < 12:
   ${ collection.add_action() }
   % endif
 ---
@@ -2137,7 +2147,7 @@ question: |
 subquestion: |
   ${ other_property.table }
 
-  % if other_property.number_gathered() < 25:
+  % if other_property.number_gathered() < 12:
   ${ other_property.add_action() }
   % endif
 ---
@@ -2160,7 +2170,7 @@ question: |
 subquestion: |
   ${ transfer.table }
 
-  % if transfer.number_gathered() < 25:
+  % if transfer.number_gathered() < 12:
   ${ transfer.add_action() }
   % endif
 ---

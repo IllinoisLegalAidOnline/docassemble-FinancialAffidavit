@@ -4,7 +4,10 @@ objects:
   - additional_child_support: ALDocument.using(title="FA Additional Child Support", filename="FA_additional_child_support.pdf", has_addendum=False)
 ---
 code: |
-  additional_child_support.enabled = (users[0].child_support_other_cases and other_cs_cases.number_gathered() > 3) or (users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 3) or (users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3)
+  if (users[0].child_support_other_cases and other_cs_cases.number_gathered() > 3) or (users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 3) or (users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3):
+    additional_child_support.enabled = True
+  else:
+    additional_child_support.enabled = False
 ---
 attachment:
   name: additional_child_support
@@ -436,7 +439,8 @@ attachment:
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 11:
         ${ True if other_cs_kids_in_home[11].paternity == "Court order" else "" }
         % endif
-
+        
+---
 ############ FA ADDITIONAL DEBTS #############
 objects:
   - additional_debts: ALDocument.using(title="FA Additional Debts", filename="FA_additional_debts.pdf", has_addendum=False)

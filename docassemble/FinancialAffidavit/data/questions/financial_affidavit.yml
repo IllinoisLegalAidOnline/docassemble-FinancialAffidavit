@@ -1,7 +1,7 @@
 metadata:
   title: Financial affidavit
   short title: Financial affidavit
-  comment: This program helps you make forms that provide financial information and documents to the other party in family law cases.
+  comment: This program helps you make forms that provide financial information and documents to the other person in family law cases.
   authors:
     - Jim Graszer
     - Matt Newsted
@@ -132,14 +132,11 @@ code: |
   users[0].transport_payment_question
 
   users[0].personal_doctor_question
-  users[0].personal_associations_question
   users[0].personal_life_term_question
   users[0].personal_clothing_question
+  users[0].personal_associations_question
   users[0].personal_gifts_question
-
-  if insurance.there_are_any:
-    insurance.gather()
-  
+ 
   if users[0].children_expenses_question:
     users[0].children_clothing_question
     users[0].children_tuition_question
@@ -148,6 +145,9 @@ code: |
     users[0].children_vacations_question 
     users[0].children_other_question
 
+  if insurance.there_are_any:
+    insurance.gather()
+  
   expenses_summary
 
   set_progress(60)
@@ -167,22 +167,22 @@ code: |
     investments.gather()
   if has_other_investments:
     other_investments.gather()
-  if has_real_estate:
-    real_estate.gather()
-  if has_motor_vehicle:
-    motor_vehicle.gather()
   if has_business_interests:
     business_interests.gather()
+  if has_transfer:
+    transfer.gather()
+  if has_real_estate:
+    real_estate.gather()
   if has_life_insurance:
     life_insurance.gather()
   if has_retirement_plan:
     retirement_plan.gather()
+  if has_motor_vehicle:
+    motor_vehicle.gather()
   if has_collection:
     collection.gather()
   if has_other_property:
     other_property.gather()
-  if has_transfer:
-    transfer.gather()
   
   if has_lawsuits:
     lawsuits.gather()
@@ -235,7 +235,7 @@ question: |
 subquestion: |
   Welcome to Illinois Legal Aid Online's **Financial affidavit** Easy Form.
 
-  This program helps you make forms that provide financial information and documents to the other party in family law cases.
+  This program helps you make forms that provide financial information and documents to the other person in family law cases.
   
     If you are in a court case for divorce, child support, or temporary maintenance, you and the other person will probably have to share information about your income, property, and expenses. 
 
@@ -247,11 +247,11 @@ question: |
 subquestion: |
   To complete this program, you will need to know:
 
-  * Your monthly income and expenses
-  * Your expenses for children and other dependents, if any
-  * Your income tax refunds or amounts owed for the last 2 years (federal and state)
-  * Your debts and liabilities
-  * Your assets, such as bank accounts, real estate, vehicles, and retirement benefits
+  * Your monthly income and expenses,
+  * Your expenses for children and other dependents, if any,
+  * Your income tax refunds or amounts owed for the last 2 years (federal and state),
+  * Your debts and monthly expenses, and
+  * Your assets, such as bank accounts, real estate, vehicles, and retirement benefits.
 
   It could take 30 to 60 minutes to finish this program. You can log in and save your work to continue later. 
  
@@ -272,11 +272,11 @@ question: |
 subquestion: |
   The *Financial Affidavit* is a very long form. This program will help you fill it out and avoid mistakes. You may want to [**preview the Financial Affidavit**](${ preview.url_for() }) before you get started. Just be sure to come back to this screen to continue.
   
-  After you complete this Easy Form, you must send a copy of the completed *Financial Affidavit* and supporting documents to the other party in the case. If a party has a lawyer, send it to the lawyer.
+  After you complete this Easy Form, you must send a copy of the completed *Financial Affidavit* and supporting documents to the other person in the case. If that person has a lawyer, send it to the lawyer.
 
-  You can use ILAO's [**Proof of delivery**](https://www.illinoislegalaid.org/node/86991) Easy Form to make the other forms that show when you sent your Financial Affidavit and supporting documents.
+  You can use ILAO's [**Proof of delivery**](https://www.illinoislegalaid.org/node/86991) Easy Form to make the other forms that show when you sent your *Financial Affidavit* and supporting documents.
   
-  **Note:** You do not need to file your *Financial Affidavit* with the Circuit Clerk. However, you do need to file your *Proof of Delivery*.
+  **Note:** You usually do not need to file your *Financial Affidavit* with the Circuit Clerk. In some courts, a local rule or court order will require you to file it. Regardless, you do need to file your *Proof of Delivery*. The Circuit Clerk can help you find rules about whether you need to file.
   
 ---
 id: family case 
@@ -334,12 +334,10 @@ id: case filing status
 question: |
   What is the status of your family law case?
 subquestion: |
-  If your case is complete, there should be a final order or judgment that was entered.
+  If your case is complete, there should be a final order or judgment that was entered. For example, a *Judgment of Dissolution of Marriage/Civil Union* would be a final order in a divorce case.
 
   If no such order was entered, your case is "pending," and you probably have another court date scheduled.
-
-  For example, a *Judgment of Dissolution of Marriage/Civil Union* would be a final order in a divorce case.
-
+  
   Select **Pre-judgment** if a final judgment or order **has not** been entered in your case or if you do not know.
 fields:
   - Case status: filing_status
@@ -350,7 +348,7 @@ fields:
 ---  
 id: party label
 question: |
-  What is your party label in the case?
+  What is your role in the case?
 subquestion: |
   ${ collapse_template(which_party) }  
 field: party_label
@@ -362,7 +360,7 @@ choices:
 ---
 template: which_party
 subject: |
-  **Learn more about party labels**
+  **Learn more about roles and party labels**
 content: |
   If you filed a new case, you are either the Petitioner or the Plaintiff.
 
@@ -420,7 +418,7 @@ id: hide address
 question: |
   Do you want to keep your address hidden?
 subquestion: |
-  You do not need to list where you are staying on your court papers if you are worried that sharing your address would put you or your household at risk. You can use a mailing address where you can receive court notices instead.
+  You do not need to list where you are staying on your *Financial Affidavit* if you are worried that sharing your address would put you or your household at risk. You can use a mailing address where you can receive court notices instead.
 fields:
   - no label: hide_address
     datatype: yesnoradio
@@ -439,9 +437,9 @@ question: |
   % endif
 subquestion: |
   % if hide_address:
-  **This address will appear on your court papers.** You may receive court notices and documents about your case at this address.
+  **This address will appear on your *Financial Affidavit*.** You may receive court notices and documents about your case at this address.
   % else:
-  **This address will appear on your court papers.** If you do not want this, click **Back** to keep your address hidden.
+  **This address will appear on your *Financial Affidavit*.** If you do not want this, click **Back** to keep your address hidden.
   % endif
 fields:
   - Street address: users[0].address.address
@@ -461,9 +459,9 @@ question: |
 subquestion: |
   The court or other parties might need to contact you about this case.
 
-  **This information will appear on your court forms.**
+  **This information will appear on your *Financial Affidavit*.**
   
-  If you do not want to list a phone number on your forms, leave it blank.
+  If you do not want to list a phone number on your *Financial Affidavit*, leave it blank.
 
   If you have an email address, you must list it. Be sure to check your email daily, otherwise you may miss important court documents or information about your case.
 
@@ -524,7 +522,7 @@ question: |
 subquestion: |
   <div class="alert alert-info ilao-info" role="alert">
     <h2 class="h4">Important</h2>
-    <p>The information you provide in the <i>Financial Affidavit</i> must be true.</p>
+    <p>The information you provide in the <i>Financial Affidavit</i> must be true and correct.</p>
     <p>If you intentionally or recklessly enter inaccurate or misleading information on this form, 
     you may face significant penalties and sanctions, including costs and attorney's fees.</p>
     <p>Do not file this document and the enclosures with the Circuit Clerk unless a local rule or 
@@ -1371,7 +1369,7 @@ fields:
 ---
 template: other_child_support_help
 subject: |
-  **What child support should I entere here?**
+  **What child support should I enter here?**
 content: |  
   You do not need to include child support payments for children that are covered by a court order. These should have already been entered.
   
@@ -1680,6 +1678,8 @@ question: |
   Monthly medical expenses
 subquestion: |
   These are expenses for your own medical care.
+
+  **Note:** These are out-of-pocket expenses. Health insurance premiums and payments can be entered on another screen.
 fields:
   - Doctor visits: users[0].personal_doctor_question
     datatype: yesnowide
@@ -1693,7 +1693,7 @@ fields:
     datatype: currency
     min: 0.01
     show if: users[0].personal_therapy_question
-  - Dental and orthodontia: users[0].personal_dental_question
+  - Dental and orthodontics (braces): users[0].personal_dental_question
     datatype: yesnowide
   - Monthly amount: users[0].personal_dental
     datatype: currency
@@ -2356,7 +2356,7 @@ id: additional debts
 question: |
   Do you have any other debts?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 25 debts. So far you have told us about:
 
   ${ debts_table }
 
@@ -2427,14 +2427,14 @@ subquestion: |
   * Cash, money on prepaid debit cards, and money transfer apps 
   * Investment accounts and securities
   * Investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency
-  * Real estate 
-  * Motor vehicles
   * Business interests
+  * Transfer or sale of assets or property worth at least $1,000 within the last 2 years
+  * Real estate 
   * Life insurance policies
   * Retirement benefits and deferred compensation
+  * Motor vehicles
   * Valuable collectibles 
   * Other personal property valued over $500
-  * Transfer or sale of assets or property worth at least $1,000 within the last 2 years
 ---
 ########### FA ASSETS - 15a Cash/Cash Equivalents ###########
 id: money in accounts intro 
@@ -2452,7 +2452,7 @@ id: additional cash
 question: |
   Do you have other money in bank or credit union accounts?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 accounts. So far you have told us about:
   ${ cash_table }
 fields:
   - Add another?: cash.there_is_another
@@ -2509,7 +2509,7 @@ id: additional certificate of deposit
 question: |
   Do you have other certificates of deposit?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 CDs. So far you have told us about:
   ${ cert_deposit_table }
 fields:
   - Add another?: cert_deposit.there_is_another
@@ -2549,7 +2549,7 @@ question: |
 subquestion: |
   This includes cash on hand, money you have on prepaid debit cards, and money transfer mobile apps like Venmo, PayPal, or Apple Pay.
 
-  A prepaid debit card can be used to make purchases like you would use cash. The amount of money on the card must be "loaded" onto the card before the purchase. Many prepaid cards carry the brand, like MasterCard, Visa, or American Express, and can be used anywhere that type of card is accepted.
+  A prepaid debit card can be used to make purchases like you would use cash. The amount of money on the card must be "loaded" onto the card before the purchase. Many prepaid cards carry the brand of a card network, like MasterCard, Visa, or American Express.
 fields:
   - no label: has_money
     datatype: yesnoradio
@@ -2558,7 +2558,8 @@ id: additional money cash/card
 question: |
   Do you have other cash, debit cards, or money transfer app balances?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 items. So far you have told us about:
+  
   ${ money_table }
 fields:
   - Add another?: money.there_is_another
@@ -2620,10 +2621,10 @@ id: additional investment accounts
 question: |
   Do you have other investment accounts or securities?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 investment account or securities. So far you have told us about:
   ${ investments_table }
 
-  Reminder: Investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency can be entered on another screen.
+  **Remember:** Investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency can be entered on another screen.
 fields:
   - Add another?: investments.there_is_another
     datatype: yesnoradio
@@ -2691,10 +2692,10 @@ id: additional other investments
 question: |
   Do you have other investment assets?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 other investment assets. So far you have told us about:
   ${ other_investments_table }
 
-  Remember: These include investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency.
+  **Remember:** These include investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency.
 
 fields:
   - Add another?: other_investments.there_is_another
@@ -2741,7 +2742,7 @@ id: additional real estate
 question: |
   Do you own other real estate?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 properties. So far you have told us about:
   ${ real_estate_table }
 fields:
   - Add another?: real_estate.there_is_another
@@ -2801,7 +2802,7 @@ id: additional motor vehicle
 question: |
   Do you have other vehicles?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 vehicles. So far you have told us about:
   ${ motor_vehicle_table }
 fields:
   - Add another?: motor_vehicle.there_is_another
@@ -2868,7 +2869,7 @@ id: additional business interests
 question: |
   Do you have other business interests?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 business interests. So far you have told us about:
   ${ business_interests_table }
 fields:
   - Add another?: business_interests.there_is_another
@@ -2892,6 +2893,8 @@ fields:
     maxlength: 30
   - Type of business: business_interests[i].type
     maxlength: 20
+    help: |
+      List whether the business is a corporation, S Corp, an LLC, or something else.
   - "What percent do you own? (1-100%)": business_interests[i].ownership
     datatype: integer
     min: 1
@@ -2913,7 +2916,7 @@ id: life insurance intro
 question: |
   Do you have any life insurance policies?
 subquestion: |
-  These can be life insurance policies you have for yourself, the other party, or your children. 
+  These can be life insurance policies you have for yourself, your spouse, or your children. 
 fields:
   - no label: has_life_insurance
     datatype: yesnoradio
@@ -2922,7 +2925,7 @@ id: additional investment accounts
 question: |
   Do you have other life insurance policies?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 policies. So far you have told us about:
   ${ life_insurance_table }
 fields:
   - Add another?: life_insurance.there_is_another
@@ -2981,7 +2984,7 @@ id: additional retirement benefits
 question: |
   Do you have other retirement benefits or deferred compensation?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 plans. So far you have told us about:
   ${ retirement_plan_table }
 fields:
   - Add another?: retirement_plan.there_is_another
@@ -3037,7 +3040,7 @@ id: additional collectibles
 question: |
   Do you have other valuable collectibles?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 collectibles. So far you have told us about:
   ${ collection_table }
 fields:
   - Add another?: collection.there_is_another
@@ -3085,7 +3088,7 @@ id: additional other_property
 question: |
   Do you have other personal property valued at over $500?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 other items. So far you have told us about:
   ${ other_property_table }
 fields:
   - Add another?: other_property.there_is_another
@@ -3131,7 +3134,7 @@ id: additional transfer
 question: |
   In the last two years, did you transfer or sell other assets or property worth at least $1,000?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 transfers or sales. So far you have told us about:
   ${ transfer_table }
 fields:
   - Add another?: transfer.there_is_another
@@ -3184,7 +3187,7 @@ id: additional lawsuits
 question: |
   Do you have other lawsuits or claims?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 25 lawsuits or claims. So far you have told us about:
   ${ lawsuits_table }
 fields:
   - Add another?: lawsuits.there_is_another
@@ -3278,7 +3281,7 @@ question: |
 subquestion: |
   This program can put "**/s/ ${users[0].name_full()}**" where you would sign your name. The court will accept this as your signature.
 
-  If you do not add your **{e-signature}**, you must sign your paper form before you send it to the other party or their lawyer.
+  If you do not add your **{e-signature}**, you must sign your paper form before you send it to the other person in the case or their lawyer.
 
   <div class="alert alert-info ilao-info" role="alert">
     <h6 class="alert-heading">What it means to sign your form</h6>
@@ -3314,7 +3317,7 @@ question: |
 subquestion: |
   Your form is ready. View and download your form below. Click **:edit: Make changes** to fix any mistakes.
 
-  This program **does not deliver** your *Financial Affidavit* to the other party or their lawyer. You will need to do that yourself.
+  This program **does not deliver** your *Financial Affidavit* to the other person in the case or their lawyer. You will need to do that yourself.
   
   ${ action_button_html(url_action('review_answers'), label=':edit: Make changes', color='success', size="md") }
 
@@ -3324,7 +3327,7 @@ subquestion: |
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
 
-  **Note:** This program **does not deliver** your *Financial Affidavit* to the other party or their lawyer. You will need to do that yourself.
+  **Note:** This program **does not deliver** your *Financial Affidavit* to the other person in the case or their lawyer. You will need to do that yourself.
   
   Thank you for using ILAO Easy Forms!
 under: |
@@ -5557,7 +5560,7 @@ attachment:
           % endif
       - "another_employment_addendum_yes": |
           % if employment.number_gathered() > 2:
-          ${ employment.number_gathered() - 1 }
+          ${ True if i < (employment.number_gathered() -1) else '' }
           % endif 
         
 ---
