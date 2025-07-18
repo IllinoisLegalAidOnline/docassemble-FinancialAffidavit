@@ -1,7 +1,7 @@
 metadata:
   title: Financial affidavit
   short title: Financial affidavit
-  comment: This program helps you make forms that provide financial information and documents to the other party in family law cases.
+  comment: This program helps you make forms that provide financial information and documents to the other person in family law cases.
   authors:
     - Jim Graszer
     - Matt Newsted
@@ -38,6 +38,9 @@ objects:
   - lawsuits: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
   - court_list: ALCourtLoader.using(file_name='docassemble.ILAO:data/sources/il_courts.xlsx')
   - preview: DAStaticFile.using(filename="financial_affidavit_preview.pdf")
+  - other_cs_cases: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - other_cs_parents: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
+  - other_cs_kids_in_home: DAList.using(object_type=Thing, complete_attribute='complete', there_are_any=True)
 ---
 code: |
   al_form_type = 'existing_case'
@@ -80,11 +83,12 @@ code: |
   filing_status
   set_progress(20)
   nav.set_section('section_user')
-  if hide_contact == False:
-    users[0].address.address
-    users[0].phone_number
+
+  hide_address
+  users[0].address.address
+  users[0].phone_number  
   users[0].birthdate
-  household_expenses
+  #household_expenses
   users_acknowledge
   set_progress(30)
   nav.set_section('section_income')
@@ -113,6 +117,13 @@ code: |
   users[0].deductions_federal_question
   users[0].maintenance_paid_court_question
   users[0].child_support_1_question
+
+  if users[0].child_support_other_cases:
+    other_cs_cases.gather()
+  if users[0].child_support_no_court_order:
+    other_cs_parents.gather()
+  if users[0].child_support_in_home:
+    other_cs_kids_in_home.gather()
   
   users[0].living_house_payment_question
   users[0].living_gas_question
@@ -121,11 +132,11 @@ code: |
   users[0].transport_payment_question
 
   users[0].personal_doctor_question
-  users[0].personal_associations_question
   users[0].personal_life_term_question
   users[0].personal_clothing_question
+  users[0].personal_associations_question
   users[0].personal_gifts_question
-
+ 
   if users[0].children_expenses_question:
     users[0].children_clothing_question
     users[0].children_tuition_question
@@ -134,10 +145,10 @@ code: |
     users[0].children_vacations_question 
     users[0].children_other_question
 
-  expenses_summary
-
   if insurance.there_are_any:
     insurance.gather()
+  
+  expenses_summary
 
   set_progress(60)
   if has_debts:
@@ -156,22 +167,22 @@ code: |
     investments.gather()
   if has_other_investments:
     other_investments.gather()
-  if has_real_estate:
-    real_estate.gather()
-  if has_motor_vehicle:
-    motor_vehicle.gather()
   if has_business_interests:
     business_interests.gather()
+  if has_transfer:
+    transfer.gather()
+  if has_real_estate:
+    real_estate.gather()
   if has_life_insurance:
     life_insurance.gather()
   if has_retirement_plan:
     retirement_plan.gather()
+  if has_motor_vehicle:
+    motor_vehicle.gather()
   if has_collection:
     collection.gather()
   if has_other_property:
     other_property.gather()
-  if has_transfer:
-    transfer.gather()
   
   if has_lawsuits:
     lawsuits.gather()
@@ -224,7 +235,7 @@ question: |
 subquestion: |
   Welcome to Illinois Legal Aid Online's **Financial affidavit** Easy Form.
 
-  This program helps you make forms that provide financial information and documents to the other party in family law cases.
+  This program helps you make forms that provide financial information and documents to the other person in family law cases.
   
     If you are in a court case for divorce, child support, or temporary maintenance, you and the other person will probably have to share information about your income, property, and expenses. 
 
@@ -236,11 +247,11 @@ question: |
 subquestion: |
   To complete this program, you will need to know:
 
-  * Your monthly income and expenses
-  * Your expenses for children and other dependents, if any
-  * Your income tax refunds or amounts owed for the last 2 years (federal and state)
-  * Your debts and liabilities
-  * Your assets, such as bank accounts, real estate, vehicles, and retirement benefits
+  * Your monthly income and expenses,
+  * Your expenses for children and other dependents, if any,
+  * Your income tax refunds or amounts owed for the last 2 years (federal and state),
+  * Your debts and monthly expenses, and
+  * Your assets, such as bank accounts, real estate, vehicles, and retirement benefits.
 
   It could take 30 to 60 minutes to finish this program. You can log in and save your work to continue later. 
  
@@ -261,11 +272,11 @@ question: |
 subquestion: |
   The *Financial Affidavit* is a very long form. This program will help you fill it out and avoid mistakes. You may want to [**preview the Financial Affidavit**](${ preview.url_for() }) before you get started. Just be sure to come back to this screen to continue.
   
-  After you complete this Easy Form, you must send a copy of the completed *Financial Affidavit* and supporting documents to the other party in the case. If a party has a lawyer, send it to the lawyer.
+  After you complete this Easy Form, you must send a copy of the completed *Financial Affidavit* and supporting documents to the other person in the case. If that person has a lawyer, send it to the lawyer.
 
-  You can use ILAO's [**Proof of delivery**](https://www.illinoislegalaid.org/node/86991) Easy Form to make the other forms that show when you sent your Financial Affidavit and supporting documents.
+  You can use ILAO's [**Proof of delivery**](https://www.illinoislegalaid.org/node/86991) Easy Form to make the other forms that show when you sent your *Financial Affidavit* and supporting documents.
   
-  **Note:** You do not need to file your *Financial Affidavit* with the Circuit Clerk. However, you do need to file your *Proof of Delivery*.
+  **Note:** You usually do not need to file your *Financial Affidavit* with the Circuit Clerk. In some courts, a local rule or court order will require you to file it. Regardless, you do need to file your *Proof of Delivery*. The Circuit Clerk can help you find rules about whether you need to file.
   
 ---
 id: family case 
@@ -323,12 +334,10 @@ id: case filing status
 question: |
   What is the status of your family law case?
 subquestion: |
-  If your case is complete, there should be a final order or judgment that was entered.
+  If your case is complete, there should be a final order or judgment that was entered. For example, a *Judgment of Dissolution of Marriage/Civil Union* would be a final order in a divorce case.
 
   If no such order was entered, your case is "pending," and you probably have another court date scheduled.
-
-  For example, a *Judgment of Dissolution of Marriage/Civil Union* would be a final order in a divorce case.
-
+  
   Select **Pre-judgment** if a final judgment or order **has not** been entered in your case or if you do not know.
 fields:
   - Case status: filing_status
@@ -339,7 +348,7 @@ fields:
 ---  
 id: party label
 question: |
-  What is your party label in the case?
+  What is your role in the case?
 subquestion: |
   ${ collapse_template(which_party) }  
 field: party_label
@@ -351,7 +360,7 @@ choices:
 ---
 template: which_party
 subject: |
-  **Learn more about party labels**
+  **Learn more about roles and party labels**
 content: |
   If you filed a new case, you are either the Petitioner or the Plaintiff.
 
@@ -405,6 +414,15 @@ fields:
   - no label: hide_contact
     datatype: yesnoradio
 ---
+id: hide address
+question: |
+  Do you want to keep your address hidden?
+subquestion: |
+  You do not need to list where you are staying on your *Financial Affidavit* if you are worried that sharing your address would put you or your household at risk. You can use a mailing address where you can receive court notices instead.
+fields:
+  - no label: hide_address
+    datatype: yesnoradio
+---
 id: users address
 sets:
   - users[0].address.address
@@ -412,9 +430,17 @@ sets:
   - users[0].address.state
   - users[0].address.zip
 question: |
-  What is your address?
+  % if hide_address:
+  What is your mailing address?
+  % else:
+  What is your home address?
+  % endif
 subquestion: |
-  **This address will appear on your form.** If you do not want this, click **Back** to keep your address hidden.
+  % if hide_address:
+  **This address will appear on your *Financial Affidavit*.** You may receive court notices and documents about your case at this address.
+  % else:
+  **This address will appear on your *Financial Affidavit*.** If you do not want this, click **Back** to keep your address hidden.
+  % endif
 fields:
   - Street address: users[0].address.address
     address autocomplete: True
@@ -427,15 +453,51 @@ fields:
     default: IL      
   - ZIP code: users[0].address.zip
 ---
-id: user phone
+id: your contact information
 question: |
-  What is your phone number?
+  What is your contact information?
 subquestion: |
-  **This number will appear on your form.** If you do not want this, leave it blank.
-fields:
-  - Phone Number: users[0].phone_number
+  The court or other parties might need to contact you about this case.
+
+  **This information will appear on your *Financial Affidavit*.**
+  
+  If you do not want to list a phone number on your *Financial Affidavit*, leave it blank.
+
+  If you have an email address, you must list it. Be sure to check your email daily, otherwise you may miss important court documents or information about your case.
+
+  ${ collapse_template(contact_info_help) }  
+fields:  
+  - Phone number: users[0].phone_number
     datatype: al_international_phone
     required: False
+  - label: |
+      Do you have an email address?
+    field: users[0].has_email_address      
+    datatype: yesnoradio
+  - note: |
+      This email address will appear on your court forms. Be sure to check 
+      this email daily, otherwise you may miss important information about 
+      your case.
+    show if:
+      variable: users[0].has_email_address
+      is: True
+  - Email address: users[0].email    
+    datatype: email
+    show if: 
+      variable: users[0].has_email_address
+      is: True
+---
+template: contact_info_help
+subject: |
+  **What if I don't want to list my email address?**
+content: |  
+  If you do not want to enter your personal email address, you can create a new email account to get email about your case.
+  
+  To make a new email account try one of these email services:
+  
+  * [**Gmail**](https://accounts.google.com/SignUp)
+  * [**Outlook**](https://outlook.live.com/owa/?nlp=1&signup=1)
+  * [**Yahoo**](https://login.yahoo.com/account/create?.lang=en-US&.intl=us)
 ---
 id: user birthdate
 question: |
@@ -460,7 +522,7 @@ question: |
 subquestion: |
   <div class="alert alert-info ilao-info" role="alert">
     <h2 class="h4">Important</h2>
-    <p>The information you provide in the <i>Financial Affidavit</i> must be true.</p>
+    <p>The information you provide in the <i>Financial Affidavit</i> must be true and correct.</p>
     <p>If you intentionally or recklessly enter inaccurate or misleading information on this form, 
     you may face significant penalties and sanctions, including costs and attorney's fees.</p>
     <p>Do not file this document and the enclosures with the Circuit Clerk unless a local rule or 
@@ -592,7 +654,7 @@ fields:
 ---
 id: business perks
 question: |
-  Do you receive any of these benefits from ${ employment[i].name.text }?
+  Do you receive any of these benefits from the employer: ${ employment[i].name.text }?
 subquestion: |
   Check all that apply.
 fields:
@@ -1105,10 +1167,11 @@ subquestion: |
   * Living expenses
   * Transportation
   * Medical expenses
-  * Professional dues and fees
   * Insurance
   * Personal, entertainment, and vacation expenses
   * Gifts, donations, and other expenses
+  * Professional dues and fees
+  * Health insurance
 
   If you have expenses for children or other dependents, they are grouped as follows:
   
@@ -1118,7 +1181,7 @@ subquestion: |
   * Additional expenses like allowance and childcare
   * Vacation, entertainment, and other expenses
 
-  After asking about monthly expenses, you can enter information about health insurance and any debts you have.
+  After asking about monthly expenses, you can enter information about any debts you have.
 
 ---
 id: monthly deduction expenses
@@ -1164,47 +1227,258 @@ id: monthly maintenance expenses
 question: |
   Monthly maintenance payments
 fields:
-  - "Maintenance being paid or payable to the other party by you under a court order in this case": users[0].maintenance_paid_court_question
+  - "Maintenance being paid by you under a court order **in this case**": users[0].maintenance_paid_court_question
     datatype: yesnowide
   - Monthly amount: users[0].maintenance_paid_court
     datatype: currency
     min: 0.01
     show if: users[0].maintenance_paid_court_question
-  - "Maintenance being paid under a court order to a former spouse by you, which is tax deductible to you": users[0].maintenance_paid_no_tax_question
+  - This payment is: users[0].maintenance_paid_court_deductible
+    datatype: radio
+    choices:
+      - "Tax deductible to me.": Yes
+      - "**Not** tax deductible to me.": No
+      - "I don't know if this is tax deductible.": idk
+    show if: users[0].maintenance_paid_court_question
+  - "Maintenance being paid by you under a court order **in a different case**": users[0].maintenance_paid_other_case_question
     datatype: yesnowide
-  - Monthly amount: users[0].maintenance_paid_no_tax
+  - Monthly amount: users[0].maintenance_paid_other_case
     datatype: currency
     min: 0.01
-    show if: users[0].maintenance_paid_no_tax_question
-  - "Maintenance being paid under a court order to a former spouse by you, which is not tax deductible to you": users[0].maintenance_paid_taxed_question
-    datatype: yesnowide
-  - Monthly amount: users[0].maintenance_paid_taxed
-    datatype: currency
-    min: 0.01
-    show if: users[0].maintenance_paid_taxed_question
+    show if: users[0].maintenance_paid_other_case_question
+  - This payment is: users[0].maintenance_paid_other_case_deductible
+    datatype: radio
+    choices:
+      - "Tax deductible to me.": Yes
+      - "**Not** tax deductible to me.": No
+      - "I don't know if this is tax deductible.": idk
+    show if: users[0].maintenance_paid_other_case_question
+
 ---
 id: monthly child support expenses
 question: |
   Monthly child support payments
 fields:
-  - Court-ordered child support being paid for the children of this relationship: users[0].child_support_1_question
-    datatype: yesnowide
+  - Are you paying monthly child support for children under a court order **in this case**?: users[0].child_support_1_question
+    datatype: yesnoradio
   - Monthly amount: users[0].child_support_1
     datatype: currency
     min: 0.01
     show if: users[0].child_support_1_question
-  - Child support being paid **under a court order** for children not shared with the other party and who are not part of this case: users[0].child_support_2_question
-    datatype: yesnowide
-  - Monthly amount: users[0].child_support_2
+  - Are you paying monthly child support for children under a court order **in other cases**?: users[0].child_support_other_cases
+    datatype: radio
+    choices:
+      - Yes (enter details on another screen): True
+      - No: False
+  - Are you paying monthly child support to another parent **where there is no court order**?: users[0].child_support_no_court_order
+    datatype: radio
+    choices:
+      - Yes (enter details on another screen): True
+      - No: False
+  - Do you have any other biological or adopted children that live in your home that you support?: users[0].child_support_in_home
+    datatype: radio
+    choices:
+      - Yes (enter details on another screen): True
+      - No: False
+---
+id: child support other court order information
+question: |
+  % if i == 0:
+  Details about child support payments in another case
+  % else:
+  Details about child support payments in a ${ordinal(i)} case
+  % endif
+subquestion: |
+  You can enter up to 12 other cases.
+fields:
+  - Case number: other_cs_cases[i].name.text
+    maxlength: 20
+  - Number of children included in support order: other_cs_cases[i].num_kids
+    datatype: number
+    min: 1
+    max: 20
+  - Monthly child support amount: other_cs_cases[i].amount
     datatype: currency
     min: 0.01
-    show if: users[0].child_support_2_question
-  - Child support being paid, **but there is no court order**, for children not shared with the other party and who are not part of this case. These are children[NEWLINE](1) that are presumed to be yours,[NEWLINE](2) for whom there is a Voluntary Acknowledgment of Paternity (VAP) signed by you and the other parent, or[NEWLINE](3) for whom there is a court order naming you as a parent, but there is no support order: users[0].child_support_3_question
-    datatype: yesnowide
-  - Monthly amount: users[0].child_support_3
+  - State where order entered: other_cs_cases[i].state
+    code: |
+      states_list() 
+  - County where order entered: other_cs_cases[i].county
+    code: |
+      court_list._load_courts()["address_county"].unique()      
+    js show if: |
+      val('other_cs_cases[i].state') === "IL"
+  - County where order entered: other_cs_cases[i].county
+    maxlength: 25
+    js show if: |
+      val('other_cs_cases[i].state') != "IL"
+---
+id: additional other child support court orders 
+question: |
+  Are you paying monthly child support in other court cases?
+subquestion: |
+  So far you have told us about:
+  ${ cs_other_cases_table }
+fields:
+  - Add another?: other_cs_cases.there_is_another
+    datatype: yesnoradio
+---
+table: cs_other_cases_table
+rows: other_cs_cases
+columns:
+  - Case number: row_item.name.text
+  - Number of children: int(row_item.num_kids)
+  - Monthly amount: currency(row_item.amount)
+  - State: row_item.state
+  - County: row_item.county
+---
+code: |
+  other_cs_cases[i].name.text
+  other_cs_cases[i].num_kids
+  other_cs_cases[i].amount
+  other_cs_cases[i].county
+  other_cs_cases[i].state  
+  other_cs_cases[i].complete = True 
+---
+code: |
+  if other_cs_cases.number_gathered() == 12:
+    other_cs_cases.there_is_another = False    
+
+---
+id: child support other parent no case information
+question: |
+  % if i == 0:
+  Details about child support payment where there is no court order
+  % else:
+  Details about ${ordinal(i)} child support payment where there is no court order
+  % endif
+subquestion: |
+  You can enter up to 12 other support payments.
+  
+  ${ collapse_template(other_child_support_help) }  
+fields:
+  - Name of parent receiving support payments: other_cs_parents[i].name.text
+    maxlength: 40
+  - Number of children included in support: other_cs_parents[i].num_kids
+    datatype: number
+    min: 1
+    max: 20
+  - Monthly child support amount: other_cs_parents[i].amount
     datatype: currency
     min: 0.01
-    show if: users[0].child_support_3_question
+---
+template: other_child_support_help
+subject: |
+  **What child support should I enter here?**
+content: |  
+  You do not need to include child support payments for children that are covered by a court order. These should have already been entered.
+  
+  On this screen, include children for whom there is no court order for support and:
+  
+  1. That are presumed to be yours because the child was born during a marriage or union,
+  2. For whom there is a Voluntary Acknowledgment of Paternity (VAP) signed by you and the other parent, or
+  3. For whom there is a court order naming you as a parent, such as an adoption.
+  
+  If there is a VAP or court order naming you as a parent, be sure to attach it to your *Financial Affidavit*.
+
+---
+id: additional other child support court orders 
+question: |
+  Are you paying additional monthly child support for kids where there is no court order?
+subquestion: |
+  So far you have told us about:
+  ${ other_cs_parents_table }
+fields:
+  - Add another?: other_cs_parents.there_is_another
+    datatype: yesnoradio
+---
+table: other_cs_parents_table
+rows: other_cs_parents
+columns:
+  - Parent receiving payments: row_item.name.text
+  - Number of children: int(row_item.num_kids)
+  - Monthly amount: currency(row_item.amount)
+
+---
+code: |
+  other_cs_parents[i].name.text
+  other_cs_parents[i].num_kids
+  other_cs_parents[i].amount
+  other_cs_parents[i].complete = True 
+---
+code: |
+  if other_cs_parents.number_gathered() == 12:
+    other_cs_parents.there_is_another = False
+---
+id: child support other parent no case information
+question: |
+  % if i == 0:
+  Details about the child that lives with you that you support
+  % else:
+  Details about the ${ordinal(i)} child that lives with you that you support
+  % endif
+subquestion: |
+  You an enter up to 12 children that live with you.
+  
+  ${ collapse_template(other_child_support_kids_in_home_help) }  
+fields:
+  - Name of child: other_cs_kids_in_home[i].name.text
+    maxlength: 40
+  - Age: other_cs_kids_in_home[i].age
+    datatype: number
+    min: 1
+    max: 99
+  - How was paternity established?: other_cs_kids_in_home[i].paternity
+    datatype: radio
+  	choices:
+	    - Child was born during marriage or civil union: "Born during marriage or union"
+	    - Voluntary Acknowledgment of Paternity (VAP): "VAP"
+	    - Court order: "Court order"
+	    - I don't know.: "Not sure"
+---
+template: other_child_support_kids_in_home_help
+subject: |
+  **Which children should I include on this screen?**
+content: |  
+  You do not need to include children whose support you already entered.
+  
+  On this screen, include children that live in your home for whom there is no court order for support and:
+  
+  1. That are presumed to be yours because the child was born during a marriage or union,
+  2. For whom there is a Voluntary Acknowledgment of Paternity (VAP) signed by you and the other parent, or
+  3. For whom there is a court order naming you as a parent, such as an adoption.
+  
+  If there is a VAP or court order naming you as a parent, be sure to attach it to your *Financial Affidavit*.
+
+---
+id: additional other child support court orders 
+question: |
+  Do you have other biological or adopted children that live with you that you support?
+subquestion: |
+  So far you have told us about:
+  ${ other_cs_kids_in_home_table }
+fields:
+  - Add another?: other_cs_kids_in_home.there_is_another
+    datatype: yesnoradio
+---
+table: other_cs_kids_in_home_table
+rows: other_cs_kids_in_home
+columns:
+  - Child name: row_item.name.text
+  - Age: int(row_item.age)
+  - Paternity determined by: row_item.paternity
+
+---
+code: |
+  other_cs_kids_in_home[i].name.text
+  other_cs_kids_in_home[i].age
+  other_cs_kids_in_home[i].paternity
+  other_cs_kids_in_home[i].complete = True 
+---
+code: |
+  if other_cs_kids_in_home.number_gathered() == 12:
+    other_cs_kids_in_home.there_is_another = False
+
 ---
 id: monthly housing expenses
 question: |
@@ -1316,7 +1590,7 @@ fields:
     datatype: currency
     min: 0.01
     show if: users[0].living_cleaner_question
-  - Necessary repairs and maintenance to my property: users[0].living_repairs_question
+  - Necessary repairs and maintenance to my home: users[0].living_repairs_question
     datatype: yesnowide
   - Monthly amount: users[0].living_repairs
     datatype: currency
@@ -1371,7 +1645,7 @@ fields:
     datatype: currency
     min: 0.01
     show if: users[0].transport_insurance_question
-  - Gasoline: users[0].transport_fuel_question
+  - Fuel (gasoline or alternative fules): users[0].transport_fuel_question
     datatype: yesnowide
   - Monthly amount: users[0].transport_fuel
     datatype: currency
@@ -1404,6 +1678,8 @@ question: |
   Monthly medical expenses
 subquestion: |
   These are expenses for your own medical care.
+
+  **Note:** These are out-of-pocket expenses. Health insurance premiums and payments can be entered on another screen.
 fields:
   - Doctor visits: users[0].personal_doctor_question
     datatype: yesnowide
@@ -1417,7 +1693,7 @@ fields:
     datatype: currency
     min: 0.01
     show if: users[0].personal_therapy_question
-  - Dental and orthodontia: users[0].personal_dental_question
+  - Dental and orthodontics (braces): users[0].personal_dental_question
     datatype: yesnowide
   - Monthly amount: users[0].personal_dental
     datatype: currency
@@ -1718,15 +1994,12 @@ reconsider: True
 depends on:
   - users[0].deductions_federal
   - users[0].deductions_state
-  - users[0].deductions_FICA
+  - users[0].deductions_fica
   - users[0].deductions_medicare
   - users[0].deductions_retirement
   - users[0].maintenance_paid_court
-  - users[0].maintenance_paid_no_tax
-  - users[0].maintenance_paid_taxed
+  - users[0].maintenance_paid_other_case
   - users[0].child_support_1
-  - users[0].child_support_2
-  - users[0].child_support_3
   # Section 12 a-d
   - users[0].living_house_payment
   - users[0].living_heloc
@@ -1798,19 +2071,44 @@ code: |
   total_monthly_deductions = sum_if_defined(
     'users[0].deductions_federal',
     'users[0].deductions_state',
-    'users[0].deductions_FICA',
+    'users[0].deductions_fica',
     'users[0].deductions_medicare',
     'users[0].deductions_retirement')
 
   total_maintenance_payments = sum_if_defined(
     'users[0].maintenance_paid_court',
-    'users[0].maintenance_paid_no_tax',
-    'users[0].maintenance_paid_taxed')
+    'users[0].maintenance_paid_other_case')
 
+  total_child_support_payments_addendum = 0.0
+  total_child_support_payments_addendum = sum_if_defined(
+    'other_cs_cases[4].amount',
+    'other_cs_cases[5].amount',
+    'other_cs_cases[6].amount',
+    'other_cs_cases[7].amount',
+    'other_cs_cases[8].amount',
+    'other_cs_cases[9].amount',
+    'other_cs_cases[10].amount',
+    'other_cs_cases[11].amount',
+    'other_cs_parents[4].amount',
+    'other_cs_parents[5].amount',
+    'other_cs_parents[6].amount',
+    'other_cs_parents[7].amount',
+    'other_cs_parents[8].amount',
+    'other_cs_parents[9].amount',
+    'other_cs_parents[10].amount',
+    'other_cs_parents[11].amount')
+  
   total_child_support_payments = sum_if_defined(
     'users[0].child_support_1',
-    'users[0].child_support_2',
-    'users[0].child_support_3')
+    'other_cs_cases[0].amount',
+    'other_cs_cases[1].amount',
+    'other_cs_cases[2].amount',
+    'other_cs_cases[3].amount',
+    'other_cs_parents[0].amount',
+    'other_cs_parents[1].amount',
+    'other_cs_parents[2].amount',
+    'other_cs_parents[3].amount',
+    'total_child_support_payments_addendum')
 
   subtotal_monthly_household_expenses = sum_if_defined(
     'users[0].living_house_payment',
@@ -1890,13 +2188,34 @@ code: |
     'users[0].children_party_gifts',
     'users[0].children_other')
 
+  subtotal_monthly_insurance_expenses = insurance_primary_total() + insurance_addenda_total()
+  
   total_monthly_household_expenses = sum_if_defined(
     'subtotal_monthly_household_expenses',
     'subtotal_monthly_utility_expenses',
     'subtotal_monthly_living_expenses',
     'subtotal_monthly_transportation_expenses',
     'subtotal_monthly_personal_expenses',
-    'subtotal_monthly_children_expenses')
+    'subtotal_monthly_children_expenses',
+    'subtotal_monthly_insurance_expenses')
+---
+code: |
+  def insurance_primary_total():
+    if insurance.there_are_any:
+        if insurance[0].paid["myself"]:
+          return insurance[0].monthly_cost
+    return 0
+---
+code: |
+  def insurance_addenda_total():
+    insurance_total = 0  
+    if insurance.there_are_any:
+      if insurance.number_gathered() > 1:
+        for policy in insurance:
+          if policy.paid["myself"] :
+            insurance_total += policy.monthly_cost
+  	  insurance_total = insurance_total - insurance_primary_total()
+    return insurance_total
 ---
 ################### FA HEALTH INSURANCE ##################
 id: health insurance intro 
@@ -1959,7 +2278,7 @@ fields:
   - Number of people covered: insurance[i].total_covered
     datatype: integer
     min: 1
-    max: 20
+    max: 50
   - Who is covered?: insurance[i].coverage
     datatype: checkboxes
     choices:
@@ -2030,11 +2349,6 @@ fields:
     max: 100
     help: |
        Coninsurance is the percentage of costs you pay.
-  - Copayment amount: insurance[i].copayment
-    datatype: currency
-    min: 0
-    help: |
-      A copayment amount is a flat amount you pay per service, such as an office visit or an x-ray.
 ---
 ########### FA DEBTS ###########
 id: debt intro 
@@ -2052,7 +2366,7 @@ id: additional debts
 question: |
   Do you have any other debts?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 25 debts. So far you have told us about:
 
   ${ debts_table }
 
@@ -2093,7 +2407,7 @@ code: |
   debts[i].complete = True 
 ---
 code: |
-  if debts.number_gathered() == 26:
+  if debts.number_gathered() == 25:
     debts.there_is_another = False
 ---
 id: expenses summary
@@ -2118,26 +2432,26 @@ question: |
 subquestion: |
   On the *Financial Affidavit*, you are required to list all of your belongings, also known as your assets. The form puts assets in the following groups:
 
-  * Cash and cash equivalents 
+  * Money in bank or credit union accounts 
   * Certificates of deposit
-  * Money on cash cards, prepaid debit cards, and money transfer apps 
+  * Cash, money on prepaid debit cards, and money transfer apps 
   * Investment accounts and securities
   * Investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency
-  * Real estate 
-  * Motor vehicles
   * Business interests
+  * Transfer or sale of assets or property worth at least $1,000 within the last 2 years
+  * Real estate 
   * Life insurance policies
   * Retirement benefits and deferred compensation
+  * Motor vehicles
   * Valuable collectibles 
   * Other personal property valued over $500
-  * Transfer or sale of assets or property worth at least $1,000 within the last 2 years
 ---
 ########### FA ASSETS - 15a Cash/Cash Equivalents ###########
-id: cash equivalent intro 
+id: money in accounts intro 
 question: |
-  Do you have any cash or cash equivalents?
+  Do you have any money in bank or credit union accounts?
 subquestion: |
-  These include checking, savings, money market, and other bank or credit union accounts.
+  This includes checking, savings, money market, and other bank or credit union accounts.
   
   **Do not list account numbers on your forms.** 
 fields:
@@ -2146,9 +2460,9 @@ fields:
 ---
 id: additional cash
 question: |
-  Do you have other cash or cash equivalent accounts?
+  Do you have other money in bank or credit union accounts?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 accounts. So far you have told us about:
   ${ cash_table }
 fields:
   - Add another?: cash.there_is_another
@@ -2164,9 +2478,9 @@ columns:
 ---
 id: cash information
 question: |
-  Details for the ${ordinal(i)} cash or cash equivalent account
+  Details for the ${ordinal(i)} account
 subquestion: |
-  **Do not list account numbers on your forms.** 
+  **Do not list account numbers on your forms.**
 fields:
   - Bank or institution name: cash[i].name.text
     maxlength: 25
@@ -2188,7 +2502,7 @@ code: |
   cash[i].complete = True 
 ---
 code: |
-  if cash.number_gathered() == 25:
+  if cash.number_gathered() == 12:
     cash.there_is_another = False
 ---
 ########### FA ASSETS - 15a Certificate of Deposit ###########
@@ -2205,7 +2519,7 @@ id: additional certificate of deposit
 question: |
   Do you have other certificates of deposit?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 CDs. So far you have told us about:
   ${ cert_deposit_table }
 fields:
   - Add another?: cert_deposit.there_is_another
@@ -2235,26 +2549,27 @@ code: |
   cert_deposit[i].complete = True 
 ---
 code: |
-  if cert_deposit.number_gathered() == 25:
+  if cert_deposit.number_gathered() == 12:
     cert_deposit.there_is_another = False
 ---
 ########### FA ASSETS - 15a money cash/card ###########
 id: money cash/card intro 
 question: |
-  Do you have any money on debit cards or in money transfer apps?
+  Do you have any money in cash, on debit cards, or in money transfer apps?
 subquestion: |
-  These include any money you have on cash cards, prepaid debit cards, and money transfer mobile apps like Venmo, PayPal, or Apple Pay.
+  This includes cash on hand, money you have on prepaid debit cards, and money transfer mobile apps like Venmo, PayPal, or Apple Pay.
 
-  A prepaid debit card can be used to make purchases like you would use cash. The amount of money on the card must be "loaded" onto the card before the purchase. Many prepaid cards carry the brand, like MasterCard, Visa, or American Express, and can be used anywhere that type of card is accepted.
+  A prepaid debit card can be used to make purchases like you would use cash. The amount of money on the card must be "loaded" onto the card before the purchase. Many prepaid cards carry the brand of a card network, like MasterCard, Visa, or American Express.
 fields:
   - no label: has_money
     datatype: yesnoradio
 ---
 id: additional money cash/card
 question: |
-  Do you have other debit cards or money transfer app balances?
+  Do you have other cash, debit cards, or money transfer app balances?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 items. So far you have told us about:
+  
   ${ money_table }
 fields:
   - Add another?: money.there_is_another
@@ -2263,22 +2578,31 @@ fields:
 table: money_table
 rows: money
 columns:
-  - Location of cash/card: row_item.name.text
-  - Held by: row_item.holder
+  - Bank or institution name: row_item.name.text
+  - Name on account: row_item.holder
+  - Account type: row_item.type
   - Balance: currency(row_item.balance)
 ---
 id: money cash/card information
 question: |
-  Details for the ${ordinal(i)} debit card or money transfer app 
+  Details for the ${ordinal(i)} cash, debit card, or money transfer app
+subquestion: |
+  If you have cash, you can enter "cash on hand" in **Bank or institution name** and put your name in **Name on account**.
 fields:
-  - Location of cash/card: money[i].name.text
+  - Bank or institution name: money[i].name.text
     maxlength: 30
     help: |
-      Explain who has physical possession of the card. If it is a money transfer app, you can mention the app name like Venmo or PayPal.
-  - Name of holder of card or account: money[i].holder
+      If you have cash, enter "cash on hand".
+  - Name on account: money[i].holder
     maxlength: 30
     help: |
-      This is the person whose name is on the account.  
+      This is the person whose name is on the account. If you have cash, enter your name.
+  - Account type: money[i].type
+    datatype: radio
+    choices:
+      - Cash
+      - Prepaid debit card 
+      - Money transfer app
   - Balance: money[i].balance
     datatype: currency
     min: 0
@@ -2288,7 +2612,7 @@ code: |
   money[i].complete = True 
 ---
 code: |
-  if money.number_gathered() == 25:
+  if money.number_gathered() == 12:
     money.there_is_another = False
 ---
 ########### FA ASSETS - 15b Investment Accounts ###########
@@ -2307,10 +2631,10 @@ id: additional investment accounts
 question: |
   Do you have other investment accounts or securities?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 investment account or securities. So far you have told us about:
   ${ investments_table }
 
-  Reminder: Investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency can be entered on another screen.
+  **Remember:** Investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency can be entered on another screen.
 fields:
   - Add another?: investments.there_is_another
     datatype: yesnoradio
@@ -2361,7 +2685,7 @@ code: |
   investments[i].complete = True 
 ---
 code: |
-  if investments.number_gathered() == 25:
+  if investments.number_gathered() == 12:
     investments.there_is_another = False
 ---
 ########### FA ASSETS - 15b Other investments ###########
@@ -2378,10 +2702,10 @@ id: additional other investments
 question: |
   Do you have other investment assets?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 other investment assets. So far you have told us about:
   ${ other_investments_table }
 
-  Remember: These include investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency.
+  **Remember:** These include investment/brokerage accounts, mutual funds, secured or unsecured notes, and cryptocurrency.
 
 fields:
   - Add another?: other_investments.there_is_another
@@ -2411,7 +2735,7 @@ code: |
   other_investments[i].complete = True 
 ---
 code: |
-  if other_investments.number_gathered() == 25:
+  if other_investments.number_gathered() == 12:
     other_investments.there_is_another = False
 ---
 ########### FA ASSETS - 15c REAL ESTATE ###########
@@ -2428,7 +2752,7 @@ id: additional real estate
 question: |
   Do you own other real estate?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 properties. So far you have told us about:
   ${ real_estate_table }
 fields:
   - Add another?: real_estate.there_is_another
@@ -2471,7 +2795,7 @@ code: |
   real_estate[i].complete = True 
 ---
 code: |
-  if real_estate.number_gathered() == 25:
+  if real_estate.number_gathered() == 12:
     real_estate.there_is_another = False
 ---
 ########### FA ASSETS - 15d Motor Vehicle ###########
@@ -2488,7 +2812,7 @@ id: additional motor vehicle
 question: |
   Do you have other vehicles?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 vehicles. So far you have told us about:
   ${ motor_vehicle_table }
 fields:
   - Add another?: motor_vehicle.there_is_another
@@ -2538,7 +2862,7 @@ code: |
   motor_vehicle[i].complete = True 
 ---
 code: |
-  if motor_vehicle.number_gathered() == 25:
+  if motor_vehicle.number_gathered() == 12:
     motor_vehicle.there_is_another = False
 ---
 ########### FA ASSETS - 15e Business Interests ###########
@@ -2555,7 +2879,7 @@ id: additional business interests
 question: |
   Do you have other business interests?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 business interests. So far you have told us about:
   ${ business_interests_table }
 fields:
   - Add another?: business_interests.there_is_another
@@ -2579,20 +2903,22 @@ fields:
     maxlength: 30
   - Type of business: business_interests[i].type
     maxlength: 20
+    help: |
+      List whether the business is a corporation, S Corp, an LLC, or something else.
+  - Fair market value (FMV): business_interests[i].fmv
+    datatype: currency
+    min: 0
   - "What percent do you own? (1-100%)": business_interests[i].ownership
     datatype: integer
     min: 1
     max: 100
-  - Fair market value (FMV): business_interests[i].fmv
-    datatype: currency
-    min: 0
 ---
 code: |
   business_interests[i].name.text
   business_interests[i].complete = True 
 ---
 code: |
-  if business_interests.number_gathered() == 25:
+  if business_interests.number_gathered() == 12:
     business_interests.there_is_another = False
 ---
 ########### FA ASSETS - 15f Life Insurance ###########
@@ -2600,7 +2926,7 @@ id: life insurance intro
 question: |
   Do you have any life insurance policies?
 subquestion: |
-  These can be life insurance policies you have for yourself, the other party, or your children. 
+  These can be life insurance policies you have for yourself, your spouse, or your children. 
 fields:
   - no label: has_life_insurance
     datatype: yesnoradio
@@ -2609,7 +2935,7 @@ id: additional investment accounts
 question: |
   Do you have other life insurance policies?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 policies. So far you have told us about:
   ${ life_insurance_table }
 fields:
   - Add another?: life_insurance.there_is_another
@@ -2648,7 +2974,7 @@ code: |
   life_insurance[i].complete = True 
 ---
 code: |
-  if life_insurance.number_gathered() == 25:
+  if life_insurance.number_gathered() == 12:
     life_insurance.there_is_another = False
 ---
 ########### FA ASSETS - 15g Retirement Benefits #######
@@ -2668,7 +2994,7 @@ id: additional retirement benefits
 question: |
   Do you have other retirement benefits or deferred compensation?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 plans. So far you have told us about:
   ${ retirement_plan_table }
 fields:
   - Add another?: retirement_plan.there_is_another
@@ -2698,7 +3024,7 @@ code: |
   retirement_plan[i].complete = True 
 ---
 code: |
-  if retirement_plan.number_gathered() == 25:
+  if retirement_plan.number_gathered() == 12:
     retirement_plan.there_is_another = False
 ---
 ########### FA ASSETS - 15h Valuable collectibles ###########
@@ -2724,7 +3050,7 @@ id: additional collectibles
 question: |
   Do you have other valuable collectibles?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 collectibles. So far you have told us about:
   ${ collection_table }
 fields:
   - Add another?: collection.there_is_another
@@ -2755,7 +3081,7 @@ code: |
   collection[i].complete = True 
 ---
 code: |
-  if collection.number_gathered() == 25:
+  if collection.number_gathered() == 12:
     collection.there_is_another = False
 ---
 ########### FA ASSETS - 15i Other Personal Property ###########
@@ -2772,7 +3098,7 @@ id: additional other_property
 question: |
   Do you have other personal property valued at over $500?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 other items. So far you have told us about:
   ${ other_property_table }
 fields:
   - Add another?: other_property.there_is_another
@@ -2801,7 +3127,7 @@ code: |
   other_property[i].complete = True 
 ---
 code: |
-  if other_property.number_gathered() == 25:
+  if other_property.number_gathered() == 12:
     other_property.there_is_another = False
 ---
 ########### FA ASSETS - 15j Transfer or Sale of Assets #######
@@ -2818,7 +3144,7 @@ id: additional transfer
 question: |
   In the last two years, did you transfer or sell other assets or property worth at least $1,000?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 12 transfers or sales. So far you have told us about:
   ${ transfer_table }
 fields:
   - Add another?: transfer.there_is_another
@@ -2854,7 +3180,7 @@ code: |
   transfer[i].complete = True 
 ---
 code: |
-  if transfer.number_gathered() == 25:
+  if transfer.number_gathered() == 12:
     transfer.there_is_another = False
 ---
 ########### FA LAWSUITS AND CLAIMS #######
@@ -2871,7 +3197,7 @@ id: additional lawsuits
 question: |
   Do you have other lawsuits or claims?
 subquestion: |
-  So far you have told us about:
+  The forms have room for up to 25 lawsuits or claims. So far you have told us about:
   ${ lawsuits_table }
 fields:
   - Add another?: lawsuits.there_is_another
@@ -2880,10 +3206,12 @@ fields:
 table: lawsuits_table
 rows: lawsuits
 columns:
-  - Case number: row_item.case
-  - Date lawsuit or claim filed: row_item.date.format("MM/dd/yyyy")
+  - Case number: |
+      row_item.case if row_item.already_filed else 'not filed'
+  - Date lawsuit or claim filed: |
+      row_item.date.format("MM/dd/yyyy") if row_item.already_filed else 'not filed'
   - Amount recovered: |
-      currency(row_item.amount) if row_item.judgement else 'unknown'
+      currency(row_item.amount) if (row_item.already_filed and row_item.case_over) else 'unknown'
 ---
 id: lawsuits information
 question: |
@@ -2891,22 +3219,33 @@ question: |
 subquestion: |
  
 fields:
+  - Has the case or claim been filed yet?: lawsuits[i].already_filed
+    datatype: yesnoradio
+  - note: |
+      **Note:** If the case or claim has not been filed, there will be an entry on your *Financial Affidavit* that the case has not been filed yet.
   - Case number: lawsuits[i].case
+    show if: lawsuits[i].already_filed
   - Date lawsuit or claim filed: lawsuits[i].date
     datatype: ThreePartsDate
     alMax: ${ today().format("yyyy-MM-dd") }
-  - Was any money recovered?: lawsuits[i].judgement
+    show if: lawsuits[i].already_filed
+  - Is the case over?: lawsuits[i].case_over
     datatype: yesnoradio
-    help: |
-      If you did not recover anything or if your case is still pending or has not yet been filed, select **No**.
-  - Amount recovered: lawsuits[i].amount
+    show if: lawsuits[i].already_filed
+  - note: |
+      **Note:** If the case is not over, there will be an entry on your *Financial Affidavit* that the amount recovered is "unknown."
+    show if: lawsuits[i].already_filed
+  - "Amount recovered, if any": lawsuits[i].amount
     datatype: currency
     min: 0.01
     default: 0.00
-    show if: lawsuits[i].judgement
+    help: |
+      Enter 0 if you did not recover anything.
+    js show if: |
+      val('lawsuits[i].already_filed') == true && val('lawsuits[i].case_over') == true
 ---
 code: |
-  lawsuits[i].case
+  lawsuits[i].already_filed
   lawsuits[i].complete = True 
 ---
 code: |
@@ -2963,16 +3302,16 @@ id: e-signature
 question: |
   Do you want to add your e-signature to your ${ form_name }?
 subquestion: |
-  This program can put "**/s/ ${users[0].name.full(middle='full')}**" where you would sign your name. The court will accept this as your signature.
+  This program can put "**/s/ ${users[0].name_full()}**" where you would sign your name. The court will accept this as your signature.
 
-  If you do not add your **{e-signature}**, you must sign your paper form before you send it to the other party in your case or their lawyer.
+  If you do not add your **{e-signature}**, you must sign your paper form before you send it to the other person in the case or their lawyer.
 
   <div class="alert alert-info ilao-info" role="alert">
     <h6 class="alert-heading">What it means to sign your form</h6>
     <p>By signing your <i>Financial Affidavit</i>, you are certifying that:</p>
     <p><ul>
-      <li>Everything on the forms is true and correct, and</li>
-      <li>You understand that making a false statement on the form is perjury, which can result in criminal penalties.</li>
+      <li>Everything on the form is true and correct, or you have been informed or you believe it is true and correct, and</li>
+      <li>You understand that making a false statement on the form is perjury and has penalties provided by law.</li>
     </ul></p>
   <p>See the <a href="https://www.ilga.gov/legislation/ilcs/documents/073500050k1-109.htm"><b>Code of Civil Procedure, 735 ILCS 5/1-109</b></a> for more information.</p>
   </div>
@@ -2999,9 +3338,9 @@ event: get_docs_screen
 question: |
   Download
 subquestion: |
-  Your form is ready. View and download your form below. Click **Make changes** to fix any mistakes.
+  Your form is ready. View and download your form below. Click **:edit: Make changes** to fix any mistakes.
 
-  This program does not deliver your *Financial Affidavit* to the other party in your case. You will need to do that yourself.
+  This program **does not deliver** your *Financial Affidavit* to the other person in the case or their lawyer. You will need to do that yourself.
   
   ${ action_button_html(url_action('review_answers'), label=':edit: Make changes', color='success', size="md") }
 
@@ -3011,7 +3350,7 @@ subquestion: |
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
 
-  **Note:** This program does not deliver your *Financial Affidavit* to the other party in your case. You will need to do that yourself.
+  **Note:** This program **does not deliver** your *Financial Affidavit* to the other person in the case or their lawyer. You will need to do that yourself.
   
   Thank you for using ILAO Easy Forms!
 under: |
@@ -3039,21 +3378,14 @@ objects:
   - financial_affidavit_bundle: ALDocumentBundle.using(title="Financial Affidavit", filename="financial_affidavit.pdf", enabled=True, elements=[
         fa_primary, 
         additional_employment_bundle,
+        additional_child_support,
         additional_health_insurance_bundle,
         additional_debts,
         additional_cash,
-        additional_cd,
-        additional_money,
         additional_investments,
-        additional_other_investments,
-        additional_real_estate,
-        additional_motor_vehicle,
         additional_business_interests,
         additional_life_insurance,
-        additional_retirement,
-        additional_collectibles,
-        additional_other_property,
-        additional_transfer,
+        additional_motor_vehicle,
         additional_lawsuits,
       ])
 ---
@@ -3079,21 +3411,21 @@ attachment:
     pdf template file: fa_primary.pdf
     editable: False
     fields:
-      - "county_name": ${ case_county.upper() }
+      - "county_name": ${ case_county }
       - "case_number": ${ case_number }
       - "pre-judgment": ${ filing_status == "pre_judgment" }
       - "post-judgment": ${ filing_status == "post_judgment" }
       - "petitioner_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % else:
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % endif
       - "respondent_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % else:
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % endif
       - "petitioner_yes": ${ party_label == 'petitioner' or party_label == 'plaintiff' }
       - "respondent_yes": ${ party_label == 'respondent' or party_label == 'defendant' }
@@ -3110,21 +3442,14 @@ attachment:
           % if users[0].attached_documents["other"]:
           ${ comma_and_list(users[0].attachment_assets) }
           % endif
-      - "users_name": ${ users[0].name.full(middle='full') }
+      - "users_name": ${ users[0].name_full() }
       - "users_phone_number": |
-          % if not hide_contact:
+          % if users[0].phone_number != "":
           ${ phone_number_formatted(users[0].phone_number) }
           % endif
-      - "users_address": |
-          % if not hide_contact:
-          ${ users[0].address.line_one(bare=True) }
-          % endif
-      - "users_address2": |
-          % if not hide_contact:
-          ${ users[0].address.line_two() }
-          % endif
+      - "users_address": ${ users[0].address.on_one_line(bare=True) }
       - "users_birthdate": ${ users[0].birthdate.format('MM/dd/yyyy') }
-      - "household_expenses": ${ household_expenses }
+      #- "household_expenses": ${ household_expenses }
       # Page 2: 6. My Employment/Business
       - "unemployed_yes": ${ employment.there_are_any == False }  
       # employed
@@ -3138,11 +3463,7 @@ attachment:
           % endif
       - "employer_address": |
           % if employment.there_are_any and employment[0].type == "employed":
-          ${ employment[0].address.line_one(bare=True) }
-          % endif
-      - "employer_address2": |
-          % if employment.there_are_any and employment[0].type == "employed":
-          ${ employment[0].address.line_two() }
+          ${ employment[0].address.on_one_line(bare=True) }
           % endif
       - "paychecks_monthly": |
           % if employment.there_are_any and employment[0].type == "employed":
@@ -3173,6 +3494,12 @@ attachment:
           ${ employment[0].gross_date.format('MM/dd/yyyy') }
           % endif
       # business
+      - "employment_cb": |
+         % if employment.there_are_any:
+         % if employment[0].type == "own" or employment[0].type == "contractor" or employment[0].type == "partnership" or employment[0].type == "LLC" or employment[0].type == "corp" or employment[0].type == "other_entity":
+         ${ True}
+         % endif
+         % endif
       - "business_own": |
           % if employment.there_are_any:
           ${ employment[0].type == "own" }
@@ -3203,11 +3530,7 @@ attachment:
           % endif
       - "business_address": |
           % if employment.there_are_any and employment[0].type != "employed":
-          ${ employment[0].address.line_one(bare=True) }
-          % endif
-      - "business_address2": |
-          % if employment.there_are_any and employment[0].type != "employed":
-          ${ employment[0].address.line_two() }
+          ${ employment[0].address.on_one_line(bare=True) }
           % endif
       - "business_gross_last_year": |
           % if employment.there_are_any and employment[0].type != "employed":
@@ -3275,7 +3598,7 @@ attachment:
           % if taxes_filed:
           ${ deduction_type == "itemized" }
           % endif
-      - "Gross income (before taxes and deductions) last year": |
+      - "gross_income_last_year": |
           % if taxes_filed:
           ${ thousands(gross_income_last_year, show_decimals=True)}
           % endif
@@ -3513,45 +3836,228 @@ attachment:
           % endif
       - "total_deductions": |
           ${ thousands(total_monthly_deductions, show_decimals=True)}
-      - "maintenance_paid_court": |
+      - "maintenance_paid_this_case": |
           % if users[0].maintenance_paid_court_question:
           ${ thousands(users[0].maintenance_paid_court, show_decimals=True)}
           % else:
           0.00
           % endif
-      - "maintenance_paid_no_tax": |
-          % if users[0].maintenance_paid_no_tax_question:
-          ${ thousands(users[0].maintenance_paid_no_tax, show_decimals=True)}
+      - "maint_this_case_tax_deduct_yes": ${ True if users[0].maintenance_paid_court_question and users[0].maintenance_paid_court_deductible == "Yes" else '' }
+      - "maint_this_case_tax_deduct_no": ${ True if users[0].maintenance_paid_court_question and users[0].maintenance_paid_court_deductible == "No" else '' }
+      - "maintenance_paid_other_case": |
+          % if users[0].maintenance_paid_other_case_question:
+          ${ thousands(users[0].maintenance_paid_other_case, show_decimals=True)}
           % else:
           0.00
           % endif
-      - "maintenance_paid_taxed": |
-          % if users[0].maintenance_paid_taxed_question:
-          ${ thousands(users[0].maintenance_paid_taxed, show_decimals=True)}
-          % else:
-          0.00
-          % endif
+      - "maint_other_case_tax_deduct_yes": ${ True if users[0].maintenance_paid_other_case_question and users[0].maintenance_paid_other_case_deductible == "Yes"  else '' }
+      - "maint_other_case_tax_deduct_no": ${ True if users[0].maintenance_paid_other_case_question and users[0].maintenance_paid_other_case_deductible == "No" else '' }
       - "total_maintenance": |
           ${ thousands(total_maintenance_payments, show_decimals=True)}
-      - "child_support_1": |
+      - "child_support_this_case": |
           % if users[0].child_support_1_question:
           ${ thousands(users[0].child_support_1, show_decimals=True)}
           % else:
           0.00
           % endif
-      - "child_support_2": |
-          % if users[0].child_support_2_question:
-          ${ thousands(users[0].child_support_2, show_decimals=True)}
-          % else:
-          0.00
+
+      - "cs_other_case_loc_1": |
+          % if users[0].child_support_other_cases:
+          ${ other_cs_cases[0].county + ", " + state_name(other_cs_cases[0].state)}
+          % endif          
+      - "cs_other_case_kids_1": |
+          % if users[0].child_support_other_cases:
+          ${ int(other_cs_cases[0].num_kids) }
           % endif
-      - "child_support_3": |
-          % if users[0].child_support_3_question:
-          ${ thousands(users[0].child_support_3, show_decimals=True)}
-          % else:
-          0.00
+      - "cs_other_case_num_1": |
+          % if users[0].child_support_other_cases:
+          ${ other_cs_cases[0].name.text }
           % endif
-      - "total_child_support": |
+      - "cs_other_case_amount_1": |
+          % if users[0].child_support_other_cases:
+          ${ thousands(other_cs_cases[0].amount, show_decimals=True)}
+          % endif
+      - "cs_other_case_loc_2": |
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 1:
+          ${ other_cs_cases[1].county + ", " + state_name(other_cs_cases[1].state)}
+          % endif          
+      - "cs_other_case_kids_2": |
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 1:
+          ${ int(other_cs_cases[1].num_kids) }
+          % endif
+      - "cs_other_case_num_2": |
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 1:
+          ${ other_cs_cases[1].name.text }
+          % endif
+      - "cs_other_case_amount_2": |
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 1:
+          ${ thousands(other_cs_cases[1].amount, show_decimals=True)}
+          % endif
+      - "cs_other_case_loc_3": |
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 2:
+          ${ other_cs_cases[2].county + ", " + state_name(other_cs_cases[2].state)}
+          % endif          
+      - "cs_other_case_kids_3": |
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 2:
+          ${ int(other_cs_cases[2].num_kids) }
+          % endif
+      - "cs_other_case_num_3": |
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 2:
+          ${ other_cs_cases[2].name.text }
+          % endif
+      - "cs_other_case_amount_3": |
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 2:
+          ${ thousands(other_cs_cases[2].amount, show_decimals=True)}
+          % endif
+      - "cs_other_case_loc_4": |
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 3:
+          ${ other_cs_cases[3].county + ", " + state_name(other_cs_cases[3].state)}
+          % endif          
+      - "cs_other_case_kids_4": |
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 3:
+          ${ int(other_cs_cases[3].num_kids) }
+          % endif
+      - "cs_other_case_num_4": |
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 3:
+          ${ other_cs_cases[3].name.text }
+          % endif
+      - "cs_other_case_amount_4": |
+          % if users[0].child_support_other_cases and other_cs_cases.number_gathered() > 3:
+          ${ thousands(other_cs_cases[3].amount, show_decimals=True)}
+          % endif
+      - "cs_no_case_parent_1": |
+          % if users[0].child_support_no_court_order:
+          ${ other_cs_parents[0].name.text }
+          % endif
+      - "cs_no_case_kids_1": |
+          % if users[0].child_support_no_court_order:
+          ${ int(other_cs_parents[0].num_kids) }
+          % endif
+      - "cs_no_case_amount_1": |
+          % if users[0].child_support_no_court_order:
+          ${ thousands(other_cs_parents[0].amount, show_decimals=True)}
+          % endif
+      - "cs_no_case_parent_2": |
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 1:
+          ${ other_cs_parents[1].name.text }
+          % endif
+      - "cs_no_case_kids_2": |
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 1:
+          ${ int(other_cs_parents[1].num_kids) }
+          % endif
+      - "cs_no_case_amount_2": |
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 1:
+          ${ thousands(other_cs_parents[1].amount, show_decimals=True)}
+          % endif
+      - "cs_no_case_parent_3": |
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 2:
+          ${ other_cs_parents[2].name.text }
+          % endif
+      - "cs_no_case_kids_3": |
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 2:
+          ${ int(other_cs_parents[2].num_kids) }
+          % endif
+      - "cs_no_case_amount_3": |
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 2:
+          ${ thousands(other_cs_parents[2].amount, show_decimals=True)}
+          % endif
+      - "cs_no_case_parent_4": |
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 3:
+          ${ other_cs_parents[3].name.text }
+          % endif
+      - "cs_no_case_kids_4": |
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 3:
+          ${ int(other_cs_parents[3].num_kids) }
+          % endif
+      - "cs_no_case_amount_4": |
+          % if users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 3:
+          ${ thousands(other_cs_parents[3].amount, show_decimals=True)}
+          % endif
+      - "cs_support_name_1": |
+          % if users[0].child_support_in_home:
+          ${ other_cs_kids_in_home[0].name.text }
+          % endif
+      - "cs_support_age_1": |
+          % if users[0].child_support_in_home:
+          ${ int(other_cs_kids_in_home[0].age) }
+          % endif
+      - "cs_support_pat_born_1": |
+          % if users[0].child_support_in_home:
+          ${ True if other_cs_kids_in_home[0].paternity == "Born during marriage or union" else "" }
+          % endif
+      - "cs_support_pat_vap_1": |
+          % if users[0].child_support_in_home:
+          ${ True if other_cs_kids_in_home[0].paternity == "VAP" else "" }
+          % endif
+      - "cs_support_pat_order_1": |
+          % if users[0].child_support_in_home:
+          ${ True if other_cs_kids_in_home[0].paternity == "Court order" else "" }
+          % endif
+      - "cs_support_name_2": |
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 1:
+          ${ other_cs_kids_in_home[1].name.text }
+          % endif
+      - "cs_support_age_2": |
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 1:
+          ${ int(other_cs_kids_in_home[1].age) }
+          % endif
+      - "cs_support_pat_born_2": |
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 1:
+          ${ True if other_cs_kids_in_home[1].paternity == "Born during marriage or union" else "" }
+          % endif
+      - "cs_support_pat_vap_2": |
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 1:
+          ${ True if other_cs_kids_in_home[1].paternity == "VAP" else "" }
+          % endif
+      - "cs_support_pat_order_2": |
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 1:
+          ${ True if other_cs_kids_in_home[1].paternity == "Court order" else "" }
+          % endif
+      - "cs_support_name_3": |
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 2:
+          ${ other_cs_kids_in_home[2].name.text }
+          % endif
+      - "cs_support_age_3": |
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 2:
+          ${ int(other_cs_kids_in_home[2].age) }
+          % endif
+      - "cs_support_pat_born_3": |
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 2:
+          ${ True if other_cs_kids_in_home[2].paternity == "Born during marriage or union" else "" }
+          % endif
+      - "cs_support_pat_vap_3": |
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 2:
+          ${ True if other_cs_kids_in_home[2].paternity == "VAP" else "" }
+          % endif
+      - "cs_support_pat_order_3": |
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 2:
+          ${ True if other_cs_kids_in_home[2].paternity == "Court order" else "" }
+          % endif
+      - "cs_support_name_4": |
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3:
+          ${ other_cs_kids_in_home[3].name.text }
+          % endif
+      - "cs_support_age_4": |
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3:
+          ${ int(other_cs_kids_in_home[3].age) }
+          % endif
+      - "cs_support_pat_born_4": |
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3:
+          ${ True if other_cs_kids_in_home[3].paternity == "Born during marriage or union" else "" }
+          % endif
+      - "cs_support_pat_vap_4": |
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3:
+          ${ True if other_cs_kids_in_home[3].paternity == "VAP" else "" }
+          % endif
+      - "cs_support_pat_order_4": |
+          % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3:
+          ${ True if other_cs_kids_in_home[3].paternity == "Court order" else "" }
+          % endif
+      - "cs_addendum_cb": |
+          ${ True if ( (users[0].child_support_other_cases and other_cs_cases.number_gathered() > 3) or (users[0].child_support_no_court_order and other_cs_parents.number_gathered() > 3) or (users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3) ) else '' }
+      - "cs_total_from_addendum": |
+          ${ thousands(total_child_support_payments_addendum, show_decimals=True)}          
+      - "cs_total": |
           ${ thousands(total_child_support_payments, show_decimals=True)}
       - "living_house_payment": |
           % if users[0].living_house_payment_question:
@@ -4105,11 +4611,15 @@ attachment:
           % if insurance.there_are_any:
           ${ nice_number(insurance[0].coinsurance, use_word=False) }%
           % endif
-      - "copayment": |
-          % if insurance.there_are_any:
-          ${ thousands(insurance[0].copayment, show_decimals=True)}
-          % endif
       - "insurance_addendum_yes": ${ insurance.number_gathered() > 1 }
+      - "health_insurance_total_from_addendum": |
+          % if insurance.there_are_any:
+          ${ thousands(insurance_addenda_total(), show_decimals=True)}
+          % endif
+      - "subtotal_health_insurance": |
+          % if insurance.there_are_any:
+          ${ thousands((insurance_primary_total() + insurance_addenda_total() ), show_decimals=True)}
+          % endif
       # 14 Debts
       - "creditor_name_1": |
           % if has_debts and debts.number_gathered() > 0:
@@ -4273,7 +4783,6 @@ attachment:
           % if has_cash_assets and cash.number_gathered() >= 3:
           ${ thousands(cash[2].balance, show_decimals=True) }
           % endif
-      - "cash_addendum_yes": ${ has_cash_assets and cash.number_gathered() > 3 }
       # 15 Assets - Certificate of Deposit
       - "cd_bank_name_1": |
           % if has_cert_deposit and cert_deposit.number_gathered() > 0:
@@ -4311,9 +4820,8 @@ attachment:
           % if has_cert_deposit and cert_deposit.number_gathered() >= 3:
           ${ thousands(cert_deposit[2].balance, show_decimals=True) }
           % endif
-      - "cd_addendum_yes": ${ has_cert_deposit and cert_deposit.number_gathered() > 3 }
       # 15 Assets - Money cash/card/apps
-      - "money_card_1": |
+      - "money_bank_1": |
           % if has_money and money.number_gathered() > 0:
           ${ money[0].name.text }
           % endif
@@ -4321,11 +4829,15 @@ attachment:
           % if has_money and money.number_gathered() > 0:
           ${ money[0].holder }
           % endif
+      - "money_type_1": |
+          % if has_money and money.number_gathered() > 0:
+          ${ money[0].type }
+          % endif
       - "money_balance_1": |
           % if has_money and money.number_gathered() > 0:
           ${ thousands(money[0].balance, show_decimals=True) }
           % endif
-      - "money_card_2": |
+      - "money_bank_2": |
           % if has_money and money.number_gathered() >= 2:
           ${ money[1].name.text }
           % endif
@@ -4333,11 +4845,15 @@ attachment:
           % if has_money and money.number_gathered() >= 2:
           ${ money[1].holder }
           % endif
+      - "money_type_2": |
+          % if has_money and money.number_gathered() >= 2:
+          ${ money[1].type }
+          % endif
       - "money_balance_2": |
           % if has_money and money.number_gathered() >= 2:
           ${ thousands(money[1].balance, show_decimals=True) }
           % endif
-      - "money_card_3": |
+      - "money_bank_3": |
           % if has_money and money.number_gathered() >= 3:
           ${ money[2].name.text }
           % endif
@@ -4345,12 +4861,16 @@ attachment:
           % if has_money and money.number_gathered() >= 3:
           ${ money[2].holder }
           % endif
+      - "money_type_3": |
+          % if has_money and money.number_gathered() >= 3:
+          ${ money[2].type }
+          % endif
       - "money_balance_3": |
           % if has_money and money.number_gathered() >= 3:
           ${ thousands(money[2].balance, show_decimals=True) }
           % endif
-      - "money_addendum_yes": ${ has_money and money.number_gathered() > 3 }
-      # 15 Assets - Investments
+      - "cash_addendum_yes": ${ True if (has_cash_assets and cash.number_gathered() > 3 ) or (has_cert_deposit and cert_deposit.number_gathered() > 3) or (has_money and money.number_gathered() > 3) else '' }
+        # 15 Assets - Investments
       - "investment_name_1": |
           % if has_investments and investments.number_gathered() > 0:
           ${ investments[0].name.text }
@@ -4411,7 +4931,6 @@ attachment:
           % if has_investments and investments.number_gathered() >= 3:
           ${ thousands(investments[2].fmv, show_decimals=True) }
           % endif
-      - "investment_addendum_yes": ${ has_investments and investments.number_gathered() > 3 }
       # 15 Assets - Other Investments
       - "other_investments_description_1": |
           % if has_other_investments and other_investments.number_gathered() > 0:
@@ -4449,7 +4968,7 @@ attachment:
           % if has_other_investments and other_investments.number_gathered() >= 3:
           ${ thousands(other_investments[2].balance, show_decimals=True) }
           % endif
-      - "other_investments_addendum_yes": ${ has_other_investments and other_investments.number_gathered() > 3 }
+      - "investment_addendum_yes": ${ True if (has_investments and investments.number_gathered() > 3) or (has_other_investments and other_investments.number_gathered() > 3) else '' }
       # 15 Assets - Real Estate
       - "real_estate_address_1": |
           % if has_real_estate and real_estate.number_gathered() > 0:
@@ -4499,7 +5018,6 @@ attachment:
           % if has_real_estate and real_estate.number_gathered() >= 3:
           ${ thousands(real_estate[2].balance, show_decimals=True) }
           % endif
-      - "real_estate_addendum_yes": ${ has_real_estate and real_estate.number_gathered() > 3 }
       # 15 Assets - Motor Vehicles
       - "motor_vehicle_info_1": |
           % if has_motor_vehicle and motor_vehicle.number_gathered() > 0:
@@ -4549,23 +5067,6 @@ attachment:
           % if has_motor_vehicle and motor_vehicle.number_gathered() >= 3:
           ${ thousands(motor_vehicle[2].balance, show_decimals=True) }
           % endif
-      - "motor_vehicle_info_4": |
-          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
-          ${ motor_vehicle[3].year } ${ motor_vehicle[3].make } ${ motor_vehicle[3].model }
-          % endif
-      - "motor_vehicle_title_4": |
-          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
-          ${ motor_vehicle[3].name.text }
-          % endif
-      - "motor_vehicle_fmv_4": |
-          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
-          ${ thousands(motor_vehicle[3].fmv, show_decimals=True) }
-          % endif
-      - "motor_vehicle_balance_4": |
-          % if has_motor_vehicle and motor_vehicle.number_gathered() >= 4:
-          ${ thousands(motor_vehicle[3].balance, show_decimals=True) }
-          % endif
-      - "motor_vehicle_addendum_yes": ${ has_motor_vehicle and motor_vehicle.number_gathered() > 4 }
       # 15 Assets - Business interests
       - "business_interests_name_1": |
           % if has_business_interests and business_interests.number_gathered() > 0:
@@ -4615,7 +5116,6 @@ attachment:
           % if has_business_interests and business_interests.number_gathered() >= 3:
           ${ thousands(business_interests[2].fmv, show_decimals=True) }
           % endif
-      - "business_interests_addendum_yes": ${ has_business_interests and business_interests.number_gathered() > 3 }
       # 15 Assets - Life insurance
       - "life_insurance_company_1": |
           % if has_life_insurance and life_insurance.number_gathered() > 0:
@@ -4665,7 +5165,6 @@ attachment:
           % if has_life_insurance and life_insurance.number_gathered() >= 3:
           ${ thousands(life_insurance[2].value, show_decimals=True) }
           % endif
-      - "life_insurance_addendum_yes": ${ has_life_insurance and life_insurance.number_gathered() > 3 }
       # 15 Assets - retirement benefits
       - "retirement_plan_1": |
           % if has_retirement_plan and retirement_plan.number_gathered() > 0:
@@ -4703,7 +5202,7 @@ attachment:
           % if has_retirement_plan and retirement_plan.number_gathered() >= 3:
           ${ thousands(retirement_plan[2].balance, show_decimals=True) }
           % endif
-      - "retirement_addendum_yes": ${ has_retirement_plan and retirement_plan.number_gathered() > 3 }
+      - "insurance_retirement_addendum_yes": ${ True if (has_life_insurance and life_insurance.number_gathered() > 3) or (has_retirement_plan and retirement_plan.number_gathered() > 3) else '' }
       # 15 Assets - valuable collectibles
       - "collection_description_1": |
           % if has_collection and collection.number_gathered() > 0:
@@ -4729,7 +5228,6 @@ attachment:
           % if has_collection and collection.number_gathered() >= 3:
           ${ thousands(collection[2].fmv, show_decimals=True) }
           % endif
-      - "collection_addendum_yes": ${ has_collection and collection.number_gathered() > 3 }
       # 15 Assets - other personal property
       - "other_property_description_1": |
           % if has_other_property and other_property.number_gathered() > 0:
@@ -4755,7 +5253,7 @@ attachment:
           % if other_property.number_gathered() >= 3:
           ${ thousands(other_property[2].fmv, show_decimals=True) }
           % endif
-      - "other_property_addendum_yes": ${ has_other_property and other_property.number_gathered() > 3 }
+      - "other_property_addendum_yes": ${ True if (has_collection and collection.number_gathered() > 3) or (has_motor_vehicle and motor_vehicle.number_gathered() > 3) or (has_other_property and other_property.number_gathered() > 3) else '' }
       # 15 Assets - transfer/sale property
       - "transfer_description_1": |
           % if has_transfer and transfer.number_gathered() > 0:
@@ -4805,55 +5303,85 @@ attachment:
           % if has_transfer and transfer.number_gathered() >= 3:
           ${ thousands(transfer[2].amount, show_decimals=True) }
           % endif
-      - "transfer_addendum_yes": ${ has_transfer and transfer.number_gathered() > 3 }
+      - "property_business_addendum_yes": ${ True if (has_business_interests and business_interests.number_gathered() > 3) or (has_real_estate and real_estate.number_gathered() > 3) or (has_transfer and transfer.number_gathered() > 3) else '' }
       # 16 Lawsuits and Claims
       - "lawsuit_number_1": |
           % if has_lawsuits and lawsuits.number_gathered() > 0:
+          % if lawsuits[0].already_filed:
           ${ lawsuits[0].case }
           % endif
-      - "lawsuit_date_1":  |
+          % endif
+      - "lawsuit_date_1": |
           % if has_lawsuits and lawsuits.number_gathered() > 0:
+          % if lawsuits[0].already_filed:
           ${ lawsuits[0].date.format('MM/dd/yyyy') }
+          % else:
+          not filed
+          % endif
           % endif
       - "lawsuit_amount_1": |
           % if has_lawsuits and lawsuits.number_gathered() > 0:
-            % if lawsuits[0].judgement:
-            ${ thousands(lawsuits[0].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+          % if lawsuits[0].already_filed:
+          % if lawsuits[0].case_over:
+          ${ thousands(lawsuits[0].amount, show_decimals=True) }
+          % else:
+          unknown
+          % endif
+          % else:
+          unknown
+          % endif
           % endif
       - "lawsuit_number_2": |
-          % if has_lawsuits and lawsuits.number_gathered() >= 2:
+          % if has_lawsuits and lawsuits.number_gathered() > 1:
+          % if lawsuits[1].already_filed:
           ${ lawsuits[1].case }
           % endif
-      - "lawsuit_date_2":  |
-          % if has_lawsuits and lawsuits.number_gathered() >= 2:
+          % endif
+      - "lawsuit_date_2": |
+          % if has_lawsuits and lawsuits.number_gathered() > 1:
+          % if lawsuits[1].already_filed:
           ${ lawsuits[1].date.format('MM/dd/yyyy') }
+          % else:
+          not filed
+          % endif
           % endif
       - "lawsuit_amount_2": |
-          % if has_lawsuits and lawsuits.number_gathered() >= 2:
-            % if lawsuits[1].judgement:
-            ${ thousands(lawsuits[1].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+          % if has_lawsuits and lawsuits.number_gathered() > 1:
+          % if lawsuits[1].already_filed:
+          % if lawsuits[1].case_over:
+          ${ thousands(lawsuits[1].amount, show_decimals=True) }
+          % else:
+          unknown
+          % endif
+          % else:
+          unknown
+          % endif
           % endif
       - "lawsuit_number_3": |
-          % if has_lawsuits and lawsuits.number_gathered() >= 3:
+          % if has_lawsuits and lawsuits.number_gathered() > 2:
+          % if lawsuits[2].already_filed:
           ${ lawsuits[2].case }
           % endif
-      - "lawsuit_date_3":  |
-          % if has_lawsuits and lawsuits.number_gathered() >= 3:
+          % endif
+      - "lawsuit_date_3": |
+          % if has_lawsuits and lawsuits.number_gathered() > 2:
+          % if lawsuits[2].already_filed:
           ${ lawsuits[2].date.format('MM/dd/yyyy') }
+          % else:
+          not filed
+          % endif
           % endif
       - "lawsuit_amount_3": |
-          % if has_lawsuits and lawsuits.number_gathered() >= 3:
-            % if lawsuits[2].judgement:
-            ${ thousands(lawsuits[2].amount, show_decimals=True) }
-            % else:
-            unknown
-            % endif
+          % if has_lawsuits and lawsuits.number_gathered() > 2:
+          % if lawsuits[2].already_filed:
+          % if lawsuits[2].case_over:
+          ${ thousands(lawsuits[2].amount, show_decimals=True) }
+          % else:
+          unknown
+          % endif
+          % else:
+          unknown
+          % endif
           % endif
       - "lawsuit_addendum_yes":  ${ has_lawsuits and lawsuits.number_gathered() > 3 }
       # 17 Income Tax Refund/Owed Amounts
@@ -4931,8 +5459,12 @@ attachment:
           % endif
 
       - "users_signature": |
-          ${ "/s/ " + users[0].name.full(middle="full") if e_signature else ''  }
-      - "users_signed_date": ${ today().format("MM/dd/yyyy") if e_signature else '' }
+          ${ users[0].name_full() if e_signature else ''  }
+      - "users_name": ${ users[0].name_full() }
+      - "users_address_2": ${ users[0].address.on_one_line(bare=True) }
+      - "user_hide_address_cb": ${ True if hide_address else '' }
+      - "users_phone": ${ phone_number_formatted(users[0].phone_number) }
+      - "users_email": ${ users[0].email if users[0].has_email_address else "" }        
 
 ---
 ############ FA EMPLOYMENT/BUSINESS INCOME ADDENDUM #############
@@ -4968,21 +5500,19 @@ attachment:
   editable: False
   pdf template file: fa_additional_employment_business.pdf
   fields:
-      - "county_name": ${ case_county.upper() }
+      - "county_name": ${ case_county }
       - "case_number": ${ case_number }
-      - "pre-judgment": ${ filing_status == "pre_judgment" }
-      - "post-judgment": ${ filing_status == "post_judgment" }
       - "petitioner_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % else:
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % endif
       - "respondent_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % else:
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % endif
 
       - "employed_yes": ${ employment[i].type == 'employed' }
@@ -4992,11 +5522,7 @@ attachment:
           % endif
       - "employer_address": |
           % if employment[i].type == "employed":
-          ${ employment[i].address.line_one(bare=True) }
-          % endif
-      - "employer_address2": |
-          % if employment[i].type == "employed":
-          ${ employment[i].address.line_two() }
+          ${ employment[i].address.on_one_line(bare=True) }
           % endif
       - "paychecks_monthly": |
           % if employment[i].type == "employed":
@@ -5027,6 +5553,10 @@ attachment:
           ${ employment[i].gross_date.format('MM/dd/yyyy') }
           % endif
       # business
+      - "employment_cb": |
+         % if employment[i].type == "own" or employment[i].type == "contractor" or employment[i].type == "partnership" or employment[i].type == "LLC" or employment[i].type == "corp" or employment[i].type == "other_entity":
+         ${ True}
+         % endif      
       - "business_own": ${ employment[i].type == "own" }
       - "business_contractor": ${ employment[i].type == "contractor" }
       - "business_partnership": ${ employment[i].type == "partnership" }
@@ -5039,11 +5569,7 @@ attachment:
           % endif
       - "business_address": |
           % if employment[i].type != "employed":
-          ${ employment[i].address.line_one(bare=True) }
-          % endif
-      - "business_address2": |
-          % if employment[i].type != "employed":
-          ${ employment[i].address.line_two() }
+          ${ employment[i].address.on_one_line(bare=True) }
           % endif
       - "business_gross_last_year": |
           % if employment[i].type != "employed":
@@ -5083,6 +5609,11 @@ attachment:
             ${ employment[i].other_perks }
             % endif
           % endif
+      - "another_employment_addendum_yes": |
+          % if employment.number_gathered() > 2:
+          ${ True if i < (employment.number_gathered() -1) else '' }
+          % endif 
+        
 ---
 ############ FA ADDITIONAL HEALTH INSURANCE #############
 objects:
@@ -5117,25 +5648,21 @@ attachment:
   editable: False
   pdf template file: FA_additional_health_insurance.pdf
   fields:
-      - "county_name": ${ case_county.upper() }
+      - "county_name": ${ case_county }
       - "case_number": ${ case_number }
-      - "pre-judgment": ${ filing_status == "pre_judgment" }
-      - "post-judgment": ${ filing_status == "post_judgment" }
       - "petitioner_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % else:
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % endif
       - "respondent_name": |
           % if party_label == 'petitioner' or party_label == 'plaintiff':
-          ${ other_parties[0].name.full(middle='full') }
+          ${ other_parties[0].name_full() }
           % else:
-          ${ users[0].name.full(middle='full') }
+          ${ users[0].name_full() }
           % endif
 
-      - "health_insurance_yes": ${ insurance.there_are_any }
-      - "health_insurance_no": ${ insurance.number_gathered() == 0 }
       - "health_insurance_company": |
           % if insurance.there_are_any:
           ${ insurance[i].name.text }
@@ -5253,10 +5780,6 @@ attachment:
       - "coinsurance":  |
           % if insurance.there_are_any:
           ${ nice_number(insurance[i].coinsurance, use_word=False) }%
-          % endif
-      - "copayment":  |
-          % if insurance.there_are_any:
-          ${ thousands(insurance[i].copayment, show_decimals=True) }
           % endif
       - "insurance_additional_yes": ${ insurance.number_gathered() > 2 }
       - "additional_count": |

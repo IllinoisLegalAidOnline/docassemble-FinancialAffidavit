@@ -1,106 +1,3 @@
-#---
-#id: income summary review
-#continue button field: income_summary
-#question: |
-#  Monthly income summary
-#subquestion: |
-#  Here's a summary of your monthly income. You can click **Edit** to see details and make changes.
-#  <span style="display: none">
-#  ${ currency(total_monthly_employment_income) }
-#  ${ currency(total_monthly_investment_income) }
-#  ${ currency(total_other_monthly_business_income) }
-#  ${ currency(total_monthly_benefits_income) }
-#  ${ currency(total_monthly_maintenance_support_income) }
-#  ${ currency(total_monthly_gifts_other_income) }
-#  ${ currency(total_gross_monthly_income) }
-#  </span>
-#review:
-#  - Edit: 
-#      - users[0].regular_pay_question
-#    button: |
-#      <h2 class="h4">Monthly employment income: ${ currency(total_monthly_employment_income) }</h2>
-#  - Edit:
-#      - users[0].pension_question
-#    button: |
-#      <h2 class="h4">Monthly investment income: ${ currency(total_monthly_investment_income) }</h2>
-#  - Edit:
-#      - users[0].rental_income_question
-#    button: |
-#      <h2 class="h4">Other monthly business income: ${ currency(total_other_monthly_business_income) }</h2>
-#  - Edit:
-#      - users[0].social_retirement_question
-#    button: |
-#      <h2 class="h4">Monthly benefits income: ${ currency(total_monthly_benefits_income) }</h2>
-#  - Edit:
-#      - users[0].maintenance_current_question
-#    button: |
-#      <h2 class="h4">Monthly maintenance and support: ${ currency(total_monthly_maintenance_support_income) }</h2>
-#  - Edit:
-#      - users[0].gifts_money_question
-#    button: |
-#      <h2 class="h4">Monthly gifts and other income: ${ currency(total_monthly_gifts_other_income) }</h2>
-#  - note: |
-#      <h2 class="h4">Total gross monthly income: ${ currency(total_gross_monthly_income) }</h2>
-#---
-#id: expenses summary review
-#continue button field: expenses_summary
-#question: |
-#  Monthly expenses summary
-#subquestion: |
-#  Here's a summary of your monthly expenses. You can click **Edit** to see details and make changes.
-#  <span style="display: none">
-#  ${ currency(total_monthly_deductions) }
-#  ${ currency(total_maintenance_payments) }
-#  ${ currency(total_child_support_payments) }
-#  ${ currency(subtotal_monthly_household_expenses) }
-#  ${ currency(subtotal_monthly_utility_expenses) }
-#  ${ currency(subtotal_monthly_living_expenses) }
-#  ${ currency(subtotal_monthly_transportation_expenses) }
-#  ${ currency(subtotal_monthly_personal_expenses) }
-#  ${ currency(subtotal_monthly_children_expenses) }
-#  ${ currency(total_monthly_household_expenses) }
-#  </span>
-#review:
-#  - Edit:
-#      - users[0].deductions_federal_question
-#    button: |
-#      <h2 class="h4">Monthly payroll deductions: ${ currency(total_monthly_deductions) }</h2>
-#  - Edit:
-#      - users[0].maintenance_paid_court_question
-#    button: |
-#      <h2 class="h4">Monthly maintenance payments: ${ currency(total_maintenance_payments) }</h2>
-#  - Edit:
-#      - users[0].child_support_1_question
-#    button: |
-#      <h2 class="h4">Monthly child support payments: ${ currency(total_child_support_payments) }</h2>
-#  - Edit:
-#      - users[0].living_house_payment_question
-#    button: |
-#      <h2 class="h4">Subtotal monthly household expenses: ${ currency(subtotal_monthly_household_expenses) }</h2>
-#  - Edit:
-#      - users[0].living_gas_question
-#    button: |
-#      <h2 class="h4">Subtotal monthly utility expenses: ${ currency(subtotal_monthly_utility_expenses) }</h2>
-#  - Edit:
-#      - users[0].living_laundry_question
-#    button: |
-#      <h2 class="h4">Subtotal monthly living expenses: ${ currency(subtotal_monthly_living_expenses) }</h2>
-#  - Edit:
-#      - users[0].transport_payment_question
-#    button: |
-#      <h2 class="h4">Subtotal monthly transportation expenses: ${ currency(subtotal_monthly_transportation_expenses) }</h2>
-#  - Edit:
-#      - users[0].personal_doctor_question
-#    button: |
-#      <h2 class="h4">Subtotal monthly personal expenses: ${ currency(subtotal_monthly_personal_expenses) }</h2>
-#  - Edit:
-#      - users[0].children_tuition_question
-#    button: |
-#      <h2 class="h4">Subtotal monthly minor and dependent children expenses: ${ currency(subtotal_monthly_children_expenses) }</h2>
-#  - note: |
-#      <h2 class="h4">Total Monthly Living Expenses: ${ currency(total_monthly_household_expenses) }</h2>
-#---
-
 
 ################## REVIEW SCREEN ###################
 ---
@@ -118,7 +15,7 @@ review:
   - Edit: users[0].name.first
     button: |
       **Your name:**
-      ${users[0].name.full(middle="full")}
+      ${users[0].name_full()}
   - Edit: party_label
     button: |
       **Your party label:**
@@ -126,7 +23,7 @@ review:
   - Edit: other_parties[0].name.first
     button: |
       **The other party's name:**
-      ${other_parties[0].name.full(middle="full")}
+      ${other_parties[0].name_full()}
   - Edit: case_county
     button: |
       **County where this case is filed:**
@@ -147,15 +44,18 @@ review:
 ################ About you  
   - note: |
       <h4>About you</h4>
-  - Edit: hide_contact
+  - Edit: hide_address
     button: |
-      **Are your address and phone number protected?**
-      ${ word(yesno(hide_contact))}  
+      **Do you want to keep your address hidden?**
+      ${ word(yesno(hide_address)) }
   - Edit: users[0].address.address
     button: |
-      **Your address:**
+      % if hide_address:
+      **Your mailing address (will appear on your court papers):**
+      % else:
+      **Your home address:**
+      % endif    
       ${ users[0].address.on_one_line(bare=True) }
-    show if: hide_contact == False
   - Edit: users[0].phone_number
     button: |
       **Your phone number:**
@@ -163,16 +63,20 @@ review:
       None entered
       % else:
       ${ phone_number_formatted(users[0].phone_number) }
-      % endif
-    show if: hide_contact == False
+      % endif      
+  - Edit: users[0].has_email_address
+    button: |
+      **Do you have an email address?**
+      ${ word(yesno(users[0].has_email_address)) }
+  - Edit: users[0].email
+    button: |
+      **Your email:**
+      ${ users[0].email }
+    show if: users[0].has_email_address
   - Edit: users[0].birthdate
     button: |
       **Your birthdate:**
       ${ users[0].birthdate }
-  - Edit: household_expenses
-    button: |
-      **Do you live with another adult that helps pay your expenses?**
-      ${ word(yesno(household_expenses))}  
 
 ################ Income  
   - note: |
@@ -386,24 +290,53 @@ review:
       ${ currency(showifdef('users[0].deductions_retirement')) if showifdef('users[0].deductions_retirement_question') else '$0.00'}
   - Edit: users[0].maintenance_paid_court_question
     button: |
-      **Monthly maintenance payments**
+      **Monthly maintenance payments (Edit to review tax deduction details)**
 
-      * Maintenance being paid or payable to the other party by you in this case: 
+      * Maintenance being paid by you **in this case**: 
       ${ currency(showifdef('users[0].maintenance_paid_court')) if showifdef('users[0].maintenance_paid_court_question') else '$0.00'}
-      * Maintenance being paid to a former spouse, which is tax deductible: 
-      ${ currency(showifdef('users[0].maintenance_paid_no_tax')) if showifdef('users[0].maintenance_paid_no_tax_question') else '$0.00'}
-      * Maintenance being paid to a former spouse, which is not tax deductible: 
-      ${ currency(showifdef('users[0].maintenance_paid_taxed')) if showifdef('users[0].maintenance_paid_taxed_question') else '$0.00'}
+      * Maintenance being paid by you under a court order **in a different case**: 
+      ${ currency(showifdef('users[0].maintenance_paid_other_case')) if showifdef('users[0].maintenance_paid_other_case_question') else '$0.00'}
   - Edit: users[0].child_support_1_question
     button: |
-      **Monthly child support payments**
-
-      * Court-ordered child support being paid for the children of this relationship: 
+      **Monthly child support payments in this case:** 
       ${ currency(showifdef('users[0].child_support_1')) if showifdef('users[0].child_support_1_question') else '$0.00'}
-      * Child support for other children being paid *under a court order*: 
-      ${ currency(showifdef('users[0].child_support_2')) if showifdef('users[0].child_support_2_question') else '$0.00'}
-      * Child support for other childre being paid, *but there is no court order*: 
-      ${ currency(showifdef('users[0].child_support_3')) if showifdef('users[0].child_support_3_question') else '$0.00'}
+  - Edit: users[0].child_support_other_cases
+    button: |
+      **Are you paying monthly child support for children under a court order in other cases?**
+      ${word(yesno(users[0].child_support_other_cases))}
+  - Edit: other_cs_cases.revisit
+    button: |
+      **Monthly child support payments in other cases (Edit to change details)**
+
+      % for case in other_cs_cases:
+        * Case number: ${ case.name.text }, Amount: ${ currency(case.amount) }
+      % endfor
+    show if: users[0].child_support_other_cases
+  - Edit: users[0].child_support_no_court_order
+    button: |
+      **Are you paying monthly child support for children where there is no court order?**
+      ${word(yesno(users[0].child_support_no_court_order))}
+  - Edit: other_cs_parents.revisit
+    button: |
+      **Monthly child support payments where no court order exists (Edit to change details)**
+
+      % for parent in other_cs_parents:
+        * Parent receiving support: ${ parent.name.text }, Amount: ${ currency(parent.amount) }
+      % endfor
+    show if: users[0].child_support_no_court_order
+  - Edit: users[0].child_support_in_home
+    button: |
+      **Do you have any other biological or adopted children that live in your home that you support?**
+      ${word(yesno(users[0].child_support_in_home))}
+  - Edit: other_cs_kids_in_home.revisit
+    button: |
+      **Other children that live in your home that you support (Edit to change details)**
+
+      % for child in other_cs_kids_in_home:
+        * Name: ${ child.name.text }, Age: ${ int(child.age) }
+      % endfor
+    show if: users[0].child_support_in_home
+  
   - Edit: users[0].living_house_payment_question
     button: |
       **Monthly housing expenses**
@@ -444,7 +377,7 @@ review:
       ${ currency(showifdef('users[0].living_laundry')) if showifdef('users[0].living_laundry_question') else '$0.00'}
       * House cleaning service: 
       ${ currency(showifdef('users[0].living_cleaner')) if showifdef('users[0].living_cleaner_question') else '$0.00'}
-      * Necessary repairs and maintenance to my property: 
+      * Necessary repairs and maintenance to my home: 
       ${ currency(showifdef('users[0].living_repairs')) if showifdef('users[0].living_repairs_question') else '$0.00'}
       * Pet care: 
       ${ currency(showifdef('users[0].living_pets')) if showifdef('users[0].living_pets_question') else '$0.00'}
@@ -470,7 +403,7 @@ review:
       ${ currency(showifdef('users[0].transport_maintenance')) if showifdef('users[0].transport_maintenance_question') else '$0.00'}
       * Insurance, license, registration, and city stickers: 
       ${ currency(showifdef('users[0].transport_insurance')) if showifdef('users[0].transport_insurance_question') else '$0.00'}
-      * Gasoline: 
+      * Fuel (gasoline or alternative fuels): 
       ${ currency(showifdef('users[0].transport_fuel')) if showifdef('users[0].transport_fuel_question') else '$0.00'}
       * Taxi, ride-share, bus, and train: 
       ${ currency(showifdef('users[0].transport_public')) if showifdef('users[0].transport_public_question') else '$0.00'}
@@ -496,14 +429,6 @@ review:
       ${ currency(showifdef('users[0].personal_vision')) if showifdef('users[0].personal_vision_question') else '$0.00'}
       * Medicine and prescriptions: 
       ${ currency(showifdef('users[0].personal_medications')) if showifdef('users[0].personal_medications_question') else '$0.00'}
-  - Edit: users[0].personal_associations_question
-    button: |
-      **Monthly professional dues and fees**
-
-      * Union, trade, or professional association dues: 
-      ${ currency(showifdef('users[0].personal_associations')) if showifdef('users[0].personal_associations_question') else '$0.00'}
-      * Professional fees, such as accountants, tax preparers, or lawyers: 
-      ${ currency(showifdef('users[0].peronsal_professional')) if showifdef('users[0].peronsal_professional_question') else '$0.00'}
   - Edit: users[0].personal_life_term_question
     button: |
       **Monthly insurance expenses**
@@ -528,6 +453,14 @@ review:
       ${ currency(showifdef('users[0].personal_subscriptions')) if showifdef('users[0].personal_subscriptions_question') else '$0.00'}
       * Vacations: 
       ${ currency(showifdef('users[0].personal_vacations')) if showifdef('users[0].personal_vacations_question') else '$0.00'}
+  - Edit: users[0].personal_associations_question
+    button: |
+      **Monthly professional dues and fees**
+
+      * Union, trade, or professional association dues: 
+      ${ currency(showifdef('users[0].personal_associations')) if showifdef('users[0].personal_associations_question') else '$0.00'}
+      * Professional fees, such as accountants, tax preparers, or lawyers: 
+      ${ currency(showifdef('users[0].peronsal_professional')) if showifdef('users[0].peronsal_professional_question') else '$0.00'}
   - Edit: users[0].personal_gifts_question
     button: |
       **Monthly gifts, donations, and other expenses**
@@ -542,6 +475,7 @@ review:
       % else:
       None entered
       % endif
+     
   - Edit: users[0].children_expenses_question
     button: |
       **Do you have any expenses for minor or dependent children?**
@@ -634,6 +568,8 @@ review:
         * ${ policy.name.text } - ${ policy.type.true_values() }
       % endfor
     show if: insurance.there_are_any
+
+  
   - Edit: has_debts
     button: |
       **Do you have any debts?**
@@ -652,11 +588,11 @@ review:
       <h4>Assets</h4>
   - Edit: has_cash_assets
     button: |
-      **Do you have any cash or cash equivalents?**
+      **Do you have any money in bank or credit union accounts?**
       ${word(yesno(has_cash_assets))}
   - Edit: cash.revisit
     button: |
-      **Cash assets**
+      **Bank and credit union accounts**
 
       % for asset in cash:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -676,11 +612,11 @@ review:
     show if: has_cert_deposit
   - Edit: has_money
     button: |
-      **Do you have any money on debit cards or in money transfer apps?**
+      **Do you have any money in cash, on debit cards, or in money transfer apps?**
       ${ word(yesno(has_money)) }
   - Edit: money.revisit
     button: |
-      **Debit card and money transfer balances**
+      **Cash, debit cards, and money transfer app balances**
 
       % for asset in money:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -710,30 +646,7 @@ review:
         * ${ asset.name.text }, ${ currency(asset.balance) }
       % endfor
     show if: has_other_investments
-  - Edit: has_real_estate
-    button: |
-      **Do you own any real estate?**
-      ${ word(yesno(has_real_estate)) }
-  - Edit: real_estate.revisit
-    button: |
-      **Real estate**
-
-      % for asset in real_estate:
-        * ${ asset.address.on_one_line(bare=True) }, ${ currency(asset.balance) }
-      % endfor
-    show if: has_real_estate
-  - Edit: has_motor_vehicle
-    button: |
-      **Do you have any motor vehicles?**
-      ${ word(yesno(has_motor_vehicle)) }
-  - Edit: motor_vehicle.revisit
-    button: |
-      **Motor vehicles**
-
-      % for asset in motor_vehicle:
-        * ${ asset.year } ${ asset.make } ${ asset.model }, ${ currency(asset.fmv) }
-      % endfor
-    show if: has_motor_vehicle
+    
   - Edit: has_business_interests
     button: |
       **Do you have any business interests?**
@@ -746,6 +659,32 @@ review:
         * ${ asset.name.text }, ${ currency(asset.fmv) }
       % endfor
     show if: has_business_interests
+  - Edit: has_transfer
+    button: |
+      **In the last two years, have you transferred or sold any assets or property worth at least $1,000?**
+      ${ word(yesno(has_transfer)) }
+  - Edit: transfer.revisit
+    button: |
+      **Assets or property that you transferred or sold**
+
+      % for asset in transfer:
+        * ${ asset.name.text }, ${ currency(asset.amount) }
+      % endfor
+    show if: has_transfer
+
+  - Edit: has_real_estate
+    button: |
+      **Do you own any real estate?**
+      ${ word(yesno(has_real_estate)) }
+  - Edit: real_estate.revisit
+    button: |
+      **Real estate**
+
+      % for asset in real_estate:
+        * ${ asset.address.on_one_line(bare=True) }, ${ currency(asset.balance) }
+      % endfor
+    show if: has_real_estate
+    
   - Edit: has_life_insurance
     button: |
       **Do you have any life insurance policies?**
@@ -774,6 +713,20 @@ review:
     button: |
       **Do you have any valuable collectibles?**
       ${ word(yesno(has_collection)) }
+
+  - Edit: has_motor_vehicle
+    button: |
+      **Do you have any motor vehicles?**
+      ${ word(yesno(has_motor_vehicle)) }
+  - Edit: motor_vehicle.revisit
+    button: |
+      **Motor vehicles**
+
+      % for asset in motor_vehicle:
+        * ${ asset.year } ${ asset.make } ${ asset.model }, ${ currency(asset.fmv) }
+      % endfor
+    show if: has_motor_vehicle
+      
   - Edit: collection.revisit
     button: |
       **Collectibles**
@@ -794,18 +747,7 @@ review:
         * ${ asset.name.text }, ${ currency(asset.fmv) }
       % endfor
     show if: has_other_property
-  - Edit: has_transfer
-    button: |
-      **In the last two years, have you transferred or sold any assets or property worth at least $1,000?**
-      ${ word(yesno(has_transfer)) }
-  - Edit: transfer.revisit
-    button: |
-      **Assets or property that you transferred or sold**
-
-      % for asset in transfer:
-        * ${ asset.name.text }, ${ currency(asset.amount) }
-      % endfor
-    show if: has_transfer
+    
   - Edit: has_lawsuits
     button: |
       **Do you have any lawsuits or claims?**
@@ -815,7 +757,7 @@ review:
       **Lawsuits or claims**
 
       % for asset in lawsuits:
-        * ${ asset.case }, ${ currency(asset.amount) if asset.judgement else 'unknown' }
+        * ${ asset.case if asset.already_filed else 'not filed'}, Amount recovered: ${ currency(asset.amount) if (asset.already_filed and asset.case_over) else 'unknown' }
       % endfor
     show if: has_lawsuits
 
@@ -869,7 +811,7 @@ review:
   - Edit: users[0].name.first
     button: |
       **Your name:**
-      ${users[0].name.full(middle="full")}
+      ${users[0].name_full()}
   - Edit: party_label
     button: |
       **Your party label:**
@@ -877,7 +819,7 @@ review:
   - Edit: other_parties[0].name.first
     button: |
       **The other party's name:**
-      ${other_parties[0].name.full(middle="full")}
+      ${other_parties[0].name_full()}
   - Edit: case_county
     button: |
       **County where this case is filed:**
@@ -906,15 +848,18 @@ question: |
 subquestion: |
   Edit your answers below.
 review:
-  - Edit: hide_contact
+  - Edit: hide_address
     button: |
-      **Are your address and phone number protected?**
-      ${ word(yesno(hide_contact))}  
+      **Do you want to keep your address hidden?**
+      ${ word(yesno(hide_address)) }
   - Edit: users[0].address.address
     button: |
-      **Your address:**
+      % if hide_address:
+      **Your mailing address (will appear on your court papers):**
+      % else:
+      **Your home address:**
+      % endif    
       ${ users[0].address.on_one_line(bare=True) }
-    show if: hide_contact == False
   - Edit: users[0].phone_number
     button: |
       **Your phone number:**
@@ -922,16 +867,20 @@ review:
       None entered
       % else:
       ${ phone_number_formatted(users[0].phone_number) }
-      % endif
-    show if: hide_contact == False
+      % endif      
+  - Edit: users[0].has_email_address
+    button: |
+      **Do you have an email address?**
+      ${ word(yesno(users[0].has_email_address)) }
+  - Edit: users[0].email
+    button: |
+      **Your email:**
+      ${ users[0].email }
+    show if: users[0].has_email_address
   - Edit: users[0].birthdate
     button: |
       **Your birthdate:**
       ${ users[0].birthdate }
-  - Edit: household_expenses
-    button: |
-      **Do you live with another adult that helps pay your expenses?**
-      ${ word(yesno(household_expenses))}  
 
 
 ---
@@ -1159,24 +1108,53 @@ review:
       ${ currency(showifdef('users[0].deductions_retirement')) if showifdef('users[0].deductions_retirement_question') else '$0.00'}
   - Edit: users[0].maintenance_paid_court_question
     button: |
-      **Monthly maintenance payments**
+      **Monthly maintenance payments (Edit to review tax deduction details)**
 
-      * Maintenance being paid or payable to the other party by you in this case: 
+      * Maintenance being paid by you **in this case**: 
       ${ currency(showifdef('users[0].maintenance_paid_court')) if showifdef('users[0].maintenance_paid_court_question') else '$0.00'}
-      * Maintenance being paid to a former spouse, which is tax deductible: 
-      ${ currency(showifdef('users[0].maintenance_paid_no_tax')) if showifdef('users[0].maintenance_paid_no_tax_question') else '$0.00'}
-      * Maintenance being paid to a former spouse, which is not tax deductible: 
-      ${ currency(showifdef('users[0].maintenance_paid_taxed')) if showifdef('users[0].maintenance_paid_taxed_question') else '$0.00'}
+      * Maintenance being paid by you under a court order **in a different case**: 
+      ${ currency(showifdef('users[0].maintenance_paid_other_case')) if showifdef('users[0].maintenance_paid_other_case_question') else '$0.00'}
   - Edit: users[0].child_support_1_question
     button: |
-      **Monthly child support payments**
-
-      * Court-ordered child support being paid for the children of this relationship: 
+      **Monthly child support payments in this case:** 
       ${ currency(showifdef('users[0].child_support_1')) if showifdef('users[0].child_support_1_question') else '$0.00'}
-      * Child support for other children being paid *under a court order*: 
-      ${ currency(showifdef('users[0].child_support_2')) if showifdef('users[0].child_support_2_question') else '$0.00'}
-      * Child support for other childre being paid, *but there is no court order*: 
-      ${ currency(showifdef('users[0].child_support_3')) if showifdef('users[0].child_support_3_question') else '$0.00'}
+  - Edit: users[0].child_support_other_cases
+    button: |
+      **Are you paying monthly child support for children under a court order in other cases?**
+      ${word(yesno(users[0].child_support_other_cases))}
+  - Edit: other_cs_cases.revisit
+    button: |
+      **Monthly child support payments in other cases (Edit to change details)**
+
+      % for case in other_cs_cases:
+        * Case number: ${ case.name.text }, Amount: ${ currency(case.amount) }
+      % endfor
+    show if: users[0].child_support_other_cases
+  - Edit: users[0].child_support_no_court_order
+    button: |
+      **Are you paying monthly child support for children where there is no court order?**
+      ${word(yesno(users[0].child_support_no_court_order))}
+  - Edit: other_cs_parents.revisit
+    button: |
+      **Monthly child support payments where no court order exists (Edit to change details)**
+
+      % for parent in other_cs_parents:
+        * Parent receiving support: ${ parent.name.text }, Amount: ${ currency(parent.amount) }
+      % endfor
+    show if: users[0].child_support_no_court_order
+  - Edit: users[0].child_support_in_home
+    button: |
+      **Do you have any other biological or adopted children that live in your home that you support?**
+      ${word(yesno(users[0].child_support_in_home))}
+  - Edit: other_cs_kids_in_home.revisit
+    button: |
+      **Other children that live in your home that you support (Edit to change details)**
+
+      % for child in other_cs_kids_in_home:
+        * Name: ${ child.name.text }, Age: ${ int(child.age) }
+      % endfor
+    show if: users[0].child_support_in_home
+  
   - Edit: users[0].living_house_payment_question
     button: |
       **Monthly housing expenses**
@@ -1217,7 +1195,7 @@ review:
       ${ currency(showifdef('users[0].living_laundry')) if showifdef('users[0].living_laundry_question') else '$0.00'}
       * House cleaning service: 
       ${ currency(showifdef('users[0].living_cleaner')) if showifdef('users[0].living_cleaner_question') else '$0.00'}
-      * Necessary repairs and maintenance to my property: 
+      * Necessary repairs and maintenance to my home: 
       ${ currency(showifdef('users[0].living_repairs')) if showifdef('users[0].living_repairs_question') else '$0.00'}
       * Pet care: 
       ${ currency(showifdef('users[0].living_pets')) if showifdef('users[0].living_pets_question') else '$0.00'}
@@ -1243,7 +1221,7 @@ review:
       ${ currency(showifdef('users[0].transport_maintenance')) if showifdef('users[0].transport_maintenance_question') else '$0.00'}
       * Insurance, license, registration, and city stickers: 
       ${ currency(showifdef('users[0].transport_insurance')) if showifdef('users[0].transport_insurance_question') else '$0.00'}
-      * Gasoline: 
+      * Fuel (gasoline or alternative fuels): 
       ${ currency(showifdef('users[0].transport_fuel')) if showifdef('users[0].transport_fuel_question') else '$0.00'}
       * Taxi, ride-share, bus, and train: 
       ${ currency(showifdef('users[0].transport_public')) if showifdef('users[0].transport_public_question') else '$0.00'}
@@ -1269,14 +1247,6 @@ review:
       ${ currency(showifdef('users[0].personal_vision')) if showifdef('users[0].personal_vision_question') else '$0.00'}
       * Medicine and prescriptions: 
       ${ currency(showifdef('users[0].personal_medications')) if showifdef('users[0].personal_medications_question') else '$0.00'}
-  - Edit: users[0].personal_associations_question
-    button: |
-      **Monthly professional dues and fees**
-
-      * Union, trade, or professional association dues: 
-      ${ currency(showifdef('users[0].personal_associations')) if showifdef('users[0].personal_associations_question') else '$0.00'}
-      * Professional fees, such as accountants, tax preparers, or lawyers: 
-      ${ currency(showifdef('users[0].peronsal_professional')) if showifdef('users[0].peronsal_professional_question') else '$0.00'}
   - Edit: users[0].personal_life_term_question
     button: |
       **Monthly insurance expenses**
@@ -1301,6 +1271,14 @@ review:
       ${ currency(showifdef('users[0].personal_subscriptions')) if showifdef('users[0].personal_subscriptions_question') else '$0.00'}
       * Vacations: 
       ${ currency(showifdef('users[0].personal_vacations')) if showifdef('users[0].personal_vacations_question') else '$0.00'}
+  - Edit: users[0].personal_associations_question
+    button: |
+      **Monthly professional dues and fees**
+
+      * Union, trade, or professional association dues: 
+      ${ currency(showifdef('users[0].personal_associations')) if showifdef('users[0].personal_associations_question') else '$0.00'}
+      * Professional fees, such as accountants, tax preparers, or lawyers: 
+      ${ currency(showifdef('users[0].peronsal_professional')) if showifdef('users[0].peronsal_professional_question') else '$0.00'}
   - Edit: users[0].personal_gifts_question
     button: |
       **Monthly gifts, donations, and other expenses**
@@ -1315,6 +1293,7 @@ review:
       % else:
       None entered
       % endif
+      
   - Edit: users[0].children_expenses_question
     button: |
       **Do you have any expenses for minor or dependent children?**
@@ -1394,7 +1373,6 @@ review:
       None entered
       % endif
     show if: users[0].children_expenses_question
-
   - Edit: insurance.there_are_any
     button: |
       **Do you have health insurance?**
@@ -1407,6 +1385,7 @@ review:
         * ${ policy.name.text } - ${ policy.type.true_values() }
       % endfor
     show if: insurance.there_are_any
+
   - Edit: has_debts
     button: |
       **Do you have any debts?**
@@ -1431,11 +1410,11 @@ subquestion: |
 review:
   - Edit: has_cash_assets
     button: |
-      **Do you have any cash or cash equivalents?**
+      **Do you have any money in bank or credit union accounts?**
       ${word(yesno(has_cash_assets))}
   - Edit: cash.revisit
     button: |
-      **Cash assets**
+      **Bank and credit union accounts**
 
       % for asset in cash:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -1455,11 +1434,11 @@ review:
     show if: has_cert_deposit
   - Edit: has_money
     button: |
-      **Do you have any money on debit cards or in money transfer apps?**
+      **Do you have any money in cash, on debit cards, or in money transfer apps?**
       ${ word(yesno(has_money)) }
   - Edit: money.revisit
     button: |
-      **Debit card and money transfer balances**
+      **Cash, debit cards, and money transfer app balances**
 
       % for asset in money:
         * ${ asset.name.text }, ${ currency(asset.balance) }
@@ -1489,30 +1468,7 @@ review:
         * ${ asset.name.text }, ${ currency(asset.balance) }
       % endfor
     show if: has_other_investments
-  - Edit: has_real_estate
-    button: |
-      **Do you own any real estate?**
-      ${ word(yesno(has_real_estate)) }
-  - Edit: real_estate.revisit
-    button: |
-      **Real estate**
 
-      % for asset in real_estate:
-        * ${ asset.address.on_one_line(bare=True) }, ${ currency(asset.balance) }
-      % endfor
-    show if: has_real_estate
-  - Edit: has_motor_vehicle
-    button: |
-      **Do you have any motor vehicles?**
-      ${ word(yesno(has_motor_vehicle)) }
-  - Edit: motor_vehicle.revisit
-    button: |
-      **Motor vehicles**
-
-      % for asset in motor_vehicle:
-        * ${ asset.year } ${ asset.make } ${ asset.model }, ${ currency(asset.fmv) }
-      % endfor
-    show if: has_motor_vehicle
   - Edit: has_business_interests
     button: |
       **Do you have any business interests?**
@@ -1525,6 +1481,32 @@ review:
         * ${ asset.name.text }, ${ currency(asset.fmv) }
       % endfor
     show if: has_business_interests
+  - Edit: has_transfer
+    button: |
+      **In the last two years, have you transferred or sold any assets or property worth at least $1,000?**
+      ${ word(yesno(has_transfer)) }
+  - Edit: transfer.revisit
+    button: |
+      **Assets or property that you transferred or sold**
+
+      % for asset in transfer:
+        * ${ asset.name.text }, ${ currency(asset.amount) }
+      % endfor
+    show if: has_transfer
+  
+  - Edit: has_real_estate
+    button: |
+      **Do you own any real estate?**
+      ${ word(yesno(has_real_estate)) }
+  - Edit: real_estate.revisit
+    button: |
+      **Real estate**
+
+      % for asset in real_estate:
+        * ${ asset.address.on_one_line(bare=True) }, ${ currency(asset.balance) }
+      % endfor
+    show if: has_real_estate
+    
   - Edit: has_life_insurance
     button: |
       **Do you have any life insurance policies?**
@@ -1549,6 +1531,19 @@ review:
         * ${ asset.name.text }, ${ currency(asset.balance) }
       % endfor
     show if: has_retirement_plan
+
+  - Edit: has_motor_vehicle
+    button: |
+      **Do you have any motor vehicles?**
+      ${ word(yesno(has_motor_vehicle)) }
+  - Edit: motor_vehicle.revisit
+    button: |
+      **Motor vehicles**
+
+      % for asset in motor_vehicle:
+        * ${ asset.year } ${ asset.make } ${ asset.model }, ${ currency(asset.fmv) }
+      % endfor
+    show if: has_motor_vehicle  
   - Edit: has_collection
     button: |
       **Do you have any valuable collectibles?**
@@ -1573,18 +1568,7 @@ review:
         * ${ asset.name.text }, ${ currency(asset.fmv) }
       % endfor
     show if: has_other_property
-  - Edit: has_transfer
-    button: |
-      **In the last two years, have you transferred or sold any assets or property worth at least $1,000?**
-      ${ word(yesno(has_transfer)) }
-  - Edit: transfer.revisit
-    button: |
-      **Assets or property that you transferred or sold**
-
-      % for asset in transfer:
-        * ${ asset.name.text }, ${ currency(asset.amount) }
-      % endfor
-    show if: has_transfer
+    
   - Edit: has_lawsuits
     button: |
       **Do you have any lawsuits or claims?**
@@ -1594,10 +1578,9 @@ review:
       **Lawsuits or claims**
 
       % for asset in lawsuits:
-        * ${ asset.case }, ${ currency(asset.amount) if asset.judgement else 'unknown' }
+        * ${ asset.case if asset.already_filed else 'not filed'}, Amount recovered: ${ currency(asset.amount) if (asset.already_filed and asset.case_over) else 'unknown' }
       % endfor
     show if: has_lawsuits
-
 
 ---
 id: Final steps review screen
@@ -1870,9 +1853,6 @@ review:
       
       **Coinsurance:**
       ${ x.coinsurance }%
-
-      **Copayment amount:**
-      ${ currency(x.copayment) }
 ---
 id: debts table
 table: debts.table
@@ -1896,11 +1876,11 @@ question: |
 subquestion: |
   ${ debts.table }
 
-  % if debts.number_gathered() < 26:
+  % if debts.number_gathered() < 25:
   ${ debts.add_action() }
   % endif
 ---
-id: cash table
+id: bank accounts table
 table: cash.table
 rows: cash
 columns:
@@ -1913,14 +1893,14 @@ columns:
 delete buttons: True
 confirm: True
 ---
-id: cash assets review screen
+id: bank accounts review screen
 continue button field: cash.revisit
 question: |
-  Edit information about your cash assets
+  Edit information about your bank or credit union accounts
 subquestion: |
   ${ cash.table }
 
-  % if cash.number_gathered() < 25:
+  % if cash.number_gathered() < 12:
   ${ cash.add_action() }
   % endif
 ---
@@ -1943,7 +1923,7 @@ question: |
 subquestion: |
   ${ cert_deposit.table }
 
-  % if cert_deposit.number_gathered() < 25:
+  % if cert_deposit.number_gathered() < 12:
   ${ cert_deposit.add_action() }
   % endif
 ---
@@ -1951,8 +1931,9 @@ id: money cash/card table
 table: money.table
 rows: money
 columns:
-  - Location of cash or card: row_item.name.text
-  - Held by: row_item.holder
+  - Bank or institution name: row_item.name.text
+  - Name on account: row_item.holder
+  - Account type: row_item.type
   - Balance: currency(row_item.balance)
   - Edit to change details: |
       action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
@@ -1962,11 +1943,11 @@ confirm: True
 id: money cash/card review screen
 continue button field: money.revisit
 question: |
-  Edit information about your debit cards and money transfer app balances
+  Edit information about your cash, debit cards, and money transfer app balances
 subquestion: |
   ${ money.table }
 
-  % if money.number_gathered() < 25:
+  % if money.number_gathered() < 12:
   ${ money.add_action() }
   % endif
 ---
@@ -1988,7 +1969,7 @@ question: |
 subquestion: |
   ${ investments.table }
 
-  % if investments.number_gathered() < 25:
+  % if investments.number_gathered() < 12:
   ${ investments.add_action() }
   % endif
 ---
@@ -2010,7 +1991,7 @@ question: |
 subquestion: |
   ${ other_investments.table }
 
-  % if other_investments.number_gathered() < 25:
+  % if other_investments.number_gathered() < 12:
   ${ other_investments.add_action() }
   % endif
 ---
@@ -2032,7 +2013,7 @@ question: |
 subquestion: |
   ${ real_estate.table }
 
-  % if real_estate.number_gathered() < 25:
+  % if real_estate.number_gathered() < 12:
   ${ real_estate.add_action() }
   % endif
 ---
@@ -2056,7 +2037,7 @@ question: |
 subquestion: |
   ${ motor_vehicle.table }
 
-  % if motor_vehicle.number_gathered() < 25:
+  % if motor_vehicle.number_gathered() < 12:
   ${ motor_vehicle.add_action() }
   % endif
 ---
@@ -2078,7 +2059,7 @@ question: |
 subquestion: |
   ${ business_interests.table }
 
-  % if business_interests.number_gathered() < 25:
+  % if business_interests.number_gathered() < 12:
   ${ business_interests.add_action() }
   % endif
 ---
@@ -2100,7 +2081,7 @@ question: |
 subquestion: |
   ${ life_insurance.table }
 
-  % if life_insurance.number_gathered() < 25:
+  % if life_insurance.number_gathered() < 12:
   ${ life_insurance.add_action() }
   % endif
 ---
@@ -2122,7 +2103,7 @@ question: |
 subquestion: |
   ${ retirement_plan.table }
 
-  % if retirement_plan.number_gathered() < 25:
+  % if retirement_plan.number_gathered() < 12:
   ${ retirement_plan.add_action() }
   % endif
 ---
@@ -2144,7 +2125,7 @@ question: |
 subquestion: |
   ${ collection.table }
 
-  % if collection.number_gathered() < 25:
+  % if collection.number_gathered() < 12:
   ${ collection.add_action() }
   % endif
 ---
@@ -2166,7 +2147,7 @@ question: |
 subquestion: |
   ${ other_property.table }
 
-  % if other_property.number_gathered() < 25:
+  % if other_property.number_gathered() < 12:
   ${ other_property.add_action() }
   % endif
 ---
@@ -2189,7 +2170,7 @@ question: |
 subquestion: |
   ${ transfer.table }
 
-  % if transfer.number_gathered() < 25:
+  % if transfer.number_gathered() < 12:
   ${ transfer.add_action() }
   % endif
 ---
@@ -2197,10 +2178,12 @@ id: lawsuits table
 table: lawsuits.table
 rows: lawsuits
 columns:
-  - Case number: row_item.case
-  - Date lawsuit or claim filed: row_item.date.format("MM/dd/yyyy")
+  - Case number: |
+      row_item.case if row_item.already_filed else 'not filed'
+  - Date lawsuit or claim filed: |
+      row_item.date.format("MM/dd/yyyy") if row_item.already_filed else 'not filed'
   - Amount recovered: |
-      currency(row_item.amount) if row_item.judgement else 'unknown'
+      currency(row_item.amount) if (row_item.already_filed and row_item.case_over) else 'unknown'
   - Edit to change details: |
       action_button_html(url_action(row_item.attr_name("case")), label="Edit", icon="pencil-alt")
 delete buttons: True
@@ -2217,3 +2200,84 @@ subquestion: |
   ${ lawsuits.add_action() }
   % endif
 ---
+id: child support other cases review screen
+continue button field: other_cs_cases.revisit
+question: |
+  Edit information about monthly child support payments in other cases
+subquestion: |
+  ${ other_cs_cases.table }
+
+  % if other_cs_cases.number_gathered() < 12:
+  ${ other_cs_cases.add_action() }
+  % endif
+---
+id: child support other cases table
+table: other_cs_cases.table
+rows: other_cs_cases
+columns:
+  - Case number: |
+      row_item.name.text
+  - Number of children supported: |
+      int(row_item.num_kids)
+  - County: |
+      row_item.county if defined("row_item.county") else ""
+  - State: |
+      row_item.state if defined("row_item.state") else ""
+  - Amount: |
+      currency(row_item.amount)
+  - Edit: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
+---
+id: child support not by court order review screen
+continue button field: other_cs_parents.revisit
+question: |
+  Edit information about monthly child support payments where there is no court order
+subquestion: |
+  ${ other_cs_parents.table }
+
+  % if other_cs_parents.number_gathered() < 12:
+  ${ other_cs_parents.add_action() }
+  % endif
+---
+id: child support other cases table
+table: other_cs_parents.table
+rows: other_cs_parents
+columns:
+  - Parent receiving support: |
+      row_item.name.text
+  - Number of children supported: |
+      int(row_item.num_kids)
+  - Amount: |
+      currency(row_item.amount)
+  - Edit: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
+---
+id: other supported children in home review screen
+continue button field: other_cs_kids_in_home.revisit
+question: |
+  Edit information about your other children in your home you support
+subquestion: |
+  ${ other_cs_kids_in_home.table }
+
+  % if other_cs_kids_in_home.number_gathered() < 12:
+  ${ other_cs_kids_in_home.add_action() }
+  % endif
+---
+id: other supported children in home table
+table: other_cs_kids_in_home.table
+rows: other_cs_kids_in_home
+columns:
+  - Child name: |
+      row_item.name.text
+  - Age: |
+      int(row_item.age)
+  - Paternity determined by: |
+      row_item.paternity
+  - Edit: |
+      action_button_html(url_action(row_item.attr_name("name.text")), label="Edit", icon="pencil-alt")
+delete buttons: True
+confirm: True
