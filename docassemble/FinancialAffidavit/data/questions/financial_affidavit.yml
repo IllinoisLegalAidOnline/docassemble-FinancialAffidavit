@@ -654,7 +654,7 @@ fields:
 ---
 id: business perks
 question: |
-  Do you receive any of these benefits from ${ employment[i].name.text }?
+  Do you receive any of these benefits from the employer: ${ employment[i].name.text }?
 subquestion: |
   Check all that apply.
 fields:
@@ -2278,7 +2278,7 @@ fields:
   - Number of people covered: insurance[i].total_covered
     datatype: integer
     min: 1
-    max: 20
+    max: 50
   - Who is covered?: insurance[i].coverage
     datatype: checkboxes
     choices:
@@ -2905,13 +2905,13 @@ fields:
     maxlength: 20
     help: |
       List whether the business is a corporation, S Corp, an LLC, or something else.
+  - Fair market value (FMV): business_interests[i].fmv
+    datatype: currency
+    min: 0
   - "What percent do you own? (1-100%)": business_interests[i].ownership
     datatype: integer
     min: 1
     max: 100
-  - Fair market value (FMV): business_interests[i].fmv
-    datatype: currency
-    min: 0
 ---
 code: |
   business_interests[i].name.text
@@ -3245,7 +3245,7 @@ fields:
       val('lawsuits[i].already_filed') == true && val('lawsuits[i].case_over') == true
 ---
 code: |
-  lawsuits[i].case
+  lawsuits[i].already_filed
   lawsuits[i].complete = True 
 ---
 code: |
@@ -3850,8 +3850,8 @@ attachment:
           % else:
           0.00
           % endif
-      - "maint_other_case_tax_deduct_yes": $ { True if users[0].maintenance_paid_other_case_question and users[0].maintenance_paid_other_case_deductible == "Yes" else '' }
-      - "maint_other_case_tax_deduct_no": $ { True if users[0].maintenance_paid_other_case_question and users[0].maintenance_paid_other_case_deductible == "No" else '' }
+      - "maint_other_case_tax_deduct_yes": ${ True if users[0].maintenance_paid_other_case_question and users[0].maintenance_paid_other_case_deductible == "Yes"  else '' }
+      - "maint_other_case_tax_deduct_no": ${ True if users[0].maintenance_paid_other_case_question and users[0].maintenance_paid_other_case_deductible == "No" else '' }
       - "total_maintenance": |
           ${ thousands(total_maintenance_payments, show_decimals=True)}
       - "child_support_this_case": |
