@@ -563,7 +563,7 @@ id: other employment
 question: |
   Do you have any other job or business income to include?
 subquestion: |
-  So far you have told us about ${comma_and_list(employment.complete_elements())}.
+  So far you have told us about ${fix_punctuation(comma_and_list(employment.complete_elements()))}
 fields:
   - no label: employment.there_is_another
     datatype: yesnoradio
@@ -601,15 +601,45 @@ fields:
         employment[i].type != 'employed'
     help: |
       If you are an independent contractor or sole proprietor, and you do not have a business name, you can enter your own name.
+  - Is this employer's address in the United States?: employment[i].in_us
+    datatype: yesnoradio
+    default: True
+    help: |
+      Click **No** if you want to list an address outside the United States. You should enter the international address using the English alphabet.    
+    show if: 
+      code: |
+        employment[i].type == 'employed'
+  - Is this business's address in the United States?: employment[i].in_us
+    datatype: yesnoradio
+    default: True
+    help: |
+      Click **No** if you want to list an address outside the United States. You should enter the international address using the English alphabet.    
+    show if: 
+      code: |
+        employment[i].type != 'employed'
   - Street address: employment[i].address.address
     address autocomplete: True
+    show if: employment[i].in_us
   - Address line 2: employment[i].address.unit
     required: False
+    show if: employment[i].in_us
   - City: employment[i].address.city
+    show if: employment[i].in_us
   - State: employment[i].address.state
     code: |
       states_list()
+    show if: employment[i].in_us
   - ZIP code: employment[i].address.zip
+    show if: employment[i].in_us
+  - "Non-US address line 1 (street address, suite or unit number)": employment[i].intl_address_1
+    show if: 
+      variable: employment[i].in_us
+      is: False
+  - "Non-US address line 2 (city, province or state, postal code, country)": employment[i].intl_address_2
+    show if: 
+      variable: employment[i].in_us
+      is: False
+    
 ---
 id: employer pay 
 question: |
@@ -3463,7 +3493,11 @@ attachment:
           % endif
       - "employer_address": |
           % if employment.there_are_any and employment[0].type == "employed":
+          % if employment[0].in_us:
           ${ employment[0].address.on_one_line(bare=True) }
+          % else:
+          ${ employment[0].intl_address_1 }, ${employment[0].intl_address_2 }
+          % endif
           % endif
       - "paychecks_monthly": |
           % if employment.there_are_any and employment[0].type == "employed":
@@ -3530,7 +3564,11 @@ attachment:
           % endif
       - "business_address": |
           % if employment.there_are_any and employment[0].type != "employed":
+          % if employment[0].in_us:
           ${ employment[0].address.on_one_line(bare=True) }
+          % else:
+          ${ employment[0].intl_address_1 }, ${employment[0].intl_address_2 }          
+          % endif
           % endif
       - "business_gross_last_year": |
           % if employment.there_are_any and employment[0].type != "employed":
@@ -5522,7 +5560,11 @@ attachment:
           % endif
       - "employer_address": |
           % if employment[i].type == "employed":
+          % if employment[i].in_us:
           ${ employment[i].address.on_one_line(bare=True) }
+          % else:
+          ${ employment[i].intl_address_1 }, ${employment[i].intl_address_2 }
+          % endif
           % endif
       - "paychecks_monthly": |
           % if employment[i].type == "employed":
@@ -5569,7 +5611,11 @@ attachment:
           % endif
       - "business_address": |
           % if employment[i].type != "employed":
+          % if employment[i].in_us:
           ${ employment[i].address.on_one_line(bare=True) }
+          % else:
+          ${ employment[i].intl_address_1 }, ${employment[i].intl_address_2 }
+          % endif
           % endif
       - "business_gross_last_year": |
           % if employment[i].type != "employed":
