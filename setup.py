@@ -44,17 +44,16 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.FinancialAffidavit',
-      version='1.1.0',
+      version='1.1.1',
       description=('A docassemble extension.'),
       long_description='# docassemble.FinancialAffidavit\r\n\r\nA docassemble extension.\r\n\r\n## Author\r\n\r\nMatt Newsted, mnewsted@illinoislegalaid.org\r\n\r\n',
       long_description_content_type='text/markdown',
       author='Jim Graszer',
       author_email='jim@lemmalegal.com',
-      license='The MIT License (MIT)',
+      license='MIT',
       url='https://docassemble.org',
       packages=find_namespace_packages(),
-      install_requires=['docassemble.AssemblyLine @ git+https://github.com/SuffolkLITLab/docassemble-AssemblyLine.git@main', 'docassemble.ILAO>=1.1.10'],
+      install_requires=[],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/FinancialAffidavit/', package='docassemble.FinancialAffidavit'),
      )
-
