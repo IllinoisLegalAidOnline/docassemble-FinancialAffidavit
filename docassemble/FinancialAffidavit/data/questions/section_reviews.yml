@@ -723,7 +723,7 @@ review:
       **Motor vehicles**
 
       % for asset in motor_vehicle:
-        * ${ asset.year } ${ asset.make } ${ asset.model }, ${ currency(asset.fmv) }
+        * ${ asset.year } ${ asset.make } ${ asset.model }
       % endfor
     show if: has_motor_vehicle
       
@@ -1541,7 +1541,7 @@ review:
       **Motor vehicles**
 
       % for asset in motor_vehicle:
-        * ${ asset.year } ${ asset.make } ${ asset.model }, ${ currency(asset.fmv) }
+        * ${ asset.year } ${ asset.make } ${ asset.model }
       % endfor
     show if: has_motor_vehicle  
   - Edit: has_collection
@@ -2028,8 +2028,7 @@ columns:
   - Vehicle year: row_item.year 
   - Vehicle make: row_item.make 
   - Vehicle model: row_item.model
-  - FMV: currency(row_item.fmv)
-  - Edit to change details: |
+  - Edit to change details including FMV and balance owed: |
       action_button_html(url_action(row_item.attr_name("year")), label="Edit", icon="pencil-alt")
 delete buttons: True
 confirm: True

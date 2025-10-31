@@ -270,7 +270,7 @@ continue button field: about_the_financial_affidavit
 question: |
   About the *Financial Affidavit*
 subquestion: |
-  The *Financial Affidavit* is a very long form. This program will help you fill it out and avoid mistakes. You may want to [**preview the Financial Affidavit**](${ preview.url_for() }) before you get started. Just be sure to come back to this screen to continue.
+  The *Financial Affidavit* is a very long form. This program will help you fill it out and avoid mistakes. You may want to [**preview or print a blank Financial Affidavit**](${ preview.url_for() }) before you get started. Just be sure to come back to this screen to continue.
   
   After you complete this Easy Form, you must send a copy of the completed *Financial Affidavit* and supporting documents to the other person in the case. If that person has a lawyer, send it to the lawyer.
 
@@ -669,6 +669,8 @@ question: |
   Income and expenses for ${ employment[i].name.text }
 subquestion: |
   **Note:** You must attach complete business federal and state business tax returns for the most recent tax year.
+
+  ${ collapse_template(attaching_documents) }  
 fields:
   - Gross business receipts for last year (${ current_datetime().year - 1 }): employment[i].income_last_year
     datatype: currency
@@ -681,6 +683,16 @@ fields:
     datatype: currency  
   - Business expenses so far this year (${ current_datetime().year }): employment[i].expenses_current_year
     datatype: currency
+---
+template: attaching_documents
+subject: |
+  **How to attach documents**
+content: |
+  You cannot attach your documents while using this Easy Form. If you file your *Financial Affidavit*, you can attach documents at that time.
+
+  If e-filing, you can upload the documents separately. If filing with paper forms, you can staple the documents to your forms. Ask the circuit clerk for instructions.
+
+  To learn more, read ILAO's article about [**e-filing**](https://www.illinoislegalaid.org/legal-information/e-filing-basics).
 ---
 id: business perks
 question: |
@@ -2856,7 +2868,7 @@ columns:
   - Vehicle model: row_item.model
   - Name on title: row_item.name.text
   - FMV: currency(row_item.fmv)
-  - Balance: currency(row_item.balance)
+  - Balance owed: currency(row_item.balance)
 ---
 id: motor vehicle information
 question: |
@@ -2883,7 +2895,7 @@ fields:
   - Fair market value (FMV): motor_vehicle[i].fmv
     datatype: currency
     min: 0
-  - Balance: motor_vehicle[i].balance
+  - Balance owed: motor_vehicle[i].balance
     datatype: currency
     min: 0
 ---
@@ -3304,6 +3316,8 @@ subquestion: |
 
   **Note:** You must attach these documents if you have them or can get them.
 
+  ${ collapse_template(attaching_documents) }  
+
   Check all that apply.
 fields:
   - I am attaching: users[0].attached_documents
@@ -3343,7 +3357,7 @@ subquestion: |
       <li>Everything on the form is true and correct, or you have been informed or you believe it is true and correct, and</li>
       <li>You understand that making a false statement on the form is perjury and has penalties provided by law.</li>
     </ul></p>
-  <p>See the <a href="https://www.ilga.gov/legislation/ilcs/documents/073500050k1-109.htm"><b>Code of Civil Procedure, 735 ILCS 5/1-109</b></a> for more information.</p>
+  <p>See the <a href="https://www.ilga.gov/legislation/ilcs/documents/073500050k1-109.htm"><b>Illinois Code of Civil Procedure, 735 ILCS 5/1-109</b></a> for more information.</p>
   </div>
 fields:
   - "Add e-signature?": e_signature
