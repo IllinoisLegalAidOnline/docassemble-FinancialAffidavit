@@ -644,6 +644,8 @@ fields:
 id: employer pay 
 question: |
   Details about pay from ${ employment[i].name.text }
+subquestion: |
+  **Gross income** is the amount of pay you receive before taxes and deductions are withheld.
 fields:
   - Pay period: employment[i].frequency
     datatype: radio
@@ -657,7 +659,7 @@ fields:
   - "Gross income so far in ${ current_datetime().year } (enter last pay date below)": employment[i].gross_income
     datatype: currency
     help: |
-      Gross income is the amount of pay you would receive before taxes and deductions are withheld.
+      **Gross income** is the amount of pay you receive before taxes and deductions are withheld.
   - "Gross income amount from January 1, ${ current_datetime().year } through:": employment[i].gross_date
     datatype: date
     max: ${ today().format("MM-dd-yyyy") }
@@ -718,6 +720,8 @@ fields:
 id: filed taxes
 question: |
   Did you file taxes for ${ current_datetime().year - 1 }?
+subquestion: |
+  If you have not filed taxes yet for ${ current_datetime().year - 1 }, select **No**.
 fields:
   - no label: taxes_filed
     datatype: yesnoradio
@@ -732,6 +736,8 @@ fields:
 id: filed taxes detail
 question: |
   Tax return details for the year ${ current_datetime().year-1 }
+subquestion: |
+  **Gross income** is the amount of income you received before taxes and deductions were withheld.
 fields:
   - What was your tax filing status last year?: taxes_filed_status
     datatype: radio
@@ -748,7 +754,7 @@ fields:
   - Gross income from last year: gross_income_last_year
     datatype: currency
     help: |
-      Gross income is the amount of income you would receive before taxes and deductions are withheld.
+      **Gross income** is the amount of income you received before taxes and deductions were withheld.
   - Did you claim any of these credits?: tax_claimed
     datatype: checkboxes
     choices: 
@@ -862,6 +868,8 @@ question: |
   Monthly employment income
 subquestion: |
   **Remember:** List the income you receive each month.
+
+  Enter your **gross income**, the amount of pay you receive before taxes and deductions are withheld.
 fields:
   - "Regular employment or self-employment earnings from all jobs, such as salary, wages, or base pay": users[0].regular_pay_question
     datatype: yesnowide
@@ -2256,7 +2264,7 @@ code: |
         for policy in insurance:
           if policy.paid["myself"] :
             insurance_total += policy.monthly_cost
-  	  insurance_total = insurance_total - insurance_primary_total()
+  	    insurance_total = insurance_total - insurance_primary_total()
     return insurance_total
 ---
 ################### FA HEALTH INSURANCE ##################
@@ -2874,7 +2882,6 @@ id: motor vehicle information
 question: |
   Details for the ${ordinal(i)} motor vehicle 
 subquestion: |
-
   ${ collapse_template(FMV_help) }  
 fields:
   - Vehicle year: motor_vehicle[i].year
@@ -2898,6 +2905,8 @@ fields:
   - Balance owed: motor_vehicle[i].balance
     datatype: currency
     min: 0
+    help: |
+      If you do not know the exact amount, take your best guess.
 ---
 code: |
   motor_vehicle[i].year
