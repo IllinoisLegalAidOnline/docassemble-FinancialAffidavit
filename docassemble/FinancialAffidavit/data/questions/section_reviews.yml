@@ -385,13 +385,9 @@ review:
       ${ currency(showifdef('users[0].living_groceries')) if showifdef('users[0].living_groceries_question') else '$0.00'}
       * Other monthly household living expenses (not transportation): 
       % if showifdef('users[0].living_other_question'):
-      What are the other monthly household living expenses?: 
-      ${ showifdef('users[0].living_other_description') if showifdef('users[0].living_other_question') else '$0.00'}
-
-      Total monthly other expenses: 
-      ${ currency(showifdef('users[0].living_other')) if showifdef('users[0].living_other_question') else '$0.00'}
+      ${ showifdef('users[0].living_other_description')} - ${ currency(showifdef('users[0].living_other'))}
       % else:
-      $0.00
+      None entered
       % endif 
   - Edit: users[0].transport_payment_question
     button: |
@@ -460,7 +456,7 @@ review:
       * Union, trade, or professional association dues: 
       ${ currency(showifdef('users[0].personal_associations')) if showifdef('users[0].personal_associations_question') else '$0.00'}
       * Professional fees, such as accountants, tax preparers, or lawyers: 
-      ${ currency(showifdef('users[0].peronsal_professional')) if showifdef('users[0].peronsal_professional_question') else '$0.00'}
+      ${ currency(showifdef('users[0].personal_professional')) if showifdef('users[0].personal_professional_question') else '$0.00'}
   - Edit: users[0].personal_gifts_question
     button: |
       **Monthly gifts, donations, and other expenses**
@@ -1203,13 +1199,9 @@ review:
       ${ currency(showifdef('users[0].living_groceries')) if showifdef('users[0].living_groceries_question') else '$0.00'}
       * Other monthly household living expenses (not transportation): 
       % if showifdef('users[0].living_other_question'):
-      What are the other monthly household living expenses?: 
-      ${ showifdef('users[0].living_other_description') if showifdef('users[0].living_other_question') else '$0.00'}
-
-      Total monthly other expenses: 
-      ${ currency(showifdef('users[0].living_other')) if showifdef('users[0].living_other_question') else '$0.00'}
+      ${ showifdef('users[0].living_other_description') } - ${ currency(showifdef('users[0].living_other'))}
       % else:
-      $0.00
+      None entered
       % endif 
   - Edit: users[0].transport_payment_question
     button: |
@@ -1278,7 +1270,7 @@ review:
       * Union, trade, or professional association dues: 
       ${ currency(showifdef('users[0].personal_associations')) if showifdef('users[0].personal_associations_question') else '$0.00'}
       * Professional fees, such as accountants, tax preparers, or lawyers: 
-      ${ currency(showifdef('users[0].peronsal_professional')) if showifdef('users[0].peronsal_professional_question') else '$0.00'}
+      ${ currency(showifdef('users[0].personal_professional')) if showifdef('users[0].personal_professional_question') else '$0.00'}
   - Edit: users[0].personal_gifts_question
     button: |
       **Monthly gifts, donations, and other expenses**

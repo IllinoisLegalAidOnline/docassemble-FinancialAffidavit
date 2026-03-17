@@ -1983,12 +1983,12 @@ fields:
     datatype: currency
     min: 0.01
     show if: users[0].personal_associations_question 
-  - Professional fees, such as accountants, tax preparers, or lawyers: users[0].peronsal_professional_question
+  - Professional fees, such as accountants, tax preparers, or lawyers: users[0].personal_professional_question
     datatype: yesnowide
-  - Monthly amount: users[0].peronsal_professional  
+  - Monthly amount: users[0].personal_professional  
     datatype: currency
     min: 0.01
-    show if: users[0].peronsal_professional_question 
+    show if: users[0].personal_professional_question 
 ---
 id: monthly children expenses
 question: |
@@ -2217,7 +2217,7 @@ depends on:
   - users[0].personal_donations
   - users[0].personal_vacations
   - users[0].personal_associations
-  - users[0].peronsal_professional
+  - users[0].personal_professional
   - users[0].personal_other
   - users[0].children_clothing
   - users[0].children_grooming
@@ -2242,60 +2242,7 @@ depends on:
   - users[0].children_entertainment
   - users[0].children_party_gifts
   - users[0].children_other
-code: |
-  subtotal_monthly_household_expenses = sum_if_defined(
-    'users[0].living_house_payment',
-    'users[0].living_heloc',
-    'users[0].living_property_taxes',
-    'users[0].living_hoa',
-    'users[0].living_insurance')
-
-  subtotal_monthly_utility_expenses = sum_if_defined(
-    'users[0].living_gas',
-    'users[0].living_power',
-    'users[0].living_phone',
-    'users[0].living_cable',
-    'users[0].living_internet',
-    'users[0].living_water',
-    'users[0].living_trash')
-
-  subtotal_monthly_living_expenses = sum_if_defined(
-    'users[0].living_laundry',
-    'users[0].living_cleaner',
-    'users[0].living_repairs',
-    'users[0].living_pets',
-    'users[0].living_groceries',
-    'users[0].living_other')
-
-  subtotal_monthly_transportation_expenses = sum_if_defined(
-    'users[0].transport_payment',
-    'users[0].transport_maintenance',
-    'users[0].transport_insurance',
-    'users[0].transport_fuel',
-    'users[0].transport_public',
-    'users[0].transport_parking',
-    'users[0].transport_other')
-  
-  subtotal_monthly_personal_expenses = sum_if_defined(
-    'users[0].personal_doctor',
-    'users[0].personal_therapy',
-    'users[0].personal_dental',
-    'users[0].personal_vision',
-    'users[0].personal_medications',
-    'users[0].personal_life_term',
-    'users[0].personal_life_whole',
-    'users[0].personal_clothing',
-    'users[0].personal_stylist',
-    'users[0].personal_memberships',
-    'users[0].personal_subscriptions',
-    'users[0].personal_entertainment',
-    'users[0].personal_gifts',
-    'users[0].personal_donations',
-    'users[0].personal_vacations',
-    'users[0].personal_associations',
-    'users[0].peronsal_professional',
-    'users[0].personal_other')
-
+code: |  
   subtotal_monthly_children_expenses = sum_if_defined(
     'users[0].children_clothing',
     'users[0].children_grooming',
@@ -2373,6 +2320,59 @@ code: |
 #    'other_cs_parents[2].amount',
 #    'other_cs_parents[3].amount',
 #    'total_child_support_payments_addendum')
+
+#  subtotal_monthly_household_expenses = sum_if_defined(
+#    'users[0].living_house_payment',
+#    'users[0].living_heloc',
+#    'users[0].living_property_taxes',
+#    'users[0].living_hoa',
+#    'users[0].living_insurance')
+
+#  subtotal_monthly_utility_expenses = sum_if_defined(
+#    'users[0].living_gas',
+#    'users[0].living_power',
+#    'users[0].living_phone',
+#    'users[0].living_cable',
+#    'users[0].living_internet',
+#    'users[0].living_water',
+#    'users[0].living_trash')
+
+#  subtotal_monthly_living_expenses = sum_if_defined(
+#    'users[0].living_laundry',
+#    'users[0].living_cleaner',
+#    'users[0].living_repairs',
+#    'users[0].living_pets',
+#    'users[0].living_groceries',
+#    'users[0].living_other')
+
+#  subtotal_monthly_transportation_expenses = sum_if_defined(
+#    'users[0].transport_payment',
+#    'users[0].transport_maintenance',
+#    'users[0].transport_insurance',
+#    'users[0].transport_fuel',
+#    'users[0].transport_public',
+#    'users[0].transport_parking',
+#    'users[0].transport_other')
+
+#  subtotal_monthly_personal_expenses = sum_if_defined(
+#    'users[0].personal_doctor',
+#    'users[0].personal_therapy',
+#    'users[0].personal_dental',
+#    'users[0].personal_vision',
+#    'users[0].personal_medications',
+#    'users[0].personal_life_term',
+#    'users[0].personal_life_whole',
+#    'users[0].personal_clothing',
+#    'users[0].personal_stylist',
+#    'users[0].personal_memberships',
+#    'users[0].personal_subscriptions',
+#    'users[0].personal_entertainment',
+#    'users[0].personal_gifts',
+#    'users[0].personal_donations',
+#    'users[0].personal_vacations',
+#    'users[0].personal_associations',
+#    'users[0].personal_professional',
+#    'users[0].personal_other')
 
 ---
 depends on:
@@ -2522,8 +2522,281 @@ code: |
                       support_sum += other_cs_parents[11].amount
   
     return support_sum
+---
+depends on:
+  - users[0].living_house_payment_question
+  - users[0].living_heloc_question
+  - users[0].living_property_taxes_question
+  - users[0].living_hoa_question
+  - users[0].living_insurance_question
 
+  - users[0].living_house_payment
+  - users[0].living_heloc
+  - users[0].living_property_taxes
+  - users[0].living_hoa
+  - users[0].living_insurance
 
+code: |
+  subtotal_monthly_household_expenses = get_total_monthly_household_expenses()
+---
+code: |
+  def get_total_monthly_household_expenses():
+    household_expenses_sum = 0
+
+    if users[0].living_house_payment_question:
+      household_expenses_sum += users[0].living_house_payment
+
+    if users[0].living_heloc_question:
+      household_expenses_sum += users[0].living_heloc
+
+    if users[0].living_property_taxes_question:
+      household_expenses_sum += users[0].living_property_taxes
+
+    if users[0].living_hoa_question:
+      household_expenses_sum += users[0].living_hoa
+
+    if users[0].living_insurance_question:
+      household_expenses_sum += users[0].living_insurance
+
+    return household_expenses_sum
+---
+depends on:
+  - users[0].living_gas_question
+  - users[0].living_power_question
+  - users[0].living_phone_question
+  - users[0].living_cable_question
+  - users[0].living_internet_question
+  - users[0].living_water_question
+  - users[0].living_trash_question
+
+  - users[0].living_gas
+  - users[0].living_power
+  - users[0].living_phone
+  - users[0].living_cable
+  - users[0].living_internet
+  - users[0].living_water
+  - users[0].living_trash
+
+code: |
+  subtotal_monthly_utility_expenses = get_total_monthly_utility_expenses()
+---
+code: |
+  def get_total_monthly_utility_expenses():
+    utility_expenses_sum = 0
+
+    if users[0].living_gas_question:
+      utility_expenses_sum += users[0].living_gas
+
+    if users[0].living_power_question:
+      utility_expenses_sum += users[0].living_power
+
+    if users[0].living_phone_question:
+      utility_expenses_sum += users[0].living_phone
+
+    if users[0].living_cable_question:
+      utility_expenses_sum += users[0].living_cable
+
+    if users[0].living_internet_question:
+      utility_expenses_sum += users[0].living_internet
+
+    if users[0].living_water_question:
+      utility_expenses_sum += users[0].living_water
+
+    if users[0].living_trash_question:
+      utility_expenses_sum += users[0].living_trash
+
+    return utility_expenses_sum
+---
+depends on:
+  - users[0].living_laundry_question
+  - users[0].living_cleaner_question
+  - users[0].living_repairs_question
+  - users[0].living_pets_question
+  - users[0].living_groceries_question
+  - users[0].living_other_question
+
+  - users[0].living_laundry
+  - users[0].living_cleaner
+  - users[0].living_repairs
+  - users[0].living_pets
+  - users[0].living_groceries
+  - users[0].living_other
+
+code: |
+  subtotal_monthly_living_expenses = get_total_monthly_living_expenses()
+---
+code: |
+  def get_total_monthly_living_expenses():
+    living_expenses_sum = 0
+
+    if users[0].living_laundry_question:
+      living_expenses_sum += users[0].living_laundry
+
+    if users[0].living_cleaner_question:
+      living_expenses_sum += users[0].living_cleaner
+
+    if users[0].living_repairs_question:
+      living_expenses_sum += users[0].living_repairs
+
+    if users[0].living_pets_question:
+      living_expenses_sum += users[0].living_pets
+
+    if users[0].living_groceries_question:
+      living_expenses_sum += users[0].living_groceries
+
+    if users[0].living_other_question:
+      living_expenses_sum += users[0].living_other
+
+    return living_expenses_sum
+---
+depends on:
+  - users[0].transport_payment_question
+  - users[0].transport_maintenance_question
+  - users[0].transport_insurance_question
+  - users[0].transport_fuel_question
+  - users[0].transport_public_question
+  - users[0].transport_parking_question
+  - users[0].transport_other_question
+
+  - users[0].transport_payment
+  - users[0].transport_maintenance
+  - users[0].transport_insurance
+  - users[0].transport_fuel
+  - users[0].transport_public
+  - users[0].transport_parking
+  - users[0].transport_other
+
+code: |
+  subtotal_monthly_transportation_expenses = get_total_monthly_transportation_expenses()
+---
+code: |
+  def get_total_monthly_transportation_expenses():
+    transport_expenses_sum = 0
+
+    if users[0].transport_payment_question:
+      transport_expenses_sum += users[0].transport_payment
+
+    if users[0].transport_maintenance_question:
+      transport_expenses_sum += users[0].transport_maintenance
+
+    if users[0].transport_insurance_question:
+      transport_expenses_sum += users[0].transport_insurance
+
+    if users[0].transport_fuel_question:
+      transport_expenses_sum += users[0].transport_fuel
+
+    if users[0].transport_public_question:
+      transport_expenses_sum += users[0].transport_public
+
+    if users[0].transport_parking_question:
+      transport_expenses_sum += users[0].transport_parking
+
+    if users[0].transport_other_question:
+      transport_expenses_sum += users[0].transport_other
+
+    return transport_expenses_sum
+---
+depends on:
+  - users[0].personal_doctor_question
+  - users[0].personal_therapy_question
+  - users[0].personal_dental_question
+  - users[0].personal_vision_question
+  - users[0].personal_medications_question
+  - users[0].personal_life_term_question
+  - users[0].personal_life_whole_question
+  - users[0].personal_clothing_question
+  - users[0].personal_stylist_question
+  - users[0].personal_memberships_question
+  - users[0].personal_subscriptions_question
+  - users[0].personal_entertainment_question
+  - users[0].personal_gifts_question
+  - users[0].personal_donations_question
+  - users[0].personal_vacations_question
+  - users[0].personal_associations_question
+  - users[0].personal_professional_question
+  - users[0].personal_other_question
+
+  - users[0].personal_doctor
+  - users[0].personal_therapy
+  - users[0].personal_dental
+  - users[0].personal_vision
+  - users[0].personal_medications
+  - users[0].personal_life_term
+  - users[0].personal_life_whole
+  - users[0].personal_clothing
+  - users[0].personal_stylist
+  - users[0].personal_memberships
+  - users[0].personal_subscriptions
+  - users[0].personal_entertainment
+  - users[0].personal_gifts
+  - users[0].personal_donations
+  - users[0].personal_vacations
+  - users[0].personal_associations
+  - users[0].personal_professional
+  - users[0].personal_other
+
+code: |
+  subtotal_monthly_personal_expenses = get_total_monthly_personal_expenses()
+---
+code: |
+  def get_total_monthly_personal_expenses():
+    personal_expenses_sum = 0
+
+    if users[0].personal_doctor_question:
+      personal_expenses_sum += users[0].personal_doctor
+
+    if users[0].personal_therapy_question:
+      personal_expenses_sum += users[0].personal_therapy
+
+    if users[0].personal_dental_question:
+      personal_expenses_sum += users[0].personal_dental
+
+    if users[0].personal_vision_question:
+      personal_expenses_sum += users[0].personal_vision
+
+    if users[0].personal_medications_question:
+      personal_expenses_sum += users[0].personal_medications
+
+    if users[0].personal_life_term_question:
+      personal_expenses_sum += users[0].personal_life_term
+
+    if users[0].personal_life_whole_question:
+      personal_expenses_sum += users[0].personal_life_whole
+
+    if users[0].personal_clothing_question:
+      personal_expenses_sum += users[0].personal_clothing
+
+    if users[0].personal_stylist_question:
+      personal_expenses_sum += users[0].personal_stylist
+
+    if users[0].personal_memberships_question:
+      personal_expenses_sum += users[0].personal_memberships
+
+    if users[0].personal_subscriptions_question:
+      personal_expenses_sum += users[0].personal_subscriptions
+
+    if users[0].personal_entertainment_question:
+      personal_expenses_sum += users[0].personal_entertainment
+
+    if users[0].personal_gifts_question:
+      personal_expenses_sum += users[0].personal_gifts
+
+    if users[0].personal_donations_question:
+      personal_expenses_sum += users[0].personal_donations
+
+    if users[0].personal_vacations_question:
+      personal_expenses_sum += users[0].personal_vacations
+
+    if users[0].personal_associations_question:
+      personal_expenses_sum += users[0].personal_associations
+
+    if users[0].personal_professional_question:
+      personal_expenses_sum += users[0].personal_professional
+
+    if users[0].personal_other_question:
+      personal_expenses_sum += users[0].personal_other
+
+    return personal_expenses_sum
 
 
 
@@ -4659,9 +4932,9 @@ attachment:
           % else:
           0.00
           % endif
-      - "peronsal_professional": |
-          % if users[0].peronsal_professional_question:
-          ${ thousands(users[0].peronsal_professional, show_decimals=True)}
+      - "personal_professional": |
+          % if users[0].personal_professional_question:
+          ${ thousands(users[0].personal_professional, show_decimals=True)}
           % else:
           0.00
           % endif
