@@ -2069,7 +2069,7 @@ fields:
 ---
 id: monthly children medical expenses
 question: |
-  Monthly medical for children
+  Monthly medical expenses for children
 subquestion: |
   **Note:** These are out-of-pocket expenses. Health insurance premiums and payments can be entered on another screen.
 fields:
@@ -2165,119 +2165,95 @@ fields:
     min: 0.01
     show if: users[0].children_other_question
 ---
-reconsider: True
-depends on:
-  - users[0].deductions_federal
-  - users[0].deductions_state
-  - users[0].deductions_fica
-  - users[0].deductions_medicare
-  - users[0].deductions_retirement
-  - users[0].maintenance_paid_court
-  - users[0].maintenance_paid_other_case
-  - users[0].child_support_1
-  # Section 12 a-d
-  - users[0].living_house_payment
-  - users[0].living_heloc
-  - users[0].living_property_taxes
-  - users[0].living_hoa
-  - users[0].living_insurance
-  - users[0].living_gas
-  - users[0].living_power
-  - users[0].living_phone
-  - users[0].living_cable
-  - users[0].living_internet
-  - users[0].living_water
-  - users[0].living_trash
-  - users[0].living_laundry
-  - users[0].living_cleaner
-  - users[0].living_repairs
-  - users[0].living_pets
-  - users[0].living_groceries
-  - users[0].living_other
-  - users[0].transport_payment
-  - users[0].transport_maintenance
-  - users[0].transport_insurance
-  - users[0].transport_fuel
-  - users[0].transport_public
-  - users[0].transport_parking
-  - users[0].transport_other
-  - users[0].personal_doctor
-  - users[0].personal_therapy
-  - users[0].personal_dental
-  - users[0].personal_vision
-  - users[0].personal_medications
-  - users[0].personal_life_term
-  - users[0].personal_life_whole
-  - users[0].personal_clothing
-  - users[0].personal_stylist
-  - users[0].personal_memberships
-  - users[0].personal_subscriptions
-  - users[0].personal_entertainment
-  - users[0].personal_gifts
-  - users[0].personal_donations
-  - users[0].personal_vacations
-  - users[0].personal_associations
-  - users[0].personal_professional
-  - users[0].personal_other
-  - users[0].children_clothing
-  - users[0].children_grooming
-  - users[0].children_tuition
-  - users[0].children_books
-  - users[0].children_school_lunch
-  - users[0].children_transportation
-  - users[0].children_school_events
-  - users[0].children_school_uniforms
-  - users[0].children_after_school
-  - users[0].children_tutor
-  - users[0].children_doctor
-  - users[0].children_therapy
-  - users[0].children_dental
-  - users[0].children_vision
-  - users[0].children_medications
-  - users[0].children_allowance
-  - users[0].children_childcare
-  - users[0].children_sports
-  - users[0].children_camps
-  - users[0].children_vacations
-  - users[0].children_entertainment
-  - users[0].children_party_gifts
-  - users[0].children_other
-code: |  
-  subtotal_monthly_children_expenses = sum_if_defined(
-    'users[0].children_clothing',
-    'users[0].children_grooming',
-    'users[0].children_tuition',
-    'users[0].children_books',
-    'users[0].children_school_lunch',
-    'users[0].children_transportation',
-    'users[0].children_school_events',
-    'users[0].children_school_uniforms',
-    'users[0].children_after_school',
-    'users[0].children_tutor',
-    'users[0].children_doctor',
-    'users[0].children_therapy',
-    'users[0].children_dental',
-    'users[0].children_vision',
-    'users[0].children_medications',
-    'users[0].children_allowance',
-    'users[0].children_childcare',
-    'users[0].children_sports',
-    'users[0].children_camps',
-    'users[0].children_vacations',
-    'users[0].children_entertainment',
-    'users[0].children_party_gifts',
-    'users[0].children_other')
-
-  subtotal_monthly_insurance_expenses = insurance_primary_total() + insurance_addenda_total()
-  
-  total_monthly_household_expenses = sum_if_defined(
-    'subtotal_monthly_household_expenses',
-    'subtotal_monthly_utility_expenses',
-    'subtotal_monthly_living_expenses',
-    'subtotal_monthly_transportation_expenses',
-    'subtotal_monthly_personal_expenses',
-    'subtotal_monthly_children_expenses',
-    'subtotal_monthly_insurance_expenses')
+#reconsider: True
+#depends on:
+#  - users[0].deductions_federal
+#  - users[0].deductions_state
+#  - users[0].deductions_fica
+#  - users[0].deductions_medicare
+#  - users[0].deductions_retirement
+#  - users[0].maintenance_paid_court
+#  - users[0].maintenance_paid_other_case
+#  - users[0].child_support_1
+#  # Section 12 a-d
+#  - users[0].living_house_payment
+#  - users[0].living_heloc
+#  - users[0].living_property_taxes
+#  - users[0].living_hoa
+#  - users[0].living_insurance
+#  - users[0].living_gas
+#  - users[0].living_power
+#  - users[0].living_phone
+#  - users[0].living_cable
+#  - users[0].living_internet
+#  - users[0].living_water
+#  - users[0].living_trash
+#  - users[0].living_laundry
+#  - users[0].living_cleaner
+#  - users[0].living_repairs
+#  - users[0].living_pets
+#  - users[0].living_groceries
+#  - users[0].living_other
+#  - users[0].transport_payment
+#  - users[0].transport_maintenance
+#  - users[0].transport_insurance
+#  - users[0].transport_fuel
+#  - users[0].transport_public
+#  - users[0].transport_parking
+#  - users[0].transport_other
+#  - users[0].personal_doctor
+#  - users[0].personal_therapy
+#  - users[0].personal_dental
+#  - users[0].personal_vision
+#  - users[0].personal_medications
+#  - users[0].personal_life_term
+#  - users[0].personal_life_whole
+#  - users[0].personal_clothing
+#  - users[0].personal_stylist
+#  - users[0].personal_memberships
+#  - users[0].personal_subscriptions
+#  - users[0].personal_entertainment
+#  - users[0].personal_gifts
+#  - users[0].personal_donations
+#  - users[0].personal_vacations
+#  - users[0].personal_associations
+#  - users[0].personal_professional
+#  - users[0].personal_other
+#  - users[0].children_clothing
+#  - users[0].children_grooming
+#  - users[0].children_tuition
+#  - users[0].children_books
+#  - users[0].children_school_lunch
+#  - users[0].children_transportation
+#  - users[0].children_school_events
+#  - users[0].children_school_uniforms
+#  - users[0].children_after_school
+#  - users[0].children_tutor
+#  - users[0].children_doctor
+#  - users[0].children_therapy
+#  - users[0].children_dental
+#  - users[0].children_vision
+#  - users[0].children_medications
+#  - users[0].children_allowance
+#  - users[0].children_childcare
+#  - users[0].children_sports
+#  - users[0].children_camps
+#  - users[0].children_vacations
+#  - users[0].children_entertainment
+#  - users[0].children_party_gifts
+#  - users[0].children_other
+#code: |  
+#
+#  subtotal_monthly_insurance_expenses = insurance_primary_total() + insurance_addenda_total()
+#  
+#  total_monthly_household_expenses = sum_if_defined(
+#    'subtotal_monthly_household_expenses',
+#    'subtotal_monthly_utility_expenses',
+#    'subtotal_monthly_living_expenses',
+#    'subtotal_monthly_transportation_expenses',
+#    'subtotal_monthly_personal_expenses',
+#    'subtotal_monthly_children_expenses',
+#    'subtotal_monthly_insurance_expenses')
 
 #  total_monthly_deductions = sum_if_defined(
 #    'users[0].deductions_federal',
@@ -2374,19 +2350,44 @@ code: |
 #    'users[0].personal_professional',
 #    'users[0].personal_other')
 
+#  subtotal_monthly_children_expenses = sum_if_defined(
+#    'users[0].children_clothing',
+#    'users[0].children_grooming',
+#    'users[0].children_tuition',
+#    'users[0].children_books',
+#    'users[0].children_school_lunch',
+#    'users[0].children_transportation',
+#    'users[0].children_school_events',
+#    'users[0].children_school_uniforms',
+#    'users[0].children_after_school',
+#    'users[0].children_tutor',
+#    'users[0].children_doctor',
+#    'users[0].children_therapy',
+#    'users[0].children_dental',
+#    'users[0].children_vision',
+#    'users[0].children_medications',
+#    'users[0].children_allowance',
+#    'users[0].children_childcare',
+#    'users[0].children_sports',
+#    'users[0].children_camps',
+#    'users[0].children_vacations',
+#    'users[0].children_entertainment',
+#    'users[0].children_party_gifts',
+#    'users[0].children_other')
+
 ---
 depends on:
-  - users[0].deductions_federal
-  - users[0].deductions_state
-  - users[0].deductions_fica
-  - users[0].deductions_medicare
-  - users[0].deductions_retirement
-
   - users[0].deductions_federal_question
   - users[0].deductions_state_question
   - users[0].deductions_fica_question
   - users[0].deductions_medicare_question
   - users[0].deductions_retirement_question
+
+  - users[0].deductions_federal
+  - users[0].deductions_state
+  - users[0].deductions_fica
+  - users[0].deductions_medicare
+  - users[0].deductions_retirement
 code: |
   total_monthly_deductions = get_total_monthly_deductions()
 ---
@@ -2797,10 +2798,133 @@ code: |
       personal_expenses_sum += users[0].personal_other
 
     return personal_expenses_sum
+---
+depends on:
+  - users[0].children_clothing_question
+  - users[0].children_grooming_question
+  - users[0].children_tuition_question
+  - users[0].children_books_question
+  - users[0].children_school_lunch_question
+  - users[0].children_transportation_question
+  - users[0].children_school_events_question
+  - users[0].children_school_uniforms_question
+  - users[0].children_after_school_question
+  - users[0].children_tutor_question
+  - users[0].children_doctor_question
+  - users[0].children_therapy_question
+  - users[0].children_dental_question
+  - users[0].children_vision_question
+  - users[0].children_medications_question
+  - users[0].children_allowance_question
+  - users[0].children_childcare_question
+  - users[0].children_sports_question
+  - users[0].children_camps_question
+  - users[0].children_vacations_question
+  - users[0].children_entertainment_question
+  - users[0].children_party_gifts_question
+  - users[0].children_other_question
 
+  - users[0].children_clothing
+  - users[0].children_grooming
+  - users[0].children_tuition
+  - users[0].children_books
+  - users[0].children_school_lunch
+  - users[0].children_transportation
+  - users[0].children_school_events
+  - users[0].children_school_uniforms
+  - users[0].children_after_school
+  - users[0].children_tutor
+  - users[0].children_doctor
+  - users[0].children_therapy
+  - users[0].children_dental
+  - users[0].children_vision
+  - users[0].children_medications
+  - users[0].children_allowance
+  - users[0].children_childcare
+  - users[0].children_sports
+  - users[0].children_camps
+  - users[0].children_vacations
+  - users[0].children_entertainment
+  - users[0].children_party_gifts
+  - users[0].children_other
 
+code: |
+  subtotal_monthly_children_expenses = get_total_monthly_children_expenses()
+---
+code: |
+  def get_total_monthly_children_expenses():
+    children_expenses_sum = 0
 
+    if users[0].children_clothing_question:
+      children_expenses_sum += users[0].children_clothing
 
+    if users[0].children_grooming_question:
+      children_expenses_sum += users[0].children_grooming
+
+    if users[0].children_tuition_question:
+      children_expenses_sum += users[0].children_tuition
+
+    if users[0].children_books_question:
+      children_expenses_sum += users[0].children_books
+
+    if users[0].children_school_lunch_question:
+      children_expenses_sum += users[0].children_school_lunch
+
+    if users[0].children_transportation_question:
+      children_expenses_sum += users[0].children_transportation
+
+    if users[0].children_school_events_question:
+      children_expenses_sum += users[0].children_school_events
+
+    if users[0].children_school_uniforms_question:
+      children_expenses_sum += users[0].children_school_uniforms
+
+    if users[0].children_after_school_question:
+      children_expenses_sum += users[0].children_after_school
+
+    if users[0].children_tutor_question:
+      children_expenses_sum += users[0].children_tutor
+
+    if users[0].children_doctor_question:
+      children_expenses_sum += users[0].children_doctor
+
+    if users[0].children_therapy_question:
+      children_expenses_sum += users[0].children_therapy
+
+    if users[0].children_dental_question:
+      children_expenses_sum += users[0].children_dental
+
+    if users[0].children_vision_question:
+      children_expenses_sum += users[0].children_vision
+
+    if users[0].children_medications_question:
+      children_expenses_sum += users[0].children_medications
+
+    if users[0].children_allowance_question:
+      children_expenses_sum += users[0].children_allowance
+
+    if users[0].children_childcare_question:
+      children_expenses_sum += users[0].children_childcare
+
+    if users[0].children_sports_question:
+      children_expenses_sum += users[0].children_sports
+
+    if users[0].children_camps_question:
+      children_expenses_sum += users[0].children_camps
+
+    if users[0].children_vacations_question:
+      children_expenses_sum += users[0].children_vacations
+
+    if users[0].children_entertainment_question:
+      children_expenses_sum += users[0].children_entertainment
+
+    if users[0].children_party_gifts_question:
+      children_expenses_sum += users[0].children_party_gifts
+
+    if users[0].children_other_question:
+      children_expenses_sum += users[0].children_other
+
+    return children_expenses_sum
 
 ---
 code: |
@@ -2820,6 +2944,24 @@ code: |
             insurance_total += policy.monthly_cost
   	    insurance_total = insurance_total - insurance_primary_total()
     return insurance_total
+---
+reconsider: True
+code: |  
+  subtotal_monthly_insurance_expenses = insurance_primary_total() + insurance_addenda_total()
+---
+reconsider: True
+code: |  
+  total_monthly_household_expenses = subtotal_monthly_household_expenses + subtotal_monthly_utility_expenses + subtotal_monthly_living_expenses + subtotal_monthly_transportation_expenses + subtotal_monthly_personal_expenses + subtotal_monthly_children_expenses + subtotal_monthly_insurance_expenses
+
+#  
+#total_monthly_household_expenses = sum_if_defined(
+#    'subtotal_monthly_household_expenses',
+#    'subtotal_monthly_utility_expenses',
+#    'subtotal_monthly_living_expenses',
+#    'subtotal_monthly_transportation_expenses',
+#    'subtotal_monthly_personal_expenses',
+#    'subtotal_monthly_children_expenses',
+#    'subtotal_monthly_insurance_expenses')
 ---
 ################### FA HEALTH INSURANCE ##################
 id: health insurance intro 
@@ -5226,7 +5368,7 @@ attachment:
           % if insurance.there_are_any:
           ${ nice_number(insurance[0].coinsurance, use_word=False) }%
           % endif
-      - "insurance_addendum_yes": ${ insurance.number_gathered() > 1 }
+      - "insurance_addendum_yes": ${ True if insurance.there_are_any and insurance.number_gathered() > 1 else '' }
       - "health_insurance_total_from_addendum": |
           % if insurance.there_are_any:
           ${ thousands(insurance_addenda_total(), show_decimals=True)}
@@ -6250,7 +6392,7 @@ code: |
   insurance_to_bundle = []
   additional_health_insurance_bundle.enabled = False
 
-  if insurance.number_gathered():
+  if insurance.there_are_any:
     for index, el in enumerate(insurance):
       # No need for additional health insurance unless insurance.number_gathered() >= 1
       if index == 0:

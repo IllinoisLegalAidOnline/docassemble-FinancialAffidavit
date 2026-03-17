@@ -508,7 +508,7 @@ review:
     show if: users[0].children_expenses_question
   - Edit: users[0].children_doctor_question
     button: |
-      **Monthly medical for children**
+      **Monthly medical expenses for children**
 
       * Doctor visits: 
       ${ currency(showifdef('users[0].children_doctor')) if showifdef('users[0].children_doctor_question') else '$0.00' }
@@ -1322,7 +1322,7 @@ review:
     show if: users[0].children_expenses_question
   - Edit: users[0].children_doctor_question
     button: |
-      **Monthly medical for children**
+      **Monthly medical expenses for children**
 
       * Doctor visits: 
       ${ currency(showifdef('users[0].children_doctor')) if showifdef('users[0].children_doctor_question') else '$0.00' }
