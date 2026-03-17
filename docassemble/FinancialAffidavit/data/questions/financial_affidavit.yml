@@ -2243,37 +2243,6 @@ depends on:
   - users[0].children_party_gifts
   - users[0].children_other
 code: |
-  total_child_support_payments_addendum = 0.0
-  total_child_support_payments_addendum = sum_if_defined(
-    'other_cs_cases[4].amount',
-    'other_cs_cases[5].amount',
-    'other_cs_cases[6].amount',
-    'other_cs_cases[7].amount',
-    'other_cs_cases[8].amount',
-    'other_cs_cases[9].amount',
-    'other_cs_cases[10].amount',
-    'other_cs_cases[11].amount',
-    'other_cs_parents[4].amount',
-    'other_cs_parents[5].amount',
-    'other_cs_parents[6].amount',
-    'other_cs_parents[7].amount',
-    'other_cs_parents[8].amount',
-    'other_cs_parents[9].amount',
-    'other_cs_parents[10].amount',
-    'other_cs_parents[11].amount')
-  
-  total_child_support_payments = sum_if_defined(
-    'users[0].child_support_1',
-    'other_cs_cases[0].amount',
-    'other_cs_cases[1].amount',
-    'other_cs_cases[2].amount',
-    'other_cs_cases[3].amount',
-    'other_cs_parents[0].amount',
-    'other_cs_parents[1].amount',
-    'other_cs_parents[2].amount',
-    'other_cs_parents[3].amount',
-    'total_child_support_payments_addendum')
-
   subtotal_monthly_household_expenses = sum_if_defined(
     'users[0].living_house_payment',
     'users[0].living_heloc',
@@ -2374,6 +2343,37 @@ code: |
 #    'users[0].maintenance_paid_court',
 #    'users[0].maintenance_paid_other_case')
 
+#  total_child_support_payments_addendum = 0.0
+#  total_child_support_payments_addendum = sum_if_defined(
+#    'other_cs_cases[4].amount',
+#    'other_cs_cases[5].amount',
+#    'other_cs_cases[6].amount',
+#    'other_cs_cases[7].amount',
+#    'other_cs_cases[8].amount',
+#    'other_cs_cases[9].amount',
+#    'other_cs_cases[10].amount',
+#    'other_cs_cases[11].amount',
+#    'other_cs_parents[4].amount',
+#    'other_cs_parents[5].amount',
+#    'other_cs_parents[6].amount',
+#    'other_cs_parents[7].amount',
+#    'other_cs_parents[8].amount',
+#    'other_cs_parents[9].amount',
+#    'other_cs_parents[10].amount',
+#    'other_cs_parents[11].amount')
+#  
+#  total_child_support_payments = sum_if_defined(
+#    'users[0].child_support_1',
+#    'other_cs_cases[0].amount',
+#    'other_cs_cases[1].amount',
+#    'other_cs_cases[2].amount',
+#    'other_cs_cases[3].amount',
+#    'other_cs_parents[0].amount',
+#    'other_cs_parents[1].amount',
+#    'other_cs_parents[2].amount',
+#    'other_cs_parents[3].amount',
+#    'total_child_support_payments_addendum')
+
 ---
 depends on:
   - users[0].deductions_federal
@@ -2431,6 +2431,104 @@ code: |
       maintenance_sum += users[0].maintenance_paid_other_case
 
     return maintenance_sum
+---
+reconsider: True
+code: |
+  total_child_support_payments = get_total_child_support_payments()
+---
+reconsider: True
+code: |
+  total_child_support_payments_addendum = get_other_cs_cases_addendum() + get_other_cs_parents_addendum()
+---
+code: |
+  def get_total_child_support_payments():
+    support_sum = 0
+
+    if users[0].child_support_1_question:
+      support_sum += users[0].child_support_1
+
+    # other_cs_cases[0–11]
+    if users[0].child_support_other_cases:
+      if other_cs_cases.number() > 0:
+        support_sum += other_cs_cases[0].amount
+        if other_cs_cases.number() > 1:
+          support_sum += other_cs_cases[1].amount
+          if other_cs_cases.number() > 2:
+            support_sum += other_cs_cases[2].amount
+            if other_cs_cases.number() > 3:
+              support_sum += other_cs_cases[3].amount
+              if other_cs_cases.number() > 4:
+                support_sum += get_other_cs_cases_addendum()
+
+    # other_cs_parents[0–11]
+    if users[0].child_support_no_court_order:
+      if other_cs_parents.number() > 0:
+        support_sum += other_cs_parents[0].amount
+        if other_cs_parents.number() > 1:
+          support_sum += other_cs_parents[1].amount
+          if other_cs_parents.number() > 2:
+            support_sum += other_cs_parents[2].amount
+            if other_cs_parents.number() > 3:
+              support_sum += other_cs_parents[3].amount
+              if other_cs_parents.number() > 4:
+                support_sum += get_other_cs_parents_addendum()
+
+    return support_sum
+---
+code: |
+  def get_other_cs_cases_addendum():
+    support_sum = 0
+
+    if users[0].child_support_other_cases:
+      if other_cs_cases.number() > 4:
+        support_sum += other_cs_cases[4].amount
+        if other_cs_cases.number() > 5:
+          support_sum += other_cs_cases[5].amount
+          if other_cs_cases.number() > 6:
+            support_sum += other_cs_cases[6].amount
+            if other_cs_cases.number() > 7:
+              support_sum += other_cs_cases[7].amount
+              if other_cs_cases.number() > 8:
+                support_sum += other_cs_cases[8].amount
+                if other_cs_cases.number() > 9:
+                  support_sum += other_cs_cases[9].amount
+                  if other_cs_cases.number() > 10:
+                    support_sum += other_cs_cases[10].amount
+                    if other_cs_cases.number() > 11:
+                      support_sum += other_cs_cases[11].amount
+  
+    return support_sum
+---
+code: |
+  def get_other_cs_parents_addendum():
+    support_sum = 0
+
+    if users[0].child_support_no_court_order:
+      if other_cs_parents.number() > 4:
+        support_sum += other_cs_parents[4].amount
+        if other_cs_parents.number() > 5:
+          support_sum += other_cs_parents[5].amount
+          if other_cs_parents.number() > 6:
+            support_sum += other_cs_parents[6].amount
+            if other_cs_parents.number() > 7:
+              support_sum += other_cs_parents[7].amount
+              if other_cs_parents.number() > 8:
+                support_sum += other_cs_parents[8].amount
+                if other_cs_parents.number() > 9:
+                  support_sum += other_cs_parents[9].amount
+                  if other_cs_parents.number() > 10:
+                    support_sum += other_cs_parents[10].amount
+                    if other_cs_parents.number() > 11:
+                      support_sum += other_cs_parents[11].amount
+  
+    return support_sum
+
+
+
+
+
+
+
 ---
 code: |
   def insurance_primary_total():
