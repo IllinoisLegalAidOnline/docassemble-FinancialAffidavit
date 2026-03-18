@@ -1084,8 +1084,37 @@ fields:
     min: 0.01
     show if: users[0].other_income_question
 ---
-reconsider: True
 depends on:
+  - users[0].regular_pay_question
+  - users[0].overtime_pay_question
+  - users[0].commission_pay_question
+  - users[0].tips_question
+  - users[0].bonus_question
+  - users[0].pension_question
+  - users[0].annuity_question
+  - users[0].interest_question
+  - users[0].dividend_question
+  - users[0].trust_question
+  - users[0].investment_question
+  - users[0].social_retirement_question
+  - users[0].social_disability_question
+  - users[0].social_income_question
+  - users[0].unemployment_benefits_question
+  - users[0].disability_benefits_question
+  - users[0].workers_comp_benefits_question
+  - users[0].child_benefits_question
+  - users[0].military_allowances_question
+  - users[0].rental_income_question
+  - users[0].partnership_income_question
+  - users[0].distributions_draws_question
+  - users[0].royalty_income_question
+  - users[0].maintenance_current_question
+  - users[0].maintenance_alternate_question
+  - users[0].child_support_current_question
+  - users[0].social_security_current_question
+  - users[0].gifts_money_question
+  - users[0].other_income_question
+
   - users[0].regular_pay
   - users[0].overtime_pay
   - users[0].commission_pay
@@ -1116,76 +1145,172 @@ depends on:
   - users[0].gifts_money 
   - users[0].other_income
 code: |
-  total_monthly_employment_income = sum_if_defined(
-    'users[0].regular_pay',
-    'users[0].overtime_pay',
-    'users[0].commission_pay',
-    'users[0].tips',
-    'users[0].bonus')
-  total_monthly_investment_income = sum_if_defined(
-    'users[0].pension',
-    'users[0].annuity',
-    'users[0].interest',
-    'users[0].dividend',
-    'users[0].trust',
-    'users[0].investment')
+  total_gross_monthly_income = get_total_gross_monthly_income()
+  
+#  total_monthly_employment_income = sum_if_defined(
+#    'users[0].regular_pay',
+#    'users[0].overtime_pay',
+#    'users[0].commission_pay',
+#    'users[0].tips',
+#    'users[0].bonus')
+#  total_monthly_investment_income = sum_if_defined(
+#    'users[0].pension',
+#    'users[0].annuity',
+#    'users[0].interest',
+#    'users[0].dividend',
+#    'users[0].trust',
+#    'users[0].investment')
+#
+#  total_monthly_benefits_income = sum_if_defined(
+#    'users[0].social_retirement',
+#    'users[0].social_disability',
+#    'users[0].social_income',
+#    'users[0].unemployment_benefits',
+#    'users[0].disability_benefits',
+#    'users[0].workers_comp_benefits',
+#    'users[0].child_benefits',
+#    'users[0].military_allowances')
+#
+#  total_other_monthly_business_income = sum_if_defined(
+#    'users[0].rental_income',
+#    'users[0].partnership_income',
+#    'users[0].distributions_draws',
+#    'users[0].royalty_income')
+#
+#  total_monthly_maintenance_support_income = sum_if_defined(
+#    'users[0].maintenance_current',
+#    'users[0].maintenance_alternate',
+#    'users[0].child_support_current',
+#    'users[0].social_security_current')
+#
+#  total_monthly_gifts_other_income = sum_if_defined(
+#    'users[0].gifts_money',
+#    'users[0].other_income')
+#
+#  total_gross_monthly_income = sum_if_defined(
+#    'users[0].regular_pay',
+#    'users[0].overtime_pay',
+#    'users[0].commission_pay',
+#    'users[0].tips',
+#    'users[0].bonus',
+#    'users[0].pension',
+#    'users[0].annuity',
+#    'users[0].interest',
+#    'users[0].dividend',
+#    'users[0].trust',
+#    'users[0].investment',
+#    'users[0].social_retirement',
+#    'users[0].social_disability',
+#    'users[0].social_income',
+#    'users[0].unemployment_benefits',
+#    'users[0].disability_benefits',
+#    'users[0].workers_comp_benefits',
+#    'users[0].child_benefits',
+#    'users[0].military_allowances',
+#    'users[0].rental_income',
+#    'users[0].partnership_income',
+#    'users[0].distributions_draws',
+#    'users[0].royalty_income',
+#    'users[0].maintenance_current',
+#    'users[0].maintenance_alternate',
+#    'users[0].child_support_current',
+#    'users[0].social_security_current',
+#    'users[0].gifts_money',
+#    'users[0].other_income')
+---
+code: |
+  def get_total_gross_monthly_income():
+    income_sum = 0
+  
+    if users[0].regular_pay_question:
+      income_sum += users[0].regular_pay
+    
+    if users[0].overtime_pay_question:
+      income_sum += users[0].overtime_pay
+    
+    if users[0].commission_pay_question:
+      income_sum += users[0].commission_pay
+    
+    if users[0].tips_question:
+      income_sum += users[0].tips
+    
+    if users[0].bonus_question:
+      income_sum += users[0].bonus
+    
+    if users[0].pension_question:
+      income_sum += users[0].pension
+    
+    if users[0].annuity_question:
+      income_sum += users[0].annuity
+    
+    if users[0].interest_question:
+      income_sum += users[0].interest
+    
+    if users[0].dividend_question:
+      income_sum += users[0].dividend
+    
+    if users[0].trust_question:
+      income_sum += users[0].trust
+    
+    if users[0].investment_question:
+      income_sum += users[0].investment
+    
+    if users[0].social_retirement_question:
+      income_sum += users[0].social_retirement
+    
+    if users[0].social_disability_question:
+      income_sum += users[0].social_disability
+    
+    if users[0].social_income_question:
+      income_sum += users[0].social_income
+    
+    if users[0].unemployment_benefits_question:
+      income_sum += users[0].unemployment_benefits
+    
+    if users[0].disability_benefits_question:
+      income_sum += users[0].disability_benefits
+    
+    if users[0].workers_comp_benefits_question:
+      income_sum += users[0].workers_comp_benefits
+    
+    if users[0].child_benefits_question:
+      income_sum += users[0].child_benefits
 
-  total_monthly_benefits_income = sum_if_defined(
-    'users[0].social_retirement',
-    'users[0].social_disability',
-    'users[0].social_income',
-    'users[0].unemployment_benefits',
-    'users[0].disability_benefits',
-    'users[0].workers_comp_benefits',
-    'users[0].child_benefits',
-    'users[0].military_allowances')
+    if users[0].military_allowances_question:
+      income_sum += users[0].military_allowances
+    
+    if users[0].rental_income_question:
+      income_sum += users[0].rental_income
+    
+    if users[0].partnership_income_question:
+      income_sum += users[0].partnership_income
+    
+    if users[0].distributions_draws_question:
+      income_sum += users[0].distributions_draws
+    
+    if users[0].royalty_income_question:
+      income_sum += users[0].royalty_income
+    
+    if users[0].maintenance_current_question:
+      income_sum += users[0].maintenance_current
+    
+    if users[0].maintenance_alternate_question:
+      income_sum += users[0].maintenance_alternate
+    
+    if users[0].child_support_current_question:
+      income_sum += users[0].child_support_current
+    
+    if users[0].social_security_current_question:
+      income_sum += users[0].social_security_current
+    
+    if users[0].gifts_money_question:
+      income_sum += users[0].gifts_money
+    
+    if users[0].other_income_question:
+      income_sum += users[0].other_income
+    
+    return income_sum
 
-  total_other_monthly_business_income = sum_if_defined(
-    'users[0].rental_income',
-    'users[0].partnership_income',
-    'users[0].distributions_draws',
-    'users[0].royalty_income')
-
-  total_monthly_maintenance_support_income = sum_if_defined(
-    'users[0].maintenance_current',
-    'users[0].maintenance_alternate',
-    'users[0].child_support_current',
-    'users[0].social_security_current')
-
-  total_monthly_gifts_other_income = sum_if_defined(
-    'users[0].gifts_money',
-    'users[0].other_income')
-
-  total_gross_monthly_income = sum_if_defined(
-    'users[0].regular_pay',
-    'users[0].overtime_pay',
-    'users[0].commission_pay',
-    'users[0].tips',
-    'users[0].bonus',
-    'users[0].pension',
-    'users[0].annuity',
-    'users[0].interest',
-    'users[0].dividend',
-    'users[0].trust',
-    'users[0].investment',
-    'users[0].social_retirement',
-    'users[0].social_disability',
-    'users[0].social_income',
-    'users[0].unemployment_benefits',
-    'users[0].disability_benefits',
-    'users[0].workers_comp_benefits',
-    'users[0].child_benefits',
-    'users[0].military_allowances',
-    'users[0].rental_income',
-    'users[0].partnership_income',
-    'users[0].distributions_draws',
-    'users[0].royalty_income',
-    'users[0].maintenance_current',
-    'users[0].maintenance_alternate',
-    'users[0].child_support_current',
-    'users[0].social_security_current',
-    'users[0].gifts_money',
-    'users[0].other_income')
 ---
 id: income summary
 continue button field: income_summary
@@ -1858,16 +1983,16 @@ fields:
     datatype: currency
     min: 0.01
     show if: users[0].personal_associations_question 
-  - Professional fees, such as accountants, tax preparers, or lawyers: users[0].peronsal_professional_question
+  - Professional fees, such as accountants, tax preparers, or lawyers: users[0].personal_professional_question
     datatype: yesnowide
-  - Monthly amount: users[0].peronsal_professional  
+  - Monthly amount: users[0].personal_professional  
     datatype: currency
     min: 0.01
-    show if: users[0].peronsal_professional_question 
+    show if: users[0].personal_professional_question 
 ---
 id: monthly children expenses
 question: |
-  Do you have any expenses for minor or dependent children?
+  Do you have any monthly expenses for minor or dependent children?
 fields:
   - no label: users[0].children_expenses_question
     datatype: yesnoradio
@@ -1944,7 +2069,7 @@ fields:
 ---
 id: monthly children medical expenses
 question: |
-  Monthly medical for children
+  Monthly medical expenses for children
 subquestion: |
   **Note:** These are out-of-pocket expenses. Health insurance premiums and payments can be entered on another screen.
 fields:
@@ -2040,22 +2165,411 @@ fields:
     min: 0.01
     show if: users[0].children_other_question
 ---
-reconsider: True
+#reconsider: True
+#depends on:
+#  - users[0].deductions_federal
+#  - users[0].deductions_state
+#  - users[0].deductions_fica
+#  - users[0].deductions_medicare
+#  - users[0].deductions_retirement
+#  - users[0].maintenance_paid_court
+#  - users[0].maintenance_paid_other_case
+#  - users[0].child_support_1
+#  # Section 12 a-d
+#  - users[0].living_house_payment
+#  - users[0].living_heloc
+#  - users[0].living_property_taxes
+#  - users[0].living_hoa
+#  - users[0].living_insurance
+#  - users[0].living_gas
+#  - users[0].living_power
+#  - users[0].living_phone
+#  - users[0].living_cable
+#  - users[0].living_internet
+#  - users[0].living_water
+#  - users[0].living_trash
+#  - users[0].living_laundry
+#  - users[0].living_cleaner
+#  - users[0].living_repairs
+#  - users[0].living_pets
+#  - users[0].living_groceries
+#  - users[0].living_other
+#  - users[0].transport_payment
+#  - users[0].transport_maintenance
+#  - users[0].transport_insurance
+#  - users[0].transport_fuel
+#  - users[0].transport_public
+#  - users[0].transport_parking
+#  - users[0].transport_other
+#  - users[0].personal_doctor
+#  - users[0].personal_therapy
+#  - users[0].personal_dental
+#  - users[0].personal_vision
+#  - users[0].personal_medications
+#  - users[0].personal_life_term
+#  - users[0].personal_life_whole
+#  - users[0].personal_clothing
+#  - users[0].personal_stylist
+#  - users[0].personal_memberships
+#  - users[0].personal_subscriptions
+#  - users[0].personal_entertainment
+#  - users[0].personal_gifts
+#  - users[0].personal_donations
+#  - users[0].personal_vacations
+#  - users[0].personal_associations
+#  - users[0].personal_professional
+#  - users[0].personal_other
+#  - users[0].children_clothing
+#  - users[0].children_grooming
+#  - users[0].children_tuition
+#  - users[0].children_books
+#  - users[0].children_school_lunch
+#  - users[0].children_transportation
+#  - users[0].children_school_events
+#  - users[0].children_school_uniforms
+#  - users[0].children_after_school
+#  - users[0].children_tutor
+#  - users[0].children_doctor
+#  - users[0].children_therapy
+#  - users[0].children_dental
+#  - users[0].children_vision
+#  - users[0].children_medications
+#  - users[0].children_allowance
+#  - users[0].children_childcare
+#  - users[0].children_sports
+#  - users[0].children_camps
+#  - users[0].children_vacations
+#  - users[0].children_entertainment
+#  - users[0].children_party_gifts
+#  - users[0].children_other
+#code: |  
+#
+#  subtotal_monthly_insurance_expenses = insurance_primary_total() + insurance_addenda_total()
+#  
+#  total_monthly_household_expenses = sum_if_defined(
+#    'subtotal_monthly_household_expenses',
+#    'subtotal_monthly_utility_expenses',
+#    'subtotal_monthly_living_expenses',
+#    'subtotal_monthly_transportation_expenses',
+#    'subtotal_monthly_personal_expenses',
+#    'subtotal_monthly_children_expenses',
+#    'subtotal_monthly_insurance_expenses')
+
+#  total_monthly_deductions = sum_if_defined(
+#    'users[0].deductions_federal',
+#    'users[0].deductions_state',
+#    'users[0].deductions_fica',
+#    'users[0].deductions_medicare',
+#    'users[0].deductions_retirement')
+
+#  total_maintenance_payments = sum_if_defined(
+#    'users[0].maintenance_paid_court',
+#    'users[0].maintenance_paid_other_case')
+
+#  total_child_support_payments_addendum = 0.0
+#  total_child_support_payments_addendum = sum_if_defined(
+#    'other_cs_cases[4].amount',
+#    'other_cs_cases[5].amount',
+#    'other_cs_cases[6].amount',
+#    'other_cs_cases[7].amount',
+#    'other_cs_cases[8].amount',
+#    'other_cs_cases[9].amount',
+#    'other_cs_cases[10].amount',
+#    'other_cs_cases[11].amount',
+#    'other_cs_parents[4].amount',
+#    'other_cs_parents[5].amount',
+#    'other_cs_parents[6].amount',
+#    'other_cs_parents[7].amount',
+#    'other_cs_parents[8].amount',
+#    'other_cs_parents[9].amount',
+#    'other_cs_parents[10].amount',
+#    'other_cs_parents[11].amount')
+#  
+#  total_child_support_payments = sum_if_defined(
+#    'users[0].child_support_1',
+#    'other_cs_cases[0].amount',
+#    'other_cs_cases[1].amount',
+#    'other_cs_cases[2].amount',
+#    'other_cs_cases[3].amount',
+#    'other_cs_parents[0].amount',
+#    'other_cs_parents[1].amount',
+#    'other_cs_parents[2].amount',
+#    'other_cs_parents[3].amount',
+#    'total_child_support_payments_addendum')
+
+#  subtotal_monthly_household_expenses = sum_if_defined(
+#    'users[0].living_house_payment',
+#    'users[0].living_heloc',
+#    'users[0].living_property_taxes',
+#    'users[0].living_hoa',
+#    'users[0].living_insurance')
+
+#  subtotal_monthly_utility_expenses = sum_if_defined(
+#    'users[0].living_gas',
+#    'users[0].living_power',
+#    'users[0].living_phone',
+#    'users[0].living_cable',
+#    'users[0].living_internet',
+#    'users[0].living_water',
+#    'users[0].living_trash')
+
+#  subtotal_monthly_living_expenses = sum_if_defined(
+#    'users[0].living_laundry',
+#    'users[0].living_cleaner',
+#    'users[0].living_repairs',
+#    'users[0].living_pets',
+#    'users[0].living_groceries',
+#    'users[0].living_other')
+
+#  subtotal_monthly_transportation_expenses = sum_if_defined(
+#    'users[0].transport_payment',
+#    'users[0].transport_maintenance',
+#    'users[0].transport_insurance',
+#    'users[0].transport_fuel',
+#    'users[0].transport_public',
+#    'users[0].transport_parking',
+#    'users[0].transport_other')
+
+#  subtotal_monthly_personal_expenses = sum_if_defined(
+#    'users[0].personal_doctor',
+#    'users[0].personal_therapy',
+#    'users[0].personal_dental',
+#    'users[0].personal_vision',
+#    'users[0].personal_medications',
+#    'users[0].personal_life_term',
+#    'users[0].personal_life_whole',
+#    'users[0].personal_clothing',
+#    'users[0].personal_stylist',
+#    'users[0].personal_memberships',
+#    'users[0].personal_subscriptions',
+#    'users[0].personal_entertainment',
+#    'users[0].personal_gifts',
+#    'users[0].personal_donations',
+#    'users[0].personal_vacations',
+#    'users[0].personal_associations',
+#    'users[0].personal_professional',
+#    'users[0].personal_other')
+
+#  subtotal_monthly_children_expenses = sum_if_defined(
+#    'users[0].children_clothing',
+#    'users[0].children_grooming',
+#    'users[0].children_tuition',
+#    'users[0].children_books',
+#    'users[0].children_school_lunch',
+#    'users[0].children_transportation',
+#    'users[0].children_school_events',
+#    'users[0].children_school_uniforms',
+#    'users[0].children_after_school',
+#    'users[0].children_tutor',
+#    'users[0].children_doctor',
+#    'users[0].children_therapy',
+#    'users[0].children_dental',
+#    'users[0].children_vision',
+#    'users[0].children_medications',
+#    'users[0].children_allowance',
+#    'users[0].children_childcare',
+#    'users[0].children_sports',
+#    'users[0].children_camps',
+#    'users[0].children_vacations',
+#    'users[0].children_entertainment',
+#    'users[0].children_party_gifts',
+#    'users[0].children_other')
+
+---
 depends on:
+  - users[0].deductions_federal_question
+  - users[0].deductions_state_question
+  - users[0].deductions_fica_question
+  - users[0].deductions_medicare_question
+  - users[0].deductions_retirement_question
+
   - users[0].deductions_federal
   - users[0].deductions_state
   - users[0].deductions_fica
   - users[0].deductions_medicare
   - users[0].deductions_retirement
+code: |
+  total_monthly_deductions = get_total_monthly_deductions()
+---
+code: |
+  def get_total_monthly_deductions():
+    deduction_sum = 0
+
+    if users[0].deductions_federal_question:
+      deduction_sum += users[0].deductions_federal
+
+    if users[0].deductions_state_question:
+      deduction_sum += users[0].deductions_state
+
+    if users[0].deductions_fica_question:
+      deduction_sum += users[0].deductions_fica
+
+    if users[0].deductions_medicare_question:
+      deduction_sum += users[0].deductions_medicare
+
+    if users[0].deductions_retirement_question:
+      deduction_sum += users[0].deductions_retirement
+
+    return deduction_sum
+---
+depends on:
+  - users[0].maintenance_paid_court_question
+  - users[0].maintenance_paid_other_case_question
+
   - users[0].maintenance_paid_court
   - users[0].maintenance_paid_other_case
-  - users[0].child_support_1
-  # Section 12 a-d
+code: |
+  total_maintenance_payments = get_total_maintenance_payments()
+---
+code: |
+  def get_total_maintenance_payments():
+    maintenance_sum = 0
+
+    if users[0].maintenance_paid_court_question:
+      maintenance_sum += users[0].maintenance_paid_court
+
+    if users[0].maintenance_paid_other_case_question:
+      maintenance_sum += users[0].maintenance_paid_other_case
+
+    return maintenance_sum
+---
+reconsider: True
+code: |
+  total_child_support_payments = get_total_child_support_payments()
+---
+reconsider: True
+code: |
+  total_child_support_payments_addendum = get_other_cs_cases_addendum() + get_other_cs_parents_addendum()
+---
+code: |
+  def get_total_child_support_payments():
+    support_sum = 0
+
+    if users[0].child_support_1_question:
+      support_sum += users[0].child_support_1
+
+    # other_cs_cases[0–11]
+    if users[0].child_support_other_cases:
+      if other_cs_cases.number() > 0:
+        support_sum += other_cs_cases[0].amount
+        if other_cs_cases.number() > 1:
+          support_sum += other_cs_cases[1].amount
+          if other_cs_cases.number() > 2:
+            support_sum += other_cs_cases[2].amount
+            if other_cs_cases.number() > 3:
+              support_sum += other_cs_cases[3].amount
+              if other_cs_cases.number() > 4:
+                support_sum += get_other_cs_cases_addendum()
+
+    # other_cs_parents[0–11]
+    if users[0].child_support_no_court_order:
+      if other_cs_parents.number() > 0:
+        support_sum += other_cs_parents[0].amount
+        if other_cs_parents.number() > 1:
+          support_sum += other_cs_parents[1].amount
+          if other_cs_parents.number() > 2:
+            support_sum += other_cs_parents[2].amount
+            if other_cs_parents.number() > 3:
+              support_sum += other_cs_parents[3].amount
+              if other_cs_parents.number() > 4:
+                support_sum += get_other_cs_parents_addendum()
+
+    return support_sum
+---
+code: |
+  def get_other_cs_cases_addendum():
+    support_sum = 0
+
+    if users[0].child_support_other_cases:
+      if other_cs_cases.number() > 4:
+        support_sum += other_cs_cases[4].amount
+        if other_cs_cases.number() > 5:
+          support_sum += other_cs_cases[5].amount
+          if other_cs_cases.number() > 6:
+            support_sum += other_cs_cases[6].amount
+            if other_cs_cases.number() > 7:
+              support_sum += other_cs_cases[7].amount
+              if other_cs_cases.number() > 8:
+                support_sum += other_cs_cases[8].amount
+                if other_cs_cases.number() > 9:
+                  support_sum += other_cs_cases[9].amount
+                  if other_cs_cases.number() > 10:
+                    support_sum += other_cs_cases[10].amount
+                    if other_cs_cases.number() > 11:
+                      support_sum += other_cs_cases[11].amount
+  
+    return support_sum
+---
+code: |
+  def get_other_cs_parents_addendum():
+    support_sum = 0
+
+    if users[0].child_support_no_court_order:
+      if other_cs_parents.number() > 4:
+        support_sum += other_cs_parents[4].amount
+        if other_cs_parents.number() > 5:
+          support_sum += other_cs_parents[5].amount
+          if other_cs_parents.number() > 6:
+            support_sum += other_cs_parents[6].amount
+            if other_cs_parents.number() > 7:
+              support_sum += other_cs_parents[7].amount
+              if other_cs_parents.number() > 8:
+                support_sum += other_cs_parents[8].amount
+                if other_cs_parents.number() > 9:
+                  support_sum += other_cs_parents[9].amount
+                  if other_cs_parents.number() > 10:
+                    support_sum += other_cs_parents[10].amount
+                    if other_cs_parents.number() > 11:
+                      support_sum += other_cs_parents[11].amount
+  
+    return support_sum
+---
+depends on:
+  - users[0].living_house_payment_question
+  - users[0].living_heloc_question
+  - users[0].living_property_taxes_question
+  - users[0].living_hoa_question
+  - users[0].living_insurance_question
+
   - users[0].living_house_payment
   - users[0].living_heloc
   - users[0].living_property_taxes
   - users[0].living_hoa
   - users[0].living_insurance
+
+code: |
+  subtotal_monthly_household_expenses = get_total_monthly_household_expenses()
+---
+code: |
+  def get_total_monthly_household_expenses():
+    household_expenses_sum = 0
+
+    if users[0].living_house_payment_question:
+      household_expenses_sum += users[0].living_house_payment
+
+    if users[0].living_heloc_question:
+      household_expenses_sum += users[0].living_heloc
+
+    if users[0].living_property_taxes_question:
+      household_expenses_sum += users[0].living_property_taxes
+
+    if users[0].living_hoa_question:
+      household_expenses_sum += users[0].living_hoa
+
+    if users[0].living_insurance_question:
+      household_expenses_sum += users[0].living_insurance
+
+    return household_expenses_sum
+---
+depends on:
+  - users[0].living_gas_question
+  - users[0].living_power_question
+  - users[0].living_phone_question
+  - users[0].living_cable_question
+  - users[0].living_internet_question
+  - users[0].living_water_question
+  - users[0].living_trash_question
+
   - users[0].living_gas
   - users[0].living_power
   - users[0].living_phone
@@ -2063,12 +2577,88 @@ depends on:
   - users[0].living_internet
   - users[0].living_water
   - users[0].living_trash
+
+code: |
+  subtotal_monthly_utility_expenses = get_total_monthly_utility_expenses()
+---
+code: |
+  def get_total_monthly_utility_expenses():
+    utility_expenses_sum = 0
+
+    if users[0].living_gas_question:
+      utility_expenses_sum += users[0].living_gas
+
+    if users[0].living_power_question:
+      utility_expenses_sum += users[0].living_power
+
+    if users[0].living_phone_question:
+      utility_expenses_sum += users[0].living_phone
+
+    if users[0].living_cable_question:
+      utility_expenses_sum += users[0].living_cable
+
+    if users[0].living_internet_question:
+      utility_expenses_sum += users[0].living_internet
+
+    if users[0].living_water_question:
+      utility_expenses_sum += users[0].living_water
+
+    if users[0].living_trash_question:
+      utility_expenses_sum += users[0].living_trash
+
+    return utility_expenses_sum
+---
+depends on:
+  - users[0].living_laundry_question
+  - users[0].living_cleaner_question
+  - users[0].living_repairs_question
+  - users[0].living_pets_question
+  - users[0].living_groceries_question
+  - users[0].living_other_question
+
   - users[0].living_laundry
   - users[0].living_cleaner
   - users[0].living_repairs
   - users[0].living_pets
   - users[0].living_groceries
   - users[0].living_other
+
+code: |
+  subtotal_monthly_living_expenses = get_total_monthly_living_expenses()
+---
+code: |
+  def get_total_monthly_living_expenses():
+    living_expenses_sum = 0
+
+    if users[0].living_laundry_question:
+      living_expenses_sum += users[0].living_laundry
+
+    if users[0].living_cleaner_question:
+      living_expenses_sum += users[0].living_cleaner
+
+    if users[0].living_repairs_question:
+      living_expenses_sum += users[0].living_repairs
+
+    if users[0].living_pets_question:
+      living_expenses_sum += users[0].living_pets
+
+    if users[0].living_groceries_question:
+      living_expenses_sum += users[0].living_groceries
+
+    if users[0].living_other_question:
+      living_expenses_sum += users[0].living_other
+
+    return living_expenses_sum
+---
+depends on:
+  - users[0].transport_payment_question
+  - users[0].transport_maintenance_question
+  - users[0].transport_insurance_question
+  - users[0].transport_fuel_question
+  - users[0].transport_public_question
+  - users[0].transport_parking_question
+  - users[0].transport_other_question
+
   - users[0].transport_payment
   - users[0].transport_maintenance
   - users[0].transport_insurance
@@ -2076,6 +2666,57 @@ depends on:
   - users[0].transport_public
   - users[0].transport_parking
   - users[0].transport_other
+
+code: |
+  subtotal_monthly_transportation_expenses = get_total_monthly_transportation_expenses()
+---
+code: |
+  def get_total_monthly_transportation_expenses():
+    transport_expenses_sum = 0
+
+    if users[0].transport_payment_question:
+      transport_expenses_sum += users[0].transport_payment
+
+    if users[0].transport_maintenance_question:
+      transport_expenses_sum += users[0].transport_maintenance
+
+    if users[0].transport_insurance_question:
+      transport_expenses_sum += users[0].transport_insurance
+
+    if users[0].transport_fuel_question:
+      transport_expenses_sum += users[0].transport_fuel
+
+    if users[0].transport_public_question:
+      transport_expenses_sum += users[0].transport_public
+
+    if users[0].transport_parking_question:
+      transport_expenses_sum += users[0].transport_parking
+
+    if users[0].transport_other_question:
+      transport_expenses_sum += users[0].transport_other
+
+    return transport_expenses_sum
+---
+depends on:
+  - users[0].personal_doctor_question
+  - users[0].personal_therapy_question
+  - users[0].personal_dental_question
+  - users[0].personal_vision_question
+  - users[0].personal_medications_question
+  - users[0].personal_life_term_question
+  - users[0].personal_life_whole_question
+  - users[0].personal_clothing_question
+  - users[0].personal_stylist_question
+  - users[0].personal_memberships_question
+  - users[0].personal_subscriptions_question
+  - users[0].personal_entertainment_question
+  - users[0].personal_gifts_question
+  - users[0].personal_donations_question
+  - users[0].personal_vacations_question
+  - users[0].personal_associations_question
+  - users[0].personal_professional_question
+  - users[0].personal_other_question
+
   - users[0].personal_doctor
   - users[0].personal_therapy
   - users[0].personal_dental
@@ -2092,8 +2733,98 @@ depends on:
   - users[0].personal_donations
   - users[0].personal_vacations
   - users[0].personal_associations
-  - users[0].peronsal_professional
+  - users[0].personal_professional
   - users[0].personal_other
+
+code: |
+  subtotal_monthly_personal_expenses = get_total_monthly_personal_expenses()
+---
+code: |
+  def get_total_monthly_personal_expenses():
+    personal_expenses_sum = 0
+
+    if users[0].personal_doctor_question:
+      personal_expenses_sum += users[0].personal_doctor
+
+    if users[0].personal_therapy_question:
+      personal_expenses_sum += users[0].personal_therapy
+
+    if users[0].personal_dental_question:
+      personal_expenses_sum += users[0].personal_dental
+
+    if users[0].personal_vision_question:
+      personal_expenses_sum += users[0].personal_vision
+
+    if users[0].personal_medications_question:
+      personal_expenses_sum += users[0].personal_medications
+
+    if users[0].personal_life_term_question:
+      personal_expenses_sum += users[0].personal_life_term
+
+    if users[0].personal_life_whole_question:
+      personal_expenses_sum += users[0].personal_life_whole
+
+    if users[0].personal_clothing_question:
+      personal_expenses_sum += users[0].personal_clothing
+
+    if users[0].personal_stylist_question:
+      personal_expenses_sum += users[0].personal_stylist
+
+    if users[0].personal_memberships_question:
+      personal_expenses_sum += users[0].personal_memberships
+
+    if users[0].personal_subscriptions_question:
+      personal_expenses_sum += users[0].personal_subscriptions
+
+    if users[0].personal_entertainment_question:
+      personal_expenses_sum += users[0].personal_entertainment
+
+    if users[0].personal_gifts_question:
+      personal_expenses_sum += users[0].personal_gifts
+
+    if users[0].personal_donations_question:
+      personal_expenses_sum += users[0].personal_donations
+
+    if users[0].personal_vacations_question:
+      personal_expenses_sum += users[0].personal_vacations
+
+    if users[0].personal_associations_question:
+      personal_expenses_sum += users[0].personal_associations
+
+    if users[0].personal_professional_question:
+      personal_expenses_sum += users[0].personal_professional
+
+    if users[0].personal_other_question:
+      personal_expenses_sum += users[0].personal_other
+
+    return personal_expenses_sum
+---
+depends on:
+  - users[0].children_expenses_question
+  - users[0].children_clothing_question
+  - users[0].children_grooming_question
+  - users[0].children_tuition_question
+  - users[0].children_books_question
+  - users[0].children_school_lunch_question
+  - users[0].children_transportation_question
+  - users[0].children_school_events_question
+  - users[0].children_school_uniforms_question
+  - users[0].children_after_school_question
+  - users[0].children_tutor_question
+  - users[0].children_doctor_question
+  - users[0].children_therapy_question
+  - users[0].children_dental_question
+  - users[0].children_vision_question
+  - users[0].children_medications_question
+  - users[0].children_allowance_question
+  - users[0].children_childcare_question
+  - users[0].children_sports_question
+  - users[0].children_camps_question
+  - users[0].children_vacations_question
+  - users[0].children_entertainment_question
+  - users[0].children_party_gifts_question
+  - users[0].children_other_question
+
   - users[0].children_clothing
   - users[0].children_grooming
   - users[0].children_tuition
@@ -2117,137 +2848,87 @@ depends on:
   - users[0].children_entertainment
   - users[0].children_party_gifts
   - users[0].children_other
+
 code: |
-  total_monthly_deductions = sum_if_defined(
-    'users[0].deductions_federal',
-    'users[0].deductions_state',
-    'users[0].deductions_fica',
-    'users[0].deductions_medicare',
-    'users[0].deductions_retirement')
+  subtotal_monthly_children_expenses = get_total_monthly_children_expenses()
+---
+code: |
+  def get_total_monthly_children_expenses():
+    children_expenses_sum = 0
 
-  total_maintenance_payments = sum_if_defined(
-    'users[0].maintenance_paid_court',
-    'users[0].maintenance_paid_other_case')
-
-  total_child_support_payments_addendum = 0.0
-  total_child_support_payments_addendum = sum_if_defined(
-    'other_cs_cases[4].amount',
-    'other_cs_cases[5].amount',
-    'other_cs_cases[6].amount',
-    'other_cs_cases[7].amount',
-    'other_cs_cases[8].amount',
-    'other_cs_cases[9].amount',
-    'other_cs_cases[10].amount',
-    'other_cs_cases[11].amount',
-    'other_cs_parents[4].amount',
-    'other_cs_parents[5].amount',
-    'other_cs_parents[6].amount',
-    'other_cs_parents[7].amount',
-    'other_cs_parents[8].amount',
-    'other_cs_parents[9].amount',
-    'other_cs_parents[10].amount',
-    'other_cs_parents[11].amount')
+    if users[0].children_expenses_question:
   
-  total_child_support_payments = sum_if_defined(
-    'users[0].child_support_1',
-    'other_cs_cases[0].amount',
-    'other_cs_cases[1].amount',
-    'other_cs_cases[2].amount',
-    'other_cs_cases[3].amount',
-    'other_cs_parents[0].amount',
-    'other_cs_parents[1].amount',
-    'other_cs_parents[2].amount',
-    'other_cs_parents[3].amount',
-    'total_child_support_payments_addendum')
-
-  subtotal_monthly_household_expenses = sum_if_defined(
-    'users[0].living_house_payment',
-    'users[0].living_heloc',
-    'users[0].living_property_taxes',
-    'users[0].living_hoa',
-    'users[0].living_insurance')
-
-  subtotal_monthly_utility_expenses = sum_if_defined(
-    'users[0].living_gas',
-    'users[0].living_power',
-    'users[0].living_phone',
-    'users[0].living_cable',
-    'users[0].living_internet',
-    'users[0].living_water',
-    'users[0].living_trash')
-
-  subtotal_monthly_living_expenses = sum_if_defined(
-    'users[0].living_laundry',
-    'users[0].living_cleaner',
-    'users[0].living_repairs',
-    'users[0].living_pets',
-    'users[0].living_groceries',
-    'users[0].living_other')
-
-  subtotal_monthly_transportation_expenses = sum_if_defined(
-    'users[0].transport_payment',
-    'users[0].transport_maintenance',
-    'users[0].transport_insurance',
-    'users[0].transport_fuel',
-    'users[0].transport_public',
-    'users[0].transport_parking',
-    'users[0].transport_other')
+      if users[0].children_clothing_question:
+        children_expenses_sum += users[0].children_clothing
   
-  subtotal_monthly_personal_expenses = sum_if_defined(
-    'users[0].personal_doctor',
-    'users[0].personal_therapy',
-    'users[0].personal_dental',
-    'users[0].personal_vision',
-    'users[0].personal_medications',
-    'users[0].personal_life_term',
-    'users[0].personal_life_whole',
-    'users[0].personal_clothing',
-    'users[0].personal_stylist',
-    'users[0].personal_memberships',
-    'users[0].personal_subscriptions',
-    'users[0].personal_entertainment',
-    'users[0].personal_gifts',
-    'users[0].personal_donations',
-    'users[0].personal_vacations',
-    'users[0].personal_associations',
-    'users[0].peronsal_professional',
-    'users[0].personal_other')
-
-  subtotal_monthly_children_expenses = sum_if_defined(
-    'users[0].children_clothing',
-    'users[0].children_grooming',
-    'users[0].children_tuition',
-    'users[0].children_books',
-    'users[0].children_school_lunch',
-    'users[0].children_transportation',
-    'users[0].children_school_events',
-    'users[0].children_school_uniforms',
-    'users[0].children_after_school',
-    'users[0].children_tutor',
-    'users[0].children_doctor',
-    'users[0].children_therapy',
-    'users[0].children_dental',
-    'users[0].children_vision',
-    'users[0].children_medications',
-    'users[0].children_allowance',
-    'users[0].children_childcare',
-    'users[0].children_sports',
-    'users[0].children_camps',
-    'users[0].children_vacations',
-    'users[0].children_entertainment',
-    'users[0].children_party_gifts',
-    'users[0].children_other')
-
-  subtotal_monthly_insurance_expenses = insurance_primary_total() + insurance_addenda_total()
+      if users[0].children_grooming_question:
+        children_expenses_sum += users[0].children_grooming
   
-  total_monthly_household_expenses = sum_if_defined(
-    'subtotal_monthly_household_expenses',
-    'subtotal_monthly_utility_expenses',
-    'subtotal_monthly_living_expenses',
-    'subtotal_monthly_transportation_expenses',
-    'subtotal_monthly_personal_expenses',
-    'subtotal_monthly_children_expenses',
-    'subtotal_monthly_insurance_expenses')
+      if users[0].children_tuition_question:
+        children_expenses_sum += users[0].children_tuition
+  
+      if users[0].children_books_question:
+        children_expenses_sum += users[0].children_books
+  
+      if users[0].children_school_lunch_question:
+        children_expenses_sum += users[0].children_school_lunch
+  
+      if users[0].children_transportation_question:
+        children_expenses_sum += users[0].children_transportation
+  
+      if users[0].children_school_events_question:
+        children_expenses_sum += users[0].children_school_events
+  
+      if users[0].children_school_uniforms_question:
+        children_expenses_sum += users[0].children_school_uniforms
+  
+      if users[0].children_after_school_question:
+        children_expenses_sum += users[0].children_after_school
+  
+      if users[0].children_tutor_question:
+        children_expenses_sum += users[0].children_tutor
+  
+      if users[0].children_doctor_question:
+        children_expenses_sum += users[0].children_doctor
+  
+      if users[0].children_therapy_question:
+        children_expenses_sum += users[0].children_therapy
+  
+      if users[0].children_dental_question:
+        children_expenses_sum += users[0].children_dental
+  
+      if users[0].children_vision_question:
+        children_expenses_sum += users[0].children_vision
+  
+      if users[0].children_medications_question:
+        children_expenses_sum += users[0].children_medications
+  
+      if users[0].children_allowance_question:
+        children_expenses_sum += users[0].children_allowance
+  
+      if users[0].children_childcare_question:
+        children_expenses_sum += users[0].children_childcare
+  
+      if users[0].children_sports_question:
+        children_expenses_sum += users[0].children_sports
+  
+      if users[0].children_camps_question:
+        children_expenses_sum += users[0].children_camps
+  
+      if users[0].children_vacations_question:
+        children_expenses_sum += users[0].children_vacations
+  
+      if users[0].children_entertainment_question:
+        children_expenses_sum += users[0].children_entertainment
+  
+      if users[0].children_party_gifts_question:
+        children_expenses_sum += users[0].children_party_gifts
+  
+      if users[0].children_other_question:
+        children_expenses_sum += users[0].children_other
+
+    return children_expenses_sum
+
 ---
 code: |
   def insurance_primary_total():
@@ -2266,6 +2947,24 @@ code: |
             insurance_total += policy.monthly_cost
   	    insurance_total = insurance_total - insurance_primary_total()
     return insurance_total
+---
+reconsider: True
+code: |  
+  subtotal_monthly_insurance_expenses = insurance_primary_total() + insurance_addenda_total()
+---
+reconsider: True
+code: |  
+  total_monthly_household_expenses = subtotal_monthly_household_expenses + subtotal_monthly_utility_expenses + subtotal_monthly_living_expenses + subtotal_monthly_transportation_expenses + subtotal_monthly_personal_expenses + subtotal_monthly_children_expenses + subtotal_monthly_insurance_expenses
+
+#  
+#total_monthly_household_expenses = sum_if_defined(
+#    'subtotal_monthly_household_expenses',
+#    'subtotal_monthly_utility_expenses',
+#    'subtotal_monthly_living_expenses',
+#    'subtotal_monthly_transportation_expenses',
+#    'subtotal_monthly_personal_expenses',
+#    'subtotal_monthly_children_expenses',
+#    'subtotal_monthly_insurance_expenses')
 ---
 ################### FA HEALTH INSURANCE ##################
 id: health insurance intro 
@@ -4378,9 +5077,9 @@ attachment:
           % else:
           0.00
           % endif
-      - "peronsal_professional": |
-          % if users[0].peronsal_professional_question:
-          ${ thousands(users[0].peronsal_professional, show_decimals=True)}
+      - "personal_professional": |
+          % if users[0].personal_professional_question:
+          ${ thousands(users[0].personal_professional, show_decimals=True)}
           % else:
           0.00
           % endif
@@ -4672,7 +5371,7 @@ attachment:
           % if insurance.there_are_any:
           ${ nice_number(insurance[0].coinsurance, use_word=False) }%
           % endif
-      - "insurance_addendum_yes": ${ insurance.number_gathered() > 1 }
+      - "insurance_addendum_yes": ${ True if insurance.there_are_any and insurance.number_gathered() > 1 else '' }
       - "health_insurance_total_from_addendum": |
           % if insurance.there_are_any:
           ${ thousands(insurance_addenda_total(), show_decimals=True)}
@@ -5696,7 +6395,7 @@ code: |
   insurance_to_bundle = []
   additional_health_insurance_bundle.enabled = False
 
-  if insurance.number_gathered():
+  if insurance.there_are_any:
     for index, el in enumerate(insurance):
       # No need for additional health insurance unless insurance.number_gathered() >= 1
       if index == 0:
