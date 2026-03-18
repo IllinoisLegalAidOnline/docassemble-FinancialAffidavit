@@ -1992,7 +1992,7 @@ fields:
 ---
 id: monthly children expenses
 question: |
-  Do you have any expenses for minor or dependent children?
+  Do you have any monthly expenses for minor or dependent children?
 fields:
   - no label: users[0].children_expenses_question
     datatype: yesnoradio
@@ -2800,6 +2800,7 @@ code: |
     return personal_expenses_sum
 ---
 depends on:
+  - users[0].children_expenses_question
   - users[0].children_clothing_question
   - users[0].children_grooming_question
   - users[0].children_tuition_question
@@ -2855,74 +2856,76 @@ code: |
   def get_total_monthly_children_expenses():
     children_expenses_sum = 0
 
-    if users[0].children_clothing_question:
-      children_expenses_sum += users[0].children_clothing
-
-    if users[0].children_grooming_question:
-      children_expenses_sum += users[0].children_grooming
-
-    if users[0].children_tuition_question:
-      children_expenses_sum += users[0].children_tuition
-
-    if users[0].children_books_question:
-      children_expenses_sum += users[0].children_books
-
-    if users[0].children_school_lunch_question:
-      children_expenses_sum += users[0].children_school_lunch
-
-    if users[0].children_transportation_question:
-      children_expenses_sum += users[0].children_transportation
-
-    if users[0].children_school_events_question:
-      children_expenses_sum += users[0].children_school_events
-
-    if users[0].children_school_uniforms_question:
-      children_expenses_sum += users[0].children_school_uniforms
-
-    if users[0].children_after_school_question:
-      children_expenses_sum += users[0].children_after_school
-
-    if users[0].children_tutor_question:
-      children_expenses_sum += users[0].children_tutor
-
-    if users[0].children_doctor_question:
-      children_expenses_sum += users[0].children_doctor
-
-    if users[0].children_therapy_question:
-      children_expenses_sum += users[0].children_therapy
-
-    if users[0].children_dental_question:
-      children_expenses_sum += users[0].children_dental
-
-    if users[0].children_vision_question:
-      children_expenses_sum += users[0].children_vision
-
-    if users[0].children_medications_question:
-      children_expenses_sum += users[0].children_medications
-
-    if users[0].children_allowance_question:
-      children_expenses_sum += users[0].children_allowance
-
-    if users[0].children_childcare_question:
-      children_expenses_sum += users[0].children_childcare
-
-    if users[0].children_sports_question:
-      children_expenses_sum += users[0].children_sports
-
-    if users[0].children_camps_question:
-      children_expenses_sum += users[0].children_camps
-
-    if users[0].children_vacations_question:
-      children_expenses_sum += users[0].children_vacations
-
-    if users[0].children_entertainment_question:
-      children_expenses_sum += users[0].children_entertainment
-
-    if users[0].children_party_gifts_question:
-      children_expenses_sum += users[0].children_party_gifts
-
-    if users[0].children_other_question:
-      children_expenses_sum += users[0].children_other
+    if users[0].children_expenses_question:
+  
+      if users[0].children_clothing_question:
+        children_expenses_sum += users[0].children_clothing
+  
+      if users[0].children_grooming_question:
+        children_expenses_sum += users[0].children_grooming
+  
+      if users[0].children_tuition_question:
+        children_expenses_sum += users[0].children_tuition
+  
+      if users[0].children_books_question:
+        children_expenses_sum += users[0].children_books
+  
+      if users[0].children_school_lunch_question:
+        children_expenses_sum += users[0].children_school_lunch
+  
+      if users[0].children_transportation_question:
+        children_expenses_sum += users[0].children_transportation
+  
+      if users[0].children_school_events_question:
+        children_expenses_sum += users[0].children_school_events
+  
+      if users[0].children_school_uniforms_question:
+        children_expenses_sum += users[0].children_school_uniforms
+  
+      if users[0].children_after_school_question:
+        children_expenses_sum += users[0].children_after_school
+  
+      if users[0].children_tutor_question:
+        children_expenses_sum += users[0].children_tutor
+  
+      if users[0].children_doctor_question:
+        children_expenses_sum += users[0].children_doctor
+  
+      if users[0].children_therapy_question:
+        children_expenses_sum += users[0].children_therapy
+  
+      if users[0].children_dental_question:
+        children_expenses_sum += users[0].children_dental
+  
+      if users[0].children_vision_question:
+        children_expenses_sum += users[0].children_vision
+  
+      if users[0].children_medications_question:
+        children_expenses_sum += users[0].children_medications
+  
+      if users[0].children_allowance_question:
+        children_expenses_sum += users[0].children_allowance
+  
+      if users[0].children_childcare_question:
+        children_expenses_sum += users[0].children_childcare
+  
+      if users[0].children_sports_question:
+        children_expenses_sum += users[0].children_sports
+  
+      if users[0].children_camps_question:
+        children_expenses_sum += users[0].children_camps
+  
+      if users[0].children_vacations_question:
+        children_expenses_sum += users[0].children_vacations
+  
+      if users[0].children_entertainment_question:
+        children_expenses_sum += users[0].children_entertainment
+  
+      if users[0].children_party_gifts_question:
+        children_expenses_sum += users[0].children_party_gifts
+  
+      if users[0].children_other_question:
+        children_expenses_sum += users[0].children_other
 
     return children_expenses_sum
 
