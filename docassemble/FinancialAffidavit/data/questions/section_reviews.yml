@@ -1674,6 +1674,8 @@ review:
       Every two weeks
       % elif x.frequency == 52:
       Once a week
+      % elif x.frequency == "other":
+      ${ x.other_payment_frequency }
       % endif
     show if: x.type == "employed"
   - Edit: x.cash_payment
@@ -1683,11 +1685,9 @@ review:
     show if: x.type == "employed"
   - Edit: x.gross_income
     button: |
-      **Gross income so far in ${ current_datetime().year }**
-      ${ currency(x.gross_income) }
+      **Gross income so far in ${ current_datetime().year }:** ${ currency(x.gross_income) }
 
-      **Gross income amount from January 1, ${ current_datetime().year } through: **
-      ${ x.gross_date.format("MM-dd-yyyy") }
+      **Gross income amount from January 1, ${ current_datetime().year } through:** ${ x.gross_date }
     show if: x.type == "employed"
   # Business
   - Edit: x.income_last_year
