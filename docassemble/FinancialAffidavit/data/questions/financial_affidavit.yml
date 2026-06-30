@@ -654,6 +654,14 @@ fields:
       - Twice a month: 24
       - Every two weeks: 26
       - Once a week: 52
+      - Other (explain below): other
+  - How often are you paid?: employment[i].other_payment_frequency
+    maxlength: 30
+    help: |
+      For example, you could say "Twice per year" or "Quarterly."
+    show if:
+      variable: employment[i].frequency
+      is: "other"
   - "Are you paid in cash?": employment[i].cash_payment
     datatype: yesnoradio
   - "Gross income so far in ${ current_datetime().year } (enter last pay date below)": employment[i].gross_income
@@ -4237,6 +4245,10 @@ attachment:
           % if employment.there_are_any and employment[0].type == "employed":
           ${ employment[0].frequency == "52" }
           % endif
+      - "paychecks_other": |
+          % if employment.there_are_any and employment[0].type == "employed":
+          ${ "[X] Other: " + employment[0].other_payment_frequency if employment[0].frequency == "other" else "" }
+          % endif
       - "paychecks_cash": |
           % if employment.there_are_any and employment[0].type == "employed":
           ${ employment[0].cash_payment }
@@ -6303,6 +6315,10 @@ attachment:
       - "paychecks_weekly": |
           % if employment[i].type == "employed":
           ${ employment[i].frequency == "52" }
+          % endif
+      - "paychecks_other": |
+          % if employment.there_are_any and employment[i].type == "employed":
+          ${ "[X] Other: " + employment[i].other_payment_frequency if employment[i].frequency == "other" else "" }
           % endif
       - "paychecks_cash": |
           % if employment[i].type == "employed":
