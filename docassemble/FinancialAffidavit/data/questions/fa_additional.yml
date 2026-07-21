@@ -278,7 +278,7 @@ attachment:
         % endif
     - "cs_support_age_5": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 4:
-        ${ int(other_cs_kids_in_home[4].age) }
+        ${ int(other_cs_kids_in_home[4].age) } years
         % endif
     - "cs_support_pat_born_5": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 4:
@@ -299,7 +299,7 @@ attachment:
         % endif
     - "cs_support_age_6": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 5:
-        ${ int(other_cs_kids_in_home[5].age) }
+        ${ int(other_cs_kids_in_home[5].age) } years
         % endif
     - "cs_support_pat_born_6": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 5:
@@ -320,7 +320,7 @@ attachment:
         % endif
     - "cs_support_age_7": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 6:
-        ${ int(other_cs_kids_in_home[6].age) }
+        ${ int(other_cs_kids_in_home[6].age) } years
         % endif
     - "cs_support_pat_born_7": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 6:
@@ -341,7 +341,7 @@ attachment:
         % endif
     - "cs_support_age_8": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 7:
-        ${ int(other_cs_kids_in_home[7].age) }
+        ${ int(other_cs_kids_in_home[7].age) } years
         % endif
     - "cs_support_pat_born_8": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 7:
@@ -362,7 +362,7 @@ attachment:
         % endif
     - "cs_support_age_9": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 8:
-        ${ int(other_cs_kids_in_home[8].age) }
+        ${ int(other_cs_kids_in_home[8].age) } years
         % endif
     - "cs_support_pat_born_9": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 8:
@@ -383,7 +383,7 @@ attachment:
         % endif
     - "cs_support_age_10": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 9:
-        ${ int(other_cs_kids_in_home[9].age) }
+        ${ int(other_cs_kids_in_home[9].age) } years
         % endif
     - "cs_support_pat_born_10": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 9:
@@ -404,7 +404,7 @@ attachment:
         % endif
     - "cs_support_age_11": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 10:
-        ${ int(other_cs_kids_in_home[10].age) }
+        ${ int(other_cs_kids_in_home[10].age) } years
         % endif
     - "cs_support_pat_born_11": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 10:
@@ -425,7 +425,7 @@ attachment:
         % endif
     - "cs_support_age_12": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 11:
-        ${ int(other_cs_kids_in_home[11].age) }
+        ${ int(other_cs_kids_in_home[11].age) } years
         % endif
     - "cs_support_pat_born_12": |
         % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 11:
