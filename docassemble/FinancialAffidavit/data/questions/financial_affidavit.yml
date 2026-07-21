@@ -1607,10 +1607,12 @@ subquestion: |
 fields:
   - Name of child: other_cs_kids_in_home[i].name.text
     maxlength: 40
-  - Age: other_cs_kids_in_home[i].age
+  - Age (in years): other_cs_kids_in_home[i].age
     datatype: number
-    min: 1
+    min: 0
     max: 99
+    help: |
+      If the child is under one year old, enter '0'.
   - How was paternity established?: other_cs_kids_in_home[i].paternity
     datatype: radio
   	choices:
@@ -4751,7 +4753,7 @@ attachment:
           % endif
       - "cs_support_age_1": |
           % if users[0].child_support_in_home:
-          ${ int(other_cs_kids_in_home[0].age) }
+          ${ int(other_cs_kids_in_home[0].age) } years
           % endif
       - "cs_support_pat_born_1": |
           % if users[0].child_support_in_home:
@@ -4771,7 +4773,7 @@ attachment:
           % endif
       - "cs_support_age_2": |
           % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 1:
-          ${ int(other_cs_kids_in_home[1].age) }
+          ${ int(other_cs_kids_in_home[1].age) } years
           % endif
       - "cs_support_pat_born_2": |
           % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 1:
@@ -4791,7 +4793,7 @@ attachment:
           % endif
       - "cs_support_age_3": |
           % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 2:
-          ${ int(other_cs_kids_in_home[2].age) }
+          ${ int(other_cs_kids_in_home[2].age) } years
           % endif
       - "cs_support_pat_born_3": |
           % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 2:
@@ -4811,7 +4813,7 @@ attachment:
           % endif
       - "cs_support_age_4": |
           % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3:
-          ${ int(other_cs_kids_in_home[3].age) }
+          ${ int(other_cs_kids_in_home[3].age) } years
           % endif
       - "cs_support_pat_born_4": |
           % if users[0].child_support_in_home and other_cs_kids_in_home.number_gathered() > 3:
