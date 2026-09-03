@@ -2003,6 +2003,8 @@ fields:
 id: monthly children expenses
 question: |
   Do you have any monthly expenses for minor or dependent children?
+subquestion: |
+  **Note:** Select **Yes** if you pay for anything for your minor or dependent children, even if you do not have custody of them or if they do not live with you most of the time.
 fields:
   - no label: users[0].children_expenses_question
     datatype: yesnoradio
